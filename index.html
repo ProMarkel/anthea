@@ -53,10 +53,23 @@
     object-fit: cover;
     flex-shrink: 0;
   }
+  .nav-icon-fb {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    color: white; font-size: 13px; font-weight: 700;
+    display: none; align-items: center; justify-content: center;
+  }
   .hero-icon {
     width: 48px; height: 48px;
     border-radius: 14px;
     object-fit: cover;
+    vertical-align: middle; margin-right: 10px;
+  }
+  .hero-icon-fb {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: rgba(255,255,255,0.2);
+    color: white; font-size: 22px; font-weight: 700;
+    display: none; align-items: center; justify-content: center;
     vertical-align: middle; margin-right: 10px;
   }
   .nav-links {
@@ -173,7 +186,7 @@
 
 <!-- NAVBAR -->
 <nav class="navbar">
-  <div class="nav-brand"><img src="icon.jpeg" class="nav-icon" alt="Anthea"> Anthea</div>
+  <div class="nav-brand"><img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"><span class="nav-icon-fb">A</span> Anthea</div>
   <ul class="nav-links">
     <li><a href="index.html" class="active">首页</a></li>
     <li><a href="resource-management-process.html">资源制作管理</a></li>
@@ -183,7 +196,7 @@
 
 <!-- HERO -->
 <div class="hero">
-  <h1><img src="icon.jpeg" class="hero-icon" alt="">『海边的安西娅』</h1>
+  <h1><img src="icon.jpeg" class="hero-icon" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"><span class="hero-icon-fb">A</span>『海边的安西娅』</h1>
   <p>Anthea · 休闲模拟经营游戏<br>现代都市 × 轻魔幻世界观 · 温馨治愈叙事体验</p>
   <div class="hero-meta">
     <span>🎮 <strong>休闲模拟经营</strong></span>
