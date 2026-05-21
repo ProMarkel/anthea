@@ -35,11 +35,21 @@
     line-height: 1.6;
   }
 
+  /* === CONTAINER === */
+  .container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .container-fluid {
+    width: 100%;
+  }
+
   /* === HEADER === */
   .header {
     background: linear-gradient(135deg, #E8547A 0%, #9B59B6 100%);
     color: white;
-    padding: 40px 48px 32px;
+    padding: 40px 0 32px;
     position: relative;
     overflow: hidden;
   }
@@ -80,7 +90,6 @@
   .optimize-banner {
     background: linear-gradient(90deg, #fff8f0 0%, #fff 100%);
     border-left: 4px solid var(--orange);
-    margin: 24px 32px;
     padding: 16px 20px;
     border-radius: 0 8px 8px 0;
     display: flex; align-items: flex-start; gap: 12px;
@@ -94,8 +103,7 @@
     padding: 3px 10px; border-radius: 12px;
   }
 
-  /* === MAIN LAYOUT === */
-  .main { padding: 0 32px 48px; }
+  /* === MAIN LAYOUT (deprecated, using .container now) === */
 
   /* === SECTION === */
   .section { margin-bottom: 32px; }
@@ -341,11 +349,11 @@
   @media (max-width: 900px) {
     .card-grid-3, .card-grid-4, .req-type-grid, .three-col { grid-template-columns: 1fr 1fr; }
     .two-col { grid-template-columns: 1fr; }
-    .header { padding: 24px; }
-    .main { padding: 0 16px 32px; }
+    .container { padding: 0 16px; }
   }
   @media (max-width: 600px) {
     .card-grid-2, .card-grid-3, .card-grid-4, .req-type-grid { grid-template-columns: 1fr; }
+    .container { padding: 0 12px; }
   }
 
   /* === NAVBAR === */
@@ -354,8 +362,6 @@
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    padding: 0 32px;
-    display: flex; align-items: center; gap: 32px;
     height: 56px;
   }
   .nav-brand {
@@ -393,7 +399,7 @@
   .nav-links a.active { border-bottom-color: var(--pink); }
 
   @media (max-width: 640px) {
-    .navbar { padding: 0 16px; gap: 16px; }
+    .navbar .container { padding: 0 12px; }
     .nav-links { gap: 12px; }
   }
 
@@ -408,43 +414,49 @@
 
 <!-- NAVBAR -->
 <nav class="navbar">
-  <div class="nav-brand"><img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"><span class="nav-icon-fb">A</span> Anthea</div>
-  <ul class="nav-links">
-    <li><a href="index.html">首页</a></li>
-    <li><a href="resource-management-process.html" class="active">资源制作管理</a></li>
-    <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↗</a></li>
-  </ul>
+  <div class="container" style="display:flex;align-items:center;height:100%;">
+    <div class="nav-brand"><img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"><span class="nav-icon-fb">A</span> Anthea</div>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li><a href="resource-management-process.html" class="active">资源制作管理</a></li>
+      <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↗</a></li>
+    </ul>
+  </div>
 </nav>
 
 <!-- HEADER -->
-<div class="header">
-  <div class="header-tag">🌸 游戏美术管理</div>
-  <h1>『花语恋』资源制作管理流程</h1>
-  <div class="header-sub">Art Asset Production Management Process — Optimized V2.0</div>
-  <div class="header-meta">
-    <span>📅 原版 <strong>V240827</strong></span>
-    <span>🔄 优化版 <strong>V2.0</strong></span>
-    <span>📦 模块数 <strong>6</strong></span>
-    <span>📋 需求类型 <strong>7</strong></span>
+<header class="header">
+  <div class="container">
+    <div class="header-tag">🌸 游戏美术管理</div>
+    <h1>『花语恋』资源制作管理流程</h1>
+    <div class="header-sub">Art Asset Production Management Process — Optimized V2.0</div>
+    <div class="header-meta">
+      <span>📅 原版 <strong>V240827</strong></span>
+      <span>🔄 优化版 <strong>V2.0</strong></span>
+      <span>📦 模块数 <strong>6</strong></span>
+      <span>📋 需求类型 <strong>7</strong></span>
+    </div>
   </div>
-</div>
+</header>
 
 <!-- OPTIMIZE NOTICE -->
-<div class="optimize-banner">
-  <div class="icon">💡</div>
-  <div>
-    <h3>本次优化重点</h3>
-    <ul>
-      <li>✨ 统一六大模块结构，增加模块间逻辑关联</li>
-      <li>📐 需求类型从 6 类扩展为 7 类（增加美宣独立分类）</li>
-      <li>🔄 制作总单字段结构化，增加外包标记和验收关卡</li>
-      <li>📊 状态流转明确触发条件，减少状态歧义</li>
-      <li>📅 日常工作规范增加 OKR 对齐维度</li>
-    </ul>
+<div class="container" style="padding-top:24px; padding-bottom:0;">
+  <div class="optimize-banner">
+    <div class="icon">💡</div>
+    <div>
+      <h3>本次优化重点</h3>
+      <ul>
+        <li>✨ 统一六大模块结构，增加模块间逻辑关联</li>
+        <li>📐 需求类型从 6 类扩展为 7 类（增加美宣独立分类）</li>
+        <li>🔄 制作总单字段结构化，增加外包标记和验收关卡</li>
+        <li>📊 状态流转明确触发条件，减少状态歧义</li>
+        <li>📅 日常工作规范增加 OKR 对齐维度</li>
+      </ul>
+    </div>
   </div>
 </div>
 
-<div class="main">
+<div class="container" style="padding-top:32px; padding-bottom:48px;">
 
 <!-- ===== MODULE 1: 资源管理规范 ===== -->
 <div class="section">
@@ -1047,9 +1059,9 @@
   </div>
 </div>
 
-</div><!-- /main -->
+</div><!-- /container -->
 
-<div style="text-align:center; padding:24px; font-size:12px; color:var(--text-muted);">
+<div class="container" style="text-align:center; padding-top:24px; padding-bottom:24px; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border);">
   『花语恋』资源制作管理流程 — 优化版 V2.0 &nbsp;·&nbsp; 基于 V240827 整理优化
 </div>
 
