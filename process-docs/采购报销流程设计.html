@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>采购报销全流程设计方案</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+  :root {
+    --bg: #FAFAF8;
+    --surface: #FFFFFF;
+    --border: #E5E4E0;
+    --border-light: #F0EFEB;
+    --text: #1A1A19;
+    --text-secondary: #6B6A65;
+    --text-tertiary: #9E9D98;
+    --purple-50: #F3F2FF;
+    --purple-100: #E2E0FC;
+    --purple-400: #8B7FF0;
+    --purple-600: #6354E0;
+    --purple-800: #3C3489;
+    --teal-50: #E8F7F2;
+    --teal-100: #C4EDDC;
+    --teal-400: #2DAF85;
+    --teal-600: #1D8A6A;
+    --teal-800: #0F5F48;
+    --coral-50: #FFF0EC;
+    --coral-100: #FBD8CC;
+    --coral-400: #E8734A;
+    --coral-600: #C45830;
+    --coral-800: #7D3A1D;
+    --blue-50: #EBF3FC;
+    --blue-100: #C8DEF7;
+    --blue-400: #4A96E8;
+    --blue-600: #2E6FBA;
+    --blue-800: #1A4778;
+    --amber-50: #FFF7E8;
+    --amber-100: #FDECC4;
+    --amber-400: #F0A830;
+    --amber-600: #C08518;
+    --amber-800: #7A560E;
+    --green-50: #EFF6E4;
+    --green-100: #D5EABC;
+    --green-400: #6BA530;
+    --green-600: #4D7D1A;
+    --green-800: #2F500E;
+    --pink-50: #FDE8EF;
+    --pink-100: #F7C5D5;
+    --pink-400: #E0588A;
+    --pink-600: #B83E6A;
+    --pink-800: #7A2848;
+    --red-50: #FDECEC;
+    --red-100: #F7C5C5;
+    --red-400: #E84B4B;
+    --red-600: #B33333;
+    --gray-50: #F5F4F0;
+    --gray-100: #E0DFDA;
+    --gray-400: #8A8880;
+    --gray-600: #5A5955;
+    --gray-800: #363533;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+  .subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 40px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .phase-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Overview cards */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 36px;
+  }
+  .overview-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+  }
+  .overview-card .num {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .overview-card .label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  /* Flow diagram */
+  .flow-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px 24px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    justify-content: center;
+  }
+  .flow-row.reverse {
+    flex-direction: row-reverse;
+  }
+  .flow-node {
+    min-width: 130px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    position: relative;
+    flex-shrink: 0;
+    border: 1.5px solid;
+    cursor: default;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .flow-node:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .flow-node .node-sub {
+    font-size: 11px;
+    font-weight: 400;
+    opacity: 0.75;
+    margin-top: 2px;
+  }
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+    color: var(--text-tertiary);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .flow-arrow-v {
+    display: flex;
+    justify-content: center;
+    padding: 4px 0;
+    color: var(--text-tertiary);
+    font-size: 18px;
+  }
+  .flow-branch {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .flow-branch-label {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  /* Phase sections */
+  .phase-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .phase-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .phase-header:hover { background: var(--gray-50); }
+  .phase-header .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+  .phase-header .title-area { flex: 1; }
+  .phase-header .title-area h3 { font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .phase-header .title-area .desc { font-size: 12px; color: var(--text-secondary); }
+  .phase-header .toggle {
+    font-size: 18px;
+    color: var(--text-tertiary);
+    transition: transform 0.2s;
+  }
+  .phase-header.open .toggle { transform: rotate(180deg); }
+  .phase-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .phase-body.open { max-height: 2000px; }
+  .phase-content {
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border-light);
+  }
+
+  /* Detail tables */
+  .detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 13px;
+  }
+  .detail-table th {
+    text-align: left;
+    font-weight: 500;
+    padding: 10px 12px;
+    background: var(--gray-50);
+    font-size: 12px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+  }
+  .detail-table tr:last-child td { border-bottom: none; }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .tag-required { background: var(--red-50); color: var(--red-600); }
+  .tag-optional { background: var(--gray-50); color: var(--gray-600); }
+  .tag-role { background: var(--blue-50); color: var(--blue-600); }
+  .tag-sla { background: var(--amber-50); color: var(--amber-800); }
+
+  /* Sub steps */
+  .sub-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .sub-step-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+  }
+  .sub-step-card h4 {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .sub-step-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .sub-step-card ul li {
+    font-size: 12px;
+    color: var(--text-secondary);
+    padding: 2px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .sub-step-card ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gray-400);
+  }
+
+  /* Approval chain */
+  .approval-chain {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 16px 0;
+    padding: 16px;
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    overflow-x: auto;
+  }
+  .approval-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 80px;
+  }
+  .approval-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+  }
+  .approval-name {
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+  }
+  .approval-role {
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+  .approval-arrow {
+    flex: 1 1 0;
+    min-width: 30px;
+    max-width: 200px;
+    height: 2px;
+    background: var(--border);
+    position: relative;
+  }
+  .approval-arrow::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: -4px;
+    border: 5px solid transparent;
+    border-left-color: var(--border);
+  }
+
+  /* Decision diamond */
+  .decision-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 16px 0;
+    padding: 14px 18px;
+    border-radius: var(--radius-sm);
+    border: 1.5px dashed;
+  }
+  .decision-label {
+    font-size: 13px;
+    font-weight: 500;
+    min-width: 80px;
+  }
+  .decision-paths {
+    display: flex;
+    gap: 12px;
+    flex: 1;
+  }
+  .decision-path {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    text-align: center;
+    border: 1px solid;
+  }
+
+  /* Footer note */
+  .note-box {
+    background: var(--amber-50);
+    border: 1px solid var(--amber-100);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--amber-800);
+  }
+  .note-box strong { font-weight: 600; }
+
+  /* Print */
+  @media print {
+    @page { size: A3; margin: 12mm 10mm 15mm 10mm; }
+    body { background: #fff; font-size: 10pt; }
+    .container { max-width: 100% !important; padding: 0; margin: 0 auto; }
+    .phase-body { max-height: none !important; }
+    .phase-header { cursor: default; }
+    .phase-header .toggle { display: none; }
+    .flow-container { padding: 12px 8px; }
+    .approval-chain { padding: 8px; margin: 8px 0; }
+    .note-box { margin-top: 12px; padding: 8px 12px; }
+    /* page break control */
+    .section-title, .phase-section > .phase-header { break-after: avoid; }
+    .phase-section { break-inside: avoid; break-before: auto; }
+    .sla-summary { break-inside: avoid; break-before: auto; }
+    .overview-grid { gap: 8px; }
+    .flow-node { min-width: 120px; }
+    .detail-table { font-size: 9pt; }
+    .detail-table th, .detail-table td { padding: 6px 8px; }
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .overview-grid { grid-template-columns: repeat(2, 1fr); }
+    .sub-steps { grid-template-columns: 1fr; }
+    .approval-chain { flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>采购报销全流程设计方案</h1>
+  <p class="subtitle">基于原始采购流程扩展，覆盖从需求申请到财务归档的完整闭环</p>
+
+  <!-- Overview -->
+  <div class="overview-grid">
+    <div class="overview-card">
+      <div class="num" style="color:var(--purple-600);">7</div>
+      <div class="label">核心阶段</div>
+    </div>
+    <div class="overview-card">
+      <div class="num" style="color:var(--teal-600);">3</div>
+      <div class="label">审批层级</div>
+    </div>
+    <div class="overview-card">
+      <div class="num" style="color:var(--coral-600);">5</div>
+      <div class="label">审批节点</div>
+    </div>
+    <div class="overview-card">
+      <div class="num" style="color:var(--blue-600);">8</div>
+      <div class="label">关键产出</div>
+    </div>
+  </div>
+
+  <!-- ==================== FLOW OVERVIEW ==================== -->
+  <div class="section-title">
+    <div class="icon" style="background:var(--purple-50);color:var(--purple-600);">&#9670;</div>
+    全流程总览
+  </div>
+
+  <div class="flow-container" id="flowOverview">
+    <div class="flow-row" style="justify-content: center; gap: 0;">
+      <!-- STEP 01 -->
+      <div class="flow-node" style="background:var(--purple-50);border-color:var(--purple-100);color:var(--purple-800);">
+        <div style="font-size:11px;opacity:0.5;margin-bottom:2px;">STEP 01</div>
+        需求申请
+        <div class="node-sub">采购申请</div>
+      </div>
+      <div class="flow-arrow">&#10145;</div>
+      <!-- STEP 02 -->
+      <div class="flow-node" style="background:var(--blue-50);border-color:var(--blue-100);color:var(--blue-800);">
+        <div style="font-size:11px;opacity:0.5;margin-bottom:2px;">STEP 02</div>
+        申购审批
+        <div class="node-sub">部门/财务/校董</div>
+      </div>
+      <div class="flow-arrow">&#10145;</div>
+      <!-- STEP 03 -->
+      <div class="flow-node" style="background:var(--teal-50);border-color:var(--teal-100);color:var(--teal-800);">
+        <div style="font-size:11px;opacity:0.5;margin-bottom:2px;">STEP 03</div>
+        询价比价
+        <div class="node-sub">货比三家/比价审批</div>
+      </div>
+      <div class="flow-arrow">&#10145;</div>
+      <!-- STEP 04 -->
+      <div class="flow-node" style="background:var(--coral-50);border-color:var(--coral-100);color:var(--coral-800);">
+        <div style="font-size:11px;opacity:0.5;margin-bottom:2px;">STEP 04</div>
+        采购执行
+        <div class="node-sub">合同/下单/交付</div>
+      </div>
+      <div class="flow-arrow">&#10145;</div>
+      <!-- STEP 05 -->
+      <div class="flow-node" style="background:var(--green-50);border-color:var(--green-100);color:var(--green-800);">
+        <div style="font-size:11px;opacity:0.5;margin-bottom:2px;">STEP 05</div>
+        验收入库
+        <div class="node-sub">到货/核对/入库</div>
+      </div>
+      <div class="flow-arrow">&#10145;</div>
+      <!-- STEP 06 -->
+      <div class="flow-node" style="background:var(--amber-50);border-color:var(--amber-100);color:var(--amber-800);">
+        <div style="font-size:11px;opacity:0.5;margin-bottom:2px;">STEP 06</div>
+        结算报销
+        <div class="node-sub">材料准备/财务审核</div>
+      </div>
+      <div class="flow-arrow">&#10145;</div>
+      <!-- STEP 07 -->
+      <div class="flow-node" style="background:var(--pink-50);border-color:var(--pink-100);color:var(--pink-800);">
+        <div style="font-size:11px;opacity:0.5;margin-bottom:2px;">STEP 07</div>
+        付款归档
+        <div class="node-sub">执行付款/凭证归档</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PHASE 1: 需求申请 ==================== -->
+  <div class="section-title">
+    <div class="icon" style="background:var(--purple-50);color:var(--purple-600);">01</div>
+    需求申请
+    <span class="phase-label" style="background:var(--purple-50);color:var(--purple-600);">发起</span>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header open" onclick="togglePhase(this)">
+      <div class="step-num" style="background:var(--purple-600);">1</div>
+      <div class="title-area">
+        <h3>填写采购申请单</h3>
+        <div class="desc">需求人发起采购申请，明确采购需求、预算归属和预期交付</div>
+      </div>
+      <div class="toggle">&#9662;</div>
+    </div>
+    <div class="phase-body open">
+      <div class="phase-content">
+        <table class="detail-table">
+          <thead>
+            <tr>
+              <th style="width:120px;">申请要素</th>
+              <th>说明</th>
+              <th style="width:70px;">性质</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:500;">采购分类</td>
+              <td>商品采购 / 服务采购 / 工程采购</td>
+              <td><span class="tag tag-required">必填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">申购方式</td>
+              <td>周申购（定期批量）/ 临时申购（即时需求）</td>
+              <td><span class="tag tag-required">必填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">物品明细</td>
+              <td>名称、规格、数量、预估单价、预估总价</td>
+              <td><span class="tag tag-required">必填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">预算科目</td>
+              <td>归属部门预算、项目编号、预算余额确认</td>
+              <td><span class="tag tag-required">必填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">期望到货日</td>
+              <td>预计需要日期，影响采购紧急程度</td>
+              <td><span class="tag tag-required">必填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">分配说明</td>
+              <td>普调分配 / 白名单供应商（如有指定）</td>
+              <td><span class="tag tag-optional">选填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">需求说明</td>
+              <td>采购用途、技术要求、验收标准</td>
+              <td><span class="tag tag-required">必填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">附件</td>
+              <td>报价单、技术方案、合同模板（如有）</td>
+              <td><span class="tag tag-optional">选填</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="decision-box" style="border-color:var(--purple-200);background:var(--purple-50);">
+          <div class="decision-label" style="color:var(--purple-800);">金额阈值</div>
+          <div class="decision-paths">
+            <div class="decision-path" style="background:var(--purple-50);border-color:var(--purple-100);color:var(--purple-800);">
+              <strong>&le; 5,000</strong><br>部门经理审批
+            </div>
+            <div class="decision-path" style="background:var(--blue-50);border-color:var(--blue-100);color:var(--blue-800);">
+              <strong>5,000 - 50,000</strong><br>部门 + 财务审批
+            </div>
+            <div class="decision-path" style="background:var(--coral-50);border-color:var(--coral-100);color:var(--coral-800);">
+              <strong>&gt; 50,000</strong><br>部门 + 财务 + 校董会
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PHASE 2: 申购审批 ==================== -->
+  <div class="section-title">
+    <div class="icon" style="background:var(--blue-50);color:var(--blue-600);">02</div>
+    申购审批
+    <span class="phase-label" style="background:var(--blue-50);color:var(--blue-600);">审核</span>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="step-num" style="background:var(--blue-600);">2</div>
+      <div class="title-area">
+        <h3>多级审批链</h3>
+        <div class="desc">根据金额阈值触发不同审批层级，确保预算管控和合规性</div>
+      </div>
+      <div class="toggle">&#9662;</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="approval-chain">
+          <div class="approval-node">
+            <div class="approval-avatar" style="background:var(--purple-600);">申</div>
+            <div class="approval-name">需求人</div>
+            <div class="approval-role">提交申请</div>
+          </div>
+          <div class="approval-arrow"></div>
+          <div class="approval-node">
+            <div class="approval-avatar" style="background:var(--blue-600);">部</div>
+            <div class="approval-name">部门经理</div>
+            <div class="approval-role">需求合理性</div>
+          </div>
+          <div class="approval-arrow"></div>
+          <div class="approval-node">
+            <div class="approval-avatar" style="background:var(--teal-600);">采</div>
+            <div class="approval-name">采购岗</div>
+            <div class="approval-role">采购可行性</div>
+          </div>
+          <div class="approval-arrow"></div>
+          <div class="approval-node">
+            <div class="approval-avatar" style="background:var(--coral-600);">财</div>
+            <div class="approval-name">财务部</div>
+            <div class="approval-role">预算/合规</div>
+          </div>
+          <div class="approval-arrow"></div>
+          <div class="approval-node">
+            <div class="approval-avatar" style="background:var(--amber-600);">董</div>
+            <div class="approval-name">校董会</div>
+            <div class="approval-role">大额终审</div>
+          </div>
+        </div>
+
+        <table class="detail-table">
+          <thead>
+            <tr>
+              <th>审批节点</th>
+              <th>审批内容</th>
+              <th>处理时限</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:500;">部门经理</td>
+              <td>需求合理性、紧急程度、预算归属确认</td>
+              <td><span class="tag tag-sla">1个工作日</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">采购岗</td>
+              <td>采购渠道评估、采购方式建议（框架协议/零星采购/招标）</td>
+              <td><span class="tag tag-sla">1个工作日</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">财务部</td>
+              <td>预算余额核实、科目归属合规性、付款条件确认</td>
+              <td><span class="tag tag-sla">2个工作日</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">校董会</td>
+              <td>大额采购终审（仅 &gt; 50,000 元触发）</td>
+              <td><span class="tag tag-sla">5个工作日</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="decision-box" style="border-color:var(--blue-200);background:var(--blue-50);">
+          <div class="decision-label" style="color:var(--blue-800);">审批结果</div>
+          <div class="decision-paths">
+            <div class="decision-path" style="background:var(--green-50);border-color:var(--green-100);color:var(--green-800);">
+              &#10003; 通过<br>进入询价比价
+            </div>
+            <div class="decision-path" style="background:var(--amber-50);border-color:var(--amber-100);color:var(--amber-800);">
+              &#8634; 退回修改<br>补充材料后重新提交
+            </div>
+            <div class="decision-path" style="background:var(--red-50);border-color:var(--red-100);color:var(--red-600);">
+              &#10007; 驳回<br>终止采购流程
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PHASE 3: 询价比价 ==================== -->
+  <div class="section-title">
+    <div class="icon" style="background:var(--teal-50);color:var(--teal-600);">03</div>
+    询价比价
+    <span class="phase-label" style="background:var(--teal-50);color:var(--teal-600);">寻源</span>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="step-num" style="background:var(--teal-600);">3</div>
+      <div class="title-area">
+        <h3>供应商询价与比价审批</h3>
+        <div class="desc">货比三家、确认供应商资质、比价审批后确定供应商</div>
+      </div>
+      <div class="toggle">&#9662;</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="sub-steps">
+          <div class="sub-step-card" style="border-color:var(--teal-100);">
+            <h4 style="color:var(--teal-800);">询价操作</h4>
+            <ul>
+              <li>至少获取 3 家供应商报价（特殊情况不少于 2 家）</li>
+              <li>确认供应商资质：营业执照、行业许可</li>
+              <li>核实供应商发票类型：增值税专票/普票</li>
+              <li>确认交付周期和付款条件</li>
+              <li>确认售后服务条款和质保期</li>
+            </ul>
+          </div>
+          <div class="sub-step-card" style="border-color:var(--teal-100);">
+            <h4 style="color:var(--teal-800);">比价记录</h4>
+            <ul>
+              <li>编制《比价分析表》：单价、总价、交期、付款方式</li>
+              <li>明确推荐供应商及推荐理由</li>
+              <li>价格差异超过 20% 的需书面说明原因</li>
+              <li>框架协议内采购免比价，引用协议编号</li>
+              <li>紧急采购需部门经理加签确认</li>
+            </ul>
+          </div>
+        </div>
+
+        <table class="detail-table">
+          <thead>
+            <tr>
+              <th>比价要素</th>
+              <th>评审要点</th>
+              <th>权重参考</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:500;">价格</td>
+              <td>含税总价、运费、安装费等全部费用</td>
+              <td>40%</td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">质量</td>
+              <td>品牌/规格是否满足需求、质保期</td>
+              <td>25%</td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">交期</td>
+              <td>交付时间、到货方式</td>
+              <td>20%</td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">服务</td>
+              <td>售后响应、技术支持、退换货政策</td>
+              <td>15%</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="approval-chain" style="margin-top:16px;">
+          <div class="approval-node">
+            <div class="approval-avatar" style="background:var(--teal-600);">采</div>
+            <div class="approval-name">采购岗</div>
+            <div class="approval-role">编制比价表</div>
+          </div>
+          <div class="approval-arrow"></div>
+          <div class="approval-node">
+            <div class="approval-avatar" style="background:var(--coral-600);">财</div>
+            <div class="approval-name">财务部</div>
+            <div class="approval-role">比价审批</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PHASE 4: 采购执行 ==================== -->
+  <div class="section-title">
+    <div class="icon" style="background:var(--coral-50);color:var(--coral-600);">04</div>
+    采购执行
+    <span class="phase-label" style="background:var(--coral-50);color:var(--coral-600);">履约</span>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="step-num" style="background:var(--coral-600);">4</div>
+      <div class="title-area">
+        <h3>合同签订与下单执行</h3>
+        <div class="desc">审批通过后，签订合同、下单订购、跟进交期，必要时申请预付</div>
+      </div>
+      <div class="toggle">&#9662;</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="sub-steps">
+          <div class="sub-step-card" style="border-color:var(--coral-100);">
+            <h4 style="color:var(--coral-800);">合同管理</h4>
+            <ul>
+              <li>&gt; 10,000 元须签订书面合同</li>
+              <li>合同模板经法务审核后使用</li>
+              <li>合同要素：标的、金额、交期、付款方式、违约条款</li>
+              <li>合同需财务编号登记，建立合同台账</li>
+            </ul>
+          </div>
+          <div class="sub-step-card" style="border-color:var(--coral-100);">
+            <h4 style="color:var(--coral-800);">下单与跟进</h4>
+            <ul>
+              <li>生成正式采购订单（PO），发送供应商确认</li>
+              <li>明确交付时间、收货地址、收货人</li>
+              <li>采购岗定期跟进交期，更新进度</li>
+              <li>延期预警：交期逾期 3 天内通知需求人</li>
+            </ul>
+          </div>
+          <div class="sub-step-card" style="border-color:var(--amber-100);">
+            <h4 style="color:var(--amber-800);">预付申请（如需）</h4>
+            <ul>
+              <li>预付比例一般不超过合同金额的 30%</li>
+              <li>预付需附加：合同复印件、预付申请表</li>
+              <li>大额预付（&gt; 30%）需校董会审批</li>
+              <li>财务审核后执行预付，登记预付台账</li>
+            </ul>
+          </div>
+          <div class="sub-step-card" style="border-color:var(--green-100);">
+            <h4 style="color:var(--green-800);">关键产出</h4>
+            <ul>
+              <li>采购合同（已签章）</li>
+              <li>采购订单（PO）</li>
+              <li>预付申请单（如适用）</li>
+              <li>采购进度跟踪表</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PHASE 5: 验收入库 ==================== -->
+  <div class="section-title">
+    <div class="icon" style="background:var(--green-50);color:var(--green-600);">05</div>
+    验收入库
+    <span class="phase-label" style="background:var(--green-50);color:var(--green-600);">核验</span>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="step-num" style="background:var(--green-600);">5</div>
+      <div class="title-area">
+        <h3>到货接收与验收核对</h3>
+        <div class="desc">确认到货信息、验收质量、办理入库，资产类固定资产同步登记</div>
+      </div>
+      <div class="toggle">&#9662;</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <table class="detail-table">
+          <thead>
+            <tr>
+              <th>验收环节</th>
+              <th>验收内容</th>
+              <th>参与角色</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:500;">到货清点</td>
+              <td>核对品名、数量、规格、外包装完整性</td>
+              <td><span class="tag tag-role">收货人</span> <span class="tag tag-role">采购岗</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">质量验收</td>
+              <td>外观检查、功能测试（必要时）、合格证/检测报告</td>
+              <td><span class="tag tag-role">需求人</span> <span class="tag tag-role">采购岗</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">票据核对</td>
+              <td>发票信息（开票方、金额、税率）与合同/PO一致性</td>
+              <td><span class="tag tag-role">采购岗</span> <span class="tag tag-role">财务部</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">入库登记</td>
+              <td>填写《入库单》，库存系统录入；资产类同步登记固定资产卡片</td>
+              <td><span class="tag tag-role">仓管员</span> <span class="tag tag-role">采购岗</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="decision-box" style="border-color:var(--red-200);background:var(--red-50);">
+          <div class="decision-label" style="color:var(--red-600);">验收异常</div>
+          <div class="decision-paths">
+            <div class="decision-path" style="background:var(--amber-50);border-color:var(--amber-100);color:var(--amber-800);">
+              数量/规格差异<br>联系供应商补发/换货
+            </div>
+            <div class="decision-path" style="background:var(--red-50);border-color:var(--red-100);color:var(--red-600);">
+              质量不合格<br>退货并启动供应商追责
+            </div>
+            <div class="decision-path" style="background:var(--blue-50);border-color:var(--blue-100);color:var(--blue-800);">
+              票据不合规<br>联系供应商重开/换开
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PHASE 6: 结算报销 ==================== -->
+  <div class="section-title">
+    <div class="icon" style="background:var(--amber-50);color:var(--amber-600);">06</div>
+    结算报销
+    <span class="phase-label" style="background:var(--amber-50);color:var(--amber-600);">结算</span>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="step-num" style="background:var(--amber-600);">6</div>
+      <div class="title-area">
+        <h3>报销材料准备与财务结算审核</h3>
+        <div class="desc">整理报销材料、提交结算申请、财务审核后执行付款</div>
+      </div>
+      <div class="toggle">&#9662;</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <h4 style="font-size:14px;font-weight:600;margin:16px 0 10px;">报销材料清单</h4>
+        <table class="detail-table">
+          <thead>
+            <tr>
+              <th style="width:140px;">材料名称</th>
+              <th>说明</th>
+              <th style="width:70px;">性质</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:500;">费用报销单</td>
+              <td>填写完整，包含费用类别、金额、报销事由、部门/项目归属</td>
+              <td><span class="tag tag-required">必填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">发票原件</td>
+              <td>增值税专用发票/普通发票，查验真伪，抬头税号正确</td>
+              <td><span class="tag tag-required">必填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">采购合同</td>
+              <td>已签章合同复印件（&gt; 10,000 元项目必附）</td>
+              <td><span class="tag tag-required">必填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">入库单/验收单</td>
+              <td>已签字确认的入库单或验收合格单</td>
+              <td><span class="tag tag-required">必填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">比价记录</td>
+              <td>比价分析表及供应商报价单（&gt; 5,000 元必附）</td>
+              <td><span class="tag tag-required">必填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">付款明细</td>
+              <td>已预付金额、本次应付金额、尾款说明</td>
+              <td><span class="tag tag-optional">选填</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">收货/签收记录</td>
+              <td>快递单号、签收人、签收日期</td>
+              <td><span class="tag tag-optional">选填</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="font-size:14px;font-weight:600;margin:20px 0 10px;">结算审核流程</h4>
+        <div class="approval-chain">
+          <div class="approval-node">
+            <div class="approval-avatar" style="background:var(--amber-600);">申</div>
+            <div class="approval-name">经办人</div>
+            <div class="approval-role">提交材料</div>
+          </div>
+          <div class="approval-arrow"></div>
+          <div class="approval-node">
+            <div class="approval-avatar" style="background:var(--purple-600);">部</div>
+            <div class="approval-name">部门经理</div>
+            <div class="approval-role">业务确认</div>
+          </div>
+          <div class="approval-arrow"></div>
+          <div class="approval-node">
+            <div class="approval-avatar" style="background:var(--coral-600);">采</div>
+            <div class="approval-name">采购岗</div>
+            <div class="approval-role">采购复核</div>
+          </div>
+          <div class="approval-arrow"></div>
+          <div class="approval-node">
+            <div class="approval-avatar" style="background:var(--teal-600);">财</div>
+            <div class="approval-name">财务部</div>
+            <div class="approval-role">票据/预算审核</div>
+          </div>
+        </div>
+
+        <table class="detail-table" style="margin-top:14px;">
+          <thead>
+            <tr>
+              <th>审核节点</th>
+              <th>审核要点</th>
+              <th>处理时限</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:500;">部门经理</td>
+              <td>确认采购业务真实性、费用归属合理性</td>
+              <td><span class="tag tag-sla">1个工作日</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">采购岗</td>
+              <td>核对合同金额、发票金额、入库数量一致性</td>
+              <td><span class="tag tag-sla">1个工作日</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">财务部</td>
+              <td>发票合规性验真、预算扣减、科目入账确认、计算应扣预付款</td>
+              <td><span class="tag tag-sla">3个工作日</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PHASE 7: 付款归档 ==================== -->
+  <div class="section-title">
+    <div class="icon" style="background:var(--pink-50);color:var(--pink-600);">07</div>
+    付款归档
+    <span class="phase-label" style="background:var(--pink-50);color:var(--pink-600);">终结</span>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="step-num" style="background:var(--pink-600);">7</div>
+      <div class="title-area">
+        <h3>执行付款与凭证归档</h3>
+        <div class="desc">财务付款、编制记账凭证、全套材料归档，完成采购闭环</div>
+      </div>
+      <div class="toggle">&#9662;</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="sub-steps">
+          <div class="sub-step-card" style="border-color:var(--pink-100);">
+            <h4 style="color:var(--pink-800);">付款执行</h4>
+            <ul>
+              <li>确认应付金额 = 合同总额 - 已预付金额</li>
+              <li>按合同约定的付款方式和账户信息执行付款</li>
+              <li>获取银行付款回单，登记付款台账</li>
+              <li>通知经办人和供应商付款完成</li>
+            </ul>
+          </div>
+          <div class="sub-step-card" style="border-color:var(--pink-100);">
+            <h4 style="color:var(--pink-800);">凭证归档</h4>
+            <ul>
+              <li>编制会计凭证：借记费用/资产科目，贷记银行存款/应付账款</li>
+              <li>全套材料装订归档：申请单+审批单+合同+发票+入库单+付款回单</li>
+              <li>电子版扫描存档，建立采购台账索引</li>
+              <li>归档期限：完成后 5 个工作日内完成</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLA Summary ==================== -->
+  <div class="sla-summary">
+  <div class="section-title">
+    <div class="icon" style="background:var(--gray-100);color:var(--gray-600);">&#9201;</div>
+    各环节时效总览
+  </div>
+
+  <div class="flow-container" style="padding:20px;">
+    <table class="detail-table" style="margin:0;">
+      <thead>
+        <tr>
+          <th>阶段</th>
+          <th>关键动作</th>
+          <th>建议时限</th>
+          <th>责任主体</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:500;color:var(--purple-600);">需求申请</td>
+          <td>填写采购申请单</td>
+          <td>需求确定后 1 日内</td>
+          <td>需求人</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;color:var(--blue-600);">申购审批</td>
+          <td>多级审批流转</td>
+          <td>3 - 7 个工作日</td>
+          <td>各级审批人</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;color:var(--teal-600);">询价比价</td>
+          <td>询价、比价、审批</td>
+          <td>3 - 5 个工作日</td>
+          <td>采购岗 / 财务部</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;color:var(--coral-600);">采购执行</td>
+          <td>合同签订、下单、跟进</td>
+          <td>视合同交期</td>
+          <td>采购岗</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;color:var(--green-600);">验收入库</td>
+          <td>到货清点、质量验收、入库</td>
+          <td>到货后 2 个工作日</td>
+          <td>需求人 / 仓管员</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;color:var(--amber-600);">结算报销</td>
+          <td>材料准备、审核流转</td>
+          <td>5 - 7 个工作日</td>
+          <td>经办人 / 财务部</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;color:var(--pink-600);">付款归档</td>
+          <td>付款执行、凭证编制、材料归档</td>
+          <td>审核通过后 5 个工作日</td>
+          <td>财务部</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+
+  <div class="note-box">
+    <strong>注意事项：</strong>
+    1) 全流程关键单据均需保留纸质原件 + 电子扫描件，归档期限为完成后 5 个工作日；
+    2) 大额采购（&gt; 50,000 元）需提前 10 个工作日提交申请，预留充足审批时间；
+    3) 预付比例超过 30% 或合同金额 &gt; 100,000 元时，须由校董会单独审批预付申请；
+    4) 采购台账按月汇总，与财务应付账款科目进行对账，确保账实相符。
+  </div>
+</div>
+
+<script>
+function togglePhase(header) {
+  const body = header.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  if (isOpen) {
+    body.classList.remove('open');
+    header.classList.remove('open');
+  } else {
+    body.classList.add('open');
+    header.classList.add('open');
+  }
+}
+</script>
+</body>
+</html>
