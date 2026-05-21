@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anthea · 『海边的安西娅』项目文档</title>
+<style>
+  :root {
+    --pink: #E8547A;
+    --pink-light: #F9D0DB;
+    --pink-pale: #FEF0F4;
+    --purple: #9B59B6;
+    --purple-light: #E8D5F5;
+    --blue: #3498DB;
+    --teal: #1ABC9C;
+    --text: #2D3748;
+    --text-muted: #718096;
+    --border: #E2E8F0;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: #F7F5FB;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* === NAVBAR === */
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex; align-items: center; gap: 32px;
+    height: 56px;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 16px; font-weight: 700;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .hero-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    object-fit: cover;
+    vertical-align: middle; margin-right: 10px;
+  }
+  .nav-links {
+    display: flex; gap: 24px; list-style: none; margin-left: auto;
+  }
+  .nav-links a {
+    text-decoration: none; font-size: 13px; font-weight: 500;
+    color: var(--text-muted); padding: 6px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--pink);
+  }
+  .nav-links a.active { border-bottom-color: var(--pink); }
+
+  /* === HERO === */
+  .hero {
+    background: linear-gradient(135deg, #E8547A 0%, #9B59B6 100%);
+    color: white; padding: 72px 48px 56px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -80px; right: -80px;
+    width: 260px; height: 260px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -50px; left: 10%;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .hero h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; position: relative; }
+  .hero p { font-size: 15px; opacity: 0.85; max-width: 520px; margin: 0 auto 32px; position: relative; }
+  .hero-meta {
+    display: inline-flex; gap: 24px; flex-wrap: wrap; justify-content: center;
+    position: relative;
+  }
+  .hero-meta span { font-size: 13px; opacity: 0.75; }
+  .hero-meta strong { opacity: 1; font-weight: 600; }
+
+  /* === MAIN === */
+  .main { max-width: 960px; margin: 0 auto; padding: 40px 24px 64px; }
+
+  .section { margin-bottom: 32px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  /* === DOC CARDS === */
+  .doc-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .doc-card {
+    background: white; border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 20px;
+    border-left: 4px solid var(--pink);
+    text-decoration: none; color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: block;
+  }
+  .doc-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+  .doc-card .icon { font-size: 22px; margin-bottom: 10px; }
+  .doc-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .doc-card p { font-size: 12px; color: var(--text-muted); }
+
+  .doc-card.pink { border-left-color: var(--pink); }
+  .doc-card.purple { border-left-color: var(--purple); }
+  .doc-card.blue { border-left-color: var(--blue); }
+
+  .doc-card.placeholder {
+    pointer-events: none; opacity: 0.5; cursor: default;
+    border-left-style: dashed; background: #FAFBFC;
+  }
+
+  /* === INFO CARD === */
+  .info-card {
+    background: white; border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 24px;
+  }
+  .info-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .info-item { }
+  .info-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .info-value { font-size: 14px; font-weight: 600; }
+
+  /* === FOOTER === */
+  .footer {
+    text-align: center; padding: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px; color: var(--text-muted);
+  }
+  .footer a { color: var(--pink); text-decoration: none; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 48px 24px 40px; }
+    .hero h1 { font-size: 24px; }
+    .navbar { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-brand"><img src="icon.jpeg" class="nav-icon" alt="Anthea"> Anthea</div>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">首页</a></li>
+    <li><a href="resource-management-process.html">资源制作管理</a></li>
+    <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1><img src="icon.jpeg" class="hero-icon" alt="">『海边的安西娅』</h1>
+  <p>Anthea · 休闲模拟经营游戏<br>现代都市 × 轻魔幻世界观 · 温馨治愈叙事体验</p>
+  <div class="hero-meta">
+    <span>🎮 <strong>休闲模拟经营</strong></span>
+    <span>📋 <strong>流程规范文档</strong></span>
+    <span>📦 <strong>仓库: ProMarkel/anthea</strong></span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- PROJECT INFO -->
+  <div class="section">
+    <div class="section-title"><div class="dot" style="background:var(--pink);"></div>项目概览</div>
+    <div class="info-card">
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">项目名称</div>
+          <div class="info-value">海边的安西娅 (Anthea)</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">品类</div>
+          <div class="info-value">休闲模拟经营</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">世界观</div>
+          <div class="info-value">现代都市 + 轻魔幻</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">叙事基调</div>
+          <div class="info-value">温馨 · 治愈</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">文档仓库</div>
+          <div class="info-value"><a href="https://github.com/ProMarkel/anthea" style="color:var(--pink);">GitHub ↗</a></div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">更新日期</div>
+          <div class="info-value">2026-05-21</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCUMENTS -->
+  <div class="section">
+    <div class="section-title"><div class="dot" style="background:var(--purple);"></div>流程规范文档</div>
+    <div class="doc-grid">
+
+      <a href="resource-management-process.html" class="doc-card pink">
+        <div class="icon">🎨</div>
+        <h3>资源制作管理流程</h3>
+        <p>美术资源制作全生命周期管理规范 · 6 模块 7 类需求 · V2.0 优化版</p>
+      </a>
+
+      <div class="doc-card purple placeholder">
+        <div class="icon">📋</div>
+        <h3>敬请期待</h3>
+        <p>更多流程规范文档即将上线</p>
+      </div>
+
+      <div class="doc-card blue placeholder">
+        <div class="icon">📐</div>
+        <h3>敬请期待</h3>
+        <p>更多流程规范文档即将上线</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Anthea Project · <a href="https://github.com/ProMarkel/anthea">GitHub</a>
+</div>
+
+</body>
+</html>
