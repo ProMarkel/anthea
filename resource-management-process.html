@@ -372,6 +372,12 @@
     object-fit: cover;
     flex-shrink: 0;
   }
+  .nav-icon-fb {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    color: white; font-size: 13px; font-weight: 700;
+    display: none; align-items: center; justify-content: center;
+  }
   .nav-links {
     display: flex; gap: 24px; list-style: none; margin-left: auto;
   }
@@ -402,7 +408,7 @@
 
 <!-- NAVBAR -->
 <nav class="navbar">
-  <div class="nav-brand"><img src="icon.jpeg" class="nav-icon" alt="Anthea"> Anthea</div>
+  <div class="nav-brand"><img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"><span class="nav-icon-fb">A</span> Anthea</div>
   <ul class="nav-links">
     <li><a href="index.html">首页</a></li>
     <li><a href="resource-management-process.html" class="active">资源制作管理</a></li>
