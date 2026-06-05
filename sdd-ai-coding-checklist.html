@@ -9,151 +9,200 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
     font-size: 14px;
-    line-height: 1.6;
-    background: #f7f6f3;
+    line-height: 1.65;
+    background: linear-gradient(180deg, #f5f3ee 0%, #f0eeea 30%, #f7f6f3 100%);
     color: #2c2c2a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   a { color: inherit; text-decoration: none; }
 
   /* Layout */
   .page-header {
-    background: #fff;
-    border-bottom: 1px solid rgba(0,0,0,0.08);
-    padding: 32px 48px 24px;
+    background: linear-gradient(180deg, #fefefd 0%, #faf9f7 100%);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-top: none;
+    padding: 28px 40px 22px;
     position: sticky;
     top: 0;
     z-index: 100;
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    border-radius: 0 0 14px 14px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.04);
+    backdrop-filter: blur(12px);
   }
-  .page-header h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
-  .page-header p { font-size: 13px; color: #888; }
-  .page-header .meta { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
-  .meta-badge { font-size: 12px; padding: 3px 10px; border-radius: 4px; border: 1px solid; }
+  .page-header h1 {
+    font-size: 18px; font-weight: 650; margin-bottom: 6px;
+    letter-spacing: -0.01em; color: #1a1a18;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .page-header .h1-icon {
+    font-size: 24px; line-height: 1;
+    background: linear-gradient(135deg, #eeedfe 0%, #e1f5ee 100%);
+    border-radius: 10px;
+    padding: 7px 9px;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 6px rgba(83,74,183,0.1);
+  }
+  .page-header p { font-size: 13px; color: #777; }
+  .page-header .meta { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .meta-badge {
+    font-size: 11.5px; padding: 4px 12px; border-radius: 6px; border: 1px solid;
+    font-weight: 500; letter-spacing: 0.01em;
+    transition: transform 0.15s;
+  }
+  .meta-badge:hover { transform: translateY(-1px); }
 
-  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+  .container { width: 100%; max-width: 960px; margin: 0 auto; padding: 28px 24px 40px; }
 
   /* Nav tabs */
   .nav-tabs {
-    display: flex; gap: 6px; flex-wrap: wrap;
+    display: flex; gap: 4px; flex-wrap: wrap;
     background: #fff;
-    border: 1px solid rgba(0,0,0,0.08);
-    border-radius: 10px;
-    padding: 8px;
-    margin-bottom: 28px;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 12px;
+    padding: 6px;
+    margin-bottom: 32px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    position: sticky;
+    top: 110px;
+    z-index: 50;
   }
   .nav-tab {
-    padding: 7px 18px; border-radius: 6px; font-size: 13px; font-weight: 500;
-    cursor: pointer; border: none; background: transparent; color: #666;
-    transition: all 0.15s;
+    padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    cursor: pointer; border: none; background: transparent; color: #777;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
   }
-  .nav-tab:hover { background: #f0eefc; color: #534ab7; }
-  .nav-tab.active { background: #534ab7; color: #fff; }
+  .nav-tab:hover { background: #f5f4fc; color: #534ab7; }
+  .nav-tab.active { background: #534ab7; color: #fff; box-shadow: 0 2px 8px rgba(83,74,183,0.3); }
 
   /* Section */
-  .section { display: none; }
-  .section.active { display: block; }
+  .section { display: none; width: 100%; max-width: 960px; margin: 0 auto; box-sizing: border-box; }
+  .section.active { display: block; width: 100%; max-width: 960px; margin: 0 auto; box-sizing: border-box; }
 
   /* Phase card */
   .phase-card {
     background: #fff;
-    border: 1px solid rgba(0,0,0,0.08);
-    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 14px;
     margin-bottom: 24px;
     overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.03);
+    transition: box-shadow 0.2s;
   }
+  .phase-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 6px 20px rgba(0,0,0,0.04); }
   .phase-header {
-    padding: 16px 24px;
+    padding: 18px 24px;
     display: flex; align-items: center; gap: 12px;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
   }
   .phase-badge {
-    font-size: 11px; font-weight: 600; padding: 3px 10px;
-    border-radius: 20px; white-space: nowrap;
+    font-size: 11px; font-weight: 600; padding: 4px 12px;
+    border-radius: 20px; white-space: nowrap; letter-spacing: 0.02em;
   }
   .phase-title { font-size: 15px; font-weight: 600; flex: 1; }
   .phase-duration { font-size: 12px; color: #999; }
-  .phase-body { padding: 16px 24px; }
+  .phase-body { padding: 20px 24px; }
 
   /* Step card */
   .step-card {
-    border: 1px solid rgba(0,0,0,0.07);
-    border-radius: 8px;
-    margin-bottom: 12px;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 10px;
+    margin-bottom: 10px;
     overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
+  .step-card:hover { border-color: rgba(83,74,183,0.15); box-shadow: 0 2px 8px rgba(83,74,183,0.05); }
   .step-header {
     display: flex; align-items: flex-start; gap: 12px;
-    padding: 14px 16px; cursor: pointer;
-    background: #fcfcfc;
-    transition: background 0.1s;
+    padding: 13px 16px; cursor: pointer;
+    background: #fcfcfe;
+    transition: background 0.15s;
   }
-  .step-header:hover { background: #f5f4fc; }
+  .step-header:hover { background: #f5f4fd; }
   .step-num {
-    width: 24px; height: 24px; border-radius: 50%;
+    width: 26px; height: 26px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
   .step-info { flex: 1; }
-  .step-title { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+  .step-title { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
   .step-sub { font-size: 12px; color: #888; }
-  .step-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .step-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; }
   .tag {
-    font-size: 11px; padding: 2px 8px; border-radius: 3px;
-    font-weight: 500;
+    font-size: 10.5px; padding: 2px 8px; border-radius: 4px;
+    font-weight: 500; letter-spacing: 0.01em;
   }
   .step-toggle {
-    width: 20px; height: 20px; border-radius: 4px;
-    border: 1px solid rgba(0,0,0,0.15);
+    width: 22px; height: 22px; border-radius: 5px;
+    border: 1px solid rgba(0,0,0,0.1);
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px; color: #aaa; flex-shrink: 0;
-    transition: transform 0.2s;
+    font-size: 13px; color: #bbb; flex-shrink: 0;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.15s;
+    background: #fff; cursor: pointer;
   }
-  .step-card.open .step-toggle { transform: rotate(90deg); }
+  .step-toggle:hover { background: #f5f4fc; border-color: rgba(83,74,183,0.2); color: #534ab7; }
+  .step-card.open .step-toggle { transform: rotate(90deg); background: #f5f4fc; border-color: rgba(83,74,183,0.2); color: #534ab7; }
   .step-body {
-    display: none; padding: 16px 20px 16px 52px;
-    border-top: 1px solid rgba(0,0,0,0.06);
+    display: none; padding: 16px 20px 16px 54px;
+    border-top: 1px solid rgba(0,0,0,0.05);
     background: #fff;
+    animation: fadeIn 0.2s ease;
   }
   .step-card.open .step-body { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
   /* Checklist */
   .checklist { list-style: none; }
   .checklist li {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.04);
+    display: flex; align-items: flex-start; gap: 11px;
+    padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.03);
+    transition: background 0.12s; border-radius: 6px;
+    padding-left: 4px; padding-right: 4px;
   }
+  .checklist li:hover { background: rgba(83,74,183,0.02); }
   .checklist li:last-child { border-bottom: none; }
   .cb {
-    width: 16px; height: 16px; border-radius: 3px;
-    border: 1.5px solid #ccc; flex-shrink: 0; margin-top: 1px;
+    width: 18px; height: 18px; border-radius: 4px;
+    border: 1.5px solid #d0d0d0; flex-shrink: 0; margin-top: 1px;
     cursor: pointer; display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #fff;
   }
-  .cb.checked { background: #1d9e75; border-color: #1d9e75; }
+  .cb:hover { border-color: #1d9e75; background: rgba(29,158,117,0.03); }
+  .cb.checked { background: #1d9e75; border-color: #1d9e75; transform: scale(1.05); }
   .cb.checked::after {
     content: '';
-    width: 8px; height: 5px;
+    width: 9px; height: 5px;
     border-left: 2px solid #fff; border-bottom: 2px solid #fff;
     transform: rotate(-45deg) translate(1px, -1px);
     display: block;
   }
-  .cb-label { font-size: 13px; line-height: 1.5; cursor: pointer; flex: 1; }
-  .cb-label.checked { text-decoration: line-through; color: #aaa; }
-  .cb-note { font-size: 11px; color: #aaa; margin-top: 2px; }
+  .cb-label { font-size: 13px; line-height: 1.55; cursor: pointer; flex: 1; transition: color 0.2s; }
+  .cb-label.checked { text-decoration: line-through; color: #bbb; }
+  .cb-note { font-size: 11px; color: #aaa; margin-top: 3px; line-height: 1.5; }
 
   /* Code block */
   .code-block {
     background: #1e1e2e;
     color: #cdd6f4;
-    border-radius: 8px;
-    padding: 16px;
+    border-radius: 10px;
+    padding: 18px 20px;
     font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
     font-size: 12.5px;
-    line-height: 1.7;
-    margin: 12px 0;
+    line-height: 1.75;
+    margin: 14px 0;
     overflow-x: auto;
     white-space: pre;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
-  .code-block .comment { color: #6c7086; }
+  .code-block .comment { color: #6c7086; font-style: italic; }
   .code-block .key { color: #89b4fa; }
   .code-block .val { color: #a6e3a1; }
   .code-block .str { color: #f38ba8; }
@@ -161,14 +210,15 @@
 
   /* File tree */
   .file-tree {
-    background: #f0eefc;
-    border: 1px solid #c8c2f0;
-    border-radius: 8px;
-    padding: 14px 16px;
+    background: linear-gradient(135deg, #f5f4fc 0%, #f0eefc 100%);
+    border: 1px solid #d8d5f0;
+    border-radius: 10px;
+    padding: 16px 20px;
     font-family: 'JetBrains Mono', Consolas, monospace;
     font-size: 12.5px;
-    line-height: 1.8;
-    margin: 12px 0;
+    line-height: 1.9;
+    margin: 14px 0;
+    box-shadow: 0 1px 4px rgba(83,74,183,0.05);
   }
   .file-tree .dir { color: #534ab7; font-weight: 600; }
   .file-tree .file { color: #2c2c2a; }
@@ -176,47 +226,41 @@
 
   /* Info box */
   .info-box {
-    border-radius: 8px; padding: 12px 16px; margin: 12px 0;
-    font-size: 13px; line-height: 1.6;
+    border-radius: 10px; padding: 14px 18px; margin: 14px 0;
+    font-size: 13px; line-height: 1.65;
+    border: 1px solid transparent;
   }
-  .info-box.tip { background: #e1f5ee; border-left: 3px solid #1d9e75; color: #085041; }
-  .info-box.warn { background: #faeeda; border-left: 3px solid #ba7517; color: #633806; }
-  .info-box.note { background: #eeedfe; border-left: 3px solid #534ab7; color: #3c3489; }
+  .info-box.tip { background: #e8f5ee; border-left: 4px solid #1d9e75; color: #085041; border-color: #b8e8cf; }
+  .info-box.warn { background: #fef6e0; border-left: 4px solid #d97706; color: #633806; border-color: #fcd34d; }
+  .info-box.note { background: #eeedfe; border-left: 4px solid #534ab7; color: #3c3489; border-color: #c8c2f0; }
 
   /* Role section specific */
   .role-header {
-    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+    padding: 0 20px;
   }
   .role-avatar {
-    width: 40px; height: 40px; border-radius: 50%;
+    width: 44px; height: 44px; border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 600; flex-shrink: 0;
+    font-size: 16px; font-weight: 700; flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
   }
-  .role-info h2 { font-size: 16px; font-weight: 600; }
-  .role-info p { font-size: 12px; color: #888; margin-top: 2px; }
+  .role-info h2 { font-size: 18px; font-weight: 650; letter-spacing: -0.01em; }
+  .role-info p { font-size: 12.5px; color: #888; margin-top: 2px; }
 
   /* Progress */
-  .progress-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-  .progress-bar { flex: 1; height: 6px; background: #e8e6f0; border-radius: 3px; overflow: hidden; }
-  .progress-fill { height: 100%; background: #1d9e75; border-radius: 3px; transition: width 0.3s; }
-  .progress-label { font-size: 12px; color: #888; white-space: nowrap; }
-
-  /* Sub section */
-  .sub-section { margin: 16px 0; }
-  .sub-section-title {
-    font-size: 12px; font-weight: 600; color: #534ab7;
-    text-transform: uppercase; letter-spacing: 0.05em;
-    margin-bottom: 8px; padding-bottom: 4px;
-    border-bottom: 1px solid #e8e6f0;
-  }
+  .progress-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding: 0 20px; }
+  .progress-bar { flex: 1; height: 8px; background: #e8e6f0; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #1d9e75 0%, #10b981 100%); border-radius: 4px; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+  .progress-label { font-size: 12px; color: #888; white-space: nowrap; font-weight: 500; }
 
   /* Colors */
   .ph1 .phase-badge { background: #eeedfe; color: #3c3489; }
   .ph1 .step-num { background: #eeedfe; color: #534ab7; }
   .ph2 .phase-badge { background: #e1f5ee; color: #085041; }
   .ph2 .step-num { background: #e1f5ee; color: #0f6e56; }
-  .ph3 .phase-badge { background: #faeeda; color: #633806; }
-  .ph3 .step-num { background: #faeeda; color: #854f0b; }
+  .ph3 .phase-badge { background: #faeda; color: #633806; }
+  .ph3 .step-num { background: #faeda; color: #854f0b; }
 
   .tag-all { background: #f1efe8; color: #5f5e5a; }
   .tag-lead { background: #eeedfe; color: #534ab7; }
@@ -224,20 +268,120 @@
   .tag-design { background: #fbeaf0; color: #993556; }
   .tag-dlead { background: #fff3e0; color: #8b4513; }
   .tag-qa { background: #e6f1fb; color: #185fa5; }
-  .tag-new { background: #faeeda; color: #854f0b; }
+  .tag-new { background: #faeda; color: #854f0b; }
+
+  /* Sub section */
+  .sub-section { margin: 18px 0 10px; }
+  .sub-section-title {
+    font-size: 12px; font-weight: 600; color: #534ab7;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 10px; padding-bottom: 6px;
+    border-bottom: 1px solid #e8e6f0;
+  }
+
+  /* MCP Cards */
+  .mcp-card {
+    background: linear-gradient(135deg, #f9f8ff 0%, #f5f4fc 100%);
+    border: 1px solid rgba(83,74,183,0.1);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 12px 0;
+    box-shadow: 0 1px 4px rgba(83,74,183,0.04);
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .mcp-card:hover { box-shadow: 0 2px 10px rgba(83,74,183,0.08); border-color: rgba(83,74,183,0.18); }
+  .mcp-header {
+    font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 8px;
+  }
+  .mcp-badge {
+    font-size: 10px; font-weight: 700; padding: 2px 7px;
+    border-radius: 4px; white-space: nowrap;
+  }
+  .mcp-badge.tier1 { background: #eeedfe; color: #534ab7; }
+  .mcp-badge.tier2 { background: #e1f5ee; color: #0f6e56; }
+  .mcp-badge.tier3 { background: #f1efe8; color: #5f5e5a; }
+  .mcp-desc {
+    font-size: 12.5px; color: #666; margin-bottom: 8px; line-height: 1.55;
+  }
+  .mcp-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px;
+    font-size: 12px; color: #555; margin: 8px 0;
+  }
+  .mcp-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+  .mcp-grid div { line-height: 1.5; }
+  .mcp-table {
+    width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0;
+    border: 1px solid rgba(0,0,0,0.07); border-radius: 8px; overflow: hidden;
+  }
+  .mcp-table th {
+    background: #f5f4fc; padding: 9px 14px; text-align: left;
+    font-weight: 600; color: #534ab7; border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .mcp-table td {
+    padding: 9px 14px; border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .mcp-table tr:last-child td { border-bottom: none; }
+  .mcp-table.role-matrix td.rm-role {
+    font-weight: 600; color: #534ab7; background: #fafafe;
+  }
+
+  /* Footer */
+  .page-footer {
+    text-align: center; padding: 20px 24px 28px;
+    font-size: 12px; color: #aaa;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    margin-top: 16px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.2); }
 
   /* Responsive */
   @media (max-width: 600px) {
-    .page-header { padding: 20px 16px 16px; }
-    .container { padding: 16px; }
-    .phase-body { padding: 12px 16px; }
+    .page-header { padding: 16px 14px 12px; }
+    .page-header h1 { font-size: 15px; gap: 6px; }
+    .page-header .h1-icon { font-size: 20px; padding: 5px 7px; }
+    .page-header p { font-size: 12px; }
+    .container { padding: 14px 10px 32px; }
+    .phase-body { padding: 14px 14px; }
+    .phase-header { padding: 14px 16px; }
+    .nav-tabs { padding: 4px; gap: 2px; top: 80px; }
+    .nav-tab { padding: 6px 10px; font-size: 11.5px; }
+    .step-body { padding: 12px 10px 12px 36px; }
+    .role-header { padding: 0 10px; gap: 10px; }
+    .role-avatar { width: 38px; height: 38px; border-radius: 10px; font-size: 14px; }
+    .cb { width: 20px; height: 20px; }
+    .mcp-card { padding: 12px 14px; }
+    .mcp-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* Print */
+  @media print {
+    .page-header { position: static; box-shadow: none; border: 1px solid #ddd; }
+    .nav-tabs { display: none; }
+    .step-body { display: block !important; }
+    .step-toggle { display: none; }
+    .cb { display: none; }
+    .cb-label.checked { text-decoration: none; color: #2c2c2a; }
+    .page-footer { display: none; }
+    body { background: #fff; }
   }
 </style>
 </head>
 <body>
 
 <div class="page-header">
-  <h1>Cocos Creator · SDD + Claude Code + OpenSpec AI Coding 工作流搭建清单</h1>
+  <h1><span class="h1-icon">🎮</span><span>Cocos Creator</span><span style="font-weight:500;font-size:15px;color:#534ab7;">SDD + Claude Code + OpenSpec &nbsp;AI Coding 工作流搭建清单</span></h1>
   <p>适用于游戏项目团队，按 Tech Lead / Design Lead / 程序员 / 策划设计 / 测试QA 五类角色分工</p>
   <div class="meta">
     <span class="meta-badge" style="background:#eeedfe;color:#3c3489;border-color:#c8c2f0;">阶段1 环境准备 1-2天</span>
@@ -388,34 +532,194 @@
             <div class="step-toggle">›</div>
           </div>
           <div class="step-body">
-            <div class="info-box note">MCP（Model Context Protocol）允许 Claude Code 调用外部工具。建议在环境准备阶段即完成配置，后续 Spec 和代码生成流程可直接利用工具能力。</div>
-            <ul class="checklist">
-              <li><div class="cb" onclick="tick(this)"></div><div><div class="cb-label">在 <code>.claude/settings.json</code> 中配置 MCP 服务器列表（<code>mcpServers</code> 字段）</div></div></li>
-              <li><div class="cb" onclick="tick(this)"></div><div><div class="cb-label">接入官方 <code>filesystem</code> MCP：允许 Claude Code 安全读写 <code>spec/</code> 和 <code>assets/scripts/</code> 目录</div></div></li>
-              <li><div class="cb" onclick="tick(this)"></div><div><div class="cb-label">接入官方 <code>git</code> MCP：允许查询 commit 历史、diff 信息，辅助 Code Review</div></div></li>
-              <li><div class="cb" onclick="tick(this)"></div><div><div class="cb-label">（可选）接入 <code>fetch</code> MCP：允许 Claude Code 读取 Cocos 官方文档 URL，减少幻觉</div></div></li>
-              <li><div class="cb" onclick="tick(this)"></div><div><div class="cb-label">在 <code>CLAUDE.md</code> 中说明各 MCP 工具的用途与使用约定，避免 AI 滥用权限</div></div></li>
-            </ul>
-            <div class="code-block"><span class="comment">// .claude/settings.json 示例</span>
+            <div class="info-box note">MCP（Model Context Protocol）允许 Claude Code 调用外部工具。本节按三档优先级列出适合 Cocos Creator 游戏项目的 MCP 服务，建议在环境准备阶段完成核心服务的配置。</div>
+
+            <!-- Tier 1: Core -->
+            <div class="sub-section"><div class="sub-section-title">第一档 · 核心必备（全员配置）</div></div>
+
+            <div class="mcp-card">
+              <div class="mcp-header"><span class="mcp-badge tier1">T1</span> Cocos Creator MCP Server</div>
+              <div class="mcp-desc">GitHub: <code>DaxianLee/cocos-mcp-server</code>（1k+ Star）— 让 Claude Code 直接操控 Cocos Creator 编辑器。</div>
+              <div class="mcp-grid">
+                <div><strong>场景操作</strong>：打开/保存场景、获取完整层级（含组件信息）</div>
+                <div><strong>节点操作</strong>：创建/删除/移动/改属性、预制体实例化</div>
+                <div><strong>组件操作</strong>：添加/删除内置组件、挂载自定义脚本</div>
+                <div><strong>资源管理</strong>：批量导入/删除/移动、获取依赖关系</div>
+                <div><strong>项目控制</strong>：运行/构建项目、检查构建状态</div>
+                <div><strong>调试工具</strong>：获取控制台日志、验证场景完整性</div>
+              </div>
+            </div>
+            <div class="code-block"><span class="comment">// 安装：将插件复制到项目 extensions/cocos-mcp-server/</span>
+<span class="comment">// 在 Cocos Creator 扩展管理器中启用后，Claude Code 侧配置：</span>
 {
   <span class="key">"mcpServers"</span>: {
-    <span class="key">"filesystem"</span>: {
+    <span class="key">"cocos-creator"</span>: {
+      <span class="key">"type"</span>: <span class="str">"http"</span>,
+      <span class="key">"url"</span>: <span class="str">"http://127.0.0.1:3000/mcp"</span>
+    }
+  }
+}</div>
+
+            <div class="mcp-card">
+              <div class="mcp-header"><span class="mcp-badge tier1">T1</span> Figma MCP（官方远程版）— Design Lead 核心工具</div>
+              <div class="mcp-desc">打通 Figma 设计稿 → Claude Code，AI 直接读取图层结构、Design Token、Auto Layout 生成 UI 代码。</div>
+              <div class="mcp-grid cols3">
+                <div><strong>读取设计上下文</strong>：组件 / Variables / 布局数据</div>
+                <div><strong>代码生成</strong>：从 Frame 直接生成 UI 代码</div>
+                <div><strong>Code Connect</strong>：代码与设计组件保持对齐</div>
+              </div>
+              <div class="code-block" style="margin-top:10px;"><span class="comment"># 一行安装</span>
+claude plugin install figma@claude-plugins-official</div>
+            </div>
+
+            <div class="mcp-card">
+              <div class="mcp-header"><span class="mcp-badge tier1">T1</span> GitHub MCP Server（官方）</div>
+              <div class="mcp-desc">代码仓库 PR / Issue / CI/CD 全流程管理，不离开 Claude Code 即可完成代码管理操作。</div>
+              <div class="code-block" style="margin-top:8px;">{
+  <span class="key">"mcpServers"</span>: {
+    <span class="key">"github"</span>: {
       <span class="key">"command"</span>: <span class="str">"npx"</span>,
-      <span class="key">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@modelcontextprotocol/server-filesystem"</span>,
-               <span class="str">"./spec"</span>, <span class="str">"./assets/scripts"</span>]
+      <span class="key">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@modelcontextprotocol/server-github"</span>]
+    }
+  }
+}</div>
+            </div>
+
+            <!-- Tier 2: Highly Recommended -->
+            <div class="sub-section"><div class="sub-section-title">第二档 · 强烈推荐（按角色配置）</div></div>
+
+            <div class="mcp-card">
+              <div class="mcp-header"><span class="mcp-badge tier2">T2</span> Context7 MCP</div>
+              <div class="mcp-desc">从源码仓库拉取实时 Cocos Creator API 文档，避免 Claude 输出过时 API 用法（如 cc.tween 版本差异）。</div>
+            </div>
+
+            <div class="mcp-card">
+              <div class="mcp-header"><span class="mcp-badge tier2">T2</span> Memory MCP（知识图谱版）</div>
+              <div class="mcp-desc">跨会话持久记忆。反复调整同一系统时（花圃经营 / 心之露 / NPC 好感度），AI 不会忘记上一次对话的决策和踩过的坑。</div>
+              <div class="code-block" style="margin-top:8px;">{
+  <span class="key">"mcpServers"</span>: {
+    <span class="key">"memory"</span>: {
+      <span class="key">"command"</span>: <span class="str">"npx"</span>,
+      <span class="key">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@modelcontextprotocol/server-memory"</span>]
+    }
+  }
+}</div>
+            </div>
+
+            <div class="mcp-card">
+              <div class="mcp-header"><span class="mcp-badge tier2">T2</span> Playwright MCP — 测试QA 核心工具</div>
+              <div class="mcp-desc">对 Web Mobile 构建版本做 UI 自动化验证：自动登录 → 点击 → 表单填写 → 截图对比，形成「改代码 → 跑测试 → 验证」闭环。</div>
+            </div>
+
+            <div class="mcp-card">
+              <div class="mcp-header"><span class="mcp-badge tier2">T2</span> FairyGUI MCP — Design Lead / 程序员 核心工具</div>
+              <div class="mcp-desc">GitHub: <code>kaohum/FairyGUI-MCP</code>（MIT）— 让 AI 直接控制 FairyGUI 编辑器，27 个工具覆盖组件浏览/打开/截图验证/控制器切换/发布全流程。</div>
+              <div class="mcp-grid">
+                <div><strong>包与资源</strong>：列出包/跨包搜索/移动删除（自动扫引用）</div>
+                <div><strong>组件分析</strong>：解析 XML → 结构化描述（含 Gear/动画）</div>
+                <div><strong>编辑器交互</strong>：打开/保存组件、获取选中元素</div>
+                <div><strong>预览与截图</strong>：预览组件、启动 F5 测试、截图验还原度</div>
+                <div><strong>控制器</strong>：列出/切换控制器页面（验证按钮状态）</div>
+                <div><strong>发布</strong>：发布单包/全包（与 Cocos 构建集成）</div>
+              </div>
+              <div class="code-block" style="margin-top:10px;"><span class="comment">// Claude Code 配置</span>
+{
+  <span class="key">"mcpServers"</span>: {
+    <span class="key">"fairygui-tools"</span>: {
+      <span class="key">"command"</span>: <span class="str">"python"</span>,
+      <span class="key">"args"</span>: [<span class="str">"-m"</span>, <span class="str">"mcp_fairygui.server"</span>],
+      <span class="key">"cwd"</span>: <span class="str">"/path/to/fairyGUI-MCP"</span>,
+      <span class="key">"env"</span>: {
+        <span class="key">"UI_PROJECT_PATH"</span>: <span class="str">"/path/to/your/fairygui-project"</span>
+      }
+    }
+  }
+}
+<span class="comment">// 安装：pip install -e .  + 将 plugin/MCPBridge/ 复制到 FGUI 项目 plugins/ 目录</span>
+<span class="comment">// ⚠️ 仅 Windows 版 FairyGUI 编辑器（截图依赖 Win32 API）</span></div>
+            </div>
+
+            <!-- Tier 3: Nice to Have -->
+            <div class="sub-section"><div class="sub-section-title">第三档 · 锦上添花</div></div>
+            <table class="mcp-table">
+              <tr><th>MCP</th><th>用途</th><th>推荐角色</th></tr>
+              <tr><td><strong>Sequential Thinking</strong></td><td>复杂架构推理、长逻辑链问题拆解</td><td>Tech Lead</td></tr>
+              <tr><td><strong>Firecrawl</strong></td><td>抓取最新 SDK 文档、第三方 API 参考</td><td>程序员</td></tr>
+              <tr><td><strong>Shell / Bash Execution</strong></td><td>沙箱化执行，限制 AI 危险命令权限</td><td>Tech Lead（安全管控）</td></tr>
+              <tr><td><strong>Linear MCP</strong></td><td>直接在 Claude Code 中创建/更新项目 Issue</td><td>全员（如团队用 Linear）</td></tr>
+            </table>
+
+            <!-- Role Matrix -->
+            <div class="sub-section"><div class="sub-section-title">团队配置矩阵</div></div>
+            <table class="mcp-table role-matrix">
+              <tr><th>角色</th><th>必备</th><th>强烈推荐</th><th>可选</th></tr>
+              <tr><td class="rm-role">Tech Lead</td><td>Cocos Creator · GitHub · Figma</td><td>Context7 · Memory · Shell Sandbox</td><td>Sequential Thinking · Linear</td></tr>
+              <tr><td class="rm-role">Design Lead</td><td>Figma</td><td>Cocos Creator（只读）· Memory · FairyGUI</td><td>—</td></tr>
+              <tr><td class="rm-role">程序员</td><td>Cocos Creator · GitHub</td><td>Context7 · Memory · Figma · FairyGUI</td><td>Firecrawl</td></tr>
+              <tr><td class="rm-role">策划 / 设计</td><td>Figma</td><td>FairyGUI</td><td>—</td></tr>
+              <tr><td class="rm-role">测试 / QA</td><td>GitHub</td><td>Playwright · Cocos Creator</td><td>—</td></tr>
+            </table>
+
+            <!-- Full Config -->
+            <div class="sub-section"><div class="sub-section-title">完整配置参考</div></div>
+            <div class="code-block"><span class="comment">// .claude/settings.json — 全量 MCP 配置参考</span>
+{
+  <span class="key">"mcpServers"</span>: {
+    <span class="comment">// ===== 第一档：核心必备 =====</span>
+    <span class="key">"cocos-creator"</span>: {
+      <span class="key">"type"</span>: <span class="str">"http"</span>,
+      <span class="key">"url"</span>: <span class="str">"http://127.0.0.1:3000/mcp"</span>
     },
-    <span class="key">"git"</span>: {
-      <span class="key">"command"</span>: <span class="str">"uvx"</span>,
-      <span class="key">"args"</span>: [<span class="str">"mcp-server-git"</span>, <span class="str">"--repository"</span>, <span class="str">"."</span>]
+    <span class="key">"github"</span>: {
+      <span class="key">"command"</span>: <span class="str">"npx"</span>,
+      <span class="key">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@modelcontextprotocol/server-github"</span>]
+    },
+    <span class="comment">// ===== 第二档：强烈推荐 =====</span>
+    <span class="key">"context7"</span>: {
+      <span class="key">"command"</span>: <span class="str">"npx"</span>,
+      <span class="key">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@upstash/context7-mcp"</span>]
+    },
+    <span class="key">"memory"</span>: {
+      <span class="key">"command"</span>: <span class="str">"npx"</span>,
+      <span class="key">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@modelcontextprotocol/server-memory"</span>]
+    },
+    <span class="key">"fairygui-tools"</span>: {
+      <span class="key">"command"</span>: <span class="str">"python"</span>,
+      <span class="key">"args"</span>: [<span class="str">"-m"</span>, <span class="str">"mcp_fairygui.server"</span>],
+      <span class="key">"cwd"</span>: <span class="str">"D:/Projects/fairyGUI-MCP"</span>,
+      <span class="key">"env"</span>: {
+        <span class="key">"UI_PROJECT_PATH"</span>: <span class="str">"D:/Projects/anthea-ui"</span>
+      }
+    },
+    <span class="comment">// ===== 第三档：按需启用 =====</span>
+    <span class="key">"sequential-thinking"</span>: {
+      <span class="key">"command"</span>: <span class="str">"npx"</span>,
+      <span class="key">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@modelcontextprotocol/server-sequential-thinking"</span>]
     }
   },
   <span class="key">"allowedTools"</span>: [
-    <span class="str">"mcp__filesystem__read_file"</span>,
-    <span class="str">"mcp__filesystem__write_file"</span>,
-    <span class="str">"mcp__git__git_log"</span>,
-    <span class="str">"mcp__git__git_diff"</span>
+    <span class="str">"mcp__cocos-creator__*"</span>,
+    <span class="str">"mcp__github__*"</span>,
+    <span class="str">"mcp__context7__*"</span>,
+    <span class="str">"mcp__memory__*"</span>
   ]
 }</div>
+
+            <div class="info-box warn">
+              <strong>MCP 安全注意事项</strong><br>
+              1. <code>resources/</code> 目录建议在 MCP filesystem 配置中设为只读，防止 AI 误修改美术资产<br>
+              2. CI 环境下的 Claude Code 应使用独立的 <code>allowedTools</code> 配置，只给只读权限<br>
+              3. Cocos Creator MCP 的运行前提：Cocos Editor 必须保持打开状态
+            </div>
+
+            <ul class="checklist">
+              <li><div class="cb" onclick="tick(this)"></div><div><div class="cb-label">在 <code>.claude/settings.json</code> 中按角色模板配置 MCP 服务器列表</div></div></li>
+              <li><div class="cb" onclick="tick(this)"></div><div><div class="cb-label">Tech Lead 确认 Cocos Creator MCP 插件已安装并配置（Editor 扩展管理器 + http endpoint）</div></div></li>
+              <li><div class="cb" onclick="tick(this)"></div><div><div class="cb-label">Design Lead 确认 Figma MCP 可用：<code>claude plugin install figma@claude-plugins-official</code></div></div></li>
+              <li><div class="cb" onclick="tick(this)"></div><div><div class="cb-label">验证各 MCP 工具连接正常：在 Claude Code 中测试读取文件、查询 Git diff、读取 Cocos 场景</div></div></li>
+              <li><div class="cb" onclick="tick(this)"></div><div><div class="cb-label">在 <code>CLAUDE.md</code> 中写入 MCP 工具用途说明和 <code>allowedTools</code> 使用约定</div></div></li>
+              <li><div class="cb" onclick="tick(this)"></div><div><div class="cb-label">配置 <code>resources/</code> 目录的文件只读权限（MCP filesystem 白名单排除）</div></div></li>
+            </ul>
           </div>
         </div>
 
@@ -804,8 +1108,6 @@ description: 对当前 TypeScript 文件进行 Cocos Creator 规范审查
     </div>
   </div>
 
-  </div>
-
   <!-- ==================== Design Lead ==================== -->
   <div class="section" id="tab-role-dlead">
     <div class="role-header">
@@ -1034,6 +1336,10 @@ description: 对当前 TypeScript 文件进行 Cocos Creator 规范审查
   </div>
 
 </div><!-- /container -->
+
+<div class="page-footer">
+  Cocos Creator · SDD + Claude Code + OpenSpec AI Coding 工作流搭建清单 &nbsp;·&nbsp; 生成于 2026-06-05 &nbsp;·&nbsp; <a href="#" onclick="document.querySelectorAll('.cb').forEach(c=>c.classList.remove('checked'));document.querySelectorAll('.cb-label.checked').forEach(l=>l.classList.remove('checked'));['lead','dlead','dev','design','qa'].forEach(r=>updateRoleProgress(r));return false;" style="color:#aaa;text-decoration:underline;cursor:pointer;">重置所有勾选</a>
+</div>
 
 <script>
 function switchTab(name, btn) {
