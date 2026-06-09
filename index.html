@@ -26,44 +26,69 @@
   }
 
   /* === NAVBAR === */
+  .navbar,
+  .navbar * {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    animation: none !important;
+    opacity: 1 !important;
+  }
   .navbar {
     position: sticky; top: 0; z-index: 100;
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(0,0,0,0.08);
     height: 56px;
+    font-size: 16px;
+    line-height: 1.6;
+    box-sizing: border-box;
   }
   .navbar .container {
-    max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px;
     display: flex; align-items: center; height: 100%;
+    box-sizing: border-box;
   }
-  .nav-brand {
+  .navbar .nav-brand {
     display: flex; align-items: center; gap: 8px;
     font-size: 16px; font-weight: 700;
     color: #E8547A;
     text-decoration: none;
   }
-  .nav-icon { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
-  .nav-icon-fb {
+  .navbar .nav-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    object-fit: cover; flex-shrink: 0;
+  }
+  .navbar .nav-icon-fb {
     width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
     background: linear-gradient(135deg, #E8547A, #9B59B6);
     color: white; font-size: 13px; font-weight: 700;
     display: none; align-items: center; justify-content: center;
   }
-  .nav-links {
-    display: flex; gap: 24px; list-style: none; margin-left: auto;
+  .navbar .nav-links {
+    display: flex; gap: 24px; list-style: none;
+    margin-left: auto; padding: 0;
+    align-items: center;
   }
-  .nav-links a {
+  .navbar .nav-links li {
+    list-style: none; padding: 0; margin: 0;
+    border: none; background: none;
+    font-size: 13px;
+    display: block;
+    counter-increment: none;
+  }
+  .navbar .nav-links a {
     text-decoration: none; font-size: 13px; font-weight: 500;
     color: #888; padding: 6px 0;
     border-bottom: 2px solid transparent;
     transition: color 0.2s, border-color 0.2s;
+    display: inline-block;
   }
-  .nav-links a:hover, .nav-links a.active {
+  .navbar .nav-links a:hover,
+  .navbar .nav-links a.active {
     color: #E8547A;
     border-bottom-color: #E8547A;
   }
-
   /* === HERO === */
   .hero {
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
@@ -171,21 +196,21 @@
 <!-- NAVBAR -->
 <nav class="navbar">
   <div class="container">
-    <div class="nav-brand">
+    <a href="index.html" class="nav-brand">
       <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
       <span class="nav-icon-fb">A</span>
       Anthea
-    </div>
+    </a>
     <ul class="nav-links">
       <li><a href="index.html" class="active">首页</a></li>
       <li><a href="resource-management-process.html">资源制作管理</a></li>
       <li><a href="claude-code-whitepaper.html">ClaudeCode 白皮书</a></li>
       <li><a href="sdd-ai-coding-checklist.html">AI Coding 清单</a></li>
-      <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↗</a></li>
+      <li><a href="workbuddy-user-guide.html">WorkBuddy 指南</a></li>
+      <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
     </ul>
   </div>
 </nav>
-
 <!-- HERO -->
 <div class="hero">
   <h1>『海边的安西娅』</h1>
@@ -269,11 +294,11 @@
         <h3>CocosCreator 项目 AI Coding 工作流搭建</h3>
         <p>Cocos Creator · SDD + Claude Code + OpenSpec · AI 辅助开发工作流清单</p>
       </a>
-      <div class="doc-card placeholder" style="border-left-color:#3498DB;">
-        <div class="icon">✨</div>
-        <h3>敬请期待</h3>
-        <p>更多 AI Coding 文档即将上线</p>
-      </div>
+      <a href="workbuddy-user-guide.html" class="doc-card" style="border-left-color:#6366f1;">
+        <div class="icon">📘</div>
+        <h3>WorkBuddy 使用指南</h3>
+        <p>WorkBuddy 完整使用指南 · 基础操作 · 进阶技巧 · 高级领域技巧</p>
+      </a>
     </div>
   </div>
 
