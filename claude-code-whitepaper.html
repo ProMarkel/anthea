@@ -578,6 +578,10 @@
     .floating-nav .dot .label { display: none; }
     .floating-nav .dot .circle { width: 10px; height: 10px; }
   }
+  /* 锚点跳转时预留导航栏空间，避免标题被固定导航栏遮挡 */
+  #ch0-quickstart, #ch0-firstday {
+    scroll-margin-top: 72px;
+  }
 </style>
 </head>
 <body>
@@ -594,6 +598,7 @@
       <li><a href="index.html">首页</a></li>
       <li><a href="resource-management-process.html">资源制作管理</a></li>
       <li><a href="claude-code-whitepaper.html" class="active">ClaudeCode 白皮书</a></li>
+      <li><a href="claude-md-rules.html">CLAUDE.md 规则</a></li>
       <li><a href="sdd-ai-coding-checklist.html">AI Coding 清单</a></li>
       <li><a href="workbuddy-user-guide.html">WorkBuddy 指南</a></li>
       <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
@@ -633,8 +638,8 @@
     <span class="label">四·工程原理</span>
     <span class="circle"></span>
   </a>
-  <a class="dot ch5" href="#ch4" title="工作流选型">
-    <span class="label">五·工作流</span>
+  <a class="dot ch5" href="#ch4" title="工作流选型(10套)">
+    <span class="label">五·工作流(10套)</span>
     <span class="circle"></span>
   </a>
   <a class="dot ch6" href="#ch5" title="官方插件生态">
@@ -672,7 +677,7 @@
     <li><a href="#ch1">二·四条黄金法则</a></li>
     <li><a href="#ch2">三·五步搭建Harness</a></li>
     <li><a href="#ch3">四·Harness工程原理</a></li>
-    <li><a href="#ch4">五·工作流选型</a></li>
+    <li><a href="#ch4">五·工作流选型(10套)</a></li>
     <li><a href="#ch5">六·官方插件生态</a></li>
     <li><a href="#ch6">七·速查与建议</a></li>
   </ul>
@@ -1065,6 +1070,40 @@ export ANTHROPIC_API_KEY="sk-ant-xxxxxxx"</code></pre>
     <div class="card"><h4>🟠 文件 / 目录</h4><p>FileChanged, CwdChanged, WorktreeCreate, WorktreeRemove</p></div>
   </div>
 
+  <!-- Skills vs MCP -->
+  <h3>⚡ Skills vs MCP：核心区别</h3>
+  <p>Skill 解决"<strong>方法论</strong>"问题（教 AI 怎么做某类任务），MCP 解决"<strong>连接</strong>"问题（让 AI 能访问外部世界）。两者是<strong>互补关系</strong>，不是替代关系。</p>
+  <div class="highlight-box" style="margin:12px 0 20px;">
+    <p style="font-size:0.92em;"><strong>架构层级：</strong>Skill（提示/知识层）→ LLM 推理层 → MCP（集成层）→ 外部世界</p>
+  </div>
+  <table style="margin:8px 0 20px;">
+    <tr><th>维度</th><th>MCP</th><th>Skill</th></tr>
+    <tr><td><strong>核心作用</strong></td><td>连接外部系统</td><td>编码专业知识和方法论</td></tr>
+    <tr><td><strong>协议基础</strong></td><td>JSON-RPC 2.0（开放协议）</td><td>文件系统 + Markdown</td></tr>
+    <tr><td><strong>Token 消耗</strong></td><td>高（工具定义持久占用上下文）</td><td>低（渐进式加载）</td></tr>
+    <tr><td><strong>触发方式</strong></td><td>持久连接，随时可用</td><td>语义匹配，自动触发</td></tr>
+    <tr><td><strong>开发难度</strong></td><td>中高（需写 Server）</td><td>极低（写 Markdown）</td></tr>
+    <tr><td><strong>跨平台</strong></td><td>✅ 多平台支持</td><td>❌ 目前 Anthropic 生态专属</td></tr>
+  </table>
+  <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin:12px 0 20px;">
+    <div class="card" style="border-left-color:var(--accent2);">
+      <h4>用 MCP 当：</h4>
+      <p>访问数据库/API、文件系统、实时信息、跨平台复用工具。<br><span style="font-size:0.85em;color:var(--accent2);">MCP = AI 的"手"</span></p>
+    </div>
+    <div class="card" style="border-left-color:var(--accent3);">
+      <h4>用 Skill 当：</h4>
+      <p>重复工作流、公司内部规范、多步骤复杂任务、Token 敏感场景。<br><span style="font-size:0.85em;color:var(--accent3);">Skill = AI 的"技能书"</span></p>
+    </div>
+    <div class="card" style="border-left-color:var(--accent4);">
+      <h4>结合使用：</h4>
+      <p>MCP 获取数据 → Skill 提供方法论 → AI 分析 → MCP 提交结果。两者协作，各司其职。</p>
+    </div>
+  </div>
+  <div class="highlight-box warning" style="margin:12px 0 20px;">
+    <p><strong>⚠️ 安全提示：</strong>MCP 第三方 Server 有 prompt injection 风险；Skill 恶意 Skill 文件可隐藏注入指令。用 <code>allowed-tools</code> 限制能力范围。</p>
+  </div>
+  <p style="font-size:0.88em;color:var(--text-secondary);margin-bottom:20px;">来源：Skills vs MCP 核心对比 · <a href="https://mp.weixin.qq.com/s/AxsLEvdv53K0_SVNDJlpwQ" target="_blank" style="color:var(--accent)">原文链接 ↗</a></p>
+
   <!-- 社区惯例 vs 官方 -->
   <h3>⚠️ 社区惯例 vs 官方支持</h3>
   <p>以下文件名在社区中常见，但 Claude Code <strong>不会自动识别和加载</strong>——如需使用必须在 <code>CLAUDE.md</code> 中显式引用：</p>
@@ -1205,7 +1244,7 @@ paths: packages/api/**
 <!-- ============ CH3: Harness 工程原理 ============ -->
 <section id="ch3">
   <h2><span class="num" style="background:var(--accent)">四</span> Harness 工程原理：12 课构建智能体系统</h2>
-  <p style="color:var(--text-secondary)">来源：<em>2小时速通 Harness 工程：如何从零搭一套 Claude Code 智能体系统</em>（GitHub: <a href="https://github.com/shareAI-lab/learn-claude-code" target="_blank" style="color:var(--accent)">shareAI-lab/learn-claude-code</a>）· <a href="https://mp.weixin.qq.com/s/-g-JDq6PmcrcUTpGU-U1LA" target="_blank" style="color:var(--accent)">原文链接 ↗</a></p>
+  <p style="color:var(--text-secondary)">来源：<em>2小时速通 Harness 工程：如何从零搭一套 Claude Code 智能体系统</em>（GitHub: <a href="https://github.com/shareAI-lab/learn-claude-code" target="_blank" style="color:var(--accent)">shareAI-lab/learn-claude-code</a> ⭐ 6.6k）· <a href="https://mp.weixin.qq.com/s/-g-JDq6PmcrcUTpGU-U1LA" target="_blank" style="color:var(--accent)">原文链接 ↗</a></p>
 
   <div class="highlight-box">
     <p><strong>核心思想：</strong>别去"开发"智能体，去给它造一个好用的工作环境。Agent = Model + Harness。模型是大脑（由 Anthropic 训练），Harness 是身体——Agent 能看到什么、能操作什么、怎么记忆、怎么协作。</p>
@@ -1458,61 +1497,193 @@ paths: packages/api/**
 
 <!-- ============ CH4: 工作流选型 ============ -->
 <section id="ch4">
-  <h2><span class="num" style="background:var(--accent2)">五</span> 工作流选型：5 套主流方案对比</h2>
-  <p style="color:var(--text-secondary)">来源：<em>Claude Code 工作流选型指南</em> · <a href="https://mp.weixin.qq.com/s/UV5r7lPf6Q7HHbwpUTH17g" target="_blank" style="color:var(--accent)">原文链接 ↗</a></p>
+  <h2><span class="num" style="background:var(--accent2)">五</span> 工作流选型：10 套主流方案对比</h2>
+  <p style="color:var(--text-secondary)">来源：<em>Claude Code 工作流选型指南</em> · <a href="https://mp.weixin.qq.com/s/UV5r7lPf6Q7HHbwpUTH17g" target="_blank" style="color:var(--accent)">原文链接 ↗</a> + <em>全自动写代码，真的建议早点接触</em> · <a href="https://mp.weixin.qq.com/s/-gqiwKWhjKZQX5Ab1LvdDA" target="_blank" style="color:var(--accent)">原文链接 ↗</a></p>
 
+  <div class="highlight-box warn">
+    <p><strong>⚠️ 不要贪多，选 1-2 个深度用，比装一堆不用强。</strong>阿东目前用 gstack + superpowers + get-shit-done。连 Anthropic 团队内部每个人用 Claude Code 的方式都完全不一样——工作流只是起点，好用的版本都是自己改出来的。</p>
+  </div>
+
+  <!-- ===== 10 套方案卡片（按 Stars 排序）===== -->
+  <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+
+    <div class="card" style="border-left: 4px solid var(--accent2);">
+      <h4>1. Superpowers ⭐ 22.7k</h4>
+      <p><strong>TDD-first + Iron Laws</strong>——测试不写完，代码一行都不准动。调试、协作模式全套方法论，有完善的插件开发文档。<strong>想自己扩展的最好起点</strong>。</p>
+      <p style="margin-top:6px"><span class="tag green">TDD-first</span><span class="tag blue">质量流程</span><span class="tag purple">可扩展</span></p>
+      <p style="font-size:0.82em;margin-top:6px">GitHub: <a href="https://github.com/obra/superpowers" target="_blank" style="color:var(--accent)">obra/superpowers</a> · ⭐ 22.7k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent);">
+      <h4>2. Everything (ECC) ⭐ 21.5k</h4>
+      <p><strong>Anthropic 黑客马拉松获奖</strong>，性能优化最狠的一套。Claude Code = 微型开发团队，前端/后端/数据库/测试各有专人。50 agent + 80 cmd + 180 skill——大而全的终极工具箱。</p>
+      <p style="margin-top:6px"><span class="tag orange">微型团队</span><span class="tag purple">50 代理</span><span class="tag green">性能优化</span></p>
+      <p style="font-size:0.82em;margin-top:6px">GitHub: <a href="https://github.com/affaan-m/everything-claude-code" target="_blank" style="color:var(--accent)">affaan-m/ECC</a> · ⭐ 21.5k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid #5B8DEF;">
+      <h4>3. Spec Kit ⭐ 11.2k</h4>
+      <p><strong>先写清楚你要什么，再让 AI 动手</strong>。强制规格文档 → 代码生成，适合大项目多模块协作。核心思路：把需求规格化，用结构化文档约束 AI 输出，保证多模块间的一致性。</p>
+      <p style="margin-top:6px"><span class="tag blue">规格驱动</span><span class="tag purple">文档先行</span><span class="tag green">一致性保障</span></p>
+      <p style="font-size:0.82em;margin-top:6px">GitHub: <a href="https://github.com/github/spec-kit" target="_blank" style="color:var(--accent)">github/spec-kit</a> · ⭐ 11.2k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent);">
+      <h4>4. gstack ⭐ 10.9k</h4>
+      <p><strong>Garry Tan（YC CEO）自己用的系统</strong>，把 Claude 变成 15 人虚拟工程团队。核心是 <code>/plan-ceo-review</code>、<code>/qa</code>、<code>/ship</code> 这些角色扮演式技能——同一 agent 在不同阶段换不同"脑子"。</p>
+      <p style="font-size:0.88em;color:var(--text-secondary);margin-top:8px">最大感受：这不是工具，是把 Garry 的脑子装进去了。</p>
+      <p style="margin-top:6px"><span class="tag orange">角色扮演</span><span class="tag purple">并行冲刺</span><span class="tag blue">全栈思维链</span></p>
+      <p style="font-size:0.82em;margin-top:6px">GitHub: <a href="https://github.com/garrytan/gstack" target="_blank" style="color:var(--accent)">garrytan/gstack</a> · ⭐ 10.9k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent4);">
+      <h4>5. get-shit-done ⭐ 6.4k</h4>
+      <p><strong>名字就直白</strong>——解决上下文腐烂，没有企业戏码。<strong>适合 solo 开发者</strong>。极简主义：不做角色扮演、不搞仪式感，只解决最痛的问题——上下文越聊越乱、对话越来越蠢。</p>
+      <p style="margin-top:6px"><span class="tag green">solo 开发者</span><span class="tag orange">极简</span><span class="tag blue">抗腐烂</span></p>
+      <p style="font-size:0.82em;margin-top:6px">GitHub: <a href="https://github.com/gsd-build/get-shit-done" target="_blank" style="color:var(--accent)">gsd-build/get-shit-done</a> · ⭐ 6.4k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent3);">
+      <h4>6. shanraisshan ⭐ 5.8k</h4>
+      <p><strong>84 条实战 tips</strong>，最大的价值是里面的"课程"——Boris Cherny（Claude Code 作者）亲授的 tips，防 dumb zone 技巧、反模式警告。适合想从原理层面理解 Claude Code 的开发者。</p>
+      <p style="margin-top:6px"><span class="tag purple">实战 tips</span><span class="tag blue">作者亲授</span><span class="tag green">反模式警告</span></p>
+      <p style="font-size:0.82em;margin-top:6px">GitHub: <a href="https://github.com/shanraisshan/claude-code-best-practice" target="_blank" style="color:var(--accent)">shanraisshan/claude-code-best-practice</a> · ⭐ 5.8k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent2);">
+      <h4>7. BMAD ⭐ 4.9k</h4>
+      <p><strong>把完整 Agile 方法论搬进 AI</strong>。PRD、架构、SM/Dev/QA 工作流，甚至有故事点、sprint 仪式。核心卖点是<strong>人类 in-the-loop</strong>——每个环节都有人确认，不会出现 AI 一路狂奔结果跑偏的情况。</p>
+      <p style="margin-top:6px"><span class="tag green">Agile</span><span class="tag blue">in-the-loop</span><span class="tag orange">sprint 仪式</span></p>
+      <p style="font-size:0.82em;margin-top:6px">GitHub: <a href="https://github.com/bmad-code-org/BMAD-METHOD" target="_blank" style="color:var(--accent)">bmad-code-org/BMAD-METHOD</a> · ⭐ 4.9k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid #E8547A;">
+      <h4>8. oh-my-claudecode ⭐ 3.6k</h4>
+      <p><strong>19 个代理 + 28 个技能</strong>，支持 Claude + Gemini + Codex 并行。作者的原话："不是工具，是武器。"适合多模型协作、需要并行处理复杂任务的场景。</p>
+      <p style="margin-top:6px"><span class="tag purple">多模型并行</span><span class="tag orange">19 代理</span><span class="tag blue">28 技能</span></p>
+      <p style="font-size:0.82em;margin-top:6px">GitHub: <a href="https://github.com/Yeachan-Heo/oh-my-claudecode" target="_blank" style="color:var(--accent)">Yeachan-Heo/oh-my-claudecode</a> · ⭐ 3.6k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent4);">
+      <h4>9. davila7 ⭐ 2.8k</h4>
+      <p><strong>不是固定模板，是 1000+ 组件的市场</strong>。当成 App Store 用，想挑什么挑什么。不需要整套装——按需取用，像逛超市一样选组件。</p>
+      <p style="margin-top:6px"><span class="tag orange">组件市场</span><span class="tag blue">1000+ 组件</span><span class="tag green">按需取用</span></p>
+      <p style="font-size:0.82em;margin-top:6px">GitHub: <a href="https://github.com/davila7/claude-code-templates" target="_blank" style="color:var(--accent)">davila7/claude-code-templates</a> · ⭐ 2.8k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid #999; background: linear-gradient(135deg, var(--card-bg) 96%, var(--bg-warm) 100%);">
+      <h4>10. 原生轻量（零配置）</h4>
+      <p><strong>被低估得最厉害的选项</strong>。小任务直接扔，三分钟内搞定。不需要任何配置、任何模板、任何方法论——就是打开 Claude Code 直接说你要什么。<strong>90% 的时间其实用它就够了</strong>。</p>
+      <p style="margin-top:6px"><span class="tag green">零配置</span><span class="tag orange">小任务之王</span><span class="tag blue">被低估</span></p>
+      <p style="font-size:0.82em;margin-top:6px">无需安装 · 所有开发者 — 90% 时间用它</p>
+    </div>
+
+  </div>
+
+  <!-- ===== 对比总表（按 Stars 排序）===== -->
+  <h3>10 套方案对比总表（按 Stars 排序）</h3>
   <table>
-    <tr><th>方案</th><th>核心理念</th><th>Star</th><th>配置规模</th><th>适合人群</th></tr>
+    <tr><th>排名</th><th>方案</th><th>Stars</th><th>核心理念</th><th>适合人群</th><th>一句话</th></tr>
     <tr>
-      <td><strong>Everything</strong></td>
-      <td>Claude Code = 微型开发团队<br>前端/后端/数据库/测试各有专人</td>
-      <td>~15万</td>
-      <td>50 agent + 80 cmd + 180 skill</td>
-      <td>大团队统一工具链；定制爱好者</td>
-    </tr>
-    <tr>
+      <td>🥇</td>
       <td><strong>Superpowers</strong></td>
-      <td>TDD-first + Iron Laws<br>测试不写完，代码一行都不准动</td>
-      <td>~14万</td>
-      <td>5 agent + 3 cmd + 14 skill</td>
-      <td>质量流程要求高；个人开发者</td>
+      <td>22.7k</td>
+      <td>TDD-first + Iron Laws</td>
+      <td>质量流程要求高；想自己扩展</td>
+      <td>测试不写完，代码一行都不准动</td>
     </tr>
     <tr>
+      <td>🥈</td>
+      <td><strong>Everything (ECC)</strong></td>
+      <td>21.5k</td>
+      <td>微型开发团队</td>
+      <td>大团队统一工具链；定制爱好者</td>
+      <td>大而全的终极工具箱</td>
+    </tr>
+    <tr>
+      <td>🥉</td>
       <td><strong>Spec Kit</strong></td>
-      <td>先写清楚你要什么，再让 AI 动手<br>强制规格文档 → 代码生成</td>
-      <td>8.7万</td>
-      <td>规格驱动流水线</td>
+      <td>11.2k</td>
+      <td>规格文档先行 → 代码生成</td>
       <td>大项目、多模块、一致性要求高</td>
+      <td>先说清楚你要什么</td>
     </tr>
     <tr>
+      <td>4</td>
       <td><strong>gstack</strong></td>
-      <td>角色扮演 + 并行冲刺<br>同一 agent 在不同阶段换不同脑子</td>
-      <td>~7万</td>
-      <td>角色链流水线</td>
+      <td>10.9k</td>
+      <td>角色扮演 + 并行冲刺</td>
       <td>个人全栈，需要完整产品思维链</td>
+      <td>把 YC CEO 的脑子装进去</td>
     </tr>
     <tr>
-      <td><strong>原生轻量</strong></td>
-      <td>被低估得最厉害的选项<br>小任务直接扔，三分钟内搞定</td>
+      <td>5</td>
+      <td><strong>get-shit-done</strong></td>
+      <td>6.4k</td>
+      <td>极简 + 抗上下文腐烂</td>
+      <td>Solo 开发者，不要企业戏码</td>
+      <td>名字就是全部宣言</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>shanraisshan</strong></td>
+      <td>5.8k</td>
+      <td>实战 tips + 作者亲授</td>
+      <td>想从原理层面理解 Claude Code 的开发者</td>
+      <td>Claude Code 作者的私房课</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><strong>BMAD</strong></td>
+      <td>4.9k</td>
+      <td>Agile 方法论 + 人工确认</td>
+      <td>重视流程管控，要人工审批每一步</td>
+      <td>AI 世界的 Scrum Master</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><strong>oh-my-claudecode</strong></td>
+      <td>3.6k</td>
+      <td>多模型并行 + 武器级工具</td>
+      <td>多模型协作（Claude + Gemini + Codex）</td>
+      <td>不是工具，是武器</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><strong>davila7</strong></td>
+      <td>2.8k</td>
+      <td>组件市场，按需取用</td>
+      <td>不想整套安装，只要特定功能</td>
+      <td>Claude Code 的 App Store</td>
+    </tr>
+    <tr style="background:var(--table-stripe);">
       <td>—</td>
-      <td>零配置</td>
+      <td><strong>原生轻量</strong></td>
+      <td>N/A</td>
+      <td>零配置，直接说需求</td>
       <td>所有开发者 — 90% 时间用它</td>
+      <td>被低估得最厉害的选项</td>
     </tr>
   </table>
 
+  <!-- ===== 选型速查 ===== -->
   <h3>选型速查表</h3>
   <table>
     <tr><th>场景</th><th>推荐方案</th></tr>
     <tr><td>小任务（5分钟以内）</td><td><span class="tag green">原生 Claude Code</span></td></tr>
-    <tr><td>个人项目，日常开发</td><td><span class="tag blue">Superpowers</span> 或 <span class="tag green">原生</span></td></tr>
-    <tr><td>多模块大项目</td><td><span class="tag blue">Spec Kit</span> + <span class="tag purple">Superpowers</span></td></tr>
-    <tr><td>个人全栈开发</td><td><span class="tag orange">gstack</span>（仅设计阶段）</td></tr>
+    <tr><td>个人项目，日常开发</td><td><span class="tag blue">Superpowers</span> 或 <span class="tag orange">get-shit-done</span></td></tr>
+    <tr><td>个人全栈开发</td><td><span class="tag orange">gstack</span>（设计阶段）+ <span class="tag blue">Superpowers</span>（执行阶段）</td></tr>
+    <tr><td>多模块大项目</td><td><span class="tag purple">Spec Kit</span> + <span class="tag blue">Superpowers</span></td></tr>
+    <tr><td>重视流程审批</td><td><span class="tag green">BMAD</span> — 每步有人确认</td></tr>
+    <tr><td>想挑特定功能，不整套安装</td><td><span class="tag orange">davila7</span> — 当 App Store 逛</td></tr>
+    <tr><td>多模型协作</td><td><span class="tag purple">oh-my-claudecode</span> — Claude + Gemini + Codex</td></tr>
     <tr><td>团队协作</td><td><span class="tag blue">Everything</span>（按需组件）</td></tr>
-    <tr><td>最不确定该选哪个</td><td><span class="tag purple">Superpowers</span> → 好用留着，不好用换原生</td></tr>
+    <tr><td>想从原理理解 Claude Code</td><td><span class="tag green">shanraisshan</span> — 作者亲授 tips</td></tr>
+    <tr><td>最不确定该选哪个</td><td><span class="tag purple">Superpowers</span> → 好用留着，不好用换 <span class="tag orange">get-shit-done</span></td></tr>
   </table>
 
   <div class="highlight-box">
-    <p><strong>核心观点：</strong>选错工作流不算坑，选了之后不敢换才是真坑。作者的混合工作流：Plan 阶段用 Superpowers，执行阶段 90% 用原生，大模块规格用 Spec Kit，探索阶段偶尔用 gstack。<br>
+    <p><strong>核心观点：</strong>选错工作流不算坑，选了之后不敢换才是真坑。作者的混合工作流：Plan 阶段用 Superpowers，执行阶段 90% 用原生，大模块规格用 Spec Kit，探索阶段偶尔用 gstack，solo 场景用 get-shit-done。<br>
     <strong>连 Anthropic 团队内部每个人用 Claude Code 的方式都完全不一样——工作流只是起点，好用的版本都是自己改出来的。</strong></p>
   </div>
 </section>
@@ -1522,7 +1693,7 @@ paths: packages/api/**
   <h2><span class="num" style="background:var(--accent3)">六</span> 官方插件生态：claude-plugins-official</h2>
   <p style="color:var(--text-secondary)">来源：<em>让你的 Claude Code 满血复活，Anthropic 在 GitHub 上开源了个插件</em> · <a href="https://mp.weixin.qq.com/s/WTD0TEKn0h_vjgNR1WGSxQ" target="_blank" style="color:var(--accent)">原文链接 ↗</a></p>
 
-  <p>GitHub: <code>anthropics/claude-plugins-official</code>（20,000+ Stars）—— Anthropic 官方维护的 Claude Code 插件目录，40+ 个插件，覆盖 Code Review、功能开发、遗留代码迁移、Hook 管理、多语言 LSP 等场景。</p>
+  <p>GitHub: <code>anthropics/claude-plugins-official</code>（⭐ 30.1k Stars）—— Anthropic 官方维护的 Claude Code 插件目录，40+ 个插件，覆盖 Code Review、功能开发、遗留代码迁移、Hook 管理、多语言 LSP 等场景。</p>
 
   <div class="highlight-box success">
     <p><strong>安装命令：</strong><code>/plugin install {插件名}@claude-plugins-official</code><br>
@@ -1598,6 +1769,155 @@ paths: packages/api/**
     </div>
   </div>
 
+  <h3>最佳实践·进阶</h3>
+  <p style="color:var(--text-secondary)">来源：<em>Claude Code 最佳实践（要点总结）</em>（公众号：超级猛 · 2026.03.21） · <a href="https://mp.weixin.qq.com/s/HPUJJnv7WDD8_QbOv-xqKQ" target="_blank" style="color:var(--accent)">原文链接 ↗</a></p>
+
+  <div class="highlight-box">
+    <p><strong>核心观点：</strong>Claude Code 的关键不在"提示词技巧"本身，而在于你是否给了它足够明确的目标、上下文和验证方式。效果不好不是模型能力不够，而是<strong>协作方式</strong>出了问题——不是"怎么问"，而是"怎么协作"。</p>
+  </div>
+
+  <!-- 1 + 2: 左右分栏 -->
+  <div class="cards" style="grid-template-columns: 1fr 1fr;">
+    <div class="card" style="border-left:4px solid var(--accent);">
+      <h4>1. 先把验收标准说死</h4>
+      <p><strong>一句话公式：</strong>任务目标 + 通过条件 + 自查动作</p>
+      <ul style="margin-left:20px; line-height:1.9; margin-top:6px;">
+        <li><strong>Test（要给用例）</strong>：哪些输入该通过、哪些边界必须失败，别只说"写个函数"。</li>
+        <li><strong>Shot（要给截图）</strong>：UI 修改最好贴设计稿或截图，让它比对差异再修一轮。</li>
+        <li><strong>Out（要给结果）</strong>：报错任务直接贴完整错误，并要求修根因，不要临时遮掩。</li>
+      </ul>
+      <p style="margin-top:10px; color:var(--text-primary);">✅ 没有验收标准时，最容易产出"看起来对，其实没跑通"的答案。<br>
+         ✅ 最值钱的一句话不是"帮我做"，而是<strong>"做完请这样验证"</strong>。</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent2);">
+      <h4>2. 先摸清代码，再让它动手</h4>
+      <p><strong>探索 → 规划 → 实现 → 提交</strong>，四步走稳：</p>
+      <ol style="margin-left:20px; line-height:1.9; margin-top:6px;">
+        <li><strong>探索</strong>：先读目录和关键文件，只理解现状，不改任何东西。</li>
+        <li><strong>规划</strong>：列出改哪些文件、为什么改、风险在哪、怎么验证。</li>
+        <li><strong>实现</strong>：切回执行模式，按计划写代码、补测试、处理失败。</li>
+        <li><strong>提交</strong>：整理提交信息、PR 描述和验证结果。</li>
+      </ol>
+      <p style="margin-top:10px; color:var(--text-primary);">⚠️ 拼写修正、文案改动、加一行日志、变量重命名这类小任务可以直接做；<strong>但凡你自己都不确定方案、要动多个文件、或对代码库不熟</strong>，就先让它探索和列计划。</p>
+    </div>
+  </div>
+
+  <!-- 3: 独占宽度，内部分栏列表（不嵌套卡片） -->
+  <div class="card" style="border-left:4px solid var(--accent3);">
+    <h4>3. 提示词要像交接单</h4>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin:10px 0 12px 0;">
+      <div>
+        <h4 style="color:#d77; margin-bottom:8px;">❌ 低质量说法</h4>
+        <ul style="margin-left:16px; line-height:2; color:var(--text-secondary);">
+          <li>"帮我把 foo.py 加测试。"</li>
+          <li>"修一下登录问题。"</li>
+          <li>"做个日历组件。"</li>
+        </ul>
+        <p style="color:var(--text-secondary); margin-top:4px;">→ Claude 只能靠猜，返工必然多。</p>
+      </div>
+      <div>
+        <h4 style="color:#7c7; margin-bottom:8px;">✅ 高质量说法</h4>
+        <ul style="margin-left:16px; line-height:2; color:var(--text-secondary);">
+          <li>① 点名文件、目录、功能场景</li>
+          <li>② 说清边界条件、限制和不想要的方案</li>
+          <li>③ 指明参考实现或 git 历史来源</li>
+          <li>④ 最后补一句"如何验证算通过"</li>
+        </ul>
+      </div>
+    </div>
+    <p><strong>万能模板：</strong>在【文件/目录】里处理【问题/需求】，覆盖【场景/边界】，遵守【限制/风格】，参考【现有模式/历史】，完成后用【测试/截图/命令】验证。</p>
+  </div>
+
+  <!-- 4 + 5: 左右分栏，各自纵向列表（不嵌套卡片） -->
+  <div class="cards" style="grid-template-columns: 1fr 1fr;">
+    <div class="card" style="border-left:4px solid var(--accent);">
+      <h4>4. 把材料喂足，别让它猜</h4>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
+        <div><strong>@ 文件</strong><br><span style="color:var(--text-secondary);">直接点名文件，比"在某个模块里找一下"省很多来回沟通。</span></div>
+        <div><strong>贴截图</strong><br><span style="color:var(--text-secondary);">UI 修改给设计稿、截图或现状图，差异会明显少很多。</span></div>
+        <div><strong>贴 URL / 文档</strong><br><span style="color:var(--text-secondary);">API、规范、官方文档都能直接引用，避免记忆误差。</span></div>
+        <div><strong>管道日志</strong><br><span style="color:var(--text-secondary);"><code>cat error.log | claude</code> 这类方式，适合大段报错和运行输出。</span></div>
+      </div>
+      <p style="margin-top:12px; color:var(--text-primary);">💡 你甚至可以直接让 Claude 自己去拿上下文：<strong>读文件、跑 Bash、调 MCP、查历史</strong>，重点是交代清楚它应该去哪找答案。</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent4);">
+      <h4>5. 大任务先访谈，小任务直接做</h4>
+      <div style="display:flex; flex-direction:column; gap:12px; margin:10px 0;">
+        <div>
+          <strong style="color:#7c7;">🟢 适合先访谈的任务</strong><br>
+          <span style="color:var(--text-secondary);">新功能、跨页面改造、需求还在摇摆。涉及 UI、技术方案、边界情况和取舍。你希望先把 spec 明确，再开始写代码。</span>
+        </div>
+        <div>
+          <strong style="color:#d77;">🔴 适合直接做的任务</strong><br>
+          <span style="color:var(--text-secondary);">修一个明确 bug、补一条日志、改一个文案。只动 1~2 个文件，验证路径很清楚。目标明白，没必要先开一轮长讨论。</span>
+        </div>
+      </div>
+      <p><strong>两种高价值问法：</strong></p>
+      <ul style="margin-left:20px; line-height:1.9;">
+        <li>把 Claude 当<strong>资深工程师</strong>：日志怎么走、某行代码为什么这样写、某个 flow 处理了哪些边界。</li>
+        <li>把 Claude 当<strong>产品和技术搭档</strong>：先采访我，把难点、权衡和遗漏场景问清，再整理成完整 spec。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6 + 7: 左右分栏 -->
+  <div class="cards" style="grid-template-columns: 1fr 1fr;">
+    <div class="card" style="border-left:4px solid var(--accent2);">
+      <h4>6. 先把环境调顺手</h4>
+      <p><strong>CLAUDE.md 里最值得写的三类信息：</strong></p>
+      <ul style="margin-left:20px; line-height:1.9; margin-top:6px;">
+        <li>常用 Bash 命令和测试入口</li>
+        <li>团队不走默认值的代码风格</li>
+        <li>项目陷阱、必备环境变量、提交流程</li>
+      </ul>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
+        <div><strong>CLAUDE.md</strong><br><span style="color:var(--text-secondary);">把命令、风格、流程、坑点固化下来，Claude 每次开局就能读到。</span></div>
+        <div><strong>/permissions</strong><br><span style="color:var(--text-secondary);">把安全命令加入允许列表，减少每次跑测试、lint、提交的打断。</span></div>
+        <div><strong>CLI 工具</strong><br><span style="color:var(--text-secondary);">像 <code>gh</code>、<code>aws</code>、<code>gcloud</code>、<code>sentry-cli</code>，比复制网页信息更省 context。</span></div>
+        <div><strong>MCP / Hooks / Skills</strong><br><span style="color:var(--text-secondary);">让 Claude 直连外部系统、自动执行必须动作，并复用你的团队知识。</span></div>
+      </div>
+      <p style="margin-top:12px; color:var(--text-primary);">⚠️ <strong>不要</strong>把详细 API 文档、常识性代码规范、经常变化的信息一股脑写进 CLAUDE.md——只写 Claude 靠读代码也很难猜出来的东西。</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent3);">
+      <h4>7. 及时清 context，保持智商</h4>
+      <p>Context window 装着整段对话、读过的文件、命令输出和中间结论。它越满，Claude 越容易<strong>跑偏、变慢、忽略关键约束</strong>——别把所有不相关任务都堆在同一条会话里。</p>
+      <table style="margin-top:10px; width:100%;">
+        <tr><th>命令</th><th>用途</th></tr>
+        <tr><td><code>/clear</code></td><td>任务切换就清；新问题不要背着旧上下文硬聊</td></tr>
+        <tr><td><code>Esc / rewind</code></td><td>一发现走偏立刻停；需要时回到之前的对话或代码检查点</td></tr>
+        <tr><td><code>/compact</code></td><td>长会话里主动压缩，只保留后面还需要的关键信息</td></tr>
+        <tr><td><code>--continue</code></td><td>上次做到一半，直接续上，不必重新交代全部背景</td></tr>
+        <tr><td><code>subagents</code></td><td>大范围调查可开 subagents，把研究放到独立 context 里</td></tr>
+      </table>
+      <p style="margin-top:10px; color:var(--text-primary);">💡 如果只是顺手问个小问题，不值得把它留在主会话里；如果要大范围调查，还可以开 <strong>subagents</strong>，把研究放到独立 context 里，别把主线程塞满。</p>
+    </div>
+  </div>
+
+  <!-- 8: 保持现有样式 -->
+  <div class="card" style="border-left:4px solid var(--accent4);">
+    <h4>8. 总结：四件套</h4>
+    <p><strong>真正厉害的人，不是把 Claude 当回答机器，而是把它带进一套可验证、可推进、可回退的协作流程。</strong>先给目标，再给上下文，再给验收，再管理节奏。</p>
+    <div class="cards" style="grid-template-columns: repeat(4, 1fr); margin-top:10px;">
+      <div class="card" style="border-left: 4px solid var(--accent); padding:18px;">
+        <h4>① 目标要清</h4>
+        <p>会提需求，把目标、范围、限制和交付标准一次说清。</p>
+      </div>
+      <div class="card" style="border-left: 4px solid var(--accent2); padding:18px;">
+        <h4>② 材料要足</h4>
+        <p>会管 context，该探案就探案、该清理就清理。</p>
+      </div>
+      <div class="card" style="border-left: 4px solid var(--accent3); padding:18px;">
+        <h4>③ 验证要硬</h4>
+        <p>会给验证，测试/截图/预期输出要先给，不只是在碰运气。</p>
+      </div>
+      <div class="card" style="border-left: 4px solid var(--accent4); padding:18px;">
+        <h4>④ context 要干净</h4>
+        <p>及时清 context，别把所有不相关任务堆在同一条会话里。</p>
+      </div>
+    </div>
+    <p style="margin-top:12px;">做到这四件事，Claude Code 才会从"<strong>能用</strong>"变成"<strong>真好用</strong>"。</p>
+  </div>
+
   <h3>核心金句</h3>
   <div class="highlight-box success">
     <p>"Claude 和你一起工作的第 30 天，会比第一天好很多。" —— Anthropic 团队</p>
@@ -1614,7 +1934,7 @@ paths: packages/api/**
     <li>Claude Code 官方文档：<a href="https://code.claude.com/docs/zh-CN/quickstart" target="_blank">code.claude.com/docs</a></li>
     <li>官方插件仓库：<a href="https://github.com/anthropics/claude-plugins-official" target="_blank">github.com/anthropics/claude-plugins-official</a></li>
     <li>Claude Code 最佳实践：<a href="https://github.com/shanraisshan/claude-code-best-practice" target="_blank">github.com/shanraisshan/claude-code-best-practice</a></li>
-    <li>Harness 工程学习项目：<a href="https://github.com/shareAI-lab/learn-claude-code" target="_blank">github.com/shareAI-lab/learn-claude-code</a></li>
+    <li>Harness 工程学习项目：<a href="https://github.com/shareAI-lab/learn-claude-code" target="_blank">github.com/shareAI-lab/learn-claude-code</a>（⭐ 6.6k）</li>
   </ul>
 </section>
 

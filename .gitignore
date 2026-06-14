@@ -1,0 +1,23 @@
+# 本地学习与缓存
+.learnings/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.log
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# 构建产物（如有）
+node_modules/
+dist/
+build/
