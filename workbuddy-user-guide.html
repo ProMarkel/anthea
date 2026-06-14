@@ -534,6 +534,19 @@ tbody tr:hover {
   background: var(--accent-bg);
 }
 
+/* Prompt reference tables: consistent column widths */
+.collapsible-content table th:first-child,
+.collapsible-content table td:first-child {
+  width: 120px;
+  min-width: 100px;
+  white-space: nowrap;
+}
+
+.collapsible-content table th:nth-child(2),
+.collapsible-content table td:nth-child(2) {
+  width: auto;
+}
+
 /* ========== Lists ========== */
 .feature-list {
   list-style: none;
@@ -1129,13 +1142,13 @@ code {
       <span class="nav-icon-fb">A</span>
       Anthea
     </a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="anthea-nav">
       <li><a href="index.html">首页</a></li>
       <li><a href="resource-management-process.html">资源制作管理</a></li>
       <li><a href="claude-code-whitepaper.html">ClaudeCode 白皮书</a></li>
       <li><a href="claude-md-rules.html">CLAUDE.md 规则</a></li>
       <li><a href="sdd-ai-coding-checklist.html">AI Coding 清单</a></li>
-      <li><a href="workbuddy-user-guide.html" class="active">WorkBuddy 指南</a></li>
+      <li><a href="workbuddy-user-guide.html">WorkBuddy 指南</a></li>
       <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
     </ul>
   </div>
@@ -1250,6 +1263,10 @@ code {
     <a class="nav-item" href="#appendix">
       <span class="nav-icon">📖</span>
       <span class="nav-label">快速参考表</span>
+    </a>
+    <a class="nav-item" href="#prompt-ref">
+      <span class="nav-icon">💬</span>
+      <span class="nav-label">提示词参考</span>
     </a>
   </div>
 </nav>
@@ -2186,6 +2203,379 @@ code {
         <li><strong>先稳，再快</strong></li>
       </ol>
 
+      <h3 class="sub-title" id="prompt-ref">提示词参考</h3>
+      <p>覆盖办公全场景的 100+ 通用提示词速查，按两级结构组织。点击展开查看详情，<code>[占位符]</code> 替换为你的实际内容即可使用。</p>
+
+      <!-- ========== 一、基础操作 ========== -->
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <span>🚀 基础操作提示词（任务管理 · 日程安排 · 文档处理）</span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="collapsible-content">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)">任务管理</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>创建任务</td><td>帮我创建一个<code>[任务名称]</code>任务，优先级<code>[高/中/低]</code>，截止日期<code>[日期]</code></td></tr>
+              <tr><td>任务分配</td><td>将<code>[任务名称]</code>分配给<code>[团队成员]</code>，需要<code>[具体要求]</code></td></tr>
+              <tr><td>任务更新</td><td>更新<code>[任务名称]</code>的进度为<code>[百分比]</code>，当前状态<code>[进行中/已完成]</code></td></tr>
+              <tr><td>任务查询</td><td>查看我今天/本周/本月的所有任务</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">日程安排</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>创建会议</td><td>安排一个<code>[会议主题]</code>会议，时间<code>[日期时间]</code>，参会人<code>[名单]</code></td></tr>
+              <tr><td>会议提醒</td><td>设置<code>[会议名称]</code>的提前<code>[分钟数]</code>提醒</td></tr>
+              <tr><td>日程查询</td><td>查看我<code>[日期]</code>的日程安排</td></tr>
+              <tr><td>冲突检查</td><td>检查<code>[时间段]</code>是否有时间冲突</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">文档处理</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>创建文档</td><td>新建一个<code>[文档类型]</code>文档，标题为<code>[标题]</code></td></tr>
+              <tr><td>文档总结</td><td>总结<code>[文档名称]</code>的核心要点，不超过<code>[字数]</code></td></tr>
+              <tr><td>格式转换</td><td>将<code>[文件]</code>转换为<code>[格式]</code></td></tr>
+              <tr><td>文档搜索</td><td>在<code>[文件夹]</code>中搜索包含<code>[关键词]</code>的文档</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 二、专业场景 ========== -->
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <span>💼 专业场景提示词（项目管理 · 数据分析 · 市场营销 · 人力资源 · 财务管理）</span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="collapsible-content">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)">项目管理</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>项目计划</td><td>制定<code>[项目名称]</code>的项目计划，包含里程碑和时间表</td></tr>
+              <tr><td>风险评估</td><td>分析<code>[项目名称]</code>的潜在风险，提出应对方案</td></tr>
+              <tr><td>进度报告</td><td>生成<code>[项目名称]</code>的周/月进度报告</td></tr>
+              <tr><td>资源分配</td><td>为<code>[项目阶段]</code>分配合适的人员和资源</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">数据分析</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>数据整理</td><td>整理<code>[数据文件]</code>，清洗异常值，标准化格式</td></tr>
+              <tr><td>图表生成</td><td>用<code>[数据]</code>生成<code>[图表类型]</code>，突出显示<code>[关键指标]</code></td></tr>
+              <tr><td>趋势分析</td><td>分析<code>[数据集]</code>的趋势变化，预测未来<code>[时间段]</code></td></tr>
+              <tr><td>报告撰写</td><td>基于<code>[分析结果]</code>撰写数据分析报告</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">市场营销</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>竞品分析</td><td>分析<code>[竞品名称]</code>的产品特点和市场策略</td></tr>
+              <tr><td>营销方案</td><td>制定<code>[产品名称]</code>的季度营销方案</td></tr>
+              <tr><td>内容策划</td><td>策划<code>[主题]</code>的社交媒体内容日历</td></tr>
+              <tr><td>效果评估</td><td>评估<code>[营销活动]</code>的ROI和转化率</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">人力资源</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>招聘需求</td><td>撰写<code>[职位名称]</code>的招聘需求描述</td></tr>
+              <tr><td>面试问卷</td><td>生成<code>[职位名称]</code>的面试问题清单</td></tr>
+              <tr><td>绩效评估</td><td>制定<code>[员工姓名]</code>的绩效评估标准</td></tr>
+              <tr><td>培训计划</td><td>设计<code>[部门名称]</code>的季度培训计划</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">财务管理</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>预算编制</td><td>编制<code>[部门/项目]</code>的年度预算</td></tr>
+              <tr><td>费用分析</td><td>分析<code>[时间段]</code>的费用支出情况</td></tr>
+              <tr><td>财务报告</td><td>生成<code>[季度/年度]</code>财务报告</td></tr>
+              <tr><td>成本控制</td><td>提出<code>[项目名称]</code>的成本控制建议</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 三、高级技巧 ========== -->
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <span>🎯 高级技巧提示词（组合指令 · 条件判断 · 模板生成）</span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="collapsible-content">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)">组合指令</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>复杂任务分解</td><td>将<code>[复杂任务]</code>分解为可执行的子任务，分配责任人，设置时间节点</td></tr>
+              <tr><td>多文档处理</td><td>同时处理<code>[文档1]</code>、<code>[文档2]</code>、<code>[文档3]</code>，提取共同主题，生成综合报告</td></tr>
+              <tr><td>跨部门协作</td><td>协调<code>[部门A]</code>和<code>[部门B]</code>完成<code>[协作项目]</code>，明确分工和交付物</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">条件判断</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>智能提醒</td><td>如果<code>[任务]</code>在<code>[时间]</code>前未完成，自动发送提醒给<code>[负责人]</code></td></tr>
+              <tr><td>自动升级</td><td>当<code>[问题]</code>超过<code>[时间]</code>未解决，自动升级给<code>[上级领导]</code></td></tr>
+              <tr><td>条件执行</td><td>如果<code>[条件成立]</code>，则执行<code>[操作]</code>，否则执行<code>[备选方案]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">模板生成</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>会议纪要模板</td><td>生成标准会议纪要模板，包含议题、决议、行动项</td></tr>
+              <tr><td>项目报告模板</td><td>创建项目进度报告模板，有数据可视化区域</td></tr>
+              <tr><td>工作总结模板</td><td>设计周/月工作总结模板，便于快速填写</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 四、技术开发 ========== -->
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <span>🔧 技术开发提示词（代码相关 · 系统运维 · 产品设计）</span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="collapsible-content">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)">代码相关</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>代码审查</td><td>审查<code>[代码文件]</code>，指出潜在问题和改进建议</td></tr>
+              <tr><td>API文档</td><td>为<code>[API接口]</code>生成详细的文档说明</td></tr>
+              <tr><td>技术方案</td><td>设计<code>[功能需求]</code>的技术实现方案</td></tr>
+              <tr><td>性能优化</td><td>分析<code>[系统]</code>的性能瓶颈，提出优化方案</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">系统运维</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>故障排查</td><td>排查<code>[系统故障]</code>的可能原因和解决方案</td></tr>
+              <tr><td>监控设置</td><td>设置<code>[系统指标]</code>的监控告警规则</td></tr>
+              <tr><td>备份策略</td><td>制定<code>[数据/系统]</code>的备份和恢复策略</td></tr>
+              <tr><td>安全加固</td><td>提出<code>[系统/应用]</code>的安全加固建议</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">产品设计</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>需求分析</td><td>分析<code>[用户需求]</code>，转化为产品功能点</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 五、数据分析 ========== -->
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <span>📊 数据分析提示词（Excel · SQL · Python）</span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="collapsible-content">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)">Excel 处理</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>数据透视</td><td>对<code>[数据表]</code>创建数据透视表，分析<code>[维度]</code>和<code>[指标]</code></td></tr>
+              <tr><td>公式应用</td><td>在<code>[单元格范围]</code>应用<code>[公式类型]</code>计算</td></tr>
+              <tr><td>条件格式</td><td>为<code>[数据范围]</code>设置条件格式，突出显示<code>[条件]</code></td></tr>
+              <tr><td>图表制作</td><td>用<code>[数据范围]</code>制作<code>[图表类型]</code>，添加<code>[标题]</code>和标签</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">SQL 查询</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>数据查询</td><td>从<code>[表名]</code>查询<code>[字段]</code>，条件为<code>[条件]</code>，排序按<code>[字段]</code></td></tr>
+              <tr><td>数据统计</td><td>统计<code>[表名]</code>中<code>[分组字段]</code>的<code>[聚合指标]</code></td></tr>
+              <tr><td>关联查询</td><td>关联<code>[表1]</code>和<code>[表2]</code>，查询<code>[关联条件]</code>的数据</td></tr>
+              <tr><td>数据更新</td><td>更新<code>[表名]</code>中<code>[条件]</code>的数据，设置<code>[新值]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">Python 分析</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>数据清洗</td><td>用 pandas 清洗<code>[数据集]</code>，处理缺失值和异常值</td></tr>
+              <tr><td>可视化</td><td>用 matplotlib/seaborn 可视化<code>[数据]</code>，展示<code>[分析结果]</code></td></tr>
+              <tr><td>机器学习</td><td>用 scikit-learn 对<code>[数据]</code>进行<code>[算法]</code>分析</td></tr>
+              <tr><td>报告生成</td><td>用 jupyter 生成数据分析报告，包含代码和解释</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 六、创意内容 ========== -->
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <span>🎨 创意内容提示词（文案创作 · 设计辅助 · 视频脚本）</span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="collapsible-content">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)">文案创作</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>广告文案</td><td>为<code>[产品]</code>创作吸引人的广告文案，突出<code>[卖点]</code></td></tr>
+              <tr><td>社交媒体</td><td>撰写<code>[平台]</code>的社交媒体文案，风格<code>[正式/轻松]</code></td></tr>
+              <tr><td>产品描述</td><td>编写<code>[产品]</code>的详细描述，包含功能特点和优势</td></tr>
+              <tr><td>新闻稿</td><td>撰写<code>[事件]</code>的新闻稿，符合媒体发布要求</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">设计辅助</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>设计说明</td><td>为<code>[设计需求]</code>编写详细的设计说明文档</td></tr>
+              <tr><td>配色方案</td><td>为<code>[品牌/项目]</code>推荐合适的配色方案</td></tr>
+              <tr><td>字体选择</td><td>为<code>[设计类型]</code>选择合适的字体组合</td></tr>
+              <tr><td>布局建议</td><td>为<code>[页面/界面]</code>提供布局设计建议</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">视频脚本</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>产品演示</td><td>编写<code>[产品]</code>的演示视频脚本，时长<code>[分钟]</code></td></tr>
+              <tr><td>培训视频</td><td>创作<code>[主题]</code>的培训视频脚本，包含讲解和示例</td></tr>
+              <tr><td>宣传片</td><td>撰写<code>[品牌/活动]</code>的宣传片脚本，有情感共鸣</td></tr>
+              <tr><td>教程视频</td><td>制作<code>[技能/软件]</code>的教程视频脚本，步骤清晰</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 七、工作流优化 ========== -->
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <span>⚙️ 工作流优化提示词（自动化流程 · 集成指令 · 团队协作）</span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="collapsible-content">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)">自动化流程</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>邮件自动回复</td><td>设置收到<code>[关键词]</code>邮件时自动回复<code>[内容]</code></td></tr>
+              <tr><td>任务自动创建</td><td>当<code>[条件触发]</code>时自动创建<code>[任务]</code></td></tr>
+              <tr><td>报告自动生成</td><td>每周一自动生成上周的工作报告</td></tr>
+              <tr><td>数据自动同步</td><td>将<code>[数据源]</code>的数据自动同步到<code>[目标系统]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">集成指令</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>微信集成</td><td>将<code>[任务/日程]</code>同步到微信提醒</td></tr>
+              <tr><td>邮件集成</td><td>通过邮件发送<code>[报告/通知]</code>给<code>[收件人]</code></td></tr>
+              <tr><td>日历集成</td><td>将<code>[会议/日程]</code>同步到<code>[日历应用]</code></td></tr>
+              <tr><td>文档集成</td><td>将<code>[数据]</code>自动导入到<code>[文档模板]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">团队协作</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>分工协作</td><td>为<code>[项目]</code>分配团队成员角色和职责</td></tr>
+              <tr><td>进度同步</td><td>定期同步团队成员的<code>[任务/项目]</code>进度</td></tr>
+              <tr><td>问题协调</td><td>协调解决团队遇到的<code>[问题/障碍]</code></td></tr>
+              <tr><td>成果分享</td><td>分享团队<code>[时间段]</code>的工作成果和经验</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 八、个性化定制 ========== -->
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <span>💡 个性化定制提示词（风格调整 · 角色扮演 · 知识库训练）</span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="collapsible-content">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)">风格调整</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>正式风格</td><td>用正式专业的语言处理<code>[内容]</code></td></tr>
+              <tr><td>轻松风格</td><td>用轻松友好的语气撰写<code>[文案]</code></td></tr>
+              <tr><td>简洁风格</td><td>用简洁明了的表达总结<code>[信息]</code></td></tr>
+              <tr><td>详细风格</td><td>提供详细完整的<code>[说明/报告]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">角色扮演</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>项目经理</td><td>以项目经理身份处理<code>[项目事务]</code></td></tr>
+              <tr><td>技术专家</td><td>以技术专家角度分析<code>[技术问题]</code></td></tr>
+              <tr><td>市场总监</td><td>以市场总监视角制定<code>[营销策略]</code></td></tr>
+              <tr><td>财务顾问</td><td>以财务顾问身份提供<code>[财务建议]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">知识库训练</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>学习文档</td><td>学习<code>[文档/资料]</code>的内容，掌握相关知识</td></tr>
+              <tr><td>记忆要点</td><td>记住<code>[关键信息]</code>，在相关场景中应用</td></tr>
+              <tr><td>更新知识</td><td>更新关于<code>[主题]</code>的最新知识和信息</td></tr>
+              <tr><td>专业深化</td><td>深入学习<code>[专业领域]</code>的深度知识</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 九、效率提升组合 ========== -->
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <span>🚀 效率提升组合（晨间工作流 · 项目启动 · 报告生成）</span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="collapsible-content">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)">晨间工作流</h4>
+            <div class="table-wrapper"><table><thead><tr><th>步骤</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>1</td><td>查看今日日程安排</td></tr>
+              <tr><td>2</td><td>规划今日重点工作任务</td></tr>
+              <tr><td>3</td><td>快速处理重要邮件</td></tr>
+              <tr><td>4</td><td>准备今日会议材料和议程</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">项目启动组合</h4>
+            <div class="table-wrapper"><table><thead><tr><th>步骤</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>1</td><td>确认项目需求和目标</td></tr>
+              <tr><td>2</td><td>组建项目团队和分工</td></tr>
+              <tr><td>3</td><td>制定详细项目计划</td></tr>
+              <tr><td>4</td><td>准备项目所需资源</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">报告生成组合</h4>
+            <div class="table-wrapper"><table><thead><tr><th>步骤</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>1</td><td>收集报告所需数据</td></tr>
+              <tr><td>2</td><td>分析处理收集的数据</td></tr>
+              <tr><td>3</td><td>撰写完整的分析报告</td></tr>
+              <tr><td>4</td><td>准备报告汇报材料</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 十、移动办公 ========== -->
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <span>📱 移动办公提示词（语音指令 · 快捷操作 · 离线功能）</span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="collapsible-content">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)">语音指令</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>语音创建</td><td>用语音创建<code>[任务/日程/提醒]</code></td></tr>
+              <tr><td>语音查询</td><td>用语音查询<code>[信息/状态/进度]</code></td></tr>
+              <tr><td>语音更新</td><td>用语音更新<code>[任务/项目]</code>状态</td></tr>
+              <tr><td>语音总结</td><td>用语音总结<code>[会议/文档]</code>要点</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">快捷操作</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>快速回复</td><td>快速回复<code>[消息/邮件]</code>的模板</td></tr>
+              <tr><td>一键生成</td><td>一键生成<code>[日报/周报/月报]</code></td></tr>
+              <tr><td>智能提醒</td><td>智能提醒<code>[重要事项/截止时间]</code></td></tr>
+              <tr><td>自动同步</td><td>自动同步<code>[数据/文件/日程]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)">离线功能</h4>
+            <div class="table-wrapper"><table><thead><tr><th>场景</th><th>提示词</th></tr></thead><tbody>
+              <tr><td>离线创建</td><td>离线状态下创建<code>[任务/文档]</code></td></tr>
+              <tr><td>本地搜索</td><td>在本地文件中搜索<code>[关键词]</code></td></tr>
+              <tr><td>缓存处理</td><td>处理缓存的<code>[数据/消息]</code></td></tr>
+              <tr><td>同步准备</td><td>准备需要同步的<code>[内容/文件]</code></td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 十一、使用技巧 ========== -->
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <span>💎 提示词优化原则 & 常见错误避免</span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="collapsible-content">
+            <div class="comparison" style="margin-top:0">
+              <div class="comparison-col">
+                <h4>❌ 常见错误</h4>
+                <ul>
+                  <li>信息不足导致理解偏差</li>
+                  <li>信息过多影响处理效率</li>
+                  <li>非标准格式难以解析</li>
+                  <li>不清楚想要什么结果</li>
+                </ul>
+              </div>
+              <div class="comparison-col">
+                <h4>✓ 优化原则</h4>
+                <ul>
+                  <li>避免模糊，提供具体信息</li>
+                  <li>使用标准格式，便于解析</li>
+                  <li>明确想要达到的效果</li>
+                  <li>提供足够但不冗余的信息</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="doc-footer">
         <p>华生 📝 · 2026-06-09 · 基于 WorkBuddy 官方文档整理</p>
       </div>
@@ -2298,5 +2688,9 @@ document.querySelectorAll('.doc-section.reveal').forEach(section => {
 });
 </script>
 
+<script>
+/* Anthea Nav: auto-highlight current page */
+(function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
+</script>
 </body>
 </html>

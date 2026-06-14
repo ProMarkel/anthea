@@ -270,11 +270,11 @@
       <span class="nav-icon-fb">A</span>
       Anthea
     </a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="anthea-nav">
       <li><a href="index.html">首页</a></li>
       <li><a href="resource-management-process.html">资源制作管理</a></li>
       <li><a href="claude-code-whitepaper.html">ClaudeCode 白皮书</a></li>
-      <li><a href="claude-md-rules.html" class="active">CLAUDE.md 规则</a></li>
+      <li><a href="claude-md-rules.html">CLAUDE.md 规则</a></li>
       <li><a href="sdd-ai-coding-checklist.html">AI Coding 清单</a></li>
       <li><a href="workbuddy-user-guide.html">WorkBuddy 指南</a></li>
       <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
@@ -501,5 +501,9 @@ backToTop.addEventListener('click', () => {
 });
 </script>
 
+<script>
+/* Anthea Nav: auto-highlight current page */
+(function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
+</script>
 </body>
 </html>
