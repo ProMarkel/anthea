@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenSpec — 游戏需求提案工作流</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #fafaf8;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --border: #e5e5e0;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --green: #059669;
+    --green-light: #ecfdf5;
+    --amber: #d97706;
+    --amber-light: #fffbeb;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --purple: #7c3aed;
+    --purple-light: #f5f3ff;
+    --radius: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── Navigation ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    height: 52px;
+    -webkit-overflow-scrolling: touch;
+  }
+  nav a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  nav a:hover { color: var(--text); background: var(--border); }
+  nav a.active { color: var(--accent); background: var(--accent-light); font-weight: 600; }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center;
+    padding: 80px 24px 60px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .hero h1 { font-size: 36px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.5px; }
+  .hero p { color: var(--muted); font-size: 17px; max-width: 540px; margin: 0 auto 24px; }
+  .hero .tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .hero .tags span {
+    font-size: 12px; padding: 3px 10px; border-radius: 4px;
+    background: var(--bg); border: 1px solid var(--border); color: var(--muted);
+  }
+
+  /* ── Sections ── */
+  section {
+    max-width: 900px;
+    margin: 0 auto 64px;
+    padding: 0 24px;
+  }
+  section h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  section h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 28px 0 10px;
+  }
+  section .sec-desc {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .card-grid-3 { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+  /* ── Principle cards ── */
+  .principle { border-left: 3px solid var(--accent); }
+  .principle .num { font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .principle h4 { font-size: 15px; margin: 4px 0 6px; }
+  .principle p { font-size: 13px; color: var(--muted); }
+
+  /* ── Pipeline ── */
+  .pipeline {
+    display: flex; align-items: center; gap: 0;
+    overflow-x: auto; padding: 24px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .pipeline .step {
+    flex-shrink: 0;
+    width: 120px; text-align: center;
+    padding: 16px 10px; border-radius: var(--radius);
+    background: var(--card); border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .pipeline .step .icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    margin: 0 auto 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+  }
+  .pipeline .step:nth-child(1) .icon { background: var(--accent); }
+  .pipeline .step:nth-child(3) .icon { background: #0891b2; }
+  .pipeline .step:nth-child(5) .icon { background: var(--green); }
+  .pipeline .step:nth-child(7) .icon { background: var(--amber); }
+  .pipeline .step:nth-child(9) .icon { background: var(--purple); }
+  .pipeline .step .label { font-size: 13px; font-weight: 600; margin-top: 4px; }
+  .pipeline .step .sublabel { font-size: 11px; color: var(--muted); }
+  .pipeline .arrow {
+    flex-shrink: 0; font-size: 20px; color: var(--muted);
+    padding: 0 6px; margin-top: -8px;
+  }
+
+  /* ── Tables ── */
+  table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow);
+  }
+  th {
+    background: #f9f9f6; text-align: left; padding: 10px 14px;
+    font-weight: 600; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid #f0f0ec; }
+  tr:last-child td { border-bottom: none; }
+  .tag {
+    display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+  }
+  .tag-r { background: var(--accent-light); color: var(--accent); }
+  .tag-a { background: var(--amber-light); color: var(--amber); }
+  .tag-c { background: var(--purple-light); color: var(--purple); }
+  .tag-i { background: #f5f5f5; color: var(--muted); }
+
+  /* ── Revision flow ── */
+  .flow-box {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px 24px; font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 13px; line-height: 2; white-space: pre-wrap; overflow-x: auto;
+    box-shadow: var(--shadow);
+  }
+
+  /* ── Callout ── */
+  .callout {
+    border-radius: var(--radius); padding: 16px 20px; margin: 16px 0;
+    font-size: 14px; border-left: 3px solid;
+  }
+  .callout-info { background: var(--accent-light); border-color: var(--accent); }
+  .callout-warn { background: var(--amber-light); border-color: var(--amber); }
+  .callout-green { background: var(--green-light); border-color: var(--green); }
+  .callout-red { background: var(--red-light); border-color: var(--red); }
+
+  /* ── Trigger table ── */
+  .trigger-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--border); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow);
+  }
+  .trigger-grid .tg-head {
+    background: #f9f9f6; padding: 10px 14px; font-size: 12px;
+    font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .trigger-grid .tg-cell {
+    background: var(--card); padding: 9px 14px; font-size: 13px;
+  }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center; padding: 40px 24px; color: var(--muted); font-size: 13px;
+    border-top: 1px solid var(--border); margin-top: 40px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 26px; }
+    .pipeline { gap: 0; }
+    .pipeline .step { width: 100px; padding: 12px 8px; }
+    .pipeline .arrow { padding: 0 2px; font-size: 16px; }
+    .trigger-grid { grid-template-columns: 1fr; }
+    .card-grid, .card-grid-3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════ NAVIGATION ════════════ -->
+<nav id="nav">
+  <a href="#why">为什么</a>
+  <a href="#identity">用户身份</a>
+  <a href="#pipeline">五步流水线</a>
+  <a href="#roles">角色矩阵</a>
+  <a href="#details">步骤详情</a>
+  <a href="#revision">修订规则</a>
+  <a href="#iron-law">铁律</a>
+  <a href="#relay">协作接力</a>
+  <a href="#example">真实案例</a>
+  <a href="#structure">目录结构</a>
+  <a href="#start">快速开始</a>
+</nav>
+
+<!-- ════════════ HERO ════════════ -->
+<div class="hero">
+  <div class="badge">OpenSpec · Propose Phase</div>
+  <h1>游戏需求提案工作流</h1>
+  <p>一套轻量级、叙事驱动的产品需求规格框架，让团队的每一次决策都有据可查、可追溯、可复盘。</p>
+  <div class="tags">
+    <span>模拟经营手游</span><span>Cocos Creator</span><span>Go 后端</span><span>15+ 人团队</span>
+  </div>
+</div>
+
+<!-- ════════════ SECTION 1: WHY ════════════ -->
+<section id="why">
+  <h2>为什么需要 OpenSpec？</h2>
+  <p class="sec-desc">软件项目持续产生大量决策——做什么、为什么、怎么做。没有一致的记录方式，上下文就会散落在 Slack 聊天、PR 描述和半遗忘的会议中。OpenSpec 让规格流程变得刻意、可审阅、可版本化。</p>
+
+  <div class="card-grid card-grid-3">
+    <div class="card principle">
+      <div class="num">原则 1</div>
+      <h4>叙事优于表单</h4>
+      <p>提案、规格、决策以可读文档形式存在。无论是人还是 LLM，都无需交叉引用工单系统就能理解设计依据。</p>
+    </div>
+    <div class="card principle">
+      <div class="num">原则 2</div>
+      <h4>变更即仪式</h4>
+      <p>每一次有意义的变更都经历：提案 → 审阅 → 批准 → 实施 → 关闭。跳过任何阶段本身就是一次值得记录的决定。</p>
+    </div>
+    <div class="card principle">
+      <div class="num">原则 3</div>
+      <h4>不做 BPMN</h4>
+      <p>流程应该简单到一张作弊小抄就能装下。过度工程化流程本身，恰恰违背了流程的初衷。</p>
+    </div>
+    <div class="card principle">
+      <div class="num">原则 4</div>
+      <h4>人人可提案，非人人可决策</h4>
+      <p>提案者和最终审批者分离，保持提案的诚实性和决策的连贯性。</p>
+    </div>
+    <div class="card principle">
+      <div class="num">原则 5</div>
+      <h4>意图版本化</h4>
+      <p>规格文档一旦批准即冻结。增补内容以追加方式记录，从不编辑历史文本，确保设计意图的完整溯源。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ SECTION 2: IDENTITY ════════════ -->
+<section id="identity">
+  <h2>用户身份与权限</h2>
+  <p class="sec-desc">hyl-propose 在每次触发时自动读取 <code>CLAUDE.local.md</code> 获取当前用户身份，用于角色判定和权限控制。PO（提案负责人）是流程中的临时角色——发起提案并撰写 story.md 的策划自动成为该提案的 PO。</p>
+
+  <h3>CLAUDE.local.md — 本地身份文件</h3>
+  <p>每个团队成员的本地身份配置极其简单，只需一行姓名和一行角色：</p>
+  <div class="flow-box">
+# 本地用户身份配置
+
+**姓名**：张三（昵称：小张）
+**角色**：系统策划
+
+> PO（提案负责人）是提案流程中的临时角色，发起提案并撰写 story.md 的人自动成为该提案的 PO。制作人或主策划可指定更换。</div>
+
+  <div class="callout callout-info" style="margin-top:16px;">
+    <strong>模板文件：</strong><code>CLAUDE.local.template.md</code> 可供团队成员复制并填写。如果首次使用 hyl-propose 时尚未创建此文件，AI 会自动引导你完成身份配置。
+  </div>
+
+  <h3>身份引导流程</h3>
+  <p>当 <code>CLAUDE.local.md</code> 不存在或无法读取时，AI 不会继续任何流程，而是先引导用户完成身份配置：</p>
+  <div class="card-grid">
+    <div class="card">
+      <h4>步骤 1：询问姓名</h4>
+      <p style="font-size:13px;color:var(--muted);">AI："未检测到你的本地身份配置。在继续之前，请先告诉我——你的姓名（全名）和常用昵称是什么？"</p>
+    </div>
+    <div class="card">
+      <h4>步骤 2：选择角色</h4>
+      <p style="font-size:13px;color:var(--muted);">AI 列出 9 种角色选项：制作人、主策划、系统策划、数值策划、文案策划、交互设计师、主程序、开发程序、QA。</p>
+    </div>
+    <div class="card">
+      <h4>步骤 3：保存配置</h4>
+      <p style="font-size:13px;color:var(--muted);">AI 将信息写入 <code>CLAUDE.local.md</code>，提示："身份信息已保存到 CLAUDE.local.md，之后可以直接使用。"</p>
+    </div>
+    <div class="card">
+      <h4>步骤 4：继续流程</h4>
+      <p style="font-size:13px;color:var(--muted);">身份配置完成后，AI 自动回到原来的流程（新建 / 续接 / 检查模式），后续每次触发均自动识别。</p>
+    </div>
+  </div>
+
+  <h3>角色分类与权限</h3>
+  <table>
+    <tr><th>类别</th><th>包含角色</th><th>propose 阶段权限</th></tr>
+    <tr><td><strong>策划类</strong></td><td>制作人、主策划、系统策划、数值策划、文案策划、交互设计师</td><td>可新建提案 · 可执行步骤 · 可审阅产物</td></tr>
+    <tr><td><strong>程序类</strong></td><td>主程序、开发程序、QA</td><td>不可新建提案 · 不可执行步骤 · propose 完成后知会</td></tr>
+  </table>
+
+  <h3>三种模式下的角色判定</h3>
+  <table>
+    <tr><th>模式</th><th>策划类角色</th><th>程序类角色</th></tr>
+    <tr>
+      <td><strong>新建模式</strong></td>
+      <td>✅ 允许。发起提案的策划自动成为该提案的 PO。</td>
+      <td>⛔ 阻止。提示："程序类角色无法直接新建提案。如有功能优化建议，可转达策划团队评估后发起提案。"</td>
+    </tr>
+    <tr>
+      <td><strong>检查模式</strong></td>
+      <td>✅ 允许。展示各步骤状态。若当前用户是进行中步骤的执行人，高亮提示"是否继续完成？"。若角色符合下一步要求，主动提示"你的角色可以接续执行，是否继续推进？"。</td>
+      <td>✅ 允许。展示状态。若提案未完成，提示："此提案仍在 propose 阶段，你将在最终审核通过后收到通知。"</td>
+    </tr>
+    <tr>
+      <td><strong>续接模式</strong></td>
+      <td>✅ 允许。AI 进行三级身份匹配：<br>• <strong>角色完全匹配</strong>（姓名 = 执行人列）→ 直接进入<br>• <strong>角色不完全匹配</strong>（姓名 ≠ 执行人列，但角色一致）→ 二次确认"是否替代接续？"<br>• <strong>角色不匹配</strong>（角色与步骤要求不符）→ 二次确认"是否仍然接续？"</td>
+      <td>⛔ 阻止。提示："程序类角色不参与 propose 阶段的执行和审阅。此提案当前处于步骤 N，完成后将通知你。"</td>
+    </tr>
+  </table>
+
+  <h3>PO 更换规则</h3>
+  <p>PO 是提案流程中的临时角色，可在以下情况下更换：</p>
+  <div class="card-grid">
+    <div class="card">
+      <h4>制作人指定更换</h4>
+      <p style="font-size:13px;color:var(--muted);">制作人在审阅 story 或后续步骤时，可指定新的 PO。更新 proposal-index.md 的 PO 字段和 story 执行人列。</p>
+    </div>
+    <div class="card">
+      <h4>主策划指定更换</h4>
+      <p style="font-size:13px;color:var(--muted);">主策划在审阅过程中，可提议更换 PO，经制作人确认后生效。写入状态变更记录。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ SECTION 3: PIPELINE ════════════ -->
+<section id="pipeline">
+  <h2>五步流水线</h2>
+  <p class="sec-desc">提案按顺序推进，每步独立审阅。审阅通过后产物即锁定，不可回改——任何修订必须走正式的 fix 版本流程。</p>
+
+  <div class="pipeline">
+    <div class="step">
+      <div class="icon">1</div>
+      <div class="label">需求创建</div>
+      <div class="sublabel">story.md</div>
+      <div class="sublabel">PO → 制作人</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="icon">2</div>
+      <div class="label">规则设计</div>
+      <div class="sublabel">mechanics.md</div>
+      <div class="sublabel">系统/主策 → PO+主策</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="icon">3</div>
+      <div class="label">数值设计</div>
+      <div class="sublabel">params.md</div>
+      <div class="sublabel">数值策划 → PO+主策</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="icon">4</div>
+      <div class="label">包装设计</div>
+      <div class="sublabel">theme.md</div>
+      <div class="sublabel">文案策划 → PO+主策</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="icon">5</div>
+      <div class="label">交互设计</div>
+      <div class="sublabel">ux.md</div>
+      <div class="sublabel">交互设计 → PO+主策</div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <strong>每步通用循环：</strong>执行人撰写 → 提交审阅 → 审阅人审阅（1 工作日）→ 通过 / 打回。打回后直接修改原文件重新提交，不创建新版本。
+  </div>
+
+  <table>
+    <tr><th>步骤</th><th>术语</th><th>产物</th><th>执行人</th><th>审阅人</th><th>时限</th></tr>
+    <tr><td>1</td><td>需求创建</td><td>story.md</td><td>PO</td><td>制作人</td><td>1 工作日</td></tr>
+    <tr><td>2</td><td>规则设计</td><td>mechanics.md</td><td>系统策划 / 主策划</td><td>PO + 主策划</td><td>1 工作日</td></tr>
+    <tr><td>3</td><td>数值设计</td><td>params.md</td><td>数值策划</td><td>PO + 主策划</td><td>1 工作日</td></tr>
+    <tr><td>4</td><td>包装设计</td><td>theme.md</td><td>文案策划</td><td>PO + 主策划</td><td>1 工作日</td></tr>
+    <tr><td>5</td><td>交互设计</td><td>ux.md</td><td>交互设计师</td><td>PO + 主策划</td><td>1 工作日</td></tr>
+    <tr><td>—</td><td>最终审核</td><td>—</td><td>—</td><td>制作人</td><td>1 工作日</td></tr>
+  </table>
+
+  <div class="callout callout-warn" style="margin-top:16px;">
+    <strong>特殊规则：</strong>当主策划同时是 PO 且执行 mechanics 时，审阅人中的「主策划」由制作人代替，避免自审。
+  </div>
+</section>
+
+<!-- ════════════ SECTION 4: ROLES ════════════ -->
+<section id="roles">
+  <h2>角色矩阵（RACI）</h2>
+  <p class="sec-desc">R = 执行 · A = 审阅 · C = 可按需加审 · I = 知会 · — = 不参与</p>
+
+  <table>
+    <tr><th>角色</th><th>story</th><th>mechanics</th><th>params</th><th>theme</th><th>ux</th><th>最终审核</th></tr>
+    <tr><td><strong>制作人</strong></td><td><span class="tag tag-a">A</span></td><td><span class="tag tag-c">C / A*</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-a">A</span></td></tr>
+    <tr><td><strong>PO</strong></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-a">A</span></td><td><span class="tag tag-a">A</span></td><td><span class="tag tag-a">A</span></td><td><span class="tag tag-a">A</span></td><td><span class="tag tag-i">I</span></td></tr>
+    <tr><td><strong>主策划</strong></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-a">A / R</span></td><td><span class="tag tag-a">A</span></td><td><span class="tag tag-a">A</span></td><td><span class="tag tag-a">A</span></td><td><span class="tag tag-i">I</span></td></tr>
+    <tr><td><strong>系统策划</strong></td><td>—</td><td><span class="tag tag-r">R</span></td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td><strong>数值策划</strong></td><td>—</td><td>—</td><td><span class="tag tag-r">R</span></td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td><strong>文案策划</strong></td><td>—</td><td>—</td><td>—</td><td><span class="tag tag-r">R</span></td><td>—</td><td>—</td></tr>
+    <tr><td><strong>交互设计师</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag tag-r">R</span></td><td>—</td></tr>
+    <tr><td><strong>主程序</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag tag-i">I</span></td></tr>
+    <tr><td><strong>开发程序</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag tag-i">I</span></td></tr>
+    <tr><td><strong>QA</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag tag-i">I</span></td></tr>
+  </table>
+
+  <div class="callout callout-warn" style="margin-top:16px;">
+    <strong>* 特殊规则：</strong>主策划同时是 PO 且执行 mechanics 时，制作人由 C（可加审）升级为 A（审阅），代替主策划履行审阅职责。
+  </div>
+
+  <h3>冲突处理</h3>
+  <p>当 PO 与主策划在审阅中意见不一致时：<strong>协商</strong> → 协商不成 → <strong>制作人介入裁决</strong>（制作人拥有最终裁决权）。</p>
+</section>
+
+<!-- ════════════ SECTION 5: STEP DETAILS ════════════ -->
+<section id="details">
+  <h2>步骤详情</h2>
+  <p class="sec-desc">每个步骤聚焦单一职责，依赖前置产物的审阅通过状态。</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>步骤 1 · 需求创建</h4>
+      <p style="font-size:13px;color:var(--muted);">产物：<code>story.md</code> · 执行人：PO · 审阅人：制作人</p>
+      <p style="font-size:13px;margin-top:8px;">从特定玩家角度出发，描述行为目标和价值。使用「作为…（角色），我想要…（目标），以便…（价值）」句式。审阅通过后 PO 正式成为该提案的 Proposal Owner。</p>
+    </div>
+    <div class="card">
+      <h4>步骤 2 · 规则设计</h4>
+      <p style="font-size:13px;color:var(--muted);">产物：<code>mechanics.md</code> · 执行人：系统/主策 · 审阅人：PO + 主策</p>
+      <p style="font-size:13px;margin-top:8px;">基于 story 进行核心机制和逻辑规则设计。包含状态机/流程图、规则逻辑详述、边界条件、异常路径、与现有系统交互点。</p>
+    </div>
+    <div class="card">
+      <h4>步骤 3 · 数值设计</h4>
+      <p style="font-size:13px;color:var(--muted);">产物：<code>params.md</code> · 执行人：数值策划 · 审阅人：PO + 主策</p>
+      <p style="font-size:13px;margin-top:8px;">基于 mechanics 进行配置表结构、常量参数、数值阈值、运算公式设计，并生成覆盖正常/边界/异常的开发调试数据。</p>
+    </div>
+    <div class="card">
+      <h4>步骤 4 · 包装设计</h4>
+      <p style="font-size:13px;color:var(--muted);">产物：<code>theme.md</code> · 执行人：文案策划 · 审阅人：PO + 主策</p>
+      <p style="font-size:13px;margin-top:8px;">基于 mechanics 和 params，结合游戏世界观，进行功能名称、道具描述、UI 文本、视觉方向的全面设计。</p>
+    </div>
+    <div class="card">
+      <h4>步骤 5 · 交互设计</h4>
+      <p style="font-size:13px;color:var(--muted);">产物：<code>ux.md</code> · 执行人：交互设计师 · 审阅人：PO + 主策</p>
+      <p style="font-size:13px;margin-top:8px;">基于 mechanics 和 theme，进行界面层级、信息架构、交互流程、状态覆盖、分辨率适配的设计。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ SECTION 6: REVISION RULES ════════════ -->
+<section id="revision">
+  <h2>修订规则</h2>
+  <p class="sec-desc">审阅通过后产物不可修改——任何修订必须创建 <code>-fixNN</code> 版本，走正式修订流程。</p>
+
+  <h3>两种修订场景</h3>
+  <div class="card-grid">
+    <div class="card">
+      <h4>场景 A：审阅通过前 · 打回</h4>
+      <p style="font-size:13px;color:var(--muted);">当前步骤被审阅人打回 → 执行人直接修改原文件，重新提交审阅。不创建 -fix 版本。</p>
+    </div>
+    <div class="card">
+      <h4>场景 B：审阅通过后 · 修订</h4>
+      <p style="font-size:13px;color:var(--muted);">后续步骤发现前置产物需修订 → 创建 <code>-fixNN</code> 版本，原文件保留不动。修订后从问题步骤重启，按序重走后续步骤。</p>
+    </div>
+  </div>
+
+  <h3>级联规则</h3>
+  <p>修订发起后，后续步骤是否需要创建 -fix 版本，取决于该步骤的当前状态：</p>
+  <div class="card-grid">
+    <div class="card" style="border-left:3px solid var(--red);">
+      <h4>已审阅通过</h4>
+      <p style="font-size:13px;color:var(--muted);">必须创建 -fix 版本——已锁定的产物不可修改</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <h4>未提交审阅（撰写中/待审阅）</h4>
+      <p style="font-size:13px;color:var(--muted);">直接在原稿内修改，不创建 -fix 版本</p>
+    </div>
+  </div>
+
+  <h3>修订状态流转</h3>
+  <div class="flow-box">
+story.md → [审阅通过] → mechanics.md → [审阅通过] → params.md → [审阅通过]
+→ ux.md（撰写中，发现 mechanics 需修订）
+→ 创建 mechanics-fix01.md → [审阅通过]
+→ params.md 已审阅通过 → 创建 params-fix01.md（级联修订）→ [审阅通过]
+→ ux.md 未提交审阅 → 在原稿内直接修订 → [审阅通过]
+→ 制作人最终审核 → [通过] → propose 完成</div>
+
+  <h3>产物状态变更</h3>
+  <table>
+    <tr><th>阶段</th><th>原产物状态</th><th>操作</th></tr>
+    <tr><td>修订发起</td><td>已通过 → <strong>修订中</strong></td><td>在修订备注中写明发起环节、原因、版本、修订人、审阅人</td></tr>
+    <tr><td>fix 版本创建</td><td>—</td><td>在修订备注中声明：修订版本、基于版本、发起环节、原因</td></tr>
+    <tr><td>fix 审阅通过</td><td>修订中 → <strong>已修订</strong></td><td>更新「当前有效版本」指向 fix 版本</td></tr>
+  </table>
+</section>
+
+<!-- ════════════ SECTION 7: IRON LAW ════════════ -->
+<section id="iron-law">
+  <h2>proposal-index.md 铁律</h2>
+  <p class="sec-desc">proposal-index.md 贯穿整个 propose 阶段，是提案的「中枢神经系统」。每次状态流转必须即时更新，不得延迟或遗漏。</p>
+
+  <div class="callout callout-red">
+    <strong>铁律：</strong>状态变更和 proposal-index 更新是<strong>原子操作</strong>——先更新产物文件，再更新 proposal-index，两者必须在同一次操作中完成，不可拆分。
+  </div>
+
+  <h3>更新触发点</h3>
+  <div class="trigger-grid">
+    <div class="tg-head">事件</div><div class="tg-head">更新的部分</div>
+    <div class="tg-cell">创建提案目录</div><div class="tg-cell">产物状态（story: 待创建→撰写中），PO 字段，状态变更记录</div>
+    <div class="tg-cell">确认执行人</div><div class="tg-cell">产物状态表执行人列</div>
+    <div class="tg-cell">更换 PO</div><div class="tg-cell">PO 字段，story 执行人列，状态变更记录</div>
+    <div class="tg-cell">执行人提交产物审阅</div><div class="tg-cell">产物状态（撰写中→待审阅），状态变更记录</div>
+    <div class="tg-cell">审阅通过</div><div class="tg-cell">产物状态（待审阅→已通过），审阅通过时间，审阅记录，状态变更记录</div>
+    <div class="tg-cell">审阅打回</div><div class="tg-cell">产物状态（待审阅→已打回），审阅记录，状态变更记录</div>
+    <div class="tg-cell">打回后重新提交</div><div class="tg-cell">产物状态（已打回→待审阅），状态变更记录</div>
+    <div class="tg-cell">发起修订</div><div class="tg-cell">原产物状态（已通过→修订中），产物状态表新增 fix 行，状态变更记录</div>
+    <div class="tg-cell">fix 审阅通过</div><div class="tg-cell">fix 产物状态→已通过，原产物状态→已修订，审阅记录，状态变更记录，当前有效版本，修订版本链</div>
+    <div class="tg-cell">fix 审阅打回</div><div class="tg-cell">fix 产物状态更新，审阅记录，状态变更记录</div>
+    <div class="tg-cell">级联修订（后续步骤）</div><div class="tg-cell">同上，按级联规则逐步骤更新</div>
+    <div class="tg-cell">任意状态变更（暂停/恢复）</div><div class="tg-cell">状态变更记录</div>
+    <div class="tg-cell">最终审核</div><div class="tg-cell">当前状态→已完成，最终审核详情</div>
+  </div>
+</section>
+
+<!-- ════════════ SECTION 8: RELAY ════════════ -->
+<section id="relay">
+  <h2>多人协作接力</h2>
+  <p class="sec-desc">本流程涉及 7 种角色在 5 个步骤间接力。proposal-index.md 是唯一状态机，Git 是同步中枢，hyl-propose 是执行引擎。</p>
+
+  <h3>接力总则</h3>
+  <div class="flow-box">
+执行人完成 → 更新产物 + proposal-index → git commit & push → 通知下一人
+下一人 git pull → 打开 proposal-index 确认状态 → 用 hyl-propose 续接</div>
+
+  <h3>hyl-propose 三种模式</h3>
+  <div class="card-grid card-grid-3">
+    <div class="card">
+      <h4>新建模式</h4>
+      <p style="font-size:13px;color:var(--muted);">输入"发起提案 功能名"或"新建提案 功能名"。<strong>仅限策划类角色</strong>（制作人/主策划/系统策划/数值策划/文案策划/交互设计师）。发起提案的策划自动成为该提案的 PO。</p>
+    </div>
+    <div class="card">
+      <h4>续接模式</h4>
+      <p style="font-size:13px;color:var(--muted);">输入"继续提案 功能名"。AI 读取 proposal-index.md 识别当前状态，进行三级身份匹配（完全匹配 / 角色匹配 / 跨角色匹配），确认后引导进入对应步骤。</p>
+    </div>
+    <div class="card">
+      <h4>检查模式</h4>
+      <p style="font-size:13px;color:var(--muted);">输入"检查 功能名 的进度"。<strong>所有角色均可使用</strong>。AI 展示各步骤状态，进行中的步骤高亮执行人，主动提示可接续的步骤。</p>
+    </div>
+  </div>
+
+  <h3>执行人列 — 身份验证</h3>
+  <p>proposal-index.md 的产物状态表中包含「执行人」列，AI 在续接时通过 <code>CLAUDE.local.md</code> 获取当前用户身份，进行三级匹配：</p>
+  <table>
+    <tr><th>步骤</th><th>产物</th><th>执行人</th><th>当前版本</th><th>状态</th><th>生成时间</th><th>审阅通过时间</th></tr>
+    <tr><td>1</td><td>story.md</td><td>@zhangsan</td><td>—</td><td><span class="tag tag-a">已通过</span></td><td>06-16 09:30</td><td>06-16 10:00</td></tr>
+    <tr><td>2</td><td>mechanics.md</td><td>@lisi</td><td>—</td><td><span class="tag tag-r">待创建</span></td><td>—</td><td>—</td></tr>
+    <tr><td>3</td><td>params.md</td><td>—</td><td>—</td><td><span class="tag tag-i">待创建</span></td><td>—</td><td>—</td></tr>
+  </table>
+
+  <h3>三级身份匹配</h3>
+  <table>
+    <tr><th>匹配场景</th><th>条件</th><th>行为</th></tr>
+    <tr><td><strong>角色完全匹配</strong></td><td>当前用户姓名 = 执行人列</td><td>✅ 直接进入对应步骤</td></tr>
+    <tr><td><strong>角色不完全匹配</strong></td><td>姓名 ≠ 执行人列，但角色类型一致（如都是系统策划）</td><td>⚠️ 二次确认："是否替代 @lisi 接续执行？" → 确认后更新执行人列</td></tr>
+    <tr><td><strong>角色不匹配</strong></td><td>当前用户角色与步骤要求不符</td><td>⚠️ 二次确认："是否仍然接续？这可能影响后续审阅流程。"</td></tr>
+    <tr><td><strong>程序类角色</strong></td><td>主程序 / 开发程序 / QA</td><td>⛔ 阻止："程序类角色不参与 propose 阶段的执行和审阅。"</td></tr>
+  </table>
+
+  <h3>提交人操作</h3>
+  <table>
+    <tr><th>场景</th><th>操作</th><th>后续动作</th></tr>
+    <tr><td>执行人完成撰写</td><td>更新产物状态为"待审阅"，写入状态变更记录</td><td>git commit & push，通知审阅人</td></tr>
+    <tr><td>审阅人审阅通过</td><td>更新产物状态为"已通过"，写入审阅通过时间、审阅记录、状态变更记录</td><td>git commit & push，通知下一步执行人</td></tr>
+    <tr><td>审阅人审阅打回</td><td>更新产物状态为"已打回"，写入审阅记录、状态变更记录</td><td>git commit & push，通知原执行人修改</td></tr>
+    <tr><td>执行人修改后重新提交</td><td>更新产物状态为"待审阅"，写入状态变更记录</td><td>git commit & push，通知审阅人</td></tr>
+    <tr><td>发起修订</td><td>更新原产物状态为"修订中"，新增 fix 行，写入状态变更记录</td><td>git commit & push，通知原审阅人</td></tr>
+    <tr><td>最终审核通过</td><td>当前状态→已完成，写入最终审核详情</td><td>git commit & push，通知主程序/开发程序/测试</td></tr>
+  </table>
+
+  <h3>通知模板</h3>
+  <div class="callout callout-info">
+    Git 提交本身不主动通知。实际使用时，提交人通过团队即时通讯工具（Slack / 企业微信等）通知下一个人，附上提案名称和 proposal-index.md 链接：<br><br>
+    <code>@张三 daily-checkin 的 story 已审阅通过，轮到你写 mechanics 了。proposal-index 已更新，pull 后用 /hyl-propose 继续。</code>
+  </div>
+
+  <h3>接棒人操作</h3>
+  <div class="card-grid">
+    <div class="card">
+      <h4>1. git pull</h4>
+      <p style="font-size:13px;color:var(--muted);">获取最新代码，确保 proposal-index.md 和产物文件是最新状态。</p>
+    </div>
+    <div class="card">
+      <h4>2. 确认状态</h4>
+      <p style="font-size:13px;color:var(--muted);">查看 <code>specs/in-progress/&lt;日期&gt;-&lt;功能名&gt;/proposal-index.md</code> 确认当前状态和待办事项。</p>
+    </div>
+    <div class="card">
+      <h4>3. 输入续接指令</h4>
+      <p style="font-size:13px;color:var(--muted);">在对话中输入"继续提案 功能名"，AI 自动识别当前提案并进入续接模式。</p>
+    </div>
+    <div class="card">
+      <h4>4. 确认身份</h4>
+      <p style="font-size:13px;color:var(--muted);">AI 根据 proposal-index 中的执行人列确认当前用户身份，确认后引导进入对应步骤。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ SECTION 9: EXAMPLE ════════════ -->
+<section id="example">
+  <h2>真实案例：每日签到系统</h2>
+  <p class="sec-desc">以下是一个完整走过 5 步流水线 + 修订链的真实提案，位于 <code>specs/examples/daily-checkin/</code></p>
+
+  <h3>提案全貌</h3>
+  <table>
+    <tr><th>步骤</th><th>产物</th><th>当前版本</th><th>状态</th><th>生成时间</th><th>审阅通过时间</th></tr>
+    <tr><td>1</td><td>story.md</td><td>—</td><td><span class="tag tag-a">已通过</span></td><td>06-16 09:30</td><td>06-16 10:00</td></tr>
+    <tr><td>2</td><td>mechanics.md</td><td>—</td><td><span class="tag tag-r">已修订</span></td><td>06-16 10:30</td><td>06-16 15:00</td></tr>
+    <tr><td>2</td><td>mechanics-fix01.md</td><td>fix01</td><td><span class="tag tag-a">已通过</span></td><td>06-17 11:00</td><td>06-17 12:00</td></tr>
+    <tr><td>3</td><td>params.md</td><td>—</td><td><span class="tag tag-r">已修订</span></td><td>06-16 15:30</td><td>06-16 17:00</td></tr>
+    <tr><td>3</td><td>params-fix01.md</td><td>fix01</td><td><span class="tag tag-a">已通过</span></td><td>06-17 13:00</td><td>06-17 14:00</td></tr>
+    <tr><td>4</td><td>theme.md</td><td>—</td><td><span class="tag tag-a">已通过</span></td><td>06-17 14:30</td><td>06-17 16:00</td></tr>
+    <tr><td>5</td><td>ux.md</td><td>—</td><td><span class="tag tag-a">已通过</span></td><td>06-17 16:30</td><td>06-18 11:00</td></tr>
+  </table>
+
+  <h3>修订链</h3>
+  <table>
+    <tr><th>原始产物</th><th>修订版本</th><th>修订原因</th><th>触发步骤</th><th>审阅状态</th><th>级联影响</th></tr>
+    <tr><td>mechanics.md</td><td>mechanics-fix01.md</td><td>补签天数(7)与周期逻辑不一致，应为周期-1=6天</td><td>theme</td><td><span class="tag tag-a">已通过</span></td><td>params-fix01.md</td></tr>
+    <tr><td>params.md</td><td>params-fix01.md</td><td>跟随 mechanics-fix01，MAX_RETROACTIVE_DAYS 7→6</td><td>因 mechanics-fix01 级联</td><td><span class="tag tag-a">已通过</span></td><td>theme 基于 fix01 继续</td></tr>
+  </table>
+
+  <div class="callout callout-green" style="margin-top:16px;">
+    <strong>关键点：</strong>theme 在撰写中发现 mechanics 的补签天数逻辑问题，发起修订。theme 自身尚未提交审阅，因此在 mechanics-fix01 和 params-fix01 通过后，直接在原稿内继续撰写（无需创建 theme-fix），最终一次审阅通过。
+  </div>
+</section>
+
+<!-- ════════════ SECTION 10: STRUCTURE ════════════ -->
+<section id="structure">
+  <h2>目录结构</h2>
+  <div class="flow-box">
+.
+├── CLAUDE.md                 # 项目理念、上下文和规格方法论
+├── CLAUDE.local.md           # 本地用户身份（hyl-propose 自动读取）
+├── CLAUDE.local.template.md  # 本地身份模板（供团队成员复制填写）
+├── README.md                 # 入门和快速开始
+├── templates/                # 规范文档模板
+│   ├── proposal-index-template.md
+│   ├── story-template.md
+│   ├── mechanics-template.md
+│   ├── params-template.md
+│   ├── theme-template.md
+│   └── ux-template.md
+├── specs/                    # 活跃和已归档规格
+│   ├── in-progress/          # 撰写中或审阅中的规格
+│   ├── examples/             # 示例提案
+│   │   └── daily-checkin/    # 每日签到系统（完整示例）
+│   ├── approved/             # 已通过、待实施
+│   ├── implemented/          # 已实施
+│   └── archived/             # 已废弃规格
+├── workflow/                 # 流程定义
+│   ├── workflow.md           # 步骤流程描述
+│   ├── roles.md              # 角色定义
+│   └── review-check.md       # 审阅检查清单
+└── config/
+    └── review-rules.yaml     # 机器可读的审阅阈值和自动检查</div>
+
+  <h3>产物文档结构</h3>
+  <p style="font-size:13px;color:var(--muted);">所有产物文档统一按以下顺序组织，基础信息字段直接以 <code>**key**：value</code> 格式换行，无需标题项。</p>
+  <div class="flow-box">
+# 标题
+
+**功能 ID**：`模块-功能名`
+**创建时间**：YYYY-MM-DD
+**更新时间**：YYYY-MM-DD
+**提案负责人（PO）**：@name
+**执行人**：@name（角色）
+**前置依赖**：mechanics.md（审阅通过）
+**状态**：撰写中 | 待审阅 | 已通过 | 已打回 | 修订中 | 已修订
+**当前有效版本**：—
+
+> **修订备注**：无
+
+---
+
+## 版本历史
+...
+
+## 审阅记录
+...
+
+## 正文...</div>
+</section>
+
+<!-- ════════════ SECTION 11: START ════════════ -->
+<section id="start">
+  <h2>快速开始</h2>
+  <p class="sec-desc">使用 hyl-propose 技能，在对话中一句话即可发起提案。首次使用前请先配置本地身份。</p>
+
+  <h3>首次使用：身份配置</h3>
+  <div class="card-grid">
+    <div class="card">
+      <h4>0. 配置身份</h4>
+      <p style="font-size:13px;color:var(--muted);">复制 <code>CLAUDE.local.template.md</code> 为 <code>CLAUDE.local.md</code>，填写姓名和角色。如果跳过此步，首次触发 hyl-propose 时 AI 会自动引导你完成身份配置。</p>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>1. 发起提案</h4>
+      <p style="font-size:13px;color:var(--muted);">在对话中告诉 AI：<em>"发起提案 功能名"</em>（格式：模块-功能名，如 <code>shop-daily-checkin</code>）。<strong>仅限策划类角色</strong>，AI 自动创建提案目录和初始文件，引导进入 story 撰写。发起提案的策划自动成为该提案的 PO。</p>
+    </div>
+    <div class="card">
+      <h4>2. 续接提案</h4>
+      <p style="font-size:13px;color:var(--muted);">当上一个步骤完成后，pull 代码后输入 <em>"继续提案 功能名"</em>。AI 自动读取 <code>CLAUDE.local.md</code> 识别身份，进行三级匹配（完全匹配 / 角色匹配 / 跨角色匹配），确认后引导进入对应步骤。</p>
+    </div>
+    <div class="card">
+      <h4>3. 检查进度</h4>
+      <p style="font-size:13px;color:var(--muted);">随时输入 <em>"检查 功能名 的进度"</em>。<strong>所有角色可用</strong>。AI 展示各步骤状态，若你是进行中步骤的执行人，会高亮提示"是否继续完成？"。</p>
+    </div>
+    <div class="card">
+      <h4>4. 接力提交流程</h4>
+      <p style="font-size:13px;color:var(--muted);">完成当前步骤后：更新产物文件 + proposal-index.md → <code>git commit & push</code> → 通过 IM 通知下一个人。下一个人 <code>git pull</code> 后用续接模式继续。</p>
+    </div>
+    <div class="card">
+      <h4>5. 最终审核</h4>
+      <p style="font-size:13px;color:var(--muted);">5 步全部通过后，制作人最终审核 → 通知主程序、开发程序、测试 → 提案进入 design 阶段。</p>
+    </div>
+  </div>
+
+  <h3>常见问题</h3>
+  <div class="card">
+    <p><strong>Q: 我是程序/QA，能发起提案吗？</strong><br><span style="font-size:13px;color:var(--muted);">程序类角色无法直接新建提案。如有功能优化建议，可转达策划团队（制作人/主策划/系统策划/数值策划/文案策划/交互设计师）评估后发起提案。你可以在检查模式中查看提案进度。</span></p>
+  </div>
+  <div class="card">
+    <p><strong>Q: 审阅被打回了怎么办？</strong><br><span style="font-size:13px;color:var(--muted);">直接修改原文件，重新提交审阅。不需要创建 -fix 版本。</span></p>
+  </div>
+  <div class="card">
+    <p><strong>Q: 发现前面已通过的步骤需要改怎么办？</strong><br><span style="font-size:13px;color:var(--muted);">创建 <code>-fixNN</code> 版本，走修订流程。后续步骤根据自身状态（已审阅/未审阅）决定是否级联创建 -fix。</span></p>
+  </div>
+  <div class="card">
+    <p><strong>Q: PO 和主策划意见不一致怎么办？</strong><br><span style="font-size:13px;color:var(--muted);">先协商，协商不成由任意一方请求制作人介入裁决。制作人拥有最终裁决权。</span></p>
+  </div>
+  <div class="card">
+    <p><strong>Q: 技术团队什么时候介入？</strong><br><span style="font-size:13px;color:var(--muted);">propose 阶段全部完成后，通知主程序、开发程序、测试。他们在 design 和 tasks 阶段介入。</span></p>
+  </div>
+</section>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+  OpenSpec · 游戏需求提案工作流 · 由 hyl-propose CLI 管理<br>
+  适用于模拟经营类休闲手机游戏 · Cocos Creator + Go · 15+ 人团队
+</footer>
+
+<script>
+  // Highlight active nav link based on scroll position
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  // Smooth scroll for nav links
+  navLinks.forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+
+</body>
+</html>
