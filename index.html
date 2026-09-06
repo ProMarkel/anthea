@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh-CN" data-page-node-id="kDDUymxzceiMb9HtXgkFBv">
+<head data-page-node-id="reGbsOg7HJHSjEnnvlHcOP">
+<meta charset="UTF-8" data-page-node-id="oSkyIg4JK5r8jSWXhTBD6i">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="3RNtSKdy15CLuOdD83c186">
 <title>Anthea · 『海边的安西娅』项目文档</title>
 <style>
   :root {
@@ -189,121 +189,186 @@
     .hero h1 { font-size: 24px; }
     .doc-grid { grid-template-columns: 1fr; }
   }
-</style>
+
+/* === ANT NAV DROPDOWN === */
+  .navbar .nav-links { gap:20px; flex-wrap:nowrap; }
+  .navbar .nav-group { position:relative; }
+  .navbar .nav-toggle { cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px; }
+  .navbar .nav-toggle .caret { font-size:9px; line-height:1; opacity:.7; transition:transform .2s; }
+  .navbar .nav-group.open .nav-toggle { color:#E8547A; }
+  .navbar .nav-group.open .nav-toggle .caret { transform:rotate(180deg); }
+  .navbar .nav-sub {
+    display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    min-width:196px; background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.13); padding:6px; margin:0; list-style:none; z-index:300;
+  }
+  .navbar .nav-group:hover > .nav-sub,
+  .navbar .nav-group.open > .nav-sub { display:block; }
+  .navbar .nav-sub::before { content:''; position:absolute; top:-9px; left:0; right:0; height:9px; }
+  .navbar .nav-sub li { display:block; font-size:13px; }
+  .navbar .nav-sub a {
+    display:block; padding:7px 12px; border-bottom:none; border-radius:6px;
+    font-size:12.5px; color:#666; white-space:nowrap; transition:background .15s,color .15s;
+  }
+  .navbar .nav-sub a:hover { background:#FEF0F4; color:#E8547A; }
+  .navbar .nav-sub a.active { background:#FEF0F4; color:#E8547A; border-bottom:none; font-weight:600; }
+  @media (max-width:900px) {
+    .navbar { height:auto; }
+    .navbar .container { height:auto; flex-wrap:wrap; padding-top:8px; padding-bottom:8px; gap:8px; }
+    .navbar .nav-links { gap:16px; margin-left:0; flex-wrap:wrap; width:100%; }
+    .navbar .nav-sub { left:0; transform:none; }
+  }
+  </style>
 </head>
-<body>
+<body data-page-node-id="7qj2dN2IVIbbQvOlUNIIoj">
 
 <!-- NAVBAR -->
-<nav class="navbar">
-  <div class="container">
-    <a href="index.html" class="nav-brand">
-      <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
-      <span class="nav-icon-fb">A</span>
+<nav class="navbar" data-page-node-id="XBZc9zou5VIPnJxUSYow7p">
+  <div class="container" data-page-node-id="jE1nf2bzrmhEQ9ANYedzSH">
+    <a href="index.html" class="nav-brand" data-page-node-id="Olqyz1S23hHwbisZFgnCNT">
+      <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'" data-page-node-id="0nOneADxJ2Bf119lg6tCWB">
+      <span class="nav-icon-fb" data-page-node-id="IrnQXLMKLTQ5fFSz4DuKpP">A</span>
       Anthea
     </a>
     <ul class="nav-links" id="anthea-nav">
       <li><a href="index.html">首页</a></li>
-      <li><a href="resource-management-process.html">资源制作管理</a></li>
-      <li><a href="claude-code-whitepaper.html">ClaudeCode 白皮书</a></li>
-      <li><a href="claude-md-rules.html">CLAUDE.md 规则</a></li>
-      <li><a href="sdd-ai-coding-checklist.html">AI Coding 清单</a></li>
-      <li><a href="workbuddy-user-guide.html">WorkBuddy 指南</a></li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="spec">流程规范文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="spec-of-project.html">① 项目流程规范</a></li>
+          <li><a href="spec-of-designer.html">② 策划工作规范</a></li>
+          <li><a href="spec-of-art.html">③ 美术工作规范</a></li>
+          <li><a href="spec-of-art-design.html">④ 美术设计规范</a></li>
+          <li><a href="spec-of-ue-ui.html">⑤ UI 设计制作规范</a></li>
+          <li><a href="spec-of-asset.html">⑥ 资源管理规范</a></li>
+        </ul>
+      </li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="ai">AI Coding 文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="guide-for-claude.html">ClaudeCode 白皮书</a></li>
+          <li><a href="guide-for-claude-md.html">CLAUDE.md 规则</a></li>
+          <li><a href="guide-for-sdd.html">AI Coding 清单</a></li>
+          <li><a href="guide-for-workbuddy.html">WorkBuddy 指南</a></li>
+          <li><a href="guide-for-openspec.html">OpenSpec 工作流</a></li>
+        </ul>
+      </li>
       <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
     </ul>
   </div>
 </nav>
 <!-- HERO -->
-<div class="hero">
-  <h1>『海边的安西娅』</h1>
-  <p>Anthea · 休闲模拟经营游戏<br>现代都市 × 轻魔幻世界观 · 温馨治愈叙事体验</p>
-  <div class="hero-meta">
-    <span>🎮 <strong>休闲模拟经营</strong></span>
-    <span>📋 <strong>流程规范文档</strong></span>
-    <span>📦 <strong>仓库: ProMarkel/anthea</strong></span>
+<div class="hero" data-page-node-id="5GjKA4Glfsb7Eu9SogmkWK">
+  <h1 data-page-node-id="QkPuKrAmJsy6DPSTTUHIm3">『海边的安西娅』</h1>
+  <p data-page-node-id="C8tqexrWAEbZDvd95LqI2c">Anthea · 休闲模拟经营游戏<br data-page-node-id="rtVsNgZ15Vb6DP2qwPSWlt">现代都市 × 轻魔幻世界观 · 温馨治愈叙事体验</p>
+  <div class="hero-meta" data-page-node-id="5JIguo3dMWPkMHSC1PFvEc">
+    <span data-page-node-id="uH0CE2GuJbYUDB8FMxfq0I">🎮 <strong data-page-node-id="KBotFg8ZB7WBGYAVsyBKY7">休闲模拟经营</strong></span>
+    <span data-page-node-id="Ll6AnB7ru4d7Vbzsv7TBik">📋 <strong data-page-node-id="C3tcPMEeoYQA9jdnZKF86q">流程规范文档</strong></span>
+    <span data-page-node-id="AAa9CnirK9C2csj0Eq6WMO">📦 <strong data-page-node-id="RBkybl1zArifxFDXzlrsAs">仓库: ProMarkel/anthea</strong></span>
   </div>
 </div>
 
 <!-- MAIN -->
-<div class="main">
+<div class="main" data-page-node-id="XPbYR5PU1RNCwQ36GCo1AA">
 
   <!-- 项目概览 -->
-  <div class="section">
-    <div class="section-title"><div class="dot" style="background:var(--primary);"></div>项目概览</div>
-    <div class="info-card">
-      <div class="info-grid">
-        <div class="info-item">
-          <div class="info-label">项目名称</div>
-          <div class="info-value">海边的安西娅 (Anthea)</div>
+  <div class="section" data-page-node-id="TWuyTBDJIdm6pNJJyY8x8L">
+    <div class="section-title" data-page-node-id="LjlE9MuzDXDKxXC9p6Z5X2"><div class="dot" style="background:var(--primary);" data-page-node-id="Bgignt5NkzLHXWTuiutSMF"></div>项目概览</div>
+    <div class="info-card" data-page-node-id="J7ya87Ik1NmMLysrAssKgs">
+      <div class="info-grid" data-page-node-id="Iozf8hjd13yHHLiXidBf74">
+        <div class="info-item" data-page-node-id="NB6mKnSUR79TKn9rFZTNoV">
+          <div class="info-label" data-page-node-id="s7FTs6KKBUMxFf33BiJLsC">项目名称</div>
+          <div class="info-value" data-page-node-id="Kooxe03A5edCGWTAp2NH7A">海边的安西娅 (Anthea)</div>
         </div>
-        <div class="info-item">
-          <div class="info-label">品类</div>
-          <div class="info-value">休闲模拟经营</div>
+        <div class="info-item" data-page-node-id="xZbfmF3Vqg9G56HFtoE1rN">
+          <div class="info-label" data-page-node-id="yih55wjpIojnRjGVpwwNKo">品类</div>
+          <div class="info-value" data-page-node-id="jPw6g0NbGDj9CEvNRLxBjR">休闲模拟经营</div>
         </div>
-        <div class="info-item">
-          <div class="info-label">世界观</div>
-          <div class="info-value">现代都市 + 轻魔幻</div>
+        <div class="info-item" data-page-node-id="OG5HNaBD8GrpAbDTernUol">
+          <div class="info-label" data-page-node-id="ofDzZGgVVrSqfEXeE4wpqQ">世界观</div>
+          <div class="info-value" data-page-node-id="pKGvL2PwpZikBiIw8wVntM">现代都市 + 轻魔幻</div>
         </div>
-        <div class="info-item">
-          <div class="info-label">叙事基调</div>
-          <div class="info-value">温馨 · 治愈</div>
+        <div class="info-item" data-page-node-id="q3SByYKr1tdkw5lojmsW8e">
+          <div class="info-label" data-page-node-id="x1XHaklX5bEpHjkBovbeP0">叙事基调</div>
+          <div class="info-value" data-page-node-id="gNwLEkEgA6Y2bvclIkTiw8">温馨 · 治愈</div>
         </div>
-        <div class="info-item">
-          <div class="info-label">文档仓库</div>
-          <div class="info-value"><a href="https://github.com/ProMarkel/anthea" style="color:var(--primary);">GitHub ↗</a></div>
+        <div class="info-item" data-page-node-id="sODYVYQBxEW9wBdZEdsmTt">
+          <div class="info-label" data-page-node-id="7ZXLuNp9q3fNDcNzXjAzz4">文档仓库</div>
+          <div class="info-value" data-page-node-id="i5GAU1lzkf1VHpDwXKL5vZ"><a href="https://github.com/ProMarkel/anthea" style="color:var(--primary);" data-page-node-id="nyjadUoJ0c9SOCEDSZiq9W">GitHub ↗</a></div>
         </div>
-        <div class="info-item">
-          <div class="info-label">更新日期</div>
-          <div class="info-value">2026-06-06</div>
+        <div class="info-item" data-page-node-id="586XpTIFfyDBHj6YK9nJRO">
+          <div class="info-label" data-page-node-id="K1FuUAf9Cfuj5LJxe6iNm2">更新日期</div>
+          <div class="info-value" data-page-node-id="RYejBTlYSj6edGsKxZJMKQ">2026-06-06</div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- 流程规范文档 -->
-  <div class="section">
-    <div class="section-title"><div class="dot" style="background:var(--secondary);"></div>流程规范文档</div>
-    <div class="doc-grid">
-      <a href="resource-management-process.html" class="doc-card">
-        <div class="icon">🎨</div>
-        <h3>资源制作管理流程</h3>
-        <p>美术资源制作全生命周期管理规范 · 6 模块 7 类需求 · V2.0 优化版</p>
+  <div class="section" data-page-node-id="dY1GGrbwX4LfnfyJHAcWxN">
+    <div class="section-title" data-page-node-id="moUHQ2Dmqi9h87Qr29h7Jk"><div class="dot" style="background:var(--secondary);" data-page-node-id="r8b2wUZ16aGV10oYR2krEk"></div>流程规范文档</div>
+    <div class="doc-grid" data-page-node-id="a7xw7ceuOLS0roxF63zyEc">
+      <a href="spec-of-project.html" class="doc-card" style="border-left-color:#3498DB;" data-page-node-id="ntr0JUQkS8VL4N1d0zzg2Y">
+        <div class="icon" data-page-node-id="b7XyzD7tqJb5o9Zo61KOHB">📁</div>
+        <h3 data-page-node-id="KS0bRGsrFct04pWIRSthAG">① 项目流程规范</h3>
+        <p data-page-node-id="6BgMvQRXsfHTMCj7csxWME">团队构成 · 资料管理 · 研发流程 · 日常规范 · Ver230228</p>
       </a>
-      <div class="doc-card placeholder">
-        <div class="icon">📋</div>
-        <h3>敬请期待</h3>
-        <p>更多流程规范文档即将上线</p>
-      </div>
-      <div class="doc-card placeholder">
-        <div class="icon">📐</div>
-        <h3>敬请期待</h3>
-        <p>更多流程规范文档即将上线</p>
-      </div>
+      <a href="spec-of-designer.html" class="doc-card" style="border-left-color:#1ABC9C;" data-page-node-id="wjd0iDcw7XNI8S7TVi6DA2">
+        <div class="icon" data-page-node-id="96KbqHbXSZXn3Pc85FHkD7">📐</div>
+        <h3 data-page-node-id="ZHBH3wvK5y2URRFXvF3p6B">② 策划工作规范</h3>
+        <p data-page-node-id="ePMYks1UmgUZ5h0BHSZrEm">人员职责 · 文档与命名规范 · 项目设计流程 · 开发需求规范 · Ver230306</p>
+      </a>
+      <a href="spec-of-art.html" class="doc-card" style="border-left-color:#E8547A;" data-page-node-id="0YwpXQaz8i5MYu8AY0ucGo">
+        <div class="icon" data-page-node-id="AQCEBgPWBI9vrUQHJnd3kY">🎨</div>
+        <h3 data-page-node-id="JK1bTnS7N8jsZGC61JlSHf">③ 美术工作规范</h3>
+        <p data-page-node-id="3eFO0Gwo61kdyU23TY1Cio">场景 / 角色 / 特效 / 界面 / 图标 制作流程与输出规范 · Ver230317</p>
+      </a>
+      <a href="spec-of-art-design.html" class="doc-card" style="border-left-color:#9B59B6;" data-page-node-id="3UBqRrxtXZCvAjSHKlryI0">
+        <div class="icon" data-page-node-id="auD78Vo5nDCrTCzyIqohrg">🖼️</div>
+        <h3 data-page-node-id="rpWS1hztXXzmB3h8tpoJjV">④ 美术设计规范</h3>
+        <p data-page-node-id="tbuN40tlOo2nusBgvVUoTm">基于项目美术白皮书 · 立绘/Q版/动画/场景/界面/图标 9 大品质标准 · V20240305</p>
+      </a>
+      <a href="spec-of-ue-ui.html" class="doc-card" style="border-left-color:#E67E22;" data-page-node-id="xNB1BBuUCwf2Ho28KxBGrP">
+        <div class="icon" data-page-node-id="tonAJsNYO4HsFOWEddfqFL">🛠️</div>
+        <h3 data-page-node-id="4Zusd1Bo0nvlP30CSEV2aq">⑤ UI 设计制作规范</h3>
+        <p data-page-node-id="H1BXFJkA7nnfyzPi9qrUUb">美术表达 · UI 规范（19 类组件）· 参考动效 · Ver230316</p>
+      </a>
+      <a href="spec-of-asset.html" class="doc-card" style="border-left-color:#E8547A;" data-page-node-id="LAzpwsqP56GOmHx3E1IWTC">
+        <div class="icon" data-page-node-id="EHs8wPa8e5jvxGhgygaPx6">📦</div>
+        <h3 data-page-node-id="T0W0K6IPJ9vP2h0ILrnY8W">⑥ 资源管理规范</h3>
+        <p data-page-node-id="VzeHEBIQxxhWQkSojr2IKZ">10 大章节 · 角色 / 场景 / 图标 / 动特效 / 音视频 / 美宣 / 界面 / 流程规范 · Ver260429</p>
+      </a>
     </div>
   </div>
 
   <!-- AI Coding 文档 -->
-  <div class="section">
-    <div class="section-title"><div class="dot" style="background:#1ABC9C;"></div>AI Coding 文档</div>
-    <div class="doc-grid">
-      <a href="claude-code-whitepaper.html" class="doc-card" style="border-left-color:#1ABC9C;">
-        <div class="icon">🤖</div>
-        <h3>ClaudeCode 白皮书</h3>
-        <p>Claude Code 快速使用白皮书 · 从零搭建 Harness · 掌握四条黄金法则 · 选对工作流</p>
+  <div class="section" data-page-node-id="g2McBinj0Q7bbDj2AgVavd">
+    <div class="section-title" data-page-node-id="qhEeB9RloimEoBBMyAZaY0"><div class="dot" style="background:#1ABC9C;" data-page-node-id="F6wUgE9SyNuMajS2Et6ByZ"></div>AI Coding 文档</div>
+    <div class="doc-grid" data-page-node-id="Br9duqXOsuJcBbnV1Oqh4y">
+      <a href="guide-for-claude.html" class="doc-card" style="border-left-color:#1ABC9C;" data-page-node-id="W7KgvdC8AQ5E1BoTc3OpJ2">
+        <div class="icon" data-page-node-id="1EvNk1sWfxfUDuMDOvvHiH">🤖</div>
+        <h3 data-page-node-id="kjp79BCinJCTAbi0ek5WkH">ClaudeCode 白皮书</h3>
+        <p data-page-node-id="QsLDyd3AdbeAg9Hwi3HMgC">Claude Code 快速使用白皮书 · 从零搭建 Harness · 掌握四条黄金法则 · 选对工作流</p>
       </a>
-      <a href="claude-md-rules.html" class="doc-card" style="border-left-color:#D97757;">
-        <div class="icon">📋</div>
-        <h3>CLAUDE.md 规则技巧</h3>
-        <p>第一性原理 · 12条天条 · AGENTS.md规范 · 让AI从执行者变思考伙伴</p>
+      <a href="guide-for-claude-md.html" class="doc-card" style="border-left-color:#D97757;" data-page-node-id="gubK1xEk69tO438lpMtJlV">
+        <div class="icon" data-page-node-id="DsB5OkjADUDLsSGqD2LLuH">📋</div>
+        <h3 data-page-node-id="WYobfaYotTpuxAu3eQxuKm">CLAUDE.md 规则技巧</h3>
+        <p data-page-node-id="jg1fcchosrYXHHLeqzR555">第一性原理 · 12条天条 · AGENTS.md规范 · 让AI从执行者变思考伙伴</p>
       </a>
-      <a href="sdd-ai-coding-checklist.html" class="doc-card" style="border-left-color:#E8547A;">
-        <div class="icon">🎮</div>
-        <h3>CocosCreator 项目 AI Coding 工作流搭建</h3>
-        <p>Cocos Creator · SDD + Claude Code + OpenSpec · AI 辅助开发工作流清单</p>
+      <a href="guide-for-sdd.html" class="doc-card" style="border-left-color:#E8547A;" data-page-node-id="0sQloVEHRJFcoTYETNY6xs">
+        <div class="icon" data-page-node-id="0eNa5wLvPBSuSNzPbfyP2A">🎮</div>
+        <h3 data-page-node-id="v2cVqwvVvQKAbBOjaMmeFF">CocosCreator 项目 AI Coding 工作流搭建</h3>
+        <p data-page-node-id="DxvjBOoU1McAbDExzr7LYn">Cocos Creator · SDD + Claude Code + OpenSpec · AI 辅助开发工作流清单</p>
       </a>
-      <a href="workbuddy-user-guide.html" class="doc-card" style="border-left-color:#6366f1;">
-        <div class="icon">📘</div>
-        <h3>WorkBuddy 使用指南</h3>
-        <p>WorkBuddy 完整使用指南 · 基础操作 · 进阶技巧 · 高级领域技巧</p>
+      <a href="guide-for-workbuddy.html" class="doc-card" style="border-left-color:#6366f1;" data-page-node-id="lRobeZcqmyjKUQnNH0yVao">
+        <div class="icon" data-page-node-id="dcz4CL9X7fUA0FeHjziZJB">📘</div>
+        <h3 data-page-node-id="1hd4NpnFRZOirQwa2GyHgH">WorkBuddy 使用指南</h3>
+        <p data-page-node-id="MB65Vv4SvAbHFskQJ0OCSI">WorkBuddy 完整使用指南 · 基础操作 · 进阶技巧 · 高级领域技巧</p>
+      </a>
+      <a href="guide-for-openspec.html" class="doc-card" style="border-left-color:#6C5CE7;" data-page-node-id="OsNav07OpenSpecWorkflowCard">
+        <div class="icon" data-page-node-id="OsNav07OpenSpecWorkflowIcon">📝</div>
+        <h3 data-page-node-id="OsNav07OpenSpecWorkflowTitle">OpenSpec 需求提案工作流</h3>
+        <p data-page-node-id="OsNav07OpenSpecWorkflowDesc">hyl-propose · 五步流水线（提案/规则/数值/包装/交互）· RACI 角色矩阵 · 修订与协作接力</p>
       </a>
     </div>
   </div>
@@ -311,12 +376,12 @@
 </div>
 
 <!-- FOOTER -->
-<div class="footer">
-  Anthea Project · <a href="https://github.com/ProMarkel/anthea">GitHub</a>
+<div class="footer" data-page-node-id="t6EAlZD3sdiJ3gb2Y1QXdG">
+  Anthea Project · <a href="https://github.com/ProMarkel/anthea" data-page-node-id="DHcTRHw2mr4hAhrhomOjG0">GitHub</a>
 </div>
 
 <!-- BACK TO TOP -->
-<button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部">↑</button>
+<button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部" data-page-node-id="uoKxjxMKGmee6hrEHrJyzh">↑</button>
 
 <script>
 const backToTop = document.getElementById('backToTop');
@@ -332,5 +397,24 @@ backToTop.addEventListener('click', () => {
 /* Anthea Nav: auto-highlight current page */
 (function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
 </script>
+<script>
+/* ANT_NAV_DROPDOWN_JS */
+(function(){
+  var groups = document.querySelectorAll('.nav-group');
+  function closeAll(){ groups.forEach(function(g){ g.classList.remove('open'); }); }
+  document.querySelectorAll('.nav-toggle').forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var g = t.parentElement, was = g.classList.contains('open');
+      closeAll();
+      if (!was) g.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest || !e.target.closest('.nav-group')) closeAll();
+  });
+})();
+</script>
+
 </body>
 </html>

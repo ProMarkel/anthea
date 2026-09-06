@@ -21,3 +21,12 @@ Thumbs.db
 node_modules/
 dist/
 build/
+
+# 本地临时文件（不同步 GitHub）
+/temp/
+
+# 页面重命名备份（不同步 GitHub）
+/backups/
+
+# WorkBuddy 内部数据（不推送 GitHub）
+.workbuddy/

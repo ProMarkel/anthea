@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="PCpEneLNTwQKq5m2MAHRlS">
+<head data-page-node-id="HJZ20taKDFKymyCX1OSGvP">
+<meta charset="UTF-8" data-page-node-id="Snp3SLbEMoLtAwj7cRUF2u">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="ZZPwKrMgO11laBZTNW4aOd">
+<title>资源管理规范 — Anthea</title>
+<style>
+
+  :root {
+    --accent: #0E9F8E;
+    --accent-dark: #0B7A6B;
+    --accent-light: #D1F2EB;
+    --accent-pale: #E8F8F5;
+    --pink: #E8547A;
+    --purple: #9B59B6;
+    --purple-light: #E8D5F5;
+    --teal: #1ABC9C;
+    --teal-light: #D5F5EE;
+    --orange: #E67E22;
+    --orange-light: #FDEBD0;
+    --gray: #6C757D;
+    --gray-light: #F8F9FA;
+    --border: #E2E8F0;
+    --text: #2D3748;
+    --text-muted: #718096;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: #F7F5FB; color: var(--text); line-height: 1.7;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* === NAVBAR === */
+  .navbar, .navbar * {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased; animation: none !important; opacity: 1 !important;
+  }
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08); height: 56px; font-size: 16px; line-height: 1.6;
+  }
+  .navbar .container { width:100%; max-width:1200px; margin:0 auto; padding:0 24px; display:flex; align-items:center; height:100%; }
+  .navbar .nav-brand { display:flex; align-items:center; gap:8px; font-size:16px; font-weight:700; color:#E8547A; text-decoration:none; }
+  .navbar .nav-icon { width:28px; height:28px; border-radius:8px; object-fit:cover; flex-shrink:0; }
+  .navbar .nav-icon-fb { width:28px;height:28px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,#E8547A,#9B59B6);color:white;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:center; }
+  .navbar .nav-links { display:flex; gap:24px; list-style:none; margin-left:auto; padding:0; align-items:center; }
+  .navbar .nav-links li { list-style:none; padding:0; margin:0; border:none; background:none; font-size:13px; }
+  .navbar .nav-links a { text-decoration:none; font-size:13px; font-weight:500; color:#888; padding:6px 0; border-bottom:2px solid transparent; display:inline-block; transition:color .2s,border-color .2s; }
+  .navbar .nav-links a:hover, .navbar .nav-links a.active { color:#E8547A; border-bottom-color:#E8547A; }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, #0E9F8E 0%, #9B59B6 100%);
+    color: white; padding: 40px 0 32px; position: relative; overflow: hidden;
+  }
+  .header::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header::after { content:''; position:absolute; bottom:-40px; right:100px; width:120px; height:120px; background:rgba(255,255,255,0.06); border-radius:50%; }
+  .header-tag { display:inline-block; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; font-size:12px; margin-bottom:12px; letter-spacing:1px; }
+  .header h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .header-sub { font-size:14px; opacity:0.85; margin-bottom:20px; }
+  .header-meta { display:flex; gap:24px; flex-wrap:wrap; }
+  .header-meta span { font-size:13px; opacity:0.75; }
+  .header-meta strong { opacity:1; font-weight:600; }
+
+  /* === SECTION === */
+  .section { margin-bottom: 28px; }
+  .section-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .section-tag { padding:4px 14px; border-radius:20px; font-size:12px; font-weight:600; letter-spacing:.5px; white-space:nowrap; }
+  .section-title { font-size:18px; font-weight:700; }
+  .section-desc { font-size:13px; color:var(--text-muted); margin-left:auto; }
+
+  /* === CARD === */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px; }
+  .card-grid-2 { grid-template-columns:repeat(2,1fr); }
+  .card-grid-3 { grid-template-columns:repeat(3,1fr); }
+  .card {
+    background:white; border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:20px; border-top:3px solid transparent; transition:transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.1); }
+  .card-icon { font-size:22px; margin-bottom:8px; }
+  .card-title { font-size:14px; font-weight:700; margin-bottom:8px; }
+  .card.blue { border-top-color:var(--accent); }
+  .card.purple { border-top-color:var(--purple); }
+  .card.teal { border-top-color:var(--teal); }
+  .card.orange { border-top-color:var(--orange); }
+  .card.pink { border-top-color:var(--pink); }
+
+  .item-list { list-style:none; }
+  .item-list li {
+    padding:6px 0; font-size:13px; color:var(--text-muted);
+    border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:8px;
+  }
+  .item-list li:last-child { border-bottom:none; }
+  .item-list li::before { content:'›'; color:var(--accent); font-weight:bold; flex-shrink:0; }
+
+  /* === PANEL === */
+  .panel { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:16px; }
+  .panel-title {
+    font-size:14px; font-weight:700; margin-bottom:14px; padding-bottom:10px;
+    border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px;
+  }
+  .panel-title .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .panel-title .no {
+    font-size:11px; font-weight:700; color:white; background:var(--accent);
+    padding:2px 8px; border-radius:10px; margin-left:auto;
+  }
+
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+
+  /* === SUB BLOCK === */
+  .sub-block { margin-bottom:18px; }
+  .sub-block:last-child { margin-bottom:0; }
+  .sub-title {
+    font-size:13px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px;
+  }
+  .sub-no {
+    font-size:11px; font-weight:700; color:var(--accent-dark);
+    background:var(--accent-pale); padding:2px 8px; border-radius:6px; flex-shrink:0;
+  }
+  .sub-desc { font-size:13px; color:var(--text-muted); margin-bottom:8px; }
+
+  /* === ORG CHART === */
+  .org { display:flex; flex-direction:column; align-items:center; gap:10px; padding:8px 0; }
+  .org-leader {
+    background:linear-gradient(135deg,#E8547A,#9B59B6); color:white; font-weight:700;
+    padding:10px 24px; border-radius:10px; font-size:14px;
+  }
+  .org-line { width:2px; height:16px; background:#CBD5E0; }
+  .org-row { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .org-box {
+    background:var(--accent-pale); border:1.5px solid #A3E4D7; color:var(--accent-dark);
+    padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600;
+  }
+  .org-box.pm { background:var(--purple-light); border-color:#D9B8EF; color:var(--purple); }
+  .org-sub {
+    display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px;
+  }
+  .org-sub span {
+    font-size:11px; background:white; border:1px solid var(--border);
+    padding:3px 10px; border-radius:12px; color:var(--text-muted);
+  }
+
+  /* === TREE (SVN) === */
+  .tree { font-size:13px; line-height:1.9; }
+  .tree-row { display:flex; align-items:baseline; gap:10px; padding:3px 0; border-bottom:1px dashed var(--border); }
+  .tree-row:last-child { border-bottom:none; }
+  .tree-path { font-family:'Cascadia Code','Consolas',monospace; font-size:12px; font-weight:600; color:var(--accent-dark); white-space:nowrap; flex-shrink:0; }
+  .tree-desc { font-size:12px; color:var(--text-muted); }
+
+  /* === FLOW === */
+  .flow-wrap { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; overflow-x:auto; }
+  .flow-title { font-size:14px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .flow-row { display:flex; align-items:center; gap:0; min-width:max-content; margin-bottom:12px; }
+  .flow-row:last-child { margin-bottom:0; }
+  .flow-label { font-size:12px; color:var(--text-muted); width:96px; flex-shrink:0; font-weight:600; text-align:right; padding-right:12px; }
+  .flow-nodes { display:flex; align-items:center; gap:0; flex:1; }
+  .flow-node {
+    padding:8px 14px; border-radius:8px; font-size:12px; font-weight:600;
+    text-align:center; min-width:92px; white-space:nowrap;
+  }
+  .flow-arrow { width:32px; height:2px; position:relative; flex-shrink:0; }
+  .flow-arrow::before { content:''; position:absolute; top:0; left:0; right:6px; height:2px; background:#CBD5E0; }
+  .flow-arrow::after { content:''; position:absolute; right:0; top:-4px; border:5px solid transparent; border-left-color:#CBD5E0; }
+  .fn-blue { background:var(--accent-light); color:var(--accent-dark); border:1.5px solid #A3E4D7; }
+  .fn-purple { background:var(--purple-light); color:var(--purple); border:1.5px solid #D9B8EF; }
+  .fn-pink { background:#FEF0F4; color:var(--pink); border:1.5px solid #F9D0DB; }
+  .fn-teal { background:var(--teal-light); color:var(--teal); border:1.5px solid #A9DFBF; }
+  .fn-orange { background:var(--orange-light); color:var(--orange); border:1.5px solid #F5CBA7; }
+  .fn-gray { background:var(--gray-light); color:var(--gray); border:1.5px solid #DEE2E6; }
+
+  /* === LANE (Jira) === */
+  .lane { display:flex; gap:0; min-width:max-content; }
+  .lane-col { min-width:170px; flex:1; }
+  .lane-head { font-size:12px; font-weight:700; text-align:center; padding:6px; border-radius:6px 6px 0 0; color:white; }
+  .lane-body { border:1px solid var(--border); border-top:none; border-radius:0 0 8px 8px; padding:8px; min-height:60px; background:white; }
+  .lane-body div {
+    font-size:11px; background:var(--gray-light); border:1px solid var(--border);
+    border-radius:6px; padding:5px 8px; margin-bottom:6px; color:var(--text-muted);
+  }
+  .lane-body div:last-child { margin-bottom:0; }
+  .lane-body div.hl { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); font-weight:600; }
+
+  /* === TABLE === */
+  .info-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .info-table th {
+    background:var(--gray-light); padding:10px 14px; text-align:left; font-weight:600;
+    border-bottom:2px solid var(--border); font-size:12px; color:var(--gray);
+    letter-spacing:.5px; white-space:nowrap;
+  }
+  .info-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-muted); font-size:13px; }
+  .info-table tr:hover td { background:var(--gray-light); }
+  .info-table td strong { color:var(--text); }
+
+  /* === BADGE === */
+  .badge-row { display:flex; flex-wrap:wrap; gap:6px; }
+  .badge { padding:5px 12px; border-radius:8px; font-size:12px; font-weight:500; }
+  .badge-p0 { background:#FEF0F4; color:#C0392B; }
+  .badge-p1 { background:#FEF9E7; color:#E67E22; }
+  .badge-p2 { background:var(--accent-pale); color:var(--accent-dark); }
+  .badge-px { background:#F2F2F2; color:#666; }
+  .badge-gen { background:var(--accent-pale); color:var(--accent-dark); }
+
+  .tag-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .tag { padding:3px 10px; border-radius:12px; font-size:11px; font-weight:500; }
+  .tag-blue { background:var(--accent-light); color:var(--accent-dark); }
+  .tag-purple { background:var(--purple-light); color:var(--purple); }
+  .tag-teal { background:var(--teal-light); color:var(--teal); }
+  .tag-orange { background:var(--orange-light); color:var(--orange); }
+  .tag-gray { background:#E2E8F0; color:var(--gray); }
+
+  /* === TOC === */
+  .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; }
+  .toc a {
+    display:block; text-decoration:none; color:var(--text); background:var(--gray-light);
+    border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-size:13px; font-weight:600;
+    transition:all .2s;
+  }
+  .toc a:hover { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); }
+  .toc a span { display:block; font-size:11px; color:var(--text-muted); font-weight:400; margin-top:2px; }
+
+  /* === NOTE === */
+  .note {
+    background:#FFFBEB; border-left:4px solid var(--orange); padding:12px 16px;
+    border-radius:0 8px 8px 0; font-size:12.5px; color:#7F5A2E; margin-top:12px;
+  }
+  .note strong { color:#B9770E; }
+
+  /* === STEPS === */
+  .steps { counter-reset:s; }
+  .steps li {
+    list-style:none; position:relative; padding-left:34px; margin-bottom:10px;
+    font-size:13px; color:var(--text-muted);
+  }
+  .steps li::before {
+    counter-increment:s; content:counter(s);
+    position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:50%;
+    background:var(--accent); color:white; font-size:11px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .steps li:last-child { margin-bottom:0; }
+
+  .divider { height:1px; background:var(--border); margin:14px 0; }
+
+  /* === BACK TO TOP === */
+  .back-to-top {
+    position:fixed; right:20px; bottom:30px; width:44px; height:44px; border-radius:50%;
+    background:white; border:1.5px solid var(--border); color:var(--text-muted); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:1.2em;
+    transition:all .3s; opacity:0; transform:translateY(20px); pointer-events:none; z-index:200;
+    box-shadow:0 2px 12px rgba(0,0,0,.1);
+  }
+  .back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+  .back-to-top:hover { border-color:var(--accent); color:var(--accent); }
+
+  @media (max-width:900px) {
+    .card-grid-3, .three-col { grid-template-columns:1fr 1fr; }
+    .two-col { grid-template-columns:1fr; }
+    .container { padding:0 16px; }
+  }
+  @media (max-width:600px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns:1fr; }
+    .container { padding:0 12px; }
+  }
+  @media print { body { background:white; } .navbar { display:none; } }
+
+  .header { background: linear-gradient(135deg, #E8547A 0%, #9B59B6 100%); }
+
+  .tag-pink { background:#F9D0DB; color:#B5435E; }
+  .goodbad { margin-top:8px; }
+  .goodbad .gb-row { display:flex; align-items:flex-start; gap:10px; padding:6px 0; border-bottom:1px dashed var(--border); font-size:13px; color:var(--text-muted); }
+  .goodbad .gb-row:last-child { border-bottom:none; }
+  .goodbad .gb { flex-shrink:0; min-width:132px; font-size:11px; font-weight:700; padding:3px 10px; border-radius:6px; text-align:center; }
+  .goodbad .gb.good { background:#D5F5EE; color:#0E6655; }
+  .goodbad .gb.bad { background:#FDEDEC; color:#B03A2E; }
+  .goodbad .gb.mid { background:#FEF9E7; color:#9A7D0A; }
+
+
+/* === ANT NAV DROPDOWN === */
+  .navbar .nav-links { gap:20px; flex-wrap:nowrap; }
+  .navbar .nav-group { position:relative; }
+  .navbar .nav-toggle { cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px; }
+  .navbar .nav-toggle .caret { font-size:9px; line-height:1; opacity:.7; transition:transform .2s; }
+  .navbar .nav-group.open .nav-toggle { color:#E8547A; }
+  .navbar .nav-group.open .nav-toggle .caret { transform:rotate(180deg); }
+  .navbar .nav-sub {
+    display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    min-width:196px; background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.13); padding:6px; margin:0; list-style:none; z-index:300;
+  }
+  .navbar .nav-group:hover > .nav-sub,
+  .navbar .nav-group.open > .nav-sub { display:block; }
+  .navbar .nav-sub::before { content:''; position:absolute; top:-9px; left:0; right:0; height:9px; }
+  .navbar .nav-sub li { display:block; font-size:13px; }
+  .navbar .nav-sub a {
+    display:block; padding:7px 12px; border-bottom:none; border-radius:6px;
+    font-size:12.5px; color:#666; white-space:nowrap; transition:background .15s,color .15s;
+  }
+  .navbar .nav-sub a:hover { background:#FEF0F4; color:#E8547A; }
+  .navbar .nav-sub a.active { background:#FEF0F4; color:#E8547A; border-bottom:none; font-weight:600; }
+  @media (max-width:900px) {
+    .navbar { height:auto; }
+    .navbar .container { height:auto; flex-wrap:wrap; padding-top:8px; padding-bottom:8px; gap:8px; }
+    .navbar .nav-links { gap:16px; margin-left:0; flex-wrap:wrap; width:100%; }
+    .navbar .nav-sub { left:0; transform:none; }
+  }
+  </style>
+</head>
+<body data-page-node-id="vHVwl4rFkskRXFTxidvcsb">
+
+<!-- NAVBAR -->
+<nav class="navbar" data-page-node-id="3FAg2KtYp9cUlBATJxk35A">
+  <div class="container" data-page-node-id="7XspD6uaSVKFoGcYNqim8z">
+    <a href="index.html" class="nav-brand" data-page-node-id="oETkHqqkcSrpBI79rGKl0v">
+      <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'" data-page-node-id="gtJfASAB4SLD6ZiOducbtE">
+      <span class="nav-icon-fb" data-page-node-id="3BGwpBLw26d6hReAktmzFP">A</span>
+      Anthea
+    </a>
+    <ul class="nav-links" id="anthea-nav" data-page-node-id="1O3ATanW9iUtyHYqFEbtyf">
+      <li data-page-node-id="NHzLIMP35Qxbn7BFMtIFJY"><a href="index.html" data-page-node-id="L1YQfprRYyqTwBAHMwuhHW">首页</a></li>
+      <li class="nav-group" data-page-node-id="SSVlW0MpnyDIjBCJLEcw8P">
+        <a href="#" class="nav-toggle" data-group="spec" data-page-node-id="zDYlKOLwDXLYxWoVCBfXhh">流程规范文档 <span class="caret" data-page-node-id="IhKDdI6a7GNDWFSl6NpRcW">▾</span></a>
+        <ul class="nav-sub" data-page-node-id="HoBW5uIn3mgOcwArUMbWtf">
+          <li data-page-node-id="cw2MLWw2WXu2f758D4Adfy"><a href="spec-of-project.html" data-page-node-id="0ztYKJPbvy904klQ2vdZxK">① 项目流程规范</a></li>
+          <li data-page-node-id="XEbFGvvipFaeGQ0qmGHUbC"><a href="spec-of-designer.html" data-page-node-id="SDXmHPKW40Zv9p9kTLFPPo">② 策划工作规范</a></li>
+          <li data-page-node-id="J6NEAay0GOi0oQ7SBJY4rr"><a href="spec-of-art.html" data-page-node-id="o6yMtU41Kj2Lo7wJMjduEG">③ 美术工作规范</a></li>
+          <li data-page-node-id="EylHk5QgAem7PIa3HsmL4T"><a href="spec-of-art-design.html" data-page-node-id="097B7P3dGZE579k7mf5LMm">④ 美术设计规范</a></li>
+          <li data-page-node-id="MeNPHWc6G6xDzzG9t2XEFd"><a href="spec-of-ue-ui.html" data-page-node-id="zhPKAYYsd7abv4xEV3axmG">⑤ UI 设计制作规范</a></li>
+          <li data-page-node-id="Cemkx3H6nZWsBJZhSMujHq"><a href="spec-of-asset.html" data-page-node-id="WOpEocYcZhNrFATdLJW8nK">⑥ 资源管理规范</a></li>
+        </ul>
+      </li>
+      <li class="nav-group" data-page-node-id="TZd1BdtwiAy0FOzybfqgTA">
+        <a href="#" class="nav-toggle" data-group="ai" data-page-node-id="DOFezEs86PYtrLFDXTQZI3">AI Coding 文档 <span class="caret" data-page-node-id="Hx8A2xWNV7VXKSFWzsS4Tm">▾</span></a>
+        <ul class="nav-sub" data-page-node-id="NzDpQHy6n08DZfwSLLKGJH">
+          <li data-page-node-id="lKZeQG7lyCsjcCG010TWJm"><a href="guide-for-claude.html" data-page-node-id="UFhSyi3Gcs40kToHpBgntt">ClaudeCode 白皮书</a></li>
+          <li data-page-node-id="890dMAmcBNErtBtktqYtAL"><a href="guide-for-claude-md.html" data-page-node-id="BA968O7UUltkHLtfEW4Iu0">CLAUDE.md 规则</a></li>
+          <li data-page-node-id="oIeyZSTIAKR7rWLlQ4q6Wq"><a href="guide-for-sdd.html" data-page-node-id="6JklFILFOygIKDQ9XJB9Hn">AI Coding 清单</a></li>
+          <li data-page-node-id="pz38HuhGHiLtf5AjzQGfZV"><a href="guide-for-workbuddy.html" data-page-node-id="zAijFggVi20ppI5HaVo0Zb">WorkBuddy 指南</a></li>
+          <li data-page-node-id="WaxiL1oA5EZxd0nfNdvDgD"><a href="guide-for-openspec.html" data-page-node-id="ATabUrwCN0KF66w7Et9g7B">OpenSpec 工作流</a></li>
+        </ul>
+      </li>
+      <li data-page-node-id="Sx5jpAngvULAZM2cEK6Lpw"><a href="https://github.com/ProMarkel/anthea" target="_blank" data-page-node-id="nQfSZfXovl9toBdirHGIxq">GitHub ↑</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="header" data-page-node-id="SAiSRS7Sc4PawRK3tNCCRE">
+  <div class="container" data-page-node-id="9DeWf9u3Xj5dXGe3Nw46xX">
+    <div class="header-tag" data-page-node-id="bM7vUn32fPWFhYjHHk4zuH">🎨 流程规范文档 · 06</div>
+    <h1 data-page-node-id="5Z2Neayx0LlLoI98ytA1aw">『海边的安西娅』资源管理规范</h1>
+    <div class="header-sub" data-page-node-id="MECUcqKOwkHxcFkBVmvHJ5">Resource Management Specification — 资源管理综述 / 角色 / 场景 / 图标 / 动特效 / 音视频 / 美宣 / 界面 / 流程规范</div>
+    <div class="header-meta" data-page-node-id="gGlw7zRn8ZbRD3jQP426Pn">
+      <span data-page-node-id="vn8Q4zge8STl8fDNGiI2py">📅 版本 <strong data-page-node-id="5dY3ICbEVnJMZ1gEgCwqAL">Ver 260429</strong></span>
+      <span data-page-node-id="3paICxBJXDKaICA2QCMKMR">✍️ 修订人 <strong data-page-node-id="1Fn5vJQdA0WMyPw4l756uk">王云华</strong></span>
+      <span data-page-node-id="ACO3sx7QqR2uvTfSRhhhCw">📆 提交日期 <strong data-page-node-id="oBnfWytJvZtNeEuU0fOdUU">2026.04.29</strong></span>
+      <span data-page-node-id="FrZBCLU4JqHnUUhBmUOXCP">🧩 章节 <strong data-page-node-id="uZFRkxDz1rT6fhrBkt0We2">10 个</strong></span>
+      <span data-page-node-id="TQ8QwPolfGZMkvVRHSnnzI">📄 原文 <strong data-page-node-id="LJSnlFniOHNrg2umhMHIgF">86 页</strong></span>
+    </div>
+  </div>
+</header>
+
+<div class="container" style="padding-top:32px; padding-bottom:48px;" data-page-node-id="Eb3FsuHnYzXy5erA69zrcV">
+<!-- ===== 目录 ===== -->
+<div class="section" data-page-node-id="ZLBZkBJMsX2TlJc2WvZwCG">
+  <div class="section-header" data-page-node-id="Bus7RRT7JblMrt0kyswCkx">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="buOGjRymcmR5roOH11huWL">目录</span>
+    <span class="section-title" data-page-node-id="GA3tlhYJNHb5k7BWUVumVn">章节导航 · Ver 260429</span>
+  </div>
+  <div class="toc" data-page-node-id="DbWDbWtqFEwGuPRcKYmUIG">
+    <a href="#v" data-page-node-id="xyElOYsXytugJPm3cvZLqo">📜 版本历史<span data-page-node-id="nLyz8IZe7VeOEgbtUMoxPb">Ver 251207 → V260429 迭代记录</span></a>
+    <a href="#s1" data-page-node-id="eA6MXYKcy4oajp4u1tF2I9">1 · 资源管理综述<span data-page-node-id="A3uZjvkJYqwxTUCB03svwT">分类 / 路径 / 命名</span></a>
+    <a href="#s2" data-page-node-id="gIJAkAL896q9b94TP9qACF">2 · 角色资源 Character<span data-page-node-id="CC7y5YyoPgv7MRIhJQGHLi">立绘 / Q版 / 换装 / 花灵</span></a>
+    <a href="#s3" data-page-node-id="4yPvzN4klbUvW7OrSyYvCu">3 · 场景资源 Map<span data-page-node-id="qydKIUCHxbTk5XQcvfmrBU">主场景 / 剧情类 / 场景物件</span></a>
+    <a href="#s4" data-page-node-id="7WQleBOhlWTxdDeeL3AXhE">4 · 图标资源 Icon<span data-page-node-id="uI91m4g44oqw8ovqN5DVZ7">22 个图标子分类</span></a>
+    <a href="#s5" data-page-node-id="EMXqMRsvJ3fqvnkXgtZBbF">5 · 动特效资源 Effect<span data-page-node-id="ALTEmUVVggTO641fHHJkhh">Spine / 序列帧 / 程序动画</span></a>
+    <a href="#s6" data-page-node-id="dHiuPrZ2c7A89V0WIzyjr6">6 · 音视频资源 Media<span data-page-node-id="uiqXbDGH8qTXCL26AXSYKE">BGM / Audio / CV / Video</span></a>
+    <a href="#s7" data-page-node-id="ECKSG96u4QmSpIGFZtbXN0">7 · 美宣资源 Poster<span data-page-node-id="HlWH3q0eWL3NM3dpNE22TP">平台素材规范</span></a>
+    <a href="#s8" data-page-node-id="ngjrubyidI7hLUW07WBA9p">8 · 界面资源 UIRes<span data-page-node-id="En2w0UogqOHKHMCBu0FJ5l">FGUI 工程与预制规范</span></a>
+    <a href="#s9" data-page-node-id="nJTmfO7Bk1f73RaqQqbji9">9 · 资源流程规范<span data-page-node-id="83oS1fBxr9aEr25OS9eLxY">需求 / 会议 / 制作 / 验收 / 提交 / 发布 / 归档</span></a>
+    <a href="#s10" data-page-node-id="YZ664LhlZvEUFFdJIq5sPD">10 · 美术日常工作规范<span data-page-node-id="OExrLr9Slc7D4CWXnwrvHs">需求对齐 / 计划 / 周会 / 月报 / 绩效 <em data-page-node-id="0vs0u8iBFsNv81UYNJZytr">(PDF 未涵盖 · 保留 V240827 旧版)</em></span></a>
+  </div>
+</div>
+
+<!-- ===== 版本历史 ===== -->
+<div class="section" id="v" data-page-node-id="DSNABqrZ7BlJVOFvUhQEpV">
+  <div class="section-header" data-page-node-id="eoy8TEbD2IoDR4Mi2MJvvC">
+    <span class="section-tag" style="background:#FEF0F4;color:var(--pink);" data-page-node-id="RFzGjDNQZ3TxWYdcG0pYKx">版本历史</span>
+    <span class="section-title" data-page-node-id="vsFk4ifsNhp7P9Ie8hnLy5">修订记录 · Ver 260429</span>
+    <span class="section-desc" data-page-node-id="nKjqNWvZC8GPTRYD6LQbm6">8 个迭代版本 · 修订人 王云华</span>
+  </div>
+  <table class="info-table" data-page-node-id="ZzOTN53rCvGfnzYyutnyDC">
+    <thead data-page-node-id="FiUGXebFAavkjqvGMvgKtt"><tr data-page-node-id="0fTCKQlFp9ZJCGmpjL0ttX"><th style="width:120px;" data-page-node-id="RDfxZMHmHDNOrRxCvqidwB">版本号</th><th style="width:120px;" data-page-node-id="J1sKaipmnOATwKNJwT900D">提交日期</th><th data-page-node-id="TD3yrFiBgf5C6cIxfr0gGf">修订要点</th></tr></thead>
+    <tbody data-page-node-id="T16RnWiDssNUqLYCmlAGjL">
+      <tr data-page-node-id="6gVJI9Oi7j9vuOVZp1HCgy"><td data-page-node-id="s9kF6QEzk8heLlSLySEd5g"><strong data-page-node-id="TPBKwGK4SjVYgcZYGq14OR">Ver 251207</strong></td><td data-page-node-id="kjfw5rnOoqPQ2KJApmT0VZ">2025.12.07</td><td data-page-node-id="l4HX2bp798QaoUBDzkVqhn">重新整理资源管理规范内容；完成资源管理综述部分整理核对，各资源分类详细规范将陆续补充完善</td></tr>
+      <tr data-page-node-id="mJG7ngwcDCzODsZ9FZA2kN"><td data-page-node-id="a2sDhDHRwWfPdKhJ4TlE6z"><strong data-page-node-id="mPJ2W2bqprMYu4nhimkNeA">Ver 251215</strong></td><td data-page-node-id="0ICtbadjMqwNIaEvXUEA90">2025.12.15</td><td data-page-node-id="qa4F38YCXRmJVkJUACzx5m">补充主场景 &amp; 家具物件的应用及规格</td></tr>
+      <tr data-page-node-id="aCFrT1XJ7qsTcECPuG85w6"><td data-page-node-id="CKxM3skbL7l7N30oEp4lx4"><strong data-page-node-id="ZVDzRtLy2HGRGeSNUb1usT">Ver 251229</strong></td><td data-page-node-id="k40myA7k6TOqMMDhXO0J8O">2025.12.29</td><td data-page-node-id="QIWL10GF3ciKcdqvF03jYg">更新主场景、社交图标、剧情立绘、Q 版角色应用及规格</td></tr>
+      <tr data-page-node-id="I177FUOJiO7fOTmU9dGvfH"><td data-page-node-id="Ti9Y3QFIEbN6UcgtDDLOXf"><strong data-page-node-id="aJ7PbbjLgfzxK617lPidix">Ver 260130</strong></td><td data-page-node-id="uKM7U5tbaoarxZpdeJ2byc">2026.01.30</td><td data-page-node-id="vFv3ztyfzeuUCfjOESvFWl">更新图标应用及规格</td></tr>
+      <tr data-page-node-id="wFsOgiHcOQKvuxXnKLN25W"><td data-page-node-id="jplIu5qC3Jyvhwy6KNGLyp"><strong data-page-node-id="IGsOH44OsWnXvqB5T5raG6">Ver 260202</strong></td><td data-page-node-id="HaFd9YFF2YN0JVqC1XJYhh">2026.02.02</td><td data-page-node-id="bn19gPqw1d8Ap5WRiM6Dtl">更新社交图标资源命名规则</td></tr>
+      <tr data-page-node-id="E72QmfGWCbVh0dFqBHGcPZ"><td data-page-node-id="VGjXxHGirKBl2i8mgCagaC"><strong data-page-node-id="OOaRdXNtRINHOWQqaPHtZV">Ver 260320</strong></td><td data-page-node-id="9yGT8UbSxrImQOH9mqvw2d">2026.03.20</td><td data-page-node-id="i0u3owcDeFmxJ6YiGQI9CP">补充花灵相关规范；补充场景装饰物规范内容；更新 UI 规范</td></tr>
+      <tr data-page-node-id="BXicWiOszvLCm7hAr0NES1"><td data-page-node-id="LBxFfzv6CJaoj9doiZGSbn"><strong data-page-node-id="TqlYQMFYCt6o9ExjK7OO1O">Ver 260408</strong></td><td data-page-node-id="lDDLEBBPRUwvr9GVRK33xC">2026.04.08</td><td data-page-node-id="691tNvf98lIY9R25WN3njU">更新 Q 版花灵输出规范</td></tr>
+      <tr data-page-node-id="YzE0wzoJEznwKFQJOahx3D"><td data-page-node-id="bFz94DGxtuFux3I7Q6YQ0T"><strong style="color:#C0392B;" data-page-node-id="TLacGoloslfdKw48RhJtTw">Ver 260429</strong></td><td data-page-node-id="mXcibvohGQTweh22WR0iDt">2026.04.29</td><td data-page-node-id="Hev4aJDxuOyeovxEbZ03bm"><strong data-page-node-id="d4rhv1PWN6vgSGQ0uPdJRk">更新音频资源规范</strong>（最新版本）</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 1 资源管理综述 ===== -->
+<div class="section" id="s1" data-page-node-id="NWNV0asuQypOyLCArU5Xwi">
+  <div class="section-header" data-page-node-id="rSL9it7d954YLJuTJ49Cce">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="2MayYb9BBqAUHFHFl2Biop">01</span>
+    <span class="section-title" data-page-node-id="S1aS9uVVycqB0IddjqvFHD">资源管理综述</span>
+    <span class="section-desc" data-page-node-id="WqMpV9DNcmsXZfGz8SUFz7">分类 · 路径 · 命名</span>
+  </div>
+
+  <!-- 1.1 资源分类 -->
+  <div class="panel" data-page-node-id="mlSh14Im33WjWkGTiqbRPo">
+    <div class="panel-title" data-page-node-id="NpgnmaU7b1FZioALiPLm0E"><div class="dot" style="background:var(--accent);" data-page-node-id="i6vYfwLJfZMqEQpOHi3avu"></div>1.1 资源分类<span class="no" data-page-node-id="WPYIriiWHq1sAp8xHjLTnt">分类维度</span></div>
+
+    <div class="sub-block" data-page-node-id="lQpwFcVllQHYHmDnLpECTU">
+      <div class="sub-title" data-page-node-id="O8bOph823lZYhC8m67LVBB">🎯 三种分类维度</div>
+      <div class="card-grid card-grid-3" data-page-node-id="KmB23Xbwc03i6siaCg1swo">
+        <div class="card" style="border-top-color:var(--teal);" data-page-node-id="PqCUq8rCMrRiVrV5t989nh">
+          <div class="card-title" data-page-node-id="wlF6nk3HNk8ntBdwavF29M">按类型分类</div>
+          <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="lhxGDt0DwMNPd5Zcmrj4x8">主要按<strong style="color:var(--text);" data-page-node-id="kM24GPbvOW6qUWLwJEv1Z9">文件格式和功能用途</strong>分类：图片资源、音频资源、视频资源等</div>
+        </div>
+        <div class="card" style="border-top-color:var(--blue);" data-page-node-id="CBEi6zSIxfgrcnq33UhmxQ">
+          <div class="card-title" data-page-node-id="wpJk2BLUekbzbyFG7eJsl5">按应用分类</div>
+          <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="vXaeME2CEanenBk07xr01Y">主要按<strong style="color:var(--text);" data-page-node-id="ZTzG1Uw9RU2JTI6ibA4y60">资源的应用场景</strong>分类：场景资源、图标等</div>
+        </div>
+        <div class="card" style="border-top-color:var(--orange);" data-page-node-id="z0zooVlxkOYGnwcxijAMFx">
+          <div class="card-title" data-page-node-id="uHfZDY0nARvzePgVoNTLvc">按分工分类</div>
+          <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="jsfYS27ySX6ka9NyxhvS4l">主要按<strong style="color:var(--text);" data-page-node-id="d6wOOI5pFuTlRxQuJL27Jh">美术制作分工</strong>分类：原画资源、Spine 资源、场景资源等</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" data-page-node-id="VlNPGy3vv5wz7Z7bIKFX8u"></div>
+
+    <div class="sub-block" data-page-node-id="yuwO5WKKKHOk8tlioOpRvs">
+      <div class="sub-title" data-page-node-id="ceAmunONYVpFOTkATjEnEw">📦 项目使用资源类型和应用场景混合分类（8 大类）</div>
+      <table class="info-table" data-page-node-id="5PZAMVHBiFzrlVZT8Bael7">
+        <thead data-page-node-id="DtutETHrcYI9V5hAJLKdXm"><tr data-page-node-id="XNgquGW8JcC1zMTFT4gofX"><th style="width:110px;" data-page-node-id="XULotB0IgEUqSr8TmHWLcW">资源大类</th><th style="width:160px;" data-page-node-id="eJ8I8ho6iFtGVh0p6sg1Px">英文章节名</th><th data-page-node-id="GNngDhAhj7IZuSm0VmT6CD">说明</th></tr></thead>
+        <tbody data-page-node-id="88nDpExfvHdPAixy5ggcOU">
+          <tr data-page-node-id="dPjpvtheX7psQLDKz3C9PR"><td data-page-node-id="UhaDp67gxSyMOb0aZ3ox5V"><strong data-page-node-id="Y6AWcYAdnzsUq5FJ8zKmpU">角色资源</strong></td><td data-page-node-id="VOBqfvCDr1LwIbg6spIIyc">Character</td><td data-page-node-id="xMcOZAKEIM0QUOLo4voPZw">用于游戏内角色展示的所有资源，含静态展示（头像）和动态展示（动作）。涉及：角色原画、角色动画、静态切图。具体含<strong data-page-node-id="KsDVnt4f5TdQNctDDCCMkQ">剧情立绘 / Q版 / 玩家换装</strong></td></tr>
+          <tr data-page-node-id="j1HVQ0ZVfkKGKEPHvn18xC"><td data-page-node-id="DMiucz90uKgBpNmvwQXeJE"><strong data-page-node-id="dOD0PdQSurGAQQNC8wF9mV">场景资源</strong></td><td data-page-node-id="xPI6phRVQxfN11If0ojFnF">Map</td><td data-page-node-id="aBLB27J9rNKMF22dDoVjCF">游戏内场景类资源，主场景构建资源，及场景功能相关的动态、替换类资源。由场景原画设计、动画人员补充动特效</td></tr>
+          <tr data-page-node-id="bFwYV6NZx5norBIAftBOn7"><td data-page-node-id="ZgAatuxGUKv3x7aAv6EDMD"><strong data-page-node-id="r4xhhe5S8jtutKqjiA59Fm">图标资源</strong></td><td data-page-node-id="2Cqbbpzg2VjGzL2Xr2rMWR">Icon</td><td data-page-node-id="fEWhQfOP9NyuFJE9OUimtP">游戏内最主要的配置型静态资源，主要以 2D Sprite 形式使用。可分为：<strong data-page-node-id="pTB4ZivyKWiuNUKxmdIAtz">附带型</strong>（如角色头像、种植物图标）+ <strong data-page-node-id="0ZI8BsVJY7NR8AEv0ZjvYL">独立型</strong>（如物品图标、功能图标）</td></tr>
+          <tr data-page-node-id="plVaRQfihz69zwcaMRijcM"><td data-page-node-id="SLMDodz7J13DNvlWwOYBgE"><strong data-page-node-id="NHL57yx2KcIDjPKmS5spmf">动特效资源</strong></td><td data-page-node-id="qiW7rPVjYhH7HLV018sJZa">Effect</td><td data-page-node-id="mEZtCR0OmzSlLh7GvRNa2B">游戏内动画类资源，独立动特效目录。狭义动特效主要以 <strong data-page-node-id="GkQeLLM70zAH17mcKZxeDu">Spine</strong> 制作输出；界面动效以 <strong data-page-node-id="Yb0oTXkSZDJ9hqAym0oGZ8">Animation</strong> 为主（属于界面资源）；固定关联于角色/场景的特效属于对应资源</td></tr>
+          <tr data-page-node-id="Ou9SbMsUXQEUTWDCDz7M6D"><td data-page-node-id="y8IAFPnTs9TxZk7sGiy6ys"><strong data-page-node-id="MoRXxYMLBge846nFsLABNv">音视频资源</strong></td><td data-page-node-id="uu5eutaHmN6mbkuvl0QluO">Media</td><td data-page-node-id="JWLPlq5d9bHQgqXW6fRdLI">音视频类资源，基于游戏内其他资源配套设计（基于场景的 Bgm / 基于动特效的 Audio / 基于剧情台词的 CV 等）</td></tr>
+          <tr data-page-node-id="gRVVQmqaUdKCjpLsY1Rtnc"><td data-page-node-id="DMf5ZFOe9ABxznfaFpjClH"><strong data-page-node-id="VGNFk9nSWuYr53qUkycQER">美宣资源</strong></td><td data-page-node-id="L63yqoaAbZFSqcNRu80c9C">Poster</td><td data-page-node-id="71gW4ptNckli2Ql39YQz8R">非游戏内实装，用于平台（五图、分享图等）和/或运营宣发用途的素材；外包核算分类中游戏内大型插画等也属于此</td></tr>
+          <tr data-page-node-id="0xywNaMIbsCi3ZfQeq9fIH"><td data-page-node-id="6BVX0GpIqWusAAKB6Z2ZIs"><strong data-page-node-id="D7VgGTuIlW7NL4tf7IEesV">界面资源</strong></td><td data-page-node-id="orUyCOlZDrYNqHxJ3DQ3FS">UIRes</td><td data-page-node-id="ECbBbCB4vUh4dLcb4r1y8b">游戏交互界面的静态素材、字体、界面动效。相较其他美术资源，<strong data-page-node-id="eECcRk5WIeCbTKYAfE870Y">逻辑关联性、规则性要求更高</strong></td></tr>
+          <tr data-page-node-id="Z7KTGVA6gbyV7yMCJBnJjs"><td data-page-node-id="CgAHUBDUC6A7cyblEM9FxY"><strong data-page-node-id="tdQOgNbSwZ4IrQLhQJ9A1W">资源流程</strong></td><td data-page-node-id="zZe8vYi4071VRDUo5MSTNV">—</td><td data-page-node-id="kyiRTgMj2hHGEC0vl1AmXp">贯穿各资源类型的<strong data-page-node-id="KDd7EFRP9jVeuYfxAAaTKd">需求 / 制作 / 验收 / 提交 / 发布 / 归档</strong>全流程规范</td></tr>
+        </tbody>
+      </table>
+      <div class="note" data-page-node-id="EzTgOThoSWmEiwdDhOeo5Z">📌 <strong data-page-node-id="fLEjfmDHKUfKfW4vVQ0dIz">特别注意：</strong>界面动效属于界面资源；与角色/场景固定关联的特效属于对应资源；通用逻辑调用的界面/角色/场景特效都属于<strong data-page-node-id="FYvunBJ9THX1CaaCTq0avK">独立动特效</strong>。</div>
+    </div>
+  </div>
+
+  <!-- 1.2 资源路径 -->
+  <div class="panel" data-page-node-id="foG029vYuXybpC7cEpzj7y">
+    <div class="panel-title" data-page-node-id="9dba3exdlVuOfuj7g8TwLR"><div class="dot" style="background:var(--purple);" data-page-node-id="sBytzlMJKHoAfo29HspBuk"></div>1.2 资源路径<span class="no" data-page-node-id="I8FFMgrrLHt1ptns2HMhFb">四库体系</span></div>
+
+    <div class="card-grid card-grid-2" data-page-node-id="HFLPTZR8g362ohtIGxiFkY">
+      <div class="card" style="border-top-color:var(--purple);" data-page-node-id="hQwDbHAEa3kDdm315NwuH6">
+        <div class="card-title" data-page-node-id="zFeXhYZF4ar6hHRqI8OhSH">① 美术 SVN 资产库</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;" data-page-node-id="yxpn0gcIYs4jH41pf8heHM">由美术管理维护，<strong style="color:var(--text);" data-page-node-id="jqCahAzmL1buRimsoeJvzW">收录美术日常制作资产 + 各时期确认使用的资源独立归档</strong>。</div>
+        <div style="font-size:11px;font-family:monospace;background:var(--gray-light);padding:4px 8px;border-radius:4px;margin-bottom:8px;" data-page-node-id="ZVyOi3fZTYWzE7oLoqEl3C">https://svnshh.dobest.com/svn/anthea_art</div>
+        <div class="tag-list" data-page-node-id="9oIz4e8DsH3ZTcxRHJCK30">
+          <span class="tag tag-gray" data-page-node-id="sXHC6D4ldrhzL96F3K6l9X">/2D 场景</span>
+          <span class="tag tag-gray" data-page-node-id="qYVlCstS7SUsixKVW2DdoA">/2D 动效</span>
+          <span class="tag tag-gray" data-page-node-id="rITyofQOLNRzxP5TP5PBvV">/2D 角色</span>
+          <span class="tag tag-gray" data-page-node-id="8MEqLDXCSvV43urnCDFmt3">/UI</span>
+          <span class="tag tag-purple" data-page-node-id="fxaHJnyTakBfEs4D0TMGlU">/归档</span>
+        </div>
+        <div class="note" style="margin-top:8px;" data-page-node-id="K1h5mLAYd8qlbJ6EE4OvDS">归档目录：源文件 + 预览文件，按<strong data-page-node-id="qXCxVRoMV5GTVRLvUZqkHg">需求分类</strong>作为一级目录（如【1. 角色】【2. 场景】）</div>
+      </div>
+      <div class="card" style="border-top-color:var(--blue);" data-page-node-id="xGInr9ci36cafr9gSLP1x1">
+        <div class="card-title" data-page-node-id="bqFWy8HrjJfPmAtPMAh4a6">② 项目 SVN 资源库</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;" data-page-node-id="9MpKjqW0EWPfNPSqlEBxTL">以<strong style="color:var(--text);" data-page-node-id="kbcRUeBwrlGskyOdHDHo8h">输出提交</strong>为主要用途，兼顾美术资产库和工程资源库的对应。</div>
+        <div style="font-size:11px;font-family:monospace;background:var(--gray-light);padding:4px 8px;border-radius:4px;margin-bottom:8px;" data-page-node-id="YgGiRtsjSHDiAYjf25g7V3">https://svnshh.dobest.com/svn/anthea/art</div>
+        <div class="tag-list" data-page-node-id="eL4gYENlVAjE4KiYbj1Deb">
+          <span class="tag tag-blue" data-page-node-id="bVW6U2vkNWMxdEvzvB4BwP">/1. 游戏角色</span>
+          <span class="tag tag-blue" data-page-node-id="G3EL18gjnUTPB6KV92kIep">/2. 游戏场景</span>
+          <span class="tag tag-blue" data-page-node-id="PdOIquCP3bY5a1QI1A1MVV">/3. 图标图素</span>
+          <span class="tag tag-blue" data-page-node-id="7emlL5AIXQwnAzGe6CIsI6">/4. 动画特效</span>
+          <span class="tag tag-blue" data-page-node-id="YNnvURZsEBqxtYTg71ftpf">/5. 媒体音频</span>
+          <span class="tag tag-blue" data-page-node-id="UaA0FxWQOFWLUuFNo2bz5c">/6. 美宣素材</span>
+        </div>
+        <div class="note" style="margin-top:8px;" data-page-node-id="QDAFNH0ZadxCZV5EMbYw2U">命名风格：<strong data-page-node-id="a1Qv15ivTSsyWFYSuiVzYE">中英文对照</strong> + 数字序号保证排序</div>
+      </div>
+      <div class="card" style="border-top-color:var(--teal);" data-page-node-id="BKFRrRDAf8OwvarMFrZylc">
+        <div class="card-title" data-page-node-id="BL9Bsh9aBwF6Fo0nskNLQa">③ FGUI 工程资源库</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;" data-page-node-id="iMpvkFDmPgZJURMrV1e9JY">项目使用 <strong style="color:var(--text);" data-page-node-id="PZHiXJ2BsikY5En8SDZ1Qj">FGUI</strong> 进行界面及花艺品编辑，由交互设计 + 资源策划管理维护的工程。</div>
+        <div style="font-size:11px;font-family:monospace;background:var(--gray-light);padding:4px 8px;border-radius:4px;margin-bottom:8px;" data-page-node-id="ZgC0lLD0XusHVRjMly2gkZ">https://svnshh.dobest.com/svn/anthea/client/FGUI</div>
+        <div class="tag-list" data-page-node-id="qNWukCWFBsnQO6cJkBCYPC">
+          <span class="tag tag-teal" data-page-node-id="FADTr9sxJYGfI4kxjDfNFM">/Anthea_GUI/assets</span>
+          <span class="tag tag-teal" data-page-node-id="nEyVaKd7QKJ1Feoe6tkRJJ">/Anthea_Floral/assets</span>
+        </div>
+        <div class="note" style="margin-top:8px;" data-page-node-id="48NiQPu2UUSFHL480wmmJs">目录 & 文件<strong data-page-node-id="J6T5pvv3oJSUQmPThdva4q">纯英文命名</strong>（除预览效果图）；FGUI 预制组件（xml）也需严格命名</div>
+      </div>
+      <div class="card" style="border-top-color:var(--orange);" data-page-node-id="L82dq1UDCOAPV3lgfnQTTj">
+        <div class="card-title" data-page-node-id="WPGM2WQar0atbe8SFEkpHA">④ trunk 工程资源库</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;" data-page-node-id="f9zMd4EQwhuk9F1iuG3wLN">由资源策划管理维护的<strong style="color:var(--text);" data-page-node-id="uagk1yMyGveFmxyGxqbopu">工程 SVN 资源库</strong>，为项目工程直接使用的资源路径。</div>
+        <div style="font-size:11px;font-family:monospace;background:var(--gray-light);padding:4px 8px;border-radius:4px;margin-bottom:8px;" data-page-node-id="iJpvGBnQRXNIikgF5VAY2X">https://svnshh.dobest.com/svn/anthea/client/trunk/assets/resources</div>
+        <div class="tag-list" data-page-node-id="X2kErqmIHnudEbyDpBeorq">
+          <span class="tag tag-orange" data-page-node-id="5497CqLu3CgUdgBg3k1HkA">/Character</span>
+          <span class="tag tag-orange" data-page-node-id="2ue7mBSOM3NDTFi3XYizwd">/Map</span>
+          <span class="tag tag-orange" data-page-node-id="LlxPoN60QmTXEmJV5UQT4o">/Icon</span>
+          <span class="tag tag-orange" data-page-node-id="hsrfbrMtJkPq1zH8IIHuc3">/Effect</span>
+          <span class="tag tag-orange" data-page-node-id="BmzaXpGB5nJgCghPbW0p5X">/fgui</span>
+          <span class="tag tag-orange" data-page-node-id="ZWfoCPKrRF3VSddBKDBKls">/Floral</span>
+          <span class="tag tag-orange" data-page-node-id="eehYcQdNQHMawfPOSwHEZU">/Story</span>
+        </div>
+        <div class="note" style="margin-top:8px;" data-page-node-id="g4YmvS6zwiDDzBgXH5Zrs5">目录分类偏向<strong data-page-node-id="0eGNh4T6lE7mF8ElNsqAKI">应用场景</strong>而非需求分类；<strong data-page-node-id="6spKwiKj009B9zoP3oLhJD">纯英文命名</strong>；含程序可调用预制体</div>
+      </div>
+    </div>
+
+    <div class="note" data-page-node-id="Hko8Z8ee9o7OMX726F8LcP">
+      📌 <strong data-page-node-id="uXYgGoalAToNhDeIKif3yI">四库对应关系：</strong>美术 SVN 资产库（日常归档）→ 项目 SVN 资源库（中转核对）→ FGUI/trunk 工程资源库（直接进包）。
+      <br data-page-node-id="beKCCTPBUgNKnVAxDy7yd7">同一资源在三个库中均有存放，路径可明确对应。
+    </div>
+  </div>
+
+  <!-- 1.3 资源命名 -->
+  <div class="panel" data-page-node-id="9UC3x47cCdR0WmPz2YL4lf">
+    <div class="panel-title" data-page-node-id="XaSZ8VBeJFZJHNS2tqMGNK"><div class="dot" style="background:var(--teal);" data-page-node-id="Cqem68mTItbum0whGolzRx"></div>1.3 资源命名<span class="no" data-page-node-id="RoO4l1pWm3zYtYv8475E1y">三段式</span></div>
+
+    <div class="sub-block" data-page-node-id="fZWQ9ePbjRfpOcPLG83qxa">
+      <div class="sub-title" data-page-node-id="JxvGPYY3oXisi1g1QYnsCo">📁 1.3.1 文件夹命名</div>
+      <ul class="item-list" data-page-node-id="cbQIBBVM5MGHdqtIVbKqu7">
+        <li data-page-node-id="0lQRG1ZMMGR0KnkPlUhnKs">文件夹深度<strong style="color:var(--text);" data-page-node-id="AFvmBnGxdZ7YToTGtEpJxh">不超过 3 层</strong></li>
+        <li data-page-node-id="ODLMSeulNOBw55NogfUwxD">拆分标准：<strong data-page-node-id="vtMgi3xAXIKb8iRDID8tI8">目标对象的分类/分组</strong>，以及<strong data-page-node-id="PAvMMCZfTZrKi03MIQCpL0">单个具体对象有多个文件</strong></li>
+        <li data-page-node-id="KJAjIe2Jmiw0nPk52Qo0Za">示例：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;" data-page-node-id="u7auR5EmR62lst6O3vODeM">../1. 角色 - Character/$角色名 - $RoleName/Q 版 - Avatar/</code></li>
+      </ul>
+      <table class="info-table" style="margin-top:10px;" data-page-node-id="bHjQNwR57Gx9yFEhdAdXS1">
+        <thead data-page-node-id="OJZUrBLTG7TElCuwZQAnAg"><tr data-page-node-id="iEO6fSMhqWHGawrjpwSYtW"><th style="width:160px;" data-page-node-id="htXPnXNTF7DZsSC1PL17Ze">资产库</th><th data-page-node-id="wG6AMmL0EaUFEHqteJtuQL">命名规则</th></tr></thead>
+        <tbody data-page-node-id="U53twIfKPPXCj4qmGl45D6">
+          <tr data-page-node-id="i4BecbyuMJb0Ro3JmtDyM3"><td data-page-node-id="E3iV34Aswmx9wgdBm7O4bF"><strong data-page-node-id="38XeEWd4eut1M3PiHtDsIj">美术 SVN 资产库</strong></td><td data-page-node-id="5vZP4tVseVVo6yRQzRDvKp">以日常工作为主要用途，文件夹命名以<strong data-page-node-id="HJw0PlwlKktGZiarOeUXJi">中文</strong>为主；日常目录以<strong data-page-node-id="bFodD3NGcEOKlR7qNdzeqi">工种</strong>划分（如【2D 角色】【2D 场景】）；资产归档以<strong data-page-node-id="3XTPh1gTFWhn9g8mM2LbJ7">需求分类</strong>为一级目录</td></tr>
+          <tr data-page-node-id="6QWvYzIKlfqYyawlFpUe86"><td data-page-node-id="FpAlIwsv3SAuuf2Ne1Ti8o"><strong data-page-node-id="7tXkrSianeRUQHZgWEUeL2">项目 SVN 资产库</strong></td><td data-page-node-id="zksvYf0JKixs7TpP0z41TZ">以输出提交为主要用途，命名以<strong data-page-node-id="6SJCuWjV0drstlowxVUbC0">中英文对照</strong>为主；一级目录基本对照【美术资产库/归档目录】（如【1. 角色 - Character】【2. 场景 - Map】）</td></tr>
+          <tr data-page-node-id="jra9gjDRdLyzmy5GZFlp5t"><td data-page-node-id="xAf3FksC7KDhicGgqHl4UP"><strong data-page-node-id="r8afpRJX97C4X9XfOCzcD0">工程 SVN 资产库（FGUI/trunk）</strong></td><td data-page-node-id="jn5UYCT2MOtHSfV3JWZf41">用于工程内直接调用，文件夹以<strong data-page-node-id="WQihGmk0HcvU2oWw1j8MBX">纯字母</strong>命名，<strong data-page-node-id="6FAFcr2Kyf5xQ87VZ2X34s">不使用数字序号</strong>排序（自带数字可保留）</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="divider" data-page-node-id="frrEloapieS34tqTxEBLKl"></div>
+
+    <div class="sub-block" data-page-node-id="EPsJ4NYulXze60CAdCtZGh">
+      <div class="sub-title" data-page-node-id="O81dnwwObGrVPqd3HIA4wM">📐 1.3.2 文件命名通则</div>
+      <div class="sub-desc" style="font-size:14px;color:var(--text);" data-page-node-id="D7ilUIlOcDdu1cDoqsc27B">通用形式：<code style="background:var(--accent-pale);padding:4px 10px;border-radius:4px;color:var(--accent-dark);font-weight:600;" data-page-node-id="EEwpgZnO7zZaW19exgoErq">$CLASS_$ResName_$standard</code></div>
+      <table class="info-table" data-page-node-id="GlWuGaf4aPsj82GG5ZXB8M">
+        <thead data-page-node-id="APyk4WX4qPCqkyqcd9Qmcn"><tr data-page-node-id="mp5OlfHVFYd4KIVTClcwFP"><th style="width:140px;" data-page-node-id="Cm6gCilgGKMrqgSxOq1k0z">分段</th><th data-page-node-id="ThMmYPah8kenSmCR8YF0B7">属性</th><th data-page-node-id="UkcAV2iEkiBUDcAQAgCmjN">格式</th></tr></thead>
+        <tbody data-page-node-id="QywT4QNEbmw66uYeAvTD7H">
+          <tr data-page-node-id="IArLl5WNLlF0VSENyeOxaT"><td data-page-node-id="eDDEEimFmJC514RlyERXEu"><strong data-page-node-id="1qVOmFKlQcsLUzpV69ChXu">$CLASS</strong></td><td data-page-node-id="znZFmxKiEZ0AgQBWUWXW5s">非必要 · 前缀</td><td data-page-node-id="alcKeEYAhREjXag3BG5XYr">全大写、字母（英文单词或缩写，<strong data-page-node-id="vULXUJAqc0FGOqACQN8aCz">≤3 个字母</strong>）。命名中分类指设计、规格、应用不同的同目录、同文件类型的不同资源</td></tr>
+          <tr data-page-node-id="m5LaSJQC7iVLYZCrHQmqao"><td data-page-node-id="akkAvSWYwa8l0aCeiwTmh6"><strong data-page-node-id="6FNjW4f31NiLuf7oLNBm3m">$ResName</strong></td><td data-page-node-id="smgzujsnc0H6M12cpFBXDh">必要 · 本体</td><td data-page-node-id="zfjwI1zt8vdv8UyaP9rwEs">大驼峰、字母 + 数字（<strong data-page-node-id="R26BKsDsDnWS4uO7NoVAWC">≤3 个拼音/单词 + 2 位数字</strong>）。资源动态匹配时对应配置中「资源标识 res」的本体文件名。尽可能使用<strong data-page-node-id="0J2FqlTo2yRJ1rffnSXeYE">拼音</strong>命名</td></tr>
+          <tr data-page-node-id="6atMjHcne3D7SaomIBLcGO"><td data-page-node-id="5cJkIBUBW5gGWtmKzfM8MY"><strong data-page-node-id="io0LEuv7h0ipWt2ipNjY9X">$standard</strong></td><td data-page-node-id="MZX2EYIblkUWqvs0X3iQrO">非必要 · 后缀</td><td data-page-node-id="Bs46VKZU9HQKHDA7VJkNQw">全小写、字母 + 数字（<strong data-page-node-id="xth4fzYOB8nShKqz35xSJe">≤1 个拼音/单词 + 2 位数字</strong>）。区分不同应用场景、状态。尽可能使用<strong data-page-node-id="rAu7tCAW0ycC1Vf7y9uuN3">英文单词</strong>，避免任意新增</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="divider" data-page-node-id="poKDYWe7nWFEgdemCsGnBr"></div>
+
+    <div class="sub-block" data-page-node-id="vWSeGe4CqQS8l3DyJiMqX3">
+      <div class="sub-title" data-page-node-id="tGBHh4zNhr3QQr9hFyESfs">📋 1.3.3 文件命名适用</div>
+      <table class="info-table" data-page-node-id="i3IBlFfxxlgSg2Ms9RvMqA">
+        <thead data-page-node-id="pTuTABcKyl1BpMFZVAYc6l"><tr data-page-node-id="Ia3w6yAwI9tcBNMYVCF5BK"><th style="width:160px;" data-page-node-id="usyL0w4ycYhpGJNHXtHhbm">资产库</th><th data-page-node-id="TPztRWdkasKK3fHsmOMKyY">命名要求</th></tr></thead>
+        <tbody data-page-node-id="wuXrj1c3hj3wA8xYFTeKbX">
+          <tr data-page-node-id="h23FXEf3eXMkSmjts0YmKB"><td data-page-node-id="n3ELbPK4A9a50p4xGTFORm"><strong data-page-node-id="iJg5OxLIN4YwDAK0Ydb8Rv">美术 SVN 资产库</strong></td><td data-page-node-id="Qo71Q6amI01gCOcWBgJPAY">以制作源文件、预览文件为主，不会直接进包，日常人工查找使用为主。命名<strong data-page-node-id="Q0P1SKi9ewpG5xCmJJCgEu">以中文为主</strong>，无需严格遵循通则，但仍需满足：<strong data-page-node-id="E2iJjkUsu3WFKH1wTyweCE">简洁、概括、可区分</strong></td></tr>
+          <tr data-page-node-id="DiQjUKdqNamqszZXnITOPm"><td data-page-node-id="i0C4n3foMoeHWZHCioEDF6"><strong data-page-node-id="f0JKp0BOLocHaig1iM3XRo">项目 SVN 资源库</strong></td><td data-page-node-id="y5H2EFQ0Zwqd9JVoAcSwOQ">制作内容导出<strong data-page-node-id="tvvHGKR1vRkl2v63x2vjv5">中转</strong>，应按进包要求的规格、样式、命名提交。资源策划会进行<strong data-page-node-id="MZcevq6pG07rCJyHBPuAzM">验收、核对和修改</strong>，再正式导入工程</td></tr>
+          <tr data-page-node-id="eEzlp6HbWfuBF75oM22nec"><td data-page-node-id="WITLxRWCYL28aLYDrWEC4b"><strong data-page-node-id="6BoK8om7secYAhoqvDl7pL">工程 SVN 资产库（FGUI/trunk）</strong></td><td data-page-node-id="r45wn0YkyojWATU5pxCVhB">除少量代图、效果图外，<strong data-page-node-id="OPpocXEPlvtZ5zONyGAME2">全部属于进包资源</strong>，直接用于游戏运行和展示。务必<strong data-page-node-id="TpzZchXDM5mfDWBdu0MhKm">严格遵守进包规格、样式、命名规范</strong>；引擎内拼制的资源预制体文件同样必须遵守</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2 角色资源 ===== -->
+<div class="section" id="s2" data-page-node-id="TuPFoTBzgK5gA7NsZnVnvS">
+  <div class="section-header" data-page-node-id="ZHzFi9bX8D2LVi325hXR4k">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="qMsKFihWCFOik1ksTEGYpk">02</span>
+    <span class="section-title" data-page-node-id="Mwnwqx0MwaGFg4AocUZDyZ">角色资源 Character</span>
+    <span class="section-desc" data-page-node-id="FqcCGdXHZiRXUCTT1F3WER">剧情立绘 · Q版形象 · 玩家换装 · 花灵</span>
+  </div>
+
+  <div class="panel" data-page-node-id="wyvoEl3JjUQ3jwCXuWseUy">
+    <div class="panel-title" data-page-node-id="DRPo846h3GqwTwUMDAQzz6"><div class="dot" style="background:var(--accent);" data-page-node-id="oyznd7pppgyGKHk77BpvaA"></div>2.1 剧情立绘 Portrait<span class="no" data-page-node-id="TWPVZf1ub9Y7ObRRj9WdW5">人设立绘</span></div>
+    <div class="sub-desc" data-page-node-id="HQRDM9Lv1cAWLWvRnQF0zP">按等身比设计，高精度制作的主要用于<strong data-page-node-id="VEQGFYSiDLa7xulZBVkR4y">剧情表演</strong>使用的角色形象资源。</div>
+    <div class="card-grid card-grid-2" data-page-node-id="bX0OxEM73HPMzveZRfHKFa">
+      <div class="card" style="border-top-color:var(--pink);" data-page-node-id="khZtBxtQMLfCakNtB0qP2T">
+        <div class="card-title" data-page-node-id="pLoio6PGjNrTlDxfZS6Cfw">应用规格 — 人物角色</div>
+        <table class="info-table" data-page-node-id="vakMe18vjvt7Fr0XBhGUee">
+          <tr data-page-node-id="sPEFkFjiEguTCPDyB17iAg"><td data-page-node-id="be3WaVq95LXOdDEw0bsKlS"><strong data-page-node-id="kdlyHFDNgPkgXJbycuSRww">原画绘制</strong></td><td data-page-node-id="UEWADBuaED9XUS92QKvZ5E"><code data-page-node-id="GCNTGZHD6cEf29jqtcGaWZ">1200 × 2400 px</code></td></tr>
+          <tr data-page-node-id="H8YbKj3DZuEcWmfyrjBr1Q"><td data-page-node-id="0ijaJMq9tedpcwO6n3xPJv"><strong data-page-node-id="yoHw7fjyM6jT0NnTCakQZG">动画输出</strong></td><td data-page-node-id="Ib2aZwQOaoCle1ULeKATE1"><code data-page-node-id="uID9QzDbeFXVCIgWmMJ7Sx">1200 × 1600 px</code></td></tr>
+          <tr data-page-node-id="45QGCdSiDGfurzBekutGxA"><td data-page-node-id="g2ECVRwB3VXtuxZx5A6z2b"><strong data-page-node-id="SrZUzbVdngzUyMYOGHLXRc">最小立绘</strong></td><td data-page-node-id="CZBoaPEmh7AqjRKyCVxGJ2"><code data-page-node-id="SAE778RiHtWQpPrxYK5qnV">700 × 1200 px</code>（花灵角色体型）</td></tr>
+        </table>
+      </div>
+      <div class="card" style="border-top-color:var(--purple);" data-page-node-id="nFFPebQZPbom6yqWmxWc9M">
+        <div class="card-title" data-page-node-id="47GE0dd8IkpAVsa8Nod6Wr">设计制作流程</div>
+        <div class="flow-row" style="min-width:0;" data-page-node-id="z6mo9Wjeszlz8BR3POkTe1">
+          <div class="flow-nodes" style="flex-wrap:wrap;gap:6px;" data-page-node-id="p714sAUy1fIxHEgIC2gUBR">
+            <div class="flow-node fn-pink" style="font-size:11px;" data-page-node-id="g5vBn27jbH7s1PiTdSqI0w">角色设定</div><span data-page-node-id="lF7xYur4VGBjVqqApAn0nj">→</span>
+            <div class="flow-node fn-blue" style="font-size:11px;" data-page-node-id="urZYUa64WEpTfyEo0KEcgv">立绘原画</div><span data-page-node-id="6zIzqnrGSx5yqxXApteo4z">→</span>
+            <div class="flow-node fn-purple" style="font-size:11px;" data-page-node-id="pKislw9Gsd5oRgeTua04Ty">表情&Pose</div><span data-page-node-id="SPLudT9U6g8FKo48EgKE0X">→</span>
+            <div class="flow-node fn-teal" style="font-size:11px;" data-page-node-id="aTllqr7bIjuzWD0Ah7ECLM">立绘拆补</div><span data-page-node-id="A6KEAov65tzyYBdZCw0pc2">→</span>
+            <div class="flow-node fn-orange" style="font-size:11px;" data-page-node-id="jT1Iq1p6BEG1EvzWA3mthA">立绘动作</div><span data-page-node-id="UXCTKeZ9lvgkjZbChdV9NW">→</span>
+            <div class="flow-node fn-gray" style="font-size:11px;" data-page-node-id="CazitcNET9ovZDsBuf3huc">头像/半身像</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" data-page-node-id="8cIVjx7mb7St8Zwalr4JWU"></div>
+    <div class="sub-block" data-page-node-id="P9ntBNCm8CAZ9XvVsn6deY">
+      <div class="sub-title" data-page-node-id="8EdPr64rf5hbG4RkDQtTYB">📍 路径 &amp; 命名</div>
+      <table class="info-table" data-page-node-id="1WHhhT2IxSYAAjryH4kBUD">
+        <tr data-page-node-id="vp3eGkeMBEr8qYLGnkiSyN"><td style="width:90px;" data-page-node-id="5lhxwSQ4DpsVXfo5pAMkVd"><strong data-page-node-id="8JVgXDIUgPbA4m49DvELyL">美术 SVN</strong></td><td data-page-node-id="uBL4zAv17wvDiTIh5EujcW"><code data-page-node-id="6eaaUSR6FOfYBHhwMbHm6F">https://svnshh.dobest.com/svn/anthea_art/归档/1. 角色/</code></td></tr>
+        <tr data-page-node-id="B3PcwJKlKyUx1vm4oBYlA2"><td data-page-node-id="mvBWfcYcyDYoL0yYx2PPvZ"><strong data-page-node-id="5EwkrFcAH3hBWLgiTlkmBc">项目 SVN</strong></td><td data-page-node-id="IUJTh6fWLx7e7IFwi5Jy9K"><code data-page-node-id="wZJwqtAIpo8qnvOyb3tA4S">https://svnshh.dobest.com/svn/anthea/art/1. 游戏角色 - Character/</code></td></tr>
+        <tr data-page-node-id="SADk5LU5SmeY4o1X1wsDrp"><td data-page-node-id="nFAQDF4Efo8Yd6EWRPU6d1"><strong data-page-node-id="0r2F7n5pw8HDyHm8sJhy1l">工程 SVN</strong></td><td data-page-node-id="DQ0hqYU5PtTDev6FkHExbX"><code data-page-node-id="7ODiFZymHajQuALO1npZbE">https://svnshh.dobest.com/svn/anthea/client/trunk/assets/resources/Story/Portrait/</code></td></tr>
+      </table>
+      <div class="note" data-page-node-id="r7Fud9qHbRoCpYoLh4azmV">
+        <strong data-page-node-id="GpdG4xKg7NobqSI6k2L9EA">ResName = RoleName</strong>：均使用<strong data-page-node-id="7TOCIriC8lrI0T4rYIx8YZ">中文对应拼音字母</strong>（不论英文音译）。同音追加 2 位数字。<br data-page-node-id="y7p6cumarSpXJeZjixKYco">
+        示例：张山 = <code data-page-node-id="G9YYAyu5wsdUHqe6nUIUDT">ZhangShan</code>；章善 = <code data-page-node-id="ik1bJR91ROLtNC76FgH444">ZhangShan02</code><br data-page-node-id="Pt0GHytJUqicpN62OQSqWo">
+        · 立绘形象：直接使用 RoleName（<code data-page-node-id="DS2zHCIE2sumjxhIV6oyBr">ZhangShan.atlas</code>）<br data-page-node-id="aybjra2vwkyeOhaYiPFBbG">
+        · 静态图形：<code data-page-node-id="JESZw2ljm0yjATeMaCvsTg">H_</code> 前缀 + RoleName（<code data-page-node-id="oQaLLXCjbVNSsrVAAsGFTR">H_ZhangShan.png</code>）<br data-page-node-id="E8cdYQB7hN5EmAU2HbzZEr">
+        · 立绘动作：<code data-page-node-id="OkUs8KdfOTEJwrjmS68Mmp">$AnimName_$standard</code>（<code data-page-node-id="2luHhY3sZyy03xIMIX0coe">Idle</code> / <code data-page-node-id="zXgAuEmsEa2VR9UCu1PZgB">Idle_back</code> / <code data-page-node-id="KyeUMNKc4MSAS26XU0nAqY">Sit</code> / <code data-page-node-id="3RdeCJHUutzFBBBYaSAMky">SitIdle</code> / <code data-page-node-id="5SDiYESNr6eBZ3UN5P6htQ">IdleRan01</code>）<br data-page-node-id="TSgDXMZyvwNL78Eb92kyxF">
+        · 立绘预制：<code data-page-node-id="vOsbpLKCCkqhOYO98GO5MJ">$RoleName.prefab</code>（<code data-page-node-id="PsBnLHWiIul95OEr6uH1TO">ZhangShan.prefab</code>）
+      </div>
+    </div>
+
+    <div class="sub-block" data-page-node-id="PWEmG75XeFiaD8DTNwVo1x">
+      <div class="sub-title" data-page-node-id="ZP1glP8beULaGGLgNmtu9n">📋 角色需求规范</div>
+      <table class="info-table" data-page-node-id="yTQRW8DHTPjVwqSPRClvDY">
+        <thead data-page-node-id="gzjFuvD5ZEPSVdHQ5dCQiu"><tr data-page-node-id="vfpEA8x7PceNnzm3LkJ6rO"><th style="width:130px;" data-page-node-id="W19FazOmM0CEHWInZsC22z">项目</th><th data-page-node-id="MbcRqH8CNzbjagELj8rsUH">子项</th><th data-page-node-id="smSU0ohB0GhnAgS814Ws6u">说明</th></tr></thead>
+        <tbody data-page-node-id="H68Nx8kCPJUmCGaDwXx0te">
+          <tr data-page-node-id="uR1NZN7Kq5LQRrpqitRXUM"><td rowspan="3" data-page-node-id="W2DuAqAUrEJaQFTFphWtjJ"><strong data-page-node-id="3GvinYIRoePtGGJZbhE9F9">角色资料</strong></td><td data-page-node-id="72J2DrKcakStA8GalaSItC">名称</td><td data-page-node-id="ANIvDZ9FMA4rCmAPFWHtkQ">角色在游戏内的展示名称文本，男/女角色可区分标色</td></tr>
+          <tr data-page-node-id="yBvk6JUAGngB5sDRmYITAP"><td data-page-node-id="QXMbsVh22Feshw7m0kunE3">角色预览</td><td data-page-node-id="GWhupewgoETkBmV8pwBdEl">设计完成的角色 Q 版形象正面效果图，类似角色证件照</td></tr>
+          <tr data-page-node-id="8hBJ5JYZrpBIBlVwRUKyHP"><td data-page-node-id="M3Twjdfksj6TH0f3gbByoy">角色设定</td><td data-page-node-id="4zGOfITF3y7FHmbi1sV8tW">文案针对该角色的设定信息，详见需求模板说明</td></tr>
+          <tr data-page-node-id="bz7KtPc44oGL5Cm2VvXhjR"><td rowspan="2" data-page-node-id="bljcDS2CmiHnKA1hRF2Vo9"><strong data-page-node-id="99ojnxWHa8MfZiSuCzepm6">角色形象</strong></td><td data-page-node-id="IWcYCV7yhMPuwCyh1dd6f3">形象设定</td><td data-page-node-id="ZO7cozhtYD3NaHF8ogId0u">针对角色形象细节的描述和设定</td></tr>
+          <tr data-page-node-id="Sa4NMFH2rdddlzE9o4s7k6"><td data-page-node-id="Sa2hW5EDPCLMdR9vZhALGY">参考图</td><td data-page-node-id="L0MGIxeZuGQeJTmYozRjLt">用于表达角色形象需求的参考图，如有更多补充可附注跳转</td></tr>
+          <tr data-page-node-id="ShNoEq3JPEfhoKJwbgLJrM"><td rowspan="5" data-page-node-id="z8zbLDDtNaQy2bGj3VLND2"><strong data-page-node-id="MFCrbnKxROgtzXFXmg2IcR">立绘需求</strong></td><td data-page-node-id="ysBGFtAm5Ul3oYr25sPigD">立绘表情</td><td data-page-node-id="cwwU7izyIAD7jXb6N1b5OL">对剧情立绘的可用表情组需求，以<strong data-page-node-id="CVoEBCY3SJ0PnvB4avEjRv">基础 + 先天六表情</strong>为主</td></tr>
+          <tr data-page-node-id="6BWAiBozbtpvwIS6e56gYY"><td data-page-node-id="TJhjWYImkjrTbpQh1hv5hC">通用立绘</td><td data-page-node-id="mtXFJMn6Zv5agDazMXyeAU">角色的默认/初始立绘，可应用于剧情表演</td></tr>
+          <tr data-page-node-id="rqWvotYZf7diXQoyKtd34I"><td data-page-node-id="BpIesMOsvQ36NLsiogHxPu">剧情 Pose</td><td data-page-node-id="Ayw3svtxLap7CMMAVDyr7K">针对特定剧情需求设计的特殊 Pose 立绘</td></tr>
+          <tr data-page-node-id="QSVXRViYx2ddpMKQscNUNH"><td data-page-node-id="0ouhKD16hMv1w5v2aLJG6f">人形立绘输出</td><td data-page-node-id="6G0rFlkxXUFIqG9BOKpmA3">原画立绘 1200×2400px；动画输出 1200×1600px</td></tr>
+          <tr data-page-node-id="Nfz61B4MtKvSMiRbw6L3nr"><td data-page-node-id="KGO26Ficg1HjWVz4RyKdrk">花灵角色输出</td><td data-page-node-id="IvS2yjnkF9B5XuxC74YHYF">原画立绘 700×1200px；动画输出 700×1200px</td></tr>
+          <tr data-page-node-id="C2NkkSct5vPvfarPtFJbRD"><td rowspan="2" data-page-node-id="z5maGUe3vsLsWiH3h9CkYg"><strong data-page-node-id="RDg0ufd2tnA7NHG2oOr58Q">Q 版需求</strong></td><td data-page-node-id="ObJzBE8olGwWSxoMGGlqEl">Q 版形象</td><td data-page-node-id="7DZlX1sXYS0grpxxMKRSQr">按通用比例、体型，基于形象设定设计制作 Q 版角色形象</td></tr>
+          <tr data-page-node-id="FqCvqYSVgg48QgfzJbn9Cj"><td data-page-node-id="eJAwtphoIiFe5KqjpBAquY">Q 版动作</td><td data-page-node-id="9z1xT3rEPk9oZHUtd0Gq83">分为<strong data-page-node-id="zHQ45N0SSckQ5cDgLMMH6i">基础通用动作、特殊功能动作</strong>，需区分<strong data-page-node-id="IK4ulfveXkCPIWscxMEV7G">正/反向</strong></td></tr>
+          <tr data-page-node-id="vhBR8lq3dq80nJKzYNzo19"><td data-page-node-id="VhlIOA2gFINTILeqVmcQX8"><strong data-page-node-id="xEswTt9KKL3Ik4rQWLBej9">Q 版原画输出</strong></td><td colspan="2" data-page-node-id="Kk5EiElRskbpBkpZf3HQWL">原画立绘尺寸 850×650px；动画输出尺寸 400×700px</td></tr>
+          <tr data-page-node-id="YfSeEsypaqaMjT1ImbT9Hf"><td rowspan="3" data-page-node-id="fM5ArFYPu32H7ju3WUaIYJ"><strong data-page-node-id="3CfKvBdhRJkOCWANViUbJ7">CV 设定</strong></td><td data-page-node-id="czMxUz4FF9l3HPBdHex5UQ">语言风格</td><td data-page-node-id="SG16uG0DyfDdCc1Fl2ECzn">参照角色设定，对角色语言风格进行描述</td></tr>
+          <tr data-page-node-id="9frKhkr8SvHMceOXy1fqDw"><td data-page-node-id="mGICVclmPxESlxkSYPym3C">角色口号</td><td data-page-node-id="JNPApj5jUgSb8UcAFVsF9z">角色口号文本内容</td></tr>
+          <tr data-page-node-id="BSd5ZgLwwEEDMnbfLmtjvw"><td data-page-node-id="DVCMybsPsxfineg1XQW8mQ">角色口头禅</td><td data-page-node-id="9d35889b8IOEs022Vho6QU">角色口头禅文本内容</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="J0XFDxTWRdECYDDgIykK3a">
+    <div class="panel-title" data-page-node-id="95ZxRhjfWZy2ah9SxmE9HS"><div class="dot" style="background:var(--purple);" data-page-node-id="teE0FppYTwhcgFiH1u1GSQ"></div>2.2 Q版形象 Avatar<span class="no" data-page-node-id="7HTCX3tE6AuTbNvvj1Tzg7">Q版</span></div>
+    <div class="sub-desc" data-page-node-id="NYey780ZAoEOPK8PHujL2A">游戏中应用最广泛的 Q 版角色形象资源。</div>
+    <table class="info-table" data-page-node-id="DggqT6RnWIVU9PPyMg2CEO">
+      <thead data-page-node-id="DJm7Tz8q4AMEfm0nU6aiiN"><tr data-page-node-id="1K8zE78WFAMWjoPeEta2wQ"><th style="width:160px;" data-page-node-id="Y24Rotz72H6RbSQGlTSPVV">应用场景</th><th data-page-node-id="avXAh7Koc1yCTcHmtAPcbX">输出尺寸</th><th data-page-node-id="5AhJCzLLs2TAylbDGhAf4e">图集精度</th><th data-page-node-id="9Plc9205OthAerazmltTAe">应用 scale</th></tr></thead>
+      <tbody data-page-node-id="CxWVKDIv9AhlLTQaRLPDZI">
+        <tr data-page-node-id="6LG3XWZyOwfci3vHnDV0cw"><td data-page-node-id="Ej9jU4TPcwf0fKR9tNZtw9">主场景原画（人物）</td><td data-page-node-id="ItQdGObwEyH36Qe2EO4rWA"><code data-page-node-id="Q940taMf26ryFJ38CklZuc">1700 × 1300 px</code></td><td data-page-node-id="PzGuxIQSx3cnRnzIwbbVdd">—</td><td data-page-node-id="r2qtASHCLFiddFVRz0S5P1">—</td></tr>
+        <tr data-page-node-id="SdjoevHig1RG7nrPMOqmMj"><td data-page-node-id="yhClBeASDiKHAaj8EjrGTZ">主场景原画（花灵 薇塔）</td><td data-page-node-id="YUxzIRJwG4IB2Ly4nX6t3U"><code data-page-node-id="3elTldUKeBJ3IYBmCWJrcv">400 × 700 px</code></td><td data-page-node-id="ZPTVpCGuuVjjRAU4oDdcHn">—</td><td data-page-node-id="Jte5GbgD3ZKWTHbQ6R6kE8">—</td></tr>
+        <tr data-page-node-id="WX2OFzWlGRp4VAbRVZ4P99"><td data-page-node-id="O02Ue8DB4MwgU4S9ovFPs7">主场景 动画</td><td data-page-node-id="G5uZ1DDbxYFv1wJCRQi9D1"><code data-page-node-id="5ZtQOVJB4cd4dr1TE4gCGO">850 × 650 px</code></td><td data-page-node-id="TvAQFW9koCmzIGLZCL6p8Y">0.7</td><td data-page-node-id="ch18UEgdr2apAwc3nMaLbX">50%</td></tr>
+        <tr data-page-node-id="E41iZIxiwCIzTjt6MjW2pW"><td data-page-node-id="l4GZ3zXGw8AGBLZZDyqgEA">订单界面 动画</td><td data-page-node-id="9K3flcO1fsuk3MgAygbpos"><code data-page-node-id="O46Cix8nA8uHIumlTFnivo">595 × 455 px</code></td><td data-page-node-id="Hx9w73AeiSZz3MWV7yVbH9">0.7</td><td data-page-node-id="QGurB0ziCvqhrEwxBC4odP">142%</td></tr>
+      </tbody>
+    </table>
+    <div class="sub-block" data-page-node-id="GMzfoRFGo7nOqaekRJpHAm">
+      <div class="sub-title" data-page-node-id="B5qeqw15aOnvd0k8UT7u0w">📍 路径</div>
+      <ul class="item-list" data-page-node-id="bRCzh3WIOoTtV1h6vv4FMe">
+        <li data-page-node-id="m2eBcYJ9RNV4ltifWXTtOg">美术 SVN：<code data-page-node-id="wQlWH8hUZn7WswK9WooSEA">https://svnshh.dobest.com/svn/anthea_art/归档/1. 角色/</code></li>
+        <li data-page-node-id="fMHljtBqj4dqXYyCJXIxsy">项目 SVN：<code data-page-node-id="AwWhnKZWAv8LDx7Xs7pclK">https://svnshh.dobest.com/svn/anthea/art/1. 游戏角色 - Character/</code></li>
+        <li data-page-node-id="g5ZcjzLKxHlzzLk2Co2Fra">工程 SVN：<code data-page-node-id="qMPe85E9nGA8k2pXIpahma">https://svnshh.dobest.com/svn/anthea/client/trunk/assets/resources/Character/</code></li>
+      </ul>
+    </div>
+    <div class="sub-block" data-page-node-id="a2oJT2R5BLfV0tDLe7HmV9">
+      <div class="sub-title" data-page-node-id="Mne9UVpfgjEkXFIzRiYtrk">📐 命名</div>
+      <ul class="item-list" data-page-node-id="DtkgWEsvx67zEjoJeTo1Ab">
+        <li data-page-node-id="0AOX5b9jBvdw2piAYLK7jv"><strong data-page-node-id="RVVc79bpAMaM5WyGhyA0J3">ResName = RoleName</strong>（与立绘一致，拼音字母 + 同音追加 2 位数字）</li>
+        <li data-page-node-id="ZUSiyNm0QGUAX6mykmy3jh">Q 版形象：<code data-page-node-id="CVtd5n3kQxcCljvTU5Q0hR">$RoleNameQ.atlas/.png/.skel</code></li>
+        <li data-page-node-id="HHB71GJs3L6HS2ZYzJxrde">静态头像：<code data-page-node-id="qdQLPpUWI8LwLGTnfACXom">HQ_$RoleName.png</code>；切换头像：<code data-page-node-id="CrtbDovFaYOpA43VAZligQ">HQ_$RoleName_switch.png</code></li>
+      </ul>
+    </div>
+    <div class="note" data-page-node-id="LyVZ95Z3tr6nZ3a5aviWqK">📌 Q 版形象设计制作流程：<strong data-page-node-id="xbLjqimP3XAfHukRqWNHVn">角色设定 → Q 版原画 → Q 版表情 → Q 版拆补 → Q 版动作 → Q 版头像/半身像</strong></div>
+  </div>
+
+  <div class="panel" data-page-node-id="OgEqJedEWVvohY8hnP1cm3">
+    <div class="panel-title" data-page-node-id="MdoKVQBTHO0kdpCR3jaMoI"><div class="dot" style="background:var(--pink);" data-page-node-id="2gWCEjHkv7UHZGjVU3rElo"></div>2.3 玩家换装 PlayerAvatar<span class="no" data-page-node-id="1XTS3vrZ7BAvIZ1rcpn0o4">换装</span></div>
+    <div class="sub-desc" data-page-node-id="0Q5HyB6sW5hc4vHwKGgBfG">玩家角色换装资源，按<strong data-page-node-id="aTDlKnkEFRVDydUEUHlDGB">套装编号</strong>划分（如 DU02）。</div>
+    <div class="sub-block" data-page-node-id="zhcRR5TAgCXwZYcBI7U2vE">
+      <div class="sub-title" data-page-node-id="LcPknt6JagL3bCR2jEc1BM">📐 命名</div>
+      <ul class="item-list" data-page-node-id="xHtXrM5SqHXgH6dh8lERTl">
+        <li data-page-node-id="eBFoJgSpDMNmkCuRGVKoJa">换装套装：<code data-page-node-id="0AvJkZcdVdNuRoxpvQGGFv">$套装编号</code>，例 <code data-page-node-id="tRUcBpJFiyuPI6Th0Dhz0l">DU02</code></li>
+        <li data-page-node-id="iOUsjYzeiwEXDoKBp5dI4C">换装图集：<code data-page-node-id="PlyvDa6zKnhK4EtE6nGxHH">$套装编号.atlas/.png/.skel</code></li>
+        <li data-page-node-id="DyGWFsw0wzC8EqJ5Ds2kAg">换装拆片（50% / 100%）：<code data-page-node-id="XRADGIUFQN50vbvwT56yes">$套装编号_spine.psd</code> / <code data-page-node-id="SZftXLb1xuTuoXhUaS89Wj">$套装编号.psd</code></li>
+        <li data-page-node-id="rL8lND9X1OlsF9OSMnWWae">换装色卡：<code data-page-node-id="os6ovwcI29fAqMSUM8vPlU">$套装编号_色卡.png</code></li>
+        <li data-page-node-id="EImo3M2zGpPIJMGPImqYEq">换装部件图标：<code data-page-node-id="zQQwCSK5pyQS9mn4NiQDAK">ICON_$套装部件名.prefab</code></li>
+      </ul>
+      <div class="sub-desc" data-page-node-id="XaTRIEcz09x9fNjMhZjDBj">换装部件类型：<code data-page-node-id="e9TwaxvVoUKhLaW60YhITu">DU00Hair</code> 发型、<code data-page-node-id="uNXvRDvwZ7YfWVJ0At6JQf">DU00Suit</code> 服饰、<code data-page-node-id="6qFgd0lJfjGpfwAJp6FEtr">DU00Grasp</code> 手持、<code data-page-node-id="xNT4R3pK7t04nEYcqfCJ6n">DU00Pack</code> 背饰、<code data-page-node-id="oy5d76iRRdEJAq7BbC17YX">DU00Face</code> 面饰、<code data-page-node-id="zkLBsf8cDNSafs5blBlCqV">DU00Hand</code> 手饰手套、<code data-page-node-id="wsYHZSBY1767nKIFEd4jH1">DU00Head</code> 五官、<code data-page-node-id="6N7zsolLsr5oGb1ExC1R3Y">DU00Hat</code> 帽子。同一位置多个配套物品末尾加 2 位数字（01 起）。</div>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="aUEeSx9r4tTdFkHFHdR03U">
+    <div class="panel-title" data-page-node-id="W91DaX1Or4lfylLVmbIqMr"><div class="dot" style="background:var(--teal);" data-page-node-id="V0yTvLNL3qnkTrFZwiBpCM"></div>2.4 花灵 Fairy<span class="no" data-page-node-id="Vaydnx2sYeqqwaU2ifKxqP">新增</span></div>
+    <div class="sub-desc" data-page-node-id="tkBG1mYmI8dAfUdhn5jkox">花灵是本项目的特色角色资源，立绘尺寸与人物立绘独立（700×1200）。</div>
+    <ul class="item-list" data-page-node-id="1kwlAwwJZwXL7WgS7zbn3D">
+      <li data-page-node-id="YBH1WfaQkGCwUpByN33cgN"><strong style="color:var(--text);" data-page-node-id="wqnucVU3su56QtU112szxx">立绘原画尺寸：</strong><code data-page-node-id="yAZirgMvdaNlJE09tlmDdz">700 × 1200 px</code></li>
+      <li data-page-node-id="JmkIvqARVC8HuAqHfZYXUF"><strong style="color:var(--text);" data-page-node-id="xlT52rnyzLFTHUANNRXJCm">动画输出尺寸：</strong><code data-page-node-id="oqcG9UcclloPI0mkcok5gm">700 × 1200 px</code></li>
+      <li data-page-node-id="UuA7k6pYKgDz8oFGpnNZ2R"><strong style="color:var(--text);" data-page-node-id="InNs7LMlioFryIgb13Ai7a">Q 版动画（薇塔示例）：</strong><code data-page-node-id="O57OSBOPlUHaFAJ1sx4BQv">400 × 700 px</code></li>
+    </ul>
+    <div class="note" data-page-node-id="EPzsagAyyuD2hQyZqgXdlF">📌 花灵类资源在原版 V240827 中并未独立分类，V260429 补充独立规范，详见 2.4 节。</div>
+  </div>
+</div>
+
+<!-- ===== 3 场景资源 ===== -->
+<div class="section" id="s3" data-page-node-id="yONBI6uQfW0hCnSYACgfnI">
+  <div class="section-header" data-page-node-id="iurxwMXsrvaNUtpvWW4VPl">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="0y9mJ4HMHtArLyterjMIHJ">03</span>
+    <span class="section-title" data-page-node-id="hSkZBPjkpag8AWqocgevIt">场景资源 Map</span>
+    <span class="section-desc" data-page-node-id="hhVIDuKg22fvJzfwJIlgBc">主场景 · 剧情类 · 场景物件（4 子类）</span>
+  </div>
+
+  <div class="panel" data-page-node-id="2zxTJrVyTKqd0jgVtztJNz">
+    <div class="panel-title" data-page-node-id="rhxlyB7v1tWCOE1o8sxetd"><div class="dot" style="background:var(--teal);" data-page-node-id="5RLMr7SiNvJii1uR0fVegK"></div>3.1 主场景 MainScene<span class="no" data-page-node-id="uVnMzRJv8FVxYlPcvETJey">三大分区</span></div>
+    <div class="sub-desc" data-page-node-id="XtVMbGorcgnvEPM2bk6ZMY">主场景资源细分为三大子分类：</div>
+    <table class="info-table" data-page-node-id="Ba83V1flS3WTJRMf1pp9C8">
+      <thead data-page-node-id="z7HsCvUPJ76achKxxpI75f"><tr data-page-node-id="56HcOH0htw4igPYsIhYvFQ"><th style="width:130px;" data-page-node-id="KsSmSECyroZpqIZswKACQQ">子分类</th><th data-page-node-id="9VB7tafQFXdeH69Ot8Bcfo">英文章节</th><th data-page-node-id="UEPE9jbAFDnyhRBUZKULvt">说明</th><th data-page-node-id="MxTD3KfT8EDxviOEslMOzm">典型命名</th></tr></thead>
+      <tbody data-page-node-id="kes2J6ByjmAuudBu8g4M1R">
+        <tr data-page-node-id="87ukJhcRGgMfhohpnel3dp"><td data-page-node-id="YTdTdqJ9I4Ag1To4QCEZp2"><strong data-page-node-id="ZiNSF3r0NWLU53JCwBQmCl">地形</strong></td><td data-page-node-id="mDWNBrFk4euE88OJEuGAGA">Terrian</td><td data-page-node-id="R8VV3pOE7aEVK3Tj4hyhAq">主场景底图</td><td data-page-node-id="sNme3Vs3AKaLvE8noqcQpO"><code data-page-node-id="NI00zyO3gxGFPBc9TW1QhT">$ResName.png</code></td></tr>
+        <tr data-page-node-id="UyhvhhrynvE5kstNzHvDRP"><td data-page-node-id="kz4IQG0znI7OJrxcSxBLWb"><strong data-page-node-id="JrOxGCnzxwXe7bizScWmdX">玩家建筑</strong></td><td data-page-node-id="rQpvi2pMnYDpwIXBuy7HCW">House</td><td data-page-node-id="zyoWjvqr6RJ9t38esuOU1V">玩家自建建筑</td><td data-page-node-id="voRc6VN8Gh2LCsGiR5rhfL"><code data-page-node-id="YWnqp1qf3Qzuj5KN1nemS8">$CLASS_$BuildName.png</code></td></tr>
+        <tr data-page-node-id="311WgjHvn5VWHaeqVyFXmF"><td data-page-node-id="ICQuEAmZWkbeC5nG784W5G"><strong data-page-node-id="KD5oAiz3lunfF68dunkp2l">功能场所</strong></td><td data-page-node-id="LOEtShQHcGSwIJTnQ8wZXe">Place</td><td data-page-node-id="C2mZ52EnmCOai3LEgGDmEh">建筑或设施</td><td data-page-node-id="0eaymEssTSwvyl1VD5bv8V"><code data-page-node-id="wSImJJwDRVikAueir1TIOY">$CLASS_$ResName.png</code></td></tr>
+      </tbody>
+    </table>
+    <div class="note" data-page-node-id="MmdNP74EBp0vsAFeDFpmF5">📌 三类场景物件均存放于 <code data-page-node-id="5freLRU9Friz5YLgB5vhT7">MainScene</code> 目录下，原画源文件 <code data-page-node-id="W6tsuIAzQLXF0IldF42lHE">主场景_$类型.psd</code>，预览文件 <code data-page-node-id="YEleC5cGfQUcJcXc25joxQ">主场景_$类型.png</code>。</div>
+  </div>
+
+  <div class="panel" data-page-node-id="piwv6MNSkTt2TaHE2Nf8AM">
+    <div class="panel-title" data-page-node-id="Kg3SZ8oaFLNAHzVm8ybuTm"><div class="dot" style="background:var(--blue);" data-page-node-id="BYZCBWQ9BbBCRVqodqHY8n"></div>3.2 剧情类 Story<span class="no" data-page-node-id="wbF4mxK98Yy39TQQXvhSJw">舞台 &amp; 插画</span></div>
+    <div class="two-col" data-page-node-id="qmQAPnwkSUFop5grMlNZSU">
+      <div class="sub-block" data-page-node-id="mBiJ2FZsBAJ9B0hnxaWGP0">
+        <div class="sub-title" data-page-node-id="R15Fde66os4d3AMR0dGs1H">🎬 剧情场景 Stage</div>
+        <ul class="item-list" data-page-node-id="9ShatWSdA75WVNCgXJYO4D">
+          <li data-page-node-id="CTqjNxvFkoEhIv2jp49aAn">应用：剧情表演的背景场景</li>
+          <li data-page-node-id="nBVmvPST3D8ZHhlOqJNjRZ">命名：<code data-page-node-id="geNYwVokloX3Z1Eg16gF2y">$StageName_$standard.atlas/.png/.skel</code></li>
+          <li data-page-node-id="tHVLz7NL3qnZjJo3Yqsmwh">预制：<code data-page-node-id="AjKRNb6nyWN2Wv7IP9TCNR">$CLASS_$StageName_$standard.prefab</code></li>
+        </ul>
+      </div>
+      <div class="sub-block" data-page-node-id="LbImBwqLHstQkTTDCQB0Xy">
+        <div class="sub-title" data-page-node-id="47vOtCMUSXA0z16NmlU6yg">🖼 剧情插画 Inset（含画中画）</div>
+        <ul class="item-list" data-page-node-id="Hx4uoNdJnWcBbEGrlofONg">
+          <li data-page-node-id="0F6mzS4hNIAiKtwwerrqtm">应用：剧情中的插画与画中画（Spine 制作导出）</li>
+          <li data-page-node-id="Ue9VCAB0r6rguNP4rZiLVu">命名：<code data-page-node-id="7xtAByyBoBlxCivLLLn5Ha">$InsetName_$standard.atlas/.png/.skel</code></li>
+          <li data-page-node-id="LNkP9Daaf1TkeMSA58P27G">预制：<code data-page-node-id="wXGlAxtMvPCdBibvncRxvh">$InsertName.prefab</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="yezDADbM4P9wG2HgYlsAje">
+    <div class="panel-title" data-page-node-id="u9duRsvAcVDWTM8rkyEPNE"><div class="dot" style="background:var(--orange);" data-page-node-id="7BErwYY7BYW5EbqT705SMn"></div>3.3 场景物件 ScenePart<span class="no" data-page-node-id="j5F80plb8VjgTyTGZKxj5h">4 子类</span></div>
+    <div class="card-grid card-grid-2" data-page-node-id="8KDOfArxb8j0Ea9KHJ1kNm">
+      <div class="card" style="border-top-color:var(--pink);" data-page-node-id="vNh4Vx6AolLklqLmdEFzaH">
+        <div class="card-title" data-page-node-id="kFHjMZVWqCCsl0SDqghjZD">3.3.1 花艺品 Floral</div>
+        <ul class="item-list" data-page-node-id="RaPWQMCNSAEkr2ZNYMqU39">
+          <li data-page-node-id="dYiOOnTPuoJslOrZczlre0">命名：<code data-page-node-id="vGpAleLodZsEqJe6Slpjx1">Floral$00_$standard.atlas/.png/.skel</code></li>
+          <li data-page-node-id="mXmxZFNvbFjmxTLAVDJjdY">鲜花插花片：<code data-page-node-id="rvDsA6OClsXHg1EAmAyXFE">F$00$FlowerName_$standard.png</code></li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--green);" data-page-node-id="fJPdjPsT4YGI5bYlKKXQyT">
+        <div class="card-title" data-page-node-id="SuSUtAy0wGWwcMfzDTCdDZ">3.3.2 种植物 Plant</div>
+        <ul class="item-list" data-page-node-id="APj7fCGASw3QfCpYbDz7tP">
+          <li data-page-node-id="nAk5TEHNa89ZtiNchMMA6G">命名：<code data-page-node-id="h6ScOpYK9snhjEzyElgvFC">$PlantName_$standard.atlas/.png/.skel</code></li>
+          <li data-page-node-id="7SVj08anSPyRCvMMo8ieIm">图标单独存放于 Icon 资源目录</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--blue);" data-page-node-id="FWmTHopDLOY0SoSfTgBJ0V">
+        <div class="card-title" data-page-node-id="xvFUws2qkwuaP5YAhyRi68">3.3.3 家具物件 Furniture</div>
+        <ul class="item-list" data-page-node-id="it9drx7HHtsIMtECgCXER7">
+          <li data-page-node-id="dSVye5SKExATFpTUVCBlY9">命名：<code data-page-node-id="H07cTXkyv2LOYSKfkB0UBL">$FurnitureName.atlas/.png/.skel</code></li>
+          <li data-page-node-id="NXkv0ZwY9tqsM02sFBd6Zq">背面图：<code data-page-node-id="2D1qcStCBi2tPBMBJl0wsy">$FurnitureName_back.png</code></li>
+          <li data-page-node-id="aqHhf7fRqhYoNbazstOF3M">附加图：<code data-page-node-id="IH1Xep7ZZhWlJsDQ6q2Ymj">$FurnitureNameAtt.png</code> / <code data-page-node-id="W3o5npbBqVLWnKHbunoj0j">$FurnitureNameAtt_back.png</code></li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--purple);" data-page-node-id="y1WjWLcknNvp9cYcR0SlEe">
+        <div class="card-title" data-page-node-id="wlKO3NO8KJOURIiCU7dnMC">3.3.4 装饰 Decoration</div>
+        <ul class="item-list" data-page-node-id="6cwjSYCgJID7pPH1WyQtPk">
+          <li data-page-node-id="VtEUZohJTvDmB6u4a1RGlC">命名：<code data-page-node-id="DLKwE2wKLBGyzctbbmpEtr">$DecorationName_$standard.atlas/.png/.skel</code></li>
+          <li data-page-node-id="0wi9bojZw8Fs7TjcByggwP">预制：<code data-page-node-id="70bUdAeMlms8q5SWFrcGdV">DEC_$DecorationName_$standard.prefab</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 4 图标资源 ===== -->
+<div class="section" id="s4" data-page-node-id="VesDnwFEWEXeir92P2UTnS">
+  <div class="section-header" data-page-node-id="oGoT3Nm2ogE0HWQTfJFmfb">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="EhTinPer5mqPwJJkb6LFSg">04</span>
+    <span class="section-title" data-page-node-id="4CaPcwboSjPTVOb2MNkVg2">图标资源 Icon</span>
+    <span class="section-desc" data-page-node-id="DCDXbYZDGbe3V8hAwrtrZu">22 个图标子分类 · 详细规格见原 PDF</span>
+  </div>
+
+  <div class="panel" data-page-node-id="I5Bt4ZARnIYnOCvEpR4TaN">
+    <div class="panel-title" data-page-node-id="5j62D0pc1ZeQ5m1JjngGr4"><div class="dot" style="background:var(--accent);" data-page-node-id="L0fB9AcE4FMeGbtrA5Nuub"></div>4.1 图标概述 &amp; 全局规范<span class="no" data-page-node-id="uDh7D5TMDQrZCspxdTD6NQ">通用</span></div>
+    <div class="card-grid card-grid-3" data-page-node-id="lhEIBCwrID3vXEXECbctlO">
+      <div class="card" style="border-top-color:var(--teal);" data-page-node-id="2ls7IMODaxA6vESXqQVibC"><div class="card-title" data-page-node-id="CGthMFt0qHHdg8LIJp65kg">⚙️ 应用说明</div><div style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="S92opyGE03AZ0KeqVos9X0">游戏内 2D Sprite 形式使用，与配置表 <code data-page-node-id="OAM748URqMhbpb8vWWNKj9">.res</code> 一一对应</div></div>
+      <div class="card" style="border-top-color:var(--blue);" data-page-node-id="SW6LuhsbXFc5Gsl04mcoE1"><div class="card-title" data-page-node-id="qOFDKLDV0KNqCBhs28HMv1">✏️ 绘制说明</div><div style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="pdeampOLiwy0huAudVtLj2">回形格绘制，<strong data-page-node-id="QLvDXLJtQSCuyzIbIUitL6">核心区域占 70%</strong>，避免信息溢出</div></div>
+      <div class="card" style="border-top-color:var(--orange);" data-page-node-id="1qBUsLjotwVvmn1U6Efv8b"><div class="card-title" data-page-node-id="oUJ7Njicv8fjIF7S1gNEWC">📐 输出规格</div><div style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="con8lhzy8dhQaGkClExPk9">常见规格：<code data-page-node-id="9GscQBXfXzd8CPwZMxaq7z">156×156</code>（标准）/<code data-page-node-id="HKZ8W4MW2TZe6CUwFAAry8">72×72</code>（小图）/<code data-page-node-id="FBEvaFzzivz1Ud1iTyJFsm">192×192</code>（鲜花图鉴）/<code data-page-node-id="R9e2i6nTPPf7DTF1D4I1GL">288×92</code>（称号）</div></div>
+    </div>
+    <div class="note" data-page-node-id="pC3X2SNwIV0AxX6zPlrZ8g">📌 常用输出尺寸速查：<code data-page-node-id="uW4o2YCDpf1PQo04YWxcNZ">_standard</code> = 156×156；<code data-page-node-id="usUFCnyKrB0r3JCxvhBhVo">_small</code> = 72×72；其他场景如剧情章节 <code data-page-node-id="jkFc6Y8LQDhpBK8SRSjGtE">580×210</code>、套件大图 <code data-page-node-id="Zs0Ho8dgFpzqv8QvsSUNXI">600×600</code> 等按具体规范</div>
+  </div>
+
+  <div class="panel" data-page-node-id="DOP7ZVCAHmyFazdR1f8FfV">
+    <div class="panel-title" data-page-node-id="DutukYwz0MPmHLTx045LOA"><div class="dot" style="background:var(--purple);" data-page-node-id="iZgMezW8m8G5VTgBwQig83"></div>4.2 图标子分类速查<span class="no" data-page-node-id="FwYFA4ryozRDkCre1I8Js5">22 类</span></div>
+    <table class="info-table" data-page-node-id="R54UdLyR5fvLU5PCR1ZDng">
+      <thead data-page-node-id="BFc5WKEJULjcMNzAVwpnA0"><tr data-page-node-id="tCYl1bhlnhKHrBEnKTJyS8"><th style="width:90px;" data-page-node-id="tXe3jMbIgAFnNFH3ux3kJw">#</th><th data-page-node-id="iEKXfKchGy0Dj2giHEsMaD">名称</th><th data-page-node-id="8tBfBBo7kI7IVMi5KF7edY">章节</th><th data-page-node-id="vFUPypCXrBO51lDan8CpYk">对应配置</th><th data-page-node-id="U1aGgqdIHTslSfWz03rCBb">关键尺寸/命名</th></tr></thead>
+      <tbody data-page-node-id="8NxlwMPqyPWX0W3uPjhU9A">
+        <tr data-page-node-id="OBULMSOjpjYXoSyUt6Yq8s"><td data-page-node-id="lKWXzvAQ6kD1vhlqnkt8Tf">3.5</td><td data-page-node-id="UMabMsH8vmL6jUqeCY9RIr"><strong data-page-node-id="206fEI8YUj48IVIgsCmw8h">角色图标</strong></td><td data-page-node-id="krfLlgNsPFCuTic8virE7B">Character</td><td data-page-node-id="Fy9F5mmexbiHAk595Zvmq4">角色头像</td><td data-page-node-id="PhV0IP1YowWgVfEqM9zFzw"><code data-page-node-id="bPxhHzH9gbac7QtUgPlRIv">$CLASS_$ResName.png</code></td></tr>
+        <tr data-page-node-id="wooU2Tg3IlHzn2WGUFI8Vg"><td data-page-node-id="eZcd0EEPO4eodMtO4XQyGm">3.6</td><td data-page-node-id="avQ3YjZK2S4efpTTY1bXAF"><strong data-page-node-id="SyOwiPA4uSmdnpMxHvTDXG">花灵图标</strong></td><td data-page-node-id="ng5xIq8xHNwiHGxDtsEwMp">Fairy</td><td data-page-node-id="akOEv84WSgfsqXI7rYpH9U">花灵展示</td><td data-page-node-id="JgNQZcwIlOVxnf1D1JDDIU">同角色图标</td></tr>
+        <tr data-page-node-id="5ccHOGPayo8uN39tKNqyCu"><td data-page-node-id="N8P8VU7nYKGvCO2BuMcTtT">3.7</td><td data-page-node-id="gVibEC3Xoj7X8vy6y9OD1M"><strong data-page-node-id="5Nvo63MXj6QzVGK3cpcijm">花艺品配方图标</strong></td><td data-page-node-id="KDhQCUf6LQ4wZZfV2KAYA2">Formula</td><td data-page-node-id="qRa2LqrqvMLLP393NlF561">花艺配方</td><td data-page-node-id="c2z326NGxc9JSnGtBgo6pv">配方专属命名</td></tr>
+        <tr data-page-node-id="QDDSU32Rxst76yBmbdb6Mt"><td data-page-node-id="FUtbHcGASzW55CWYGZBYkg">3.8</td><td data-page-node-id="C3z8BWgYbH8ymW906GpmFx"><strong data-page-node-id="dpx4CaFep6gQCa4XKMOsay">家具图标</strong></td><td data-page-node-id="j23CtC7ADyo6Mgkxtj6MDp">Furniture</td><td data-page-node-id="jrGOdTUkkY3ulVPoBcxCs1">家具展示</td><td data-page-node-id="mICOpaHpcvLRVEZ50LTwSE">两尺寸：standard/small</td></tr>
+        <tr data-page-node-id="HGYdcB3ey66qtVJFEGOJkv"><td data-page-node-id="40D5mVmqWwL6rgXPj9hRJI">3.9</td><td data-page-node-id="NMqSKDT8Bm038IDFGpmIyg"><strong data-page-node-id="UOqpYtAdMPMP0Lb5aWd7mB">包装图标</strong></td><td data-page-node-id="BauzLkVW1sk46i15CCD3js">GameDict</td><td data-page-node-id="AqzoY2VPxZOre2Uui6raUp">字典</td><td data-page-node-id="JM0UsHNRDuBmrlScKF9QkC"><code data-page-node-id="gn4kMaKdrQ8uLG2WBMX6HF">$ResName.png</code></td></tr>
+        <tr data-page-node-id="1yPNNzNloIk4gbnnhb8qFu"><td data-page-node-id="YUKBJZxGLyPpzYxrtkAKAx">3.10</td><td data-page-node-id="TAIdcqHoD8dOs5AZLiLdK5"><strong data-page-node-id="b5TxD8mmcbMLwgR4Fa6Ac3">功能图标</strong></td><td data-page-node-id="EoJJnqq0DFWiGa9bYXQ2qI">GameFunc</td><td data-page-node-id="6xjoCjB2WNBynwjV5FKWWB">功能配置</td><td data-page-node-id="MHlH9pttU2nj1N7gnhXJXm">多状态多尺寸</td></tr>
+        <tr data-page-node-id="y0BfrZ6E8XKjlzfaOCcAfi"><td data-page-node-id="Z1u43WRM4bxAYaHmsmNLBw">3.11</td><td data-page-node-id="PDU8A0tZb3bCjp2ZCIPZRz"><strong data-page-node-id="kze0KSAV31PuPYLBgTYnCw">排行榜图标</strong></td><td data-page-node-id="fG7IOPC1OZABjb1BzDRB0Q">GameRanking</td><td data-page-node-id="jeiZ8STkDuFeTfmvOZKtkB">社交付费</td><td data-page-node-id="5gJldgou8QZa8ax29GxxZk">目录暂时为空</td></tr>
+        <tr data-page-node-id="hi72fMD3Ym9VYIpXT7Tgdp"><td data-page-node-id="TLuezEQJzMyo9C3l5FLuyK">3.12</td><td data-page-node-id="VUtDhVoD69DEAoZcou20xo"><strong data-page-node-id="N7cYzRUfp6enwb1FayDnrJ">设置图标</strong></td><td data-page-node-id="KxiZJn5fyEMJhJl3V5N8bT">GameSetting</td><td data-page-node-id="rpY7HonMAijgnAHMYjZRLm">杂项配置</td><td data-page-node-id="AimB9FoeZCvlUYatM7Dp4k">目录暂时为空</td></tr>
+        <tr data-page-node-id="mc8NiikoBCyaeANEHuMGds"><td data-page-node-id="AEv4uIkoMIFS7FIaGFWh9v">3.13</td><td data-page-node-id="Q4IhGZG1qgnHqiyKQoIFLl"><strong data-page-node-id="pfElNUXZLGcVC9PZ76xZuJ">商品图标</strong></td><td data-page-node-id="NEMnHCW9EQZSaIVefG7oU7">Goods</td><td data-page-node-id="72RGoe9K6Zi3ETZAZi84u2">社交付费</td><td data-page-node-id="1pfopPtGzD5xGgWaruenPW">300×300 绘制；输出 156/72</td></tr>
+        <tr data-page-node-id="vplkCpkRXgJlVkEtNR0nV1"><td data-page-node-id="zZxPEc9FGbrB9h8g7Ve95p">3.14</td><td data-page-node-id="8MxhjBVOWaoNGBoKCalMSv"><strong data-page-node-id="Ha2HRB6FbGUphIjmCozLm9">物品图标</strong></td><td data-page-node-id="18FA1A7cGUBAgBcmOo3EQK">Item</td><td data-page-node-id="mTgyOdxgihHvH3763v1zN9">角色物品</td><td data-page-node-id="dkgAANVifgPdKycEPCnHw4">156×156 / 120×120（仓库）/ 108×108（花艺制作）/ 72×72（商店礼包）</td></tr>
+        <tr data-page-node-id="wVThqzS9EiqD4FnIXqDtq0"><td data-page-node-id="Fu8lB2VN53b34IlRGjjrkK">3.15</td><td data-page-node-id="HddgsIOmaiUFqPKGcb09b2"><strong data-page-node-id="n5unCuIatNihiq3aAh0ABv">邮件图标</strong></td><td data-page-node-id="DJ1a5GpHZci0RfytIiGwae">Mail</td><td data-page-node-id="Jqq7fGOIMqa0PKNK319QNr">杂项配置</td><td data-page-node-id="jwaxQL0X06aZFyjw7eFFfl">含邮件 + 附件图标</td></tr>
+        <tr data-page-node-id="pDWFLFUD7FnLGDfEPx5Twp"><td data-page-node-id="eAqdgdv8mtIvLnmuDl9PSv">3.16</td><td data-page-node-id="UfSM0EarflWqa2cvYqHte2"><strong data-page-node-id="vxEuFLM7Rn6DPkdQJSwQP4">换装图标</strong></td><td data-page-node-id="wbN9LHE7uhS36QER24y4Fd">PlayerAvatar</td><td data-page-node-id="mQxAFe8nYSj2G7CefsKwT2">角色物品</td><td data-page-node-id="2rKZEPBCuRDizC7i6vJBCr">DU 套装编号前缀，156/72</td></tr>
+        <tr data-page-node-id="t82HVOnNLBwhCVVO0UnVcn"><td data-page-node-id="ts7uV2jHVGepyR5CUIPaCy">3.17</td><td data-page-node-id="jsAbQvdH7PvAUgMgGz8f0p"><strong data-page-node-id="2xT5HRhT2L4TXwKseafXGz">种植物图标</strong></td><td data-page-node-id="mFBuHixfEZAvblf5Ptp0TH">Plant</td><td data-page-node-id="Cs5PgmXPcgZK8LBL7wEdpw">角色物品</td><td data-page-node-id="VZcD5Bskss0cq1rUD41hVu">516×516 / 192×192；序号区分颜色</td></tr>
+        <tr data-page-node-id="7Ln23aQIsZonscS3N5x3hH"><td data-page-node-id="x33aM71AGeJ90RfNUFT69w">3.18</td><td data-page-node-id="QaTdj51ezobiyW8gUqkYgL"><strong data-page-node-id="Rw4IKKp0x5VChlbJH25MXO">社交展示图标</strong></td><td data-page-node-id="x8d4MZiXDrGAOSePdYLUvV">SocialRes</td><td data-page-node-id="pNjXAuj3JD83VEjfGDCvMw">称号 / 头像 / 头像框 / 聊天框</td><td data-page-node-id="BAZVFNkfMDthV0fpOmkBHg">前缀 <code data-page-node-id="OKEHOevtj2sDthNDh5hp4r">HAD_</code> 头像、<code data-page-node-id="teBBZxeiE0xEmINjUFhrxo">HFR_</code> 头像框、<code data-page-node-id="LzGI2I03PBuP9SBdbJKhIb">TTL_</code> 称号、<code data-page-node-id="CdpOe0vaBpU8oUydut4WaN">CBX_</code> 聊天框、<code data-page-node-id="cPKVl7h7wAvJDpZ0HKKSbp">EMO_</code> 表情包</td></tr>
+        <tr data-page-node-id="wPLZ658DIB88IPC1Goq2fb"><td data-page-node-id="57wroxwkfdF3cJUEclMDWM">3.19</td><td data-page-node-id="f8mbOMC9bolnUSgSFC6UXV"><strong data-page-node-id="rYnjWDsmnsFHWrdTACuHV6">剧情图标</strong></td><td data-page-node-id="QxTMsaKX3QAb1pQXvrFqnI">Story</td><td data-page-node-id="z5ApbEcCEwgjPKiNIn0F1P">任务剧情</td><td data-page-node-id="9rAGc24Db3bMko5t8Fj5tI">章节 Banner：580×210，.jpg；<code data-page-node-id="HIuuLkjNGiehmlQbk2Zfs8">BG_0001.png</code></td></tr>
+        <tr data-page-node-id="W2IZF4KJO6zTOyKe1eDHp5"><td data-page-node-id="qpYkwXd8uTU7IDv7bKaUGI">3.20</td><td data-page-node-id="vpx3DwMLEk8DdNZDnLU6Hy"><strong data-page-node-id="rqVuLDYD03nO1BDgzEFEex">套件图标</strong></td><td data-page-node-id="DlVBoKYbj3gWk7vU7J56JE">SuiteBuff</td><td data-page-node-id="lIT5mX0aHhRBHkOPTCNhjY">特色玩法</td><td data-page-node-id="2zodxkm71BkpUdnTOMr87r">600×600 / 240×240；TM 家具 / DU 装扮</td></tr>
+        <tr data-page-node-id="GleGJQRrCGzcCoEELpgKmj"><td data-page-node-id="TF746ji0RBD9FN7sjEBOlK">3.21</td><td data-page-node-id="mPfdybMNGcOrYMGwKbeyHF"><strong data-page-node-id="bDNaC1ZcuE99VDLLQGrUYf">特权图标</strong></td><td data-page-node-id="NA1GU9rOK34irAUnqbPiQJ">Vip</td><td data-page-node-id="a0aGGSSyjUfsqDEtgAgW9F">社交付费</td><td data-page-node-id="L95dAL3cFkHaUqf8E2sGiz">156/72；月卡 <code data-page-node-id="XpELvBpqembJAq3qTo2DQF">MonthlyCard01.png</code></td></tr>
+        <tr data-page-node-id="2B5eMMf4a2IG3z8hmqlCuh"><td data-page-node-id="4qJBPU9wlyWUJfzpMMJdh7">3.22</td><td data-page-node-id="Mdy9NaWCPsx5W5KN1hRjee"><strong data-page-node-id="pGD0A4b3fXYsS2R4Z1whA8">活动图标</strong></td><td data-page-node-id="rhi48vmDmc7Mn3rqo4ixFj">OpAct</td><td data-page-node-id="RN6PNsaCrsSycu0BW20Out">社交付费</td><td data-page-node-id="JetN5KHbZc0EHq6wXk6hKD">目录暂时为空</td></tr>
+      </tbody>
+    </table>
+    <div class="note" data-page-node-id="kVMzrCBfJvNjQ80H2XwBs8">📌 完整 22 个图标子分类的详细路径 &amp; 命名规则详见 PDF 第 55-72 页（含临时目录与未来扩展位置预留）。</div>
+  </div>
+
+  <div class="panel" data-page-node-id="Cj07E7KCbo6AkfN3Ai7jAV">
+    <div class="panel-title" data-page-node-id="IGTAQWgNn5uEAv3kRAvdxe"><div class="dot" style="background:var(--teal);" data-page-node-id="E1NOU0RYxBXB0lmn4bCRYi"></div>4.3 社交展示图标速查（4 类）<span class="no" data-page-node-id="drtEIwmvisXqNXTe0N5jWY">SocialRes</span></div>
+    <table class="info-table" data-page-node-id="rcUscBZgq3NTZhypW4iZJD">
+      <thead data-page-node-id="saRp2c1LdbNIVCsGjw8ka0"><tr data-page-node-id="bO4rzvElTlVjUV4k9CQVFT"><th style="width:120px;" data-page-node-id="cRLgoEs3tw9lQI9dlrJtc2">类型</th><th data-page-node-id="2TxPEWBAqsgsBmwwr4YSgp">输出尺寸</th><th data-page-node-id="6xEOCXFDDueVGfYZsH3azt">$CLASS 前缀</th><th data-page-node-id="RdGLqnTT7U3l7eSh2fD0lw">示例</th></tr></thead>
+      <tbody data-page-node-id="OgRZJBFK4nLOGS48dc7LS3">
+        <tr data-page-node-id="eKoj926QCKq6xwlBVSSUoG"><td data-page-node-id="iTvTazWPPFEtpDGTBMpubv"><strong data-page-node-id="19Z2l92R6UF0Qko8qmZhYA">头像</strong></td><td data-page-node-id="hTfGURrTgPKmWMnxUYjzdz">156×156（核心 126×126）</td><td data-page-node-id="pSsqL7C39VImNrGdoQvBAG"><code data-page-node-id="4sQjvmleCGzdOLBBIKI4pI">HAD_</code> (Head)</td><td data-page-node-id="0o3t0VB0sNfruHEnLIcypo"><code data-page-node-id="KChUwyvJAAkyRxP26j0vx0">HAD_ZhangShan.png</code></td></tr>
+        <tr data-page-node-id="o7tlUKR0IDhHMtHmeqeLVd"><td data-page-node-id="mpGUi4IhGJoPRvw7iC50Rq"><strong data-page-node-id="SCIKQPPLGWrPJrKxIaisnp">头像框</strong></td><td data-page-node-id="xyCGsAWcHd1xMRB990E2G3">180×180 / 72×72</td><td data-page-node-id="8K0iapIRKuJYkbFQGsf9CO"><code data-page-node-id="vBswAwoAgOdsF5r5sB2bFc">HFR_</code> (HeadFrame)</td><td data-page-node-id="eVq2ZKqEKa2hpNX6Tu6ZQF"><code data-page-node-id="1bvraeQUeBuMG7fYVtDrgM">HFR_TouXiangKuang01_small.png</code></td></tr>
+        <tr data-page-node-id="GrUfUFGkJBCm9leu2ttOsW"><td data-page-node-id="shHdaeZJXUJA4JjzNpE6wr"><strong data-page-node-id="g1VvlNKV0s8XJtl5owK6EH">称号</strong></td><td data-page-node-id="yH3ScAMCu7mrT0j5Qizp64">288×92（图标 156/72）</td><td data-page-node-id="FOs2WrnLtaJYSJgfOLYGzp"><code data-page-node-id="pBu2iFVy8eIq1e5FNG9Qk8">TTL_</code> (Title)</td><td data-page-node-id="RY34apOKt57HvCYqa99xHo">蓝/紫/黄/红 四基础模板</td></tr>
+        <tr data-page-node-id="6c9JQC68jmG7qzC6WltU7B"><td data-page-node-id="I7G2FP3Ksxb5FR8auD6aIE"><strong data-page-node-id="0gIYYFiFnhkRuHhqI2GeKA">聊天框</strong></td><td data-page-node-id="KN34y8T7ez52aDAjyD6IUY">160×80</td><td data-page-node-id="mWcJBEfZMgCZi1gTQkCY1m"><code data-page-node-id="aPa740kLNrHNpb6MxTSWlV">CBX_</code> (ChatBox)</td><td data-page-node-id="V7gi7qxxycnTSMOrNc9v6O"><code data-page-node-id="cnQrwX9NJmaSJ64gMDRYxd">CBX_Chat03.png</code></td></tr>
+        <tr data-page-node-id="0RJyW10fhCZSIedVeuABTU"><td data-page-node-id="ddUsDmBIhAEbpoplmDBOpw"><strong data-page-node-id="GEZL7mWWc6KMfoAIZ67ihw">表情包</strong></td><td data-page-node-id="1l6dWu4ciSQkIzEo7dc9YS">—</td><td data-page-node-id="owECg3LJBRVYG5yI1cm5i3"><code data-page-node-id="vSphMaIfTo0hDVVSb6vMtG">EMO_</code> (Emoticon)</td><td data-page-node-id="hibj5q9FHqVYCBoJZ1mh0X">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== 5 动特效 ===== -->
+<div class="section" id="s5" data-page-node-id="sN6b7BK1REGHJKpQWBBCJq">
+  <div class="section-header" data-page-node-id="19TiM9BwhtLzEFRC7mXou4">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="4gpQz6Xb5acRL5WeAHLJLi">05</span>
+    <span class="section-title" data-page-node-id="laG4ssBdVQU0RMGFoIGE8N">动特效资源 Effect</span>
+    <span class="section-desc" data-page-node-id="TZGuSMHypQBd13hONuheQz">Spine · 序列帧 · 程序动画</span>
+  </div>
+
+  <div class="panel" data-page-node-id="UFcalvDZucqOEEY9VONml4">
+    <div class="panel-title" data-page-node-id="nDNUpzJTfWRKgX6LuTCx9h"><div class="dot" style="background:var(--orange);" data-page-node-id="DRCgKqcjWSzl9HcfK05tgS"></div>5.1 动特效分类<span class="no" data-page-node-id="Dzo2Qlbn1fuV4ZiFddxrQL">分类</span></div>
+
+    <div class="card-grid card-grid-2" data-page-node-id="tsnt9cPy91xgkpfvyohEbD">
+      <div class="card" style="border-top-color:var(--teal);" data-page-node-id="mFnMaoRFpAAg9TB5dDJUnp">
+        <div class="card-title" data-page-node-id="ZPzTYs0IXEeO8TJm6cB6sL">5.1.1 按制作方式</div>
+        <ul class="item-list" data-page-node-id="5Bu0h5jGi9CrUCtxHlPKIj">
+          <li data-page-node-id="qnjOBcSLi7b0miNgwntMN8"><strong style="color:var(--text);" data-page-node-id="tfSFq7MQushX7DR3qFRASS">Spine 动画</strong>：基于 2D 骨骼绑定与蒙皮</li>
+          <li data-page-node-id="r9pXxejlvcTMByNZ3VTdnV"><strong style="color:var(--text);" data-page-node-id="0l8cOa6AeBPGiGZPbsLXJC">序列帧动画</strong>：连续播放静态帧（视觉暂留）</li>
+          <li data-page-node-id="oAMFINNhbWElbjxKMziuEH"><strong style="color:var(--text);" data-page-node-id="BtXIgRTdZJR4dnlB7fGNjd">程序 Animation</strong>：引擎 + 代码实现</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--blue);" data-page-node-id="vzCI8IpXcR9597KPKSsX2k">
+        <div class="card-title" data-page-node-id="0i8A6FCFt5GhtS8QGpdBaJ">5.1.2 按应用分类</div>
+        <ul class="item-list" data-page-node-id="aeq6fArcWNgamDp4ab8A7f">
+          <li data-page-node-id="CVfNK5Y5RO08NWc0Q6tjoO"><strong style="color:var(--text);" data-page-node-id="wmf7AL3g8bOW77je2zSvpv">界面动特效</strong>：界面交互、状态、事件触发</li>
+          <li data-page-node-id="f5YqC12CP4xUCkwBhwJRIT"><strong style="color:var(--text);" data-page-node-id="ouTXDMEimeQHlNeyIoNa91">角色特效</strong>：角色动作、状态触发；固定关联特效可与角色动作一并制作</li>
+          <li data-page-node-id="R32RKH2AtTviqbIHAgpLes"><strong style="color:var(--text);" data-page-node-id="AFoLNpMWDEvLmBdmfB1KPX">场景特效</strong>：场景元素动画、状态、事件触发；固定关联特效可与场景物件一并制作</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="f1o6gQM4285vzjD4dBWlYj">
+    <div class="panel-title" data-page-node-id="ONYMYmskaaqvYroLK1u6XD"><div class="dot" style="background:var(--pink);" data-page-node-id="FxOljlRbHzz7cdayGCYAan"></div>5.2 路径 &amp; 命名<span class="no" data-page-node-id="bTgzuczFVFEIERvE4uhGNy">特效</span></div>
+
+    <div class="sub-block" data-page-node-id="UQSpWgJvuKG0N9h7O3Ia0B">
+      <div class="sub-title" data-page-node-id="qVuM4OGqprYt2wnYRqgoTJ">📍 路径速查</div>
+      <table class="info-table" data-page-node-id="3DlzROkNjeOFsjwG907EJK">
+        <tr data-page-node-id="ls0rrsCHdmPjuhDUZIeHVP"><td style="width:90px;" data-page-node-id="OPhQmBeuxEZPufEJZN1oI6"><strong data-page-node-id="ILTCviHzNdW56rAOGV7BaE">美术 SVN</strong></td><td data-page-node-id="EyZAs9U4zs1KcqMj2XbGRh"><code data-page-node-id="FVCLP8S1BpECWahDzz72tC">https://svnshh.dobest.com/svn/anthea_art</code> → <code data-page-node-id="3A8thUEpQIF9nKc8HS17qW">归档/4.特效/$特效分类</code></td></tr>
+        <tr data-page-node-id="obLPCUHaDQIdfr9lUO3ezo"><td data-page-node-id="v7GNiNaXaDiCcb3aeSbdMK"><strong data-page-node-id="Lj5svrAFBmeFMoOtLsXOwW">项目 SVN</strong></td><td data-page-node-id="JpQqkLMOdc32gU4Nj8i2Bj"><code data-page-node-id="kHhRrUnnXPgCqtGEbSL7BZ">https://svnshh.dobest.com/svn/anthea/art</code> → <code data-page-node-id="jynoguUJXe6DZ9lxzFUVGD">4.特效/0.通用 / 1.角色 / 2.场景 / 3.界面</code></td></tr>
+        <tr data-page-node-id="wq5Yt7csQUPfIWVD1BwVBu"><td data-page-node-id="bqHdeRsITlHSERuqCt6D1Q"><strong data-page-node-id="RSTcPL2JuYNVum0ymuvqA7">工程 SVN</strong></td><td data-page-node-id="AL2aw9trDWzdCR0iSsNTSB"><code data-page-node-id="C9Lm1zpbtuClqCJpjuVltf">HomeScene/Effect</code>（界面）；<code data-page-node-id="XuHElJB3sY0z3BEwo7LETR">Story/Effect</code>（角色）；<code data-page-node-id="H7JyQbiBTSDRA4l9x6HL6o">UIRes/Animation</code>（界面序列帧）</td></tr>
+      </table>
+    </div>
+
+    <div class="divider" data-page-node-id="05UDBQGiberXKF62QqZl4t"></div>
+
+    <div class="sub-block" data-page-node-id="PE5VcOZVyra0SNN3XXEqtU">
+      <div class="sub-title" data-page-node-id="BVohPDqpcXYpJ3uu2NsW7I">📐 命名（按特效类型加 $CLASS 前缀）</div>
+      <table class="info-table" data-page-node-id="8KCfcKUe9aeczxAGIm9m3T">
+        <thead data-page-node-id="KLSRv0t1qb9CINuyERlIGh"><tr data-page-node-id="NtxdyBjm789e0fXDJtMPQw"><th style="width:110px;" data-page-node-id="FFFbnoYGqowSFYEQqZMs1v">类型</th><th data-page-node-id="MOlAWxMABk9UTCnBSDTG2x">素材命名</th><th data-page-node-id="NuJGQ8u1EugYCTdtbQeLUy">预制命名</th></tr></thead>
+        <tbody data-page-node-id="NfNXBmaMDBjduAzWEchIqZ">
+          <tr data-page-node-id="WbBOptRqSGjzmMH7oxE8PQ"><td data-page-node-id="s1uXSGiTh42L3haHBdBXJb"><strong data-page-node-id="PQJIYoYMe0OXFQkN7WyXKE">界面特效</strong></td><td data-page-node-id="OM3o4EfRYn9YbuM8H6WqQQ"><code data-page-node-id="GuTsUz9wV47dE2QlGbYgVh">UI_$EffectName.atlas</code></td><td data-page-node-id="mvoOz56i0gKKH42PbmBVPF"><code data-page-node-id="I1cgbH90e59kVYJ1z5ah2G">UI_$EffectName.prefab</code></td></tr>
+          <tr data-page-node-id="3Xo7WzZEzPjo7IpQyVAyPn"><td data-page-node-id="gjIxAGcj36rA1whSefBCe7"><strong data-page-node-id="wH1VgNET2cFjf1j9WJlR2F">角色特效</strong></td><td data-page-node-id="HrB6PS6ue1BkGVvpOaWw4K"><code data-page-node-id="XKU70ZUHZMsKiMPrOQWD5w">CRT_$EffectName.skel</code></td><td data-page-node-id="6m9jk2ZRBMOy44qiL9pn7H"><code data-page-node-id="bycXnkkL17IAvlRHGBuHa9">CRT_$EffectName.prefab</code></td></tr>
+          <tr data-page-node-id="WWznHoU5pO5SpBgsWUdizD"><td data-page-node-id="3Fv2jZ53F12OrYY8bOCEBo"><strong data-page-node-id="vFCw7H9gdZ7OFTN5125R6w">场景特效</strong></td><td data-page-node-id="Xhh5BhVJTjqUisX5tVgBpy"><code data-page-node-id="xcUeoZhAecwFGataoOwDbG">SCN_$EffectName.skel</code></td><td data-page-node-id="YJF84xMixMxIjY5Skx9cIW"><code data-page-node-id="DYif8fBhR8y3S2czcBOVSY">SCN_$EffectName.prefab</code></td></tr>
+          <tr data-page-node-id="zOZ4c6JoDYVPWKXPioE8HS"><td data-page-node-id="CDyrKBfabXxvOog4D1iUtk"><strong data-page-node-id="aIddhuKPAjwBaNcVyMVJeX">界面特效序列帧</strong></td><td data-page-node-id="bwoUDY7y1KXKA9LUhYbRp1"><code data-page-node-id="GD6yX7ZDxFxQqXOGJ9mVss">$CLASS_$EffectName_00.png</code></td><td data-page-node-id="EFGzTxfwYD8GvwDQE2R9gw">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note" data-page-node-id="vDnZpBlgNyCGgFegDd2iZy">⚠️ 动特效需求核心包含：特效标识、用途描述、视觉参考与循环类型。<strong data-page-node-id="PcJFMRnWpUwgovgN1xMgNa">必须</strong>根据应用场景与性能要求，指定为 Spine / 序列帧 / 程序动画其中一类。</div>
+  </div>
+</div>
+
+<!-- ===== 6 音视频 ===== -->
+<div class="section" id="s6" data-page-node-id="M9ItO7MkG1WgVnhLmiz62z">
+  <div class="section-header" data-page-node-id="Mt7iormQx8jK0GwWVVXioU">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="g6PW2mCbEsMV9eU4InFje0">06</span>
+    <span class="section-title" data-page-node-id="VPK4Wi9Qg4729hT2xYUf1B">音视频资源 Media</span>
+    <span class="section-desc" data-page-node-id="cFBvZaYo7WVFzVB1Is1Cb6">BGM · Audio · CV · Video（V260429 更新重点）</span>
+  </div>
+
+  <div class="panel" data-page-node-id="7aHTVNtwi2mObbVPLjnUUo">
+    <div class="panel-title" data-page-node-id="Dj2RxvDDBdACUuC2I3SJ2b"><div class="dot" style="background:var(--accent);" data-page-node-id="EAEh7j9n9BdyjfJphLESmh"></div>6.1 分类说明<span class="no" data-page-node-id="stazpWzCKkw7e2IZ1KUOFd">4 类</span></div>
+
+    <div class="sub-desc" data-page-node-id="sWjcRGhNtYwmrTshhBFQLO">游戏内音视频资源，通常为<strong data-page-node-id="SvSV0YNw4j14AZnttWLKIo">独立外包设计制作</strong>，有专属需求沟通和反馈过程。</div>
+
+    <div class="card-grid card-grid-2" data-page-node-id="NO9qeJQDOEBRqaHlasmRFd">
+      <div class="card" style="border-top-color:var(--teal);" data-page-node-id="mf4evU0oWvaGb0oQaEKxKW">
+        <div class="card-title" data-page-node-id="jSpVj695fRCBAenXqutIYr">🎵 6.1.1 背景音乐 Bgm</div>
+        <ul class="item-list" data-page-node-id="vCep96XFIwRWDkDyhLsTzG">
+          <li data-page-node-id="dObwx4vYc0F2YIbKaX88i1">匹配不同游戏功能场景（主场景 Bgm、剧情 Bgm 等）</li>
+          <li data-page-node-id="Hs57fUoeiMdwZF4fwcDqPg">时长 <strong data-page-node-id="ZQDSbSltSEdwU531em3gmF">≤60s</strong>；输出比特率 <strong data-page-node-id="OH5TRS1rhGfu0gkyeBgegD">128kbps</strong></li>
+          <li data-page-node-id="gUSYUil8AnpQUBP1rqErJc">输出格式：<code data-page-node-id="YWlEnoygdMiaQm1LRAmbAY">.mp3</code>（避免 wav 体积过大）</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--blue);" data-page-node-id="mFCWltCSPqLjfuxDc6ETm2">
+        <div class="card-title" data-page-node-id="GVMmbMrTC2Fjse68APNBhF">🔊 6.1.2 音效资源 Audio</div>
+        <ul class="item-list" data-page-node-id="lThd5eagy5dLjuc3pL4N6O">
+          <li data-page-node-id="ofgwhiDNLJTH06HLwFhxX4">时长 <strong data-page-node-id="uFUepDaqD2qT8d6jnqMJR4">≤3s</strong>；输出比特率 <strong data-page-node-id="AxoqahxSXfpKGG4EfCfW8R">128kbps</strong></li>
+          <li data-page-node-id="7w5vxadjWIvazv7VE8nwDj">分类：界面 / 角色 / 特效 / 独立音效</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--purple);" data-page-node-id="ep31yYHZ5ximpmhF2wtImp">
+        <div class="card-title" data-page-node-id="590KWjzfGp9MXts1fVEyHL">🎤 6.1.3 语音资源 CV</div>
+        <ul class="item-list" data-page-node-id="kEaSBvwjuW90UlwAtzgCQm">
+          <li data-page-node-id="JPLrF1RFXAcEPuqDAsfzH7">与角色塑造相关，对应特定场景台词</li>
+          <li data-page-node-id="WEbRpdQExfp2nV89BJgH9P">输出比特率 <strong data-page-node-id="nLOFWNEdciaXTJXgoTptq9">128kbps</strong>，格式 <code data-page-node-id="XCF7tpAJTJVMDKUY6VeaCQ">.mp3</code></li>
+          <li data-page-node-id="HqMO21mndQ3GLgBza4eX5o">分类：界面语音 / 动效语音 / 口头禅 / 剧情语音</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--orange);" data-page-node-id="FDdIM05uzdEX6otBMCR9nG">
+        <div class="card-title" data-page-node-id="FeL51qXdgzZHBlmOPWY6pD">🎬 6.1.4 视频资源 Video</div>
+        <ul class="item-list" data-page-node-id="kukSYvDJSLAgNEod8aEpog">
+          <li data-page-node-id="RQNeWNLT6VD1EKIsfB9psl">特殊剧情 / 动画表现形式（PV、CG 等）</li>
+          <li data-page-node-id="WI5BwBMh8O1DkuubS4p3Wg">输出格式：<code data-page-node-id="zZRH61GqqPKOkj96nPZ1pG">.mp4</code>（确保多设备播放支持）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="y64uaUn6nDYMmQALvdnnGJ">
+    <div class="panel-title" data-page-node-id="cOOYZlX9id9Sjj7HAGUFSD"><div class="dot" style="background:var(--pink);" data-page-node-id="Gt83BEMR2hD8dCNn6gZjZg"></div>6.2 路径 &amp; 命名<span class="no" data-page-node-id="ydybYIrWLYiYsa54x46J6Q">音视频</span></div>
+
+    <div class="sub-block" data-page-node-id="6bI456S6ezjWjtDoGDnBC1">
+      <div class="sub-title" data-page-node-id="Z4R9vVkbuJBw693oj1XVsc">📍 路径速查</div>
+      <table class="info-table" data-page-node-id="0qPShKceWJvCEBvzTy1vBh">
+        <tr data-page-node-id="zmj8zBFdUZxXkyJKguQlrG"><td style="width:90px;" data-page-node-id="TwtBRnF8PI0YlGhKA0tTrf"><strong data-page-node-id="Dd8uP1ufmqWUSRyLZzozqf">美术 SVN</strong></td><td data-page-node-id="xn92Y3lSHC4mdzJLeA469X"><code data-page-node-id="DIou4zFjkSAdPRvJXQwG7p">https://svnshh.dobest.com/svn/anthea_art/归档/5. 音视频/$分类/</code></td></tr>
+        <tr data-page-node-id="gGGXpfBDVcVxYY8KyCETTH"><td data-page-node-id="yGqN3ZmGM7gRbbLeBVtbGA"><strong data-page-node-id="ZBSVMHXsMFsP9kner1Lqcx">项目 SVN</strong></td><td data-page-node-id="GAuSpW1oGVrBEBLOcGHHiE"><code data-page-node-id="50EmfZKyCfiZSYea3wE74J">https://svnshh.dobest.com/svn/anthea/art/5. 媒体音频 - Media/$分类/</code></td></tr>
+        <tr data-page-node-id="W0AD9XdEE7Jdk0hTpIWn1g"><td data-page-node-id="xbzQ9xu6mipq2HkdxB6r6i"><strong data-page-node-id="7y1VyLKvMEkV5GGNX1vcAS">工程 SVN</strong></td><td data-page-node-id="AetxMmHbLBf0GPzBuzIV7L"><code data-page-node-id="JEtJtDKJHcLnq3QMjS7fqz">https://svnshh.dobest.com/svn/anthea/client/trunk/assets/resources/media</code></td></tr>
+      </table>
+    </div>
+
+    <div class="divider" data-page-node-id="uHXvrCy0C5k8cmDINB3LAI"></div>
+
+    <div class="sub-block" data-page-node-id="7HSOVCySAJeJuMrTGeLl05">
+      <div class="sub-title" data-page-node-id="GpujK29oGEw7GtfBycHDQz">📐 命名速查</div>
+      <table class="info-table" data-page-node-id="XjI3BaprIaU3LzJ84Sy0a9">
+        <thead data-page-node-id="pUhHp5slyYyIRERVyCBqmf"><tr data-page-node-id="pjhNT1PohoVmifElCmOh2s"><th style="width:110px;" data-page-node-id="v6YZoLWgIpkqxDqCAuq57J">类型</th><th data-page-node-id="Izb7l9HFPJ8DaX4UGFCNol">基础命名</th><th data-page-node-id="hI3v9nHTR06rExXt5GLMpD">$CLASS 前缀</th></tr></thead>
+        <tbody data-page-node-id="YISTab9B07npLXj7v5dhIe">
+          <tr data-page-node-id="XvKXdFodfkPVw4o44DA49G"><td data-page-node-id="4G6eG7K8wrqauDfslwYxvO"><strong data-page-node-id="NGFDG2kWqUQvBhWnnj8h4t">BGM</strong></td><td data-page-node-id="TVhiHx3TYQam0oFZsSpnx0"><code data-page-node-id="86CAm4cHRKmYdKLkTS3roT">BGM_$BgmName_$standard.mp3</code></td><td data-page-node-id="SOptpmczQKyj9p0b6lNNOv">固定前缀 <code data-page-node-id="ENNL5bkx43yrsO6FzRP7DU">BGM_</code></td></tr>
+          <tr data-page-node-id="CPtqVL8iegHxwkflF6AAco"><td data-page-node-id="gXdorWPqT3IRWLiO7xijcU"><strong data-page-node-id="KI8umFOAOyeaea78gRVxun">Audio</strong></td><td data-page-node-id="WB93mPhuiwPC14cfmyvfYr"><code data-page-node-id="ADxW1gjMSEHh5owZBtLI6Y">$CLASS_$AudioName_$standard.mp3</code></td><td data-page-node-id="5Ubt05zC2WYS1HmFMDXeE3"><code data-page-node-id="RVCN3XxJnETFHwrE1LByaw">UI_</code> 界面 / <code data-page-node-id="nauA4xE67SAoHkQRNzgnnh">CA_</code> 角色 / <code data-page-node-id="aMOvEkNt3MTWYHv6TyOmOa">EF_</code> 特效 / <code data-page-node-id="GDTHbX7kxKmIgt0SqOjsK0">SD_</code> 独立</td></tr>
+          <tr data-page-node-id="kf9snHODUEIr4EjamKm5et"><td data-page-node-id="sXAQnWOTUL0XrozzzKD2nL"><strong data-page-node-id="Ajp3Rfz3jTJ8FPHtUSQCC4">CV 功能语音</strong></td><td data-page-node-id="k2WFiwboPF28kUCfuqL8au"><code data-page-node-id="zPlnQijH9vifxVJDQSWtMa">$CLASS_$RoleName_$standard.mp3</code></td><td data-page-node-id="AY2LyyvNoE7ReLAW73DZds"><code data-page-node-id="XfhRelxnTGaGhnRTgTm2wJ">UI_</code> 界面 / <code data-page-node-id="fSIMJQUPUIhlRHcI3kD9OC">CA_</code> 动作 / <code data-page-node-id="6i80cZQ4lE5HJH8866zNr5">SL_</code> 介绍</td></tr>
+          <tr data-page-node-id="KuKJ0xPTmVNrCw4XKkibHH"><td data-page-node-id="L9xVW9WkTKeMZvNolQ6KPY"><strong data-page-node-id="XkTuTt49EURdOakrvzftz3">CV 剧情语音</strong></td><td data-page-node-id="Ei4Dczcz2QCqAB9w4EL1MR"><code data-page-node-id="RUvyloD05Y9xuqfCHEHAgN">SP$003_$RoleName_$standard.mp3</code></td><td data-page-node-id="dWs5zGwxCQDhHISpsicXrT"><code data-page-node-id="9tWiVP5IxHeIBnZX7KYhOx">SP003_</code> 剧情段落编号</td></tr>
+          <tr data-page-node-id="W3zeDFm4cWHzgKIdN0hZjC"><td data-page-node-id="CdZ2djHFoKih9vquoqRDBQ"><strong data-page-node-id="YjpTvQDBi9Z5ctfFsqSryB">Video</strong></td><td data-page-node-id="pyx2tnXkB7Bzs9P77xQ1sK"><code data-page-node-id="av7EE6Bn4jFWGKdoDTKdfu">$CLASS_$VideoName_$standard.mp4</code></td><td data-page-node-id="UXRCjtfKoIH7tfBvMmKt9k">无固定前缀</td></tr>
+        </tbody>
+      </table>
+      <div class="note" data-page-node-id="OrJtCYUW2A5C3UGtUkaQE6">
+        示例：<br data-page-node-id="diWRHeXEtyXsCubTXWwGnq">
+• 【张山】详情界面语音（序号 01）：<code data-page-node-id="Y3OrkDEuNwEGjdJl0zSu7X">UI_ZhangShan_01.mp3</code><br data-page-node-id="0jLGzDpPDsKyCFIqKwePTN">
+• 【章善】剧情段落 016 中对白语音（序号 003）：<code data-page-node-id="zCKMGk7fTUfJW1HAEMEF4V">SP016_ZhangShan02_003.mp3</code>
+      </div>
+    </div>
+
+    <div class="divider" data-page-node-id="XkY847NUwwmle7xaEu07Mo"></div>
+
+    <div class="sub-block" data-page-node-id="k33HHRkxCjhpnwzaBbpCsY">
+      <div class="sub-title" data-page-node-id="DE2j7x1mdbHzEkfaIBoLqH">📋 需求规范</div>
+      <ul class="item-list" data-page-node-id="By9KoCJuhOuVxUThU00yLz">
+        <li data-page-node-id="oz0MJZapcQ2gAsZ1GlZJJ6"><strong style="color:var(--text);" data-page-node-id="iWQk1BekCMg44N0WVOoLnm">文案策划</strong>提供：音频资源的<strong data-page-node-id="ghpz1HKdDqRct6ktKg6qPD">应用场景、界面、功能或关联内容</strong>及其说明；<strong data-page-node-id="XHhHLw1grhYiI9m46yjdp7">风格、节奏、是否循环、长度</strong>等具体要求；<strong data-page-node-id="k1kSpNI7lgevqRRX6qEa97">设计参考素材或链接</strong></li>
+        <li data-page-node-id="uwgJCzvAJXd82PrYtS0HSU"><strong style="color:var(--text);" data-page-node-id="yHjWNUpGYlGpR0b0yB89xD">资源策划</strong>核对需求内容和数量后补充：<strong data-page-node-id="4M22P5QHuYUmYislAx3YLS">音频资源名称及标识</strong>（包括前缀分类标识）、<strong data-page-node-id="D5whnEu5QrGNHmxkFkgSCX">音频文件格式</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 7 美宣 ===== -->
+<div class="section" id="s7" data-page-node-id="OTaU2XEGG29Ku4Ym9eZrAd">
+  <div class="section-header" data-page-node-id="zb7E54UqtdWvbmoNBq5P2x">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="NpIGD2Sl7BozmBrAty4zTb">07</span>
+    <span class="section-title" data-page-node-id="gIaEPCYdPUWaIRHQMEu26H">美宣资源 Poster</span>
+    <span class="section-desc" data-page-node-id="uQnK8C424swBVymtIRkZQp">平台分享素材 · 微信 / 游戏圈 / 创作任务</span>
+  </div>
+
+  <div class="panel" data-page-node-id="C7VlmgrpmYEpv7y39xZGwR">
+    <div class="panel-title" data-page-node-id="O8Ee8E2aSXbl28MyASpUdS"><div class="dot" style="background:var(--accent);" data-page-node-id="AIzsgO7KxDS5IAxkLUM7BO"></div>7.1 分类说明<span class="no" data-page-node-id="3Ut0SBJARQTueUlAEbgjEV">非游戏内</span></div>
+    <div class="sub-desc" data-page-node-id="XvNG2RKdkGtMcn1wKPCt9F">用于<strong data-page-node-id="s2QG5AG0mNOGec9FzEtdDL">平台分享</strong>的素材资源；<strong data-page-node-id="jek66SjVrOW5UcbWa6cYUH">剧情插画、剧情画中画</strong>在成本预算环节归属于美宣，在工程实际应用中归属剧情场景。该部分资源<strong data-page-node-id="YaONbUqRtwFI2T8JN5y2Vp">不进入工程</strong>。</div>
+  </div>
+
+  <div class="panel" data-page-node-id="nsAREVw4hxPgKwxG9bJNwp">
+    <div class="panel-title" data-page-node-id="2nQbOGoDtLD0UijC8dauya"><div class="dot" style="background:var(--purple);" data-page-node-id="hGJFds33CG7OBDUqR9I6N8"></div>7.2 微信平台素材规范<span class="no" data-page-node-id="I8RBHsi5rVv857PjghNdoA">尺寸规格</span></div>
+    <table class="info-table" data-page-node-id="ynxriA1PqCw7T0n402lsG3">
+      <thead data-page-node-id="LGF6fnPloYIcE4KCRjSFtW"><tr data-page-node-id="A2zRkelZKlFyUqTyYTxbNt"><th style="width:160px;" data-page-node-id="TxRuA2mx2N6bE9AldRrq9u">应用途径</th><th data-page-node-id="AcS3ANSbY9CuKxRK9KsAkU">具体应用</th><th style="width:130px;" data-page-node-id="P5AbMJE8VsUH3TTNS9gHpN">素材尺寸 (px)</th><th style="width:80px;" data-page-node-id="2bz1bMikYFwiOCGbEaaaV3">格式</th></tr></thead>
+      <tbody data-page-node-id="YtYxN6GoS5DAvah6NyjDUB">
+        <tr data-page-node-id="31dvdQHLoAHar89tPk2Zf6"><td rowspan="4" data-page-node-id="g5gOcDPzG4vCfBi7Xv6yPm"><strong data-page-node-id="S54m9U3mYxsLSUIXBDvZSS">运营素材</strong></td><td data-page-node-id="ECOyRJ2WoHkXmEroT8LwUA">通用素材封面</td><td data-page-node-id="t8mwQb0Lfi8jsk4vtviOLp">650 × 250</td><td data-page-node-id="w0020GmsuKgBY2ytIkExtr">JPG</td></tr>
+        <tr data-page-node-id="dNxhbayEriaYi45u6rvJmJ"><td data-page-node-id="BiYAjDIxaYoHB7tgHhHNvl">详情推广图（竖版）</td><td data-page-node-id="1LK1RJYDIrwAAgHVdBcq38">780 × 1280</td><td data-page-node-id="TsXLQ2qUqpe3I7BzKvy2Px">JPG</td></tr>
+        <tr data-page-node-id="qBdthmkfGux7kHEvGT9vx4"><td data-page-node-id="MHpoyCThY7LcOZDrMagEf2">详情推广图（横板）</td><td data-page-node-id="ohiZEOG7bFraAZLOWLa7ry">1280 × 720</td><td data-page-node-id="7OQ9ZjDyGqYEreK0urWHrv">JPG</td></tr>
+        <tr data-page-node-id="rbaxF2CUfD6ICWl1m2kNak"><td data-page-node-id="MLocaaJ7Cem12fuD7a4fGj">自定义转发图片</td><td data-page-node-id="2HYcMHFSLP9jI5T3hrEztv">500 × 400</td><td data-page-node-id="CAaeiSVAF5NDNVMIl8EaT2">JPG</td></tr>
+        <tr data-page-node-id="B618koAzjRDsMx3tZcjOA1"><td rowspan="2" data-page-node-id="t8k2LtLOgxIl4c07Ne3gLv"><strong data-page-node-id="NlWvSBwUoEjZRfN1fWiVt4">推广视频</strong></td><td data-page-node-id="65F2wiJ6Ysrfo6fDDKHvBZ">视频封面图</td><td data-page-node-id="YYWLolsJyiHOCJaDxBESqE">1280 × 720</td><td data-page-node-id="6wW9UF0RuCxklSLcKxyJYr">JPG</td></tr>
+        <tr data-page-node-id="Hu4wPZmCNgCHZOmFJeDuLl"><td data-page-node-id="nnaxX9PDkeTYnfT4RCwcn4">视频</td><td data-page-node-id="F7nWaMnW5XCCMO15brXAlq">/</td><td data-page-node-id="dFV5SJRmMODetE3uAKtwuI">MP4</td></tr>
+        <tr data-page-node-id="BYOWHgiaBRjlwO9fEUjrpo"><td rowspan="2" data-page-node-id="TTDDoN0f7t8z3bRYnzEHXH"><strong data-page-node-id="24Bi8yrFHjWR3YoJma7VQJ">游戏圈素材</strong></td><td data-page-node-id="zYEBdphDxA7eDZLhOrOM5V">游戏圈 Banner</td><td data-page-node-id="HHkzmThzylwxE7Ia1oKPrA">1080 × 270</td><td data-page-node-id="Oacdly3zybK6UeFUA6jzlI">JPG</td></tr>
+        <tr data-page-node-id="q1bHjlzOs4L1X4tQCE9NZ2"><td data-page-node-id="7EXor9s7kAZJAl6bmoIjVI">游戏圈氛围图</td><td data-page-node-id="QAYSasClJZ03MR56pJHk2C">750 × 280</td><td data-page-node-id="C4eY1CnAhpiwnEfztiP4Xt">JPG</td></tr>
+        <tr data-page-node-id="MCzlaQkuw2AeBYZ3bCg85P"><td rowspan="3" data-page-node-id="YYEPjQpVy5zaS7BC5oHdPu"><strong data-page-node-id="jWhpmox6iGdf8sZp1jkxuj">话题 / 活动</strong></td><td data-page-node-id="zPRDsUE2ina6oV6jS1t18j">话题氛围图</td><td data-page-node-id="OBFr8A8iehoNODbiXbM2oC">900 × 506</td><td data-page-node-id="0ADtQWsr1ocXCx5fdqQeRF">JPG</td></tr>
+        <tr data-page-node-id="MeLLkoEnhXgwNG7u46Nqff"><td data-page-node-id="49YTXFmRcUp82L4Hh4kJi2">活动氛围图</td><td data-page-node-id="qWBKprf55Zzo6Y111Kou7r">828 × 452</td><td data-page-node-id="oLjtkerCuapra3SUD7dhYQ">JPG</td></tr>
+        <tr data-page-node-id="Ca0sjCD1QNas0TMv6Auokm"><td data-page-node-id="BeFfwSBSMZsRizzzdylQpc">九宫格抽奖图</td><td data-page-node-id="OqVp67XcHG2YNNrkFi5cob">216 × 144</td><td data-page-node-id="lkn47FBSjm4fKkWHea3LXI">PNG</td></tr>
+        <tr data-page-node-id="qGm7hcTXBG2xW472DMGiX2"><td rowspan="3" data-page-node-id="2HP9IjvR4SBCjZDOqbRXCg"><strong data-page-node-id="q2SMSxulKFZaTCzCdl90fZ">创作任务</strong></td><td data-page-node-id="ewb8oArcHu7MS4iRDRlfXi">奖励图</td><td data-page-node-id="koCfvAOMsccPEio4JawG32">56 × 56</td><td data-page-node-id="6tOGlYEUkNW9xHrqT18oiz">PNG</td></tr>
+        <tr data-page-node-id="9HurAASmjHrWC0HN6wr0oQ"><td data-page-node-id="RxeYI6ls9eVVEBPw2BBLQj">任务 ICON 图</td><td data-page-node-id="9LnhSjuzcdc7sQVPUJoh4F">160 × 160</td><td data-page-node-id="BEnGgSMsKjpQKIHBGj4slE">JPG</td></tr>
+        <tr data-page-node-id="mJyTlIVjHpPN0T0ZWn5w8o"><td data-page-node-id="QHtkXbvzlfV3AJ41eRCUkL">任务 Banner 图</td><td data-page-node-id="5EupSCPrwQaU4I4ubXVYrL">686 × 384</td><td data-page-node-id="mH1ZD0hhH3EF26FHdbiI8Y">JPG</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel" data-page-node-id="gzSf7dzCsEmbYenYcdoNDK">
+    <div class="panel-title" data-page-node-id="ktWofNSxGXF08kL6aZ53XN"><div class="dot" style="background:var(--teal);" data-page-node-id="GMBUKn8EkGfpERGnwGvCIF"></div>7.3 路径 &amp; 命名<span class="no" data-page-node-id="kTtFD1AVWCHuzNe5nkdLJE">美宣</span></div>
+    <div class="sub-block" data-page-node-id="NR4j5BHWtwJclnbAUTyGNa">
+      <div class="sub-title" data-page-node-id="CsZhPGKjsnpKLxWzMqTguS">📍 路径</div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="la8iE27PzgPguzwWYP14QL">美术 SVN：<code data-page-node-id="YKbVXwZMzZzMcc1ATswV6y">https://svnshh.dobest.com/svn/anthea_art/归档/6. 美宣/</code></p>
+    </div>
+    <div class="sub-block" data-page-node-id="7maDgjGeoJJxysOxPsFxbV">
+      <div class="sub-title" data-page-node-id="6mNz6i6DMFkolBWPxYyhEB">📐 命名</div>
+      <ul class="item-list" data-page-node-id="gjo6wABf698CsKlDUdVX2R">
+        <li data-page-node-id="Gb1fMGKXhUHECyuBAFKqu8"><strong style="color:var(--text);" data-page-node-id="PULo29ADpYIh5CXLyjkJCa">剧情插画</strong>（用于游戏中剧情部分）：分插画和画中画（Spine 制作导出）</li>
+        <li data-page-node-id="YQ0nXqiFqhEPPng8UYJT4G">插画和画中画<strong style="color:var(--text);" data-page-node-id="7ImuGSz56TiPRQNDxs4jfW">无 $CLASS 分类前缀</strong>，直接使用 <code data-page-node-id="dLo1pvDtTGUIuQst9kEHnf">$ResName</code>，<code data-page-node-id="a6WhE6Aw6MUG8C9GU3z5mB">$standard</code> 后缀暂不使用</li>
+      </ul>
+    </div>
+    <div class="sub-block" data-page-node-id="BcDqJWnYgf2qDLE3fclU9K">
+      <div class="sub-title" data-page-node-id="Ps59KhANocmnf9BiL6iD7W">📋 需求规范</div>
+      <ul class="item-list" data-page-node-id="xOnAwbSt21WbxDsqkbJj44">
+        <li data-page-node-id="Z273VFsZOJbFyDBs5MnY4B"><strong style="color:var(--text);" data-page-node-id="dhx3Rr0Wi3nXPzTbsGp53L">原始需求方</strong>：需求内容、分类、数量、用途</li>
+        <li data-page-node-id="r623EtaUIol010AgcfYOQS"><strong style="color:var(--text);" data-page-node-id="Wx0HaZOKKKGquhTtMNstgD">文案策划</strong>需求包装：<strong data-page-node-id="brvtK2DCu6yNPlT8UppDIM">应用概述</strong>（明确应用场景）、<strong data-page-node-id="NI0ITPVLYvxI6k9QU2plAe">时空说明</strong>（时间、地点，如白天、室外）、<strong data-page-node-id="woRH9rxGhEZVLmLHWMjqw8">构成元素</strong>（主要元素、动态表现）、<strong data-page-node-id="YIGgxuGUAM8RzEuvJzod5k">背景故事</strong>、<strong data-page-node-id="884i1Qk8P3JD5SnFv1FCx5">设计说明</strong>（构图、参考图）</li>
+        <li data-page-node-id="r65uTttNbojtVyCI1UiLL1"><strong style="color:var(--text);" data-page-node-id="TFijfDrcXtguHGFlHWlczl">资源策划</strong>核对后补充：<strong data-page-node-id="gWZw14HnEL0cYD9xlf94Er">输出规格、资源标识、输出路径</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 8 界面资源 ===== -->
+<div class="section" id="s8" data-page-node-id="mICC2zEiwAJ4m6oINIcuWi">
+  <div class="section-header" data-page-node-id="NCa5gU2NNLWt59fX90j6Gk">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="zrFRhLcsED5iM5GYmugN3r">08</span>
+    <span class="section-title" data-page-node-id="18EpuC1xad1VWZtBGlnPOt">界面资源 UIRes</span>
+    <span class="section-desc" data-page-node-id="qLCwadeBIX5e0z8JyOSdlE">FGUI 工程 · 预制规范 · 节点状态命名</span>
+  </div>
+
+  <div class="panel" data-page-node-id="lHJd9M22P9QkVHKR82mZRM">
+    <div class="panel-title" data-page-node-id="36wsshRD81jHryE1QvFgds"><div class="dot" style="background:var(--accent);" data-page-node-id="rW85hcIOamhAq3yC4ccJll"></div>8.1 界面概述<span class="no" data-page-node-id="byTyPPUX1r6MuQyCtsr3gD">FGUI 工作流</span></div>
+    <div class="sub-desc" data-page-node-id="CkBvEQgcJNfosZ4DtpVlX9">界面资源相较于其他美术资源，<strong data-page-node-id="sHRMnbEboZETTEpDfWZ83U">逻辑关联性、规则性要求都更高</strong>。详细设计制作要求见『海边的安西娅』<strong data-page-node-id="HLj7Y7lqQbjLvpQXANX9Jf">UI 设计制作规范</strong>（V230316）。</div>
+
+    <div class="card-grid card-grid-3" style="margin-top:10px;" data-page-node-id="UgysCXyVjZKMTDb02VccGO">
+      <div class="card" style="border-top-color:var(--blue);" data-page-node-id="rEH7szgMl25fkr5FiGoSkq">
+        <div class="card-title" data-page-node-id="Z27AIUzpj0BaG3u3eYLFwy">8.1.1 界面流程</div>
+        <div class="flow-row" style="min-width:0;" data-page-node-id="weZdhU30xH2bgCBGexOZoC">
+          <div class="flow-nodes" style="flex-wrap:wrap;gap:6px;" data-page-node-id="Uoho555Ei8yNAAAJVHnWoF">
+            <div class="flow-node fn-purple" style="font-size:11px;" data-page-node-id="YD5IoZCYRRH4iUGkmk1p96">策划交互需求</div><span data-page-node-id="4z0r672UnEqAg1L2mzusPL">→</span>
+            <div class="flow-node fn-blue" style="font-size:11px;" data-page-node-id="rxC2k2UnVxXEXlJnEoYYTR">UE 交互设计稿</div><span data-page-node-id="MBpOCme81ej13xmcqONp3J">→</span>
+            <div class="flow-node fn-pink" style="font-size:11px;" data-page-node-id="5iM9jAl2afgykyHhyAWcO9">UI 设计效果图</div><span data-page-node-id="lmRDUtDL9R274DwONYg3Cc">→</span>
+            <div class="flow-node fn-teal" style="font-size:11px;" data-page-node-id="NW8liBkV4xx2ciDRC5XDJm">UI 素材提交</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="border-top-color:var(--teal);" data-page-node-id="C0QlKSFYWzLdRUO8Rcm6yc">
+        <div class="card-title" data-page-node-id="Hbx7J6yaCWWtjo3jTPtGgS">8.1.2 关联工具</div>
+        <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="sCmQd3QFzxh0n43Xh9bQlM">
+          · FGUI 编辑器（界面/花艺品编辑）<br data-page-node-id="TGYzVE1AvemcPuOEhAwLvr">
+          · BlueLake / 蓝湖（UE 稿协作）<br data-page-node-id="IJRzRez1puIiHKWlLGvSgj">
+          · Spine（动效编辑）<br data-page-node-id="hgKDt1voAIXqJ0WVsvkVo3">
+          · Cocos Creator（工程拼制）
+        </div>
+      </div>
+      <div class="card" style="border-top-color:var(--orange);" data-page-node-id="DI5JLZandFM8h0HVbPJAxD">
+        <div class="card-title" data-page-node-id="Bm3BYZRlaA32pUb95eTPHZ">8.1.3 设计制作</div>
+        <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="CxqHn8DDAgiZrpzkYc1bUk">依据 UI 设计制作规范执行（<strong data-page-node-id="60au2b8CPOhvEB8EHqDvdX">详见 UI 规范页</strong>）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="7GsfkCFGd34rxXPh4JQgKG">
+    <div class="panel-title" data-page-node-id="Bec4g8hfLQ08oGFJnWChGy"><div class="dot" style="background:var(--purple);" data-page-node-id="GNF7AoIRwvR8oFqsUDBjVT"></div>8.2 FGUI 工程目录<span class="no" data-page-node-id="PjSw1FFuTezmoE0k1h3Ufn">FGUI</span></div>
+    <div class="sub-desc" data-page-node-id="fErqDMXyUjeX1HZdn64Aze">FGUI 工程路径：<code data-page-node-id="QhSv0C0RvDdi9UwgAN9G0z">https://svnshh.dobest.com/svn/anthea/client/FGUI</code></div>
+    <div class="tree" style="margin-top:10px;" data-page-node-id="L9vNbUHVa1uuEKvseJfkYB">
+      <div class="tree-row" data-page-node-id="8BGeEHa03LK2A50dwBAcN4"><span class="tree-path" data-page-node-id="yBCQ9tl2UlzeX3LhahUW1h">/Anthea_GUI/assets/Pkg$FuncName</span><span class="tree-desc" data-page-node-id="BauIcFnx821lNAVL2OkpYV">界面分包目录，按功能名划分</span></div>
+      <div class="tree-row" data-page-node-id="23EYhMfOvBunQirr7BB5oK"><span class="tree-path" data-page-node-id="R0DdeMuogMZDEosvsuCIsC">└ /Font</span><span class="tree-desc" data-page-node-id="Q90EEdK2AD7XQHEZfTi2tb">字体文件目录（仅 PkgCommonUI）</span></div>
+      <div class="tree-row" data-page-node-id="WI6cEdDMP1tTwFReHgPbTC"><span class="tree-path" data-page-node-id="lL3QIFmv9ArjUxQYDF7T1Y">└ /Prefab</span><span class="tree-desc" data-page-node-id="qdZ0FnGCu106KBkt9dAqcZ">界面控件/部件预制体目录</span></div>
+      <div class="tree-row" data-page-node-id="iVxgrhk2g7EBCRVfyJ476n"><span class="tree-path" data-page-node-id="abjc2GqdV6IgGld2jUCC6N">└ /Spine</span><span class="tree-desc" data-page-node-id="9C1sPFtD1Ft8IAfrepYZ96">界面动特效 Spine 资源目录</span></div>
+      <div class="tree-row" data-page-node-id="XjKDGL1mMpDFv1HVaSOZSR"><span class="tree-path" data-page-node-id="EkGLESNgzGSIDCJquuhP5v">└ /Texture</span><span class="tree-desc" data-page-node-id="OociDALkTp6DlglcStgpMU">界面（打图集）切图素材目录</span></div>
+      <div class="tree-row" data-page-node-id="VUt8pBgUtL6r4VlQo6h0bF"><span class="tree-path" data-page-node-id="4iOEnjG2ywHL2S2sy9Ct8E">└ /Unpack</span><span class="tree-desc" data-page-node-id="tPmXpNyssKPVWTU2SJgLch">界面（不打图集）大图素材目录</span></div>
+      <div class="tree-row" data-page-node-id="6R2GJ3GYO5IlqPmdfkif9k"><span class="tree-path" data-page-node-id="DNWHI7DHO8jnEJNFsFvZd0">/Anthea_Floral/assets/PkgFloral$00</span><span class="tree-desc" data-page-node-id="6e23frliHijY1kjQ8FeouV">花艺分包目录</span></div>
+    </div>
+    <div class="note" data-page-node-id="k3DidaiAXX5NtPaP37Cw2o">⚠️ FGUI 工程目录 &amp; 文件使用<strong data-page-node-id="XIZHlcinQQNiCFfU7JMCcx">纯英文命名</strong>（除预览效果图）；FGUI 编辑预制组件（xml）也需严格遵循命名规则</div>
+  </div>
+
+  <div class="panel" data-page-node-id="lSvPkdOXfb8WBvrLIJN29r">
+    <div class="panel-title" data-page-node-id="comLn5t4GEGHPnAUZ0rUWn"><div class="dot" style="background:var(--pink);" data-page-node-id="M573HdRfqzXkK18OAEuJLa"></div>8.3 预制规范<span class="no" data-page-node-id="C04HJPXY1ZmHBHug4lIjhp">Prefab 命名</span></div>
+
+    <div class="sub-block" data-page-node-id="b3YlKRXhiatHGPNiEmIBMx">
+      <div class="sub-title" data-page-node-id="clEwqkDBYRSUDpUh4c4ncF">📐 8.3.1 预制分类</div>
+      <div class="card-grid card-grid-2" data-page-node-id="iGTgNf0b7bmLFk4oeobN6z">
+        <div class="card" style="border-top-color:var(--blue);" data-page-node-id="tyEnRaUXmtKNQNJDEmdkgB">
+          <div class="card-title" data-page-node-id="p0KagLcAlVKYgHpd4pGfyu">视图预制 View</div>
+          <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="B0CgIv4USTRuRmfBmlhIaR">完整界面视图，对应 <code data-page-node-id="B56WN2DmStpHbdGyofV86y">$CLASS_$ViewName_$standard.xml</code></div>
+        </div>
+        <div class="card" style="border-top-color:var(--purple);" data-page-node-id="DlmrwcA0yaoaXqc3CZjCTH">
+          <div class="card-title" data-page-node-id="AIkSx0ZBM7WGf8Vj7cZcit">部件预制 Widget</div>
+          <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="BKSTOlbTH7Ey4XKcYke5Op">通用部件，对应 <code data-page-node-id="pbzQb5FatUPkj4YS2frnZw">$CLASS_$WidgetName_$standard.xml</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" data-page-node-id="ozr7vw7UqjhSM30SOPhU8q"></div>
+
+    <div class="sub-block" data-page-node-id="LuTwGy31HePZ8cMLmR6GsM">
+      <div class="sub-title" data-page-node-id="bq6QjtYld5wwWYtxNpw9hj">🏷 视图预制 $CLASS 前缀</div>
+      <table class="info-table" data-page-node-id="q4FQjEJg56aGtTgGjsEJCL">
+        <thead data-page-node-id="oTpLYoAiNTG2HEipp4lV6d"><tr data-page-node-id="VVzvSduCe4aWATjNxnrAsn"><th style="width:110px;" data-page-node-id="e5mBS1QNOquZioFwVPmEHU">$CLASS</th><th data-page-node-id="1cYrOkpqsLBCFA44sBi08O">用途</th></tr></thead>
+        <tbody data-page-node-id="b9YVDlwcaPznhP0Md2mvUE">
+          <tr data-page-node-id="hEjjuH3mEHg8DGGF0TdRcm"><td data-page-node-id="xJkCD1k8K9eitEsrmQnGOD"><code data-page-node-id="hMxMtDDTIreFsNeAEgUghZ">WIN_</code></td><td data-page-node-id="LZVB41hGmilyTSEDZOSR0a">窗口预制体，全屏窗口；<code data-page-node-id="QGhj5ZnXlpmhdyTZU5z0rm">$standard</code> 后缀可区分状态</td></tr>
+          <tr data-page-node-id="YaC5sBhNergQtXUn2g8jOS"><td data-page-node-id="PovlggCSyGCBD3L94TRHBR"><code data-page-node-id="09cK7TPtxXFTg0KN8GnKSu">POP_</code></td><td data-page-node-id="vAFu0TMuU7KrUeAehlbKxx">面板预制体，子界面层级窗口；<code data-page-node-id="OgklEYslAfXCNmDHPRcZQn">$standard</code> 后缀可区分状态</td></tr>
+          <tr data-page-node-id="6oaaaCbt5b0hkaI35QLeM9"><td data-page-node-id="vGCbk2sT6EopWvhM56QjcH"><code data-page-node-id="7x8SJB2ynLB5M9VR6gLneB">FRM_</code></td><td data-page-node-id="xsrjXClc43Y0AG8E9SIQyg">表单预制体，弹窗类表单；<code data-page-node-id="yQRgZLv7tM6C1qS09eB5ls">$standard</code> 后缀可区分状态</td></tr>
+          <tr data-page-node-id="4GlRXRz7zLLkUBv3zyZ56c"><td data-page-node-id="jpEyFqRENgCx55YwgkBKCD"><code data-page-node-id="iY4TF90hDwLGy9yyACCkeu">TIP_</code></td><td data-page-node-id="IxWjbH8WzdUjH5l50t2IEM">Tips 浮窗预制体，同名唯一，替换式开关，并行交互</td></tr>
+          <tr data-page-node-id="gP78SVFIQaWJStRgu7Rg6i"><td data-page-node-id="klNB796QwDoPAqhjZLQSy5"><code data-page-node-id="DZhn9Njq9RtITKBVga5I4S">MSG_</code></td><td data-page-node-id="oefWPVPXbyrlhhgKFq6Ch7">消息提示预制体，最高层级显示，膜态交互</td></tr>
+        </tbody>
+      </table>
+      <div class="note" data-page-node-id="TzKVCiDSFokQ2MOyHD6Z4w"><strong data-page-node-id="DkZkINrRnpUcg41NZoRdCd">$ResName</strong>：素材名，中文拼音为主，由<strong data-page-node-id="JwTB2bpI9p8w6BGcquLCCH">功能负责策划</strong>提供。<code data-page-node-id="C0FF0ZVtQAt9fTSAJLpoCE">$standard</code> 后缀用于区分相同 GameFuncName 的不同状态，如 <code data-page-node-id="1sfIwzZJAiC3qH9u3uHoGS">WV_AdDouble_pop</code></div>
+    </div>
+
+    <div class="divider" data-page-node-id="6NKRyx0BUUSgJDlavczuTj"></div>
+
+    <div class="sub-block" data-page-node-id="qZUDJqqjHLNfaXpDt2uL7C">
+      <div class="sub-title" data-page-node-id="EFUjvcbcIy8jYEcznGFC9W">🔧 部件预制 $CLASS 前缀</div>
+      <table class="info-table" data-page-node-id="Z8Vu7phPM3lChCmvwvBDrC">
+        <thead data-page-node-id="Ak4l3LLHWccAssiWLxVdXk"><tr data-page-node-id="Y2uoc4MszCxFPuA5Htjknd"><th style="width:110px;" data-page-node-id="Dmdhj6AbKbnqydW45qqrjL">$CLASS</th><th data-page-node-id="UAOdM8r9lWEjznpjwwADfa">用途</th></tr></thead>
+        <tbody data-page-node-id="TaNTxTCub9D0dAabRBwFHD">
+          <tr data-page-node-id="fTZjpjZ78SmiZFHVrSaBTQ"><td data-page-node-id="oSD5FQ0U8CKuOCKJm5sDlM"><code data-page-node-id="PpXGyhRtbBsFj9JE5TkyHc">ITM_</code></td><td data-page-node-id="mMhYJpXu8s9EkuLADYzLjJ">列表中样式部件；<code data-page-node-id="YpmRzYjzxfAggl7M5Rmj4E">$standard</code> 区分类型/品质/状态</td></tr>
+          <tr data-page-node-id="PiBcq84cQkYPtVRJSrYj57"><td data-page-node-id="YAO3uYZFSB2LITRmWltlJZ"><code data-page-node-id="HR8rRpH94mQLdGUh4C6yVt">BTN_</code></td><td data-page-node-id="yn3G8d0hYwpSpYNYAlVYAN">按钮部件，可包含多态素材</td></tr>
+          <tr data-page-node-id="v2PYYm0AqxFc20KVxP7DRs"><td data-page-node-id="T4ewkuQkfAbfExnBSwExn3"><code data-page-node-id="Ro7Yn1R3ovcIXW786t1l16">BUB_</code></td><td data-page-node-id="ailowF4XrwCny6qD241DW9">气泡部件，场景内锚点</td></tr>
+          <tr data-page-node-id="kLSLFkw0ShGRltZyLDNIhG"><td data-page-node-id="JDOZXNOUmdNwQpQVs1MWgw"><code data-page-node-id="gmQiyGsGFWKfkgFTmtnabP">PAN_</code></td><td data-page-node-id="uncpIBNZ9nFBc129ZRex5T">面板部件，状态面板或多视图通用面板</td></tr>
+          <tr data-page-node-id="Cg5NKyCHKgZbVOwYBjR2ah"><td data-page-node-id="MvMenC7QsHyBh6Vkn6C7xJ"><code data-page-node-id="5aKCucMQWA6luPNazjQZyI">BAR_</code></td><td data-page-node-id="3p6ayrDLKzXHpjjASyVvwa">进度条部件</td></tr>
+        </tbody>
+      </table>
+      <div class="note" data-page-node-id="y2fcOEoDn9QB7aF6ktFuLy"><strong data-page-node-id="RtGNKp6Z1Hz4ekn65dNsYU">$Component</strong>：组件名，英文单词为主（如 <code data-page-node-id="vJKGNiHVDcdnRMR1yie6iq">ITM_Item_156</code>）</div>
+    </div>
+
+    <div class="divider" data-page-node-id="VkbdBJoQBiUxeGh37ybY0k"></div>
+
+    <div class="sub-block" data-page-node-id="pkEAtyRChoGmKC4Za61DRb">
+      <div class="sub-title" data-page-node-id="UReCwCQL8Fite5IQAJCnqJ">📌 8.3.5 节点 &amp; 状态</div>
+      <table class="info-table" data-page-node-id="YbVnVbEFSE6y5SYRslkRGG">
+        <thead data-page-node-id="gJCojfsogXgmPVQ9ohwLIV"><tr data-page-node-id="MtdNO7l2P4xwrO1pFj6j2q"><th style="width:120px;" data-page-node-id="H81LMFTpHajuheDQBLn8Rq">类型</th><th data-page-node-id="dmXlGlKcZSp4fsCxRWocFR">命名规则</th></tr></thead>
+        <tbody data-page-node-id="jcKLOG9NJKKE0tkOAeZO51">
+          <tr data-page-node-id="goDhYLsYOvp7LrNMcB9FdM"><td data-page-node-id="hDHvaiE8qXRAqA0kvQhAv2"><strong data-page-node-id="wp1gnfVVhHr05U74va4gsz">图标节点</strong></td><td data-page-node-id="L65bihUtR9wH07VOhop5cn"><code data-page-node-id="fjL6g282zkM1ydpa2wj6Fb">$IconName</code>；页签图标系统默认 <code data-page-node-id="pZaKHcEBYI64o6VpAaXT5y">icon</code></td></tr>
+          <tr data-page-node-id="1EgRmGULDB11qOA0SPs77F"><td data-page-node-id="WjXcGkbmwue6zBwVIyBPpZ"><strong data-page-node-id="rOnFYDM5BJDbcHmhYGGZi0">文本节点</strong></td><td data-page-node-id="MiGES6kpSXrW8oHQsWF7xY"><code data-page-node-id="QyfG67okGQLfKvpSkabR7f">$TextName</code>；页签文本系统默认 <code data-page-node-id="hNG0CPvP8xdRaPEoLqta4H">title</code></td></tr>
+          <tr data-page-node-id="oRCTFBOrwbckvZyBD0XzYJ"><td data-page-node-id="lbLEUJ4WsB0WhX5mlCUZK1"><strong data-page-node-id="wNtRV0yEBU0GYMxnk4zEXv">特效节点</strong></td><td data-page-node-id="9R83T66yEUA0P2dXT3A6zP"><code data-page-node-id="YVRrhlGCxJqDd4xKV6wLHf">$SpineName</code>；一般默认 <code data-page-node-id="AYxhpOwdFDxdMvUJ4BkV1X">Spine</code></td></tr>
+          <tr data-page-node-id="xA3DduCZK8irQc6IAEpugv"><td data-page-node-id="rSb71S07MlbBjo6CNdfAv0"><strong data-page-node-id="9qFipg3RTaNtPwMKIc1DZA">页签节点</strong></td><td data-page-node-id="4MoLdeqVa1vs7WUy3YKHtG"><code data-page-node-id="qUShaevgJbXGjqo3hXbDbU">$GameFuncName</code>（与配置对应）</td></tr>
+          <tr data-page-node-id="qHrXyexGnLRS0BEidmpl4o"><td data-page-node-id="PM86fSRxvgtLj2iC2So6vQ"><strong data-page-node-id="yXNfSFtTWQ6HtEOSCd0faJ">按钮节点</strong></td><td data-page-node-id="gt6j3SF9DhmJtUbwIaLMvU"><code data-page-node-id="TLexdcXgju9NfDUqfdhU9r">$GameFuncName</code>（由 UE 自命名）</td></tr>
+        </tbody>
+      </table>
+      <div class="note" data-page-node-id="lS3Q9V4ODsM1orn3zSfomf">
+        <strong data-page-node-id="W8l5xkRfhBaNQvisleZs20">通用控制器命名</strong>（小驼峰）：<code data-page-node-id="N6oQtQtXkyOS8NCcDnPHxz">rarity</code> 品质 / <code data-page-node-id="uF8udaY6niz4unYhVHLXK0">tab</code> 页签 / <code data-page-node-id="Dxw89EsNoWCZeMx7bQn1MI">money</code> 资源 / <code data-page-node-id="uNvCgc1RYjx03OjHCHurCz">lock</code> 锁定 / <code data-page-node-id="DIDaRIvaImXY4JadikCX9J">select</code> 选中<br data-page-node-id="St3vEmj5nX8O0T1P6TKwmG">
+        <strong data-page-node-id="VmyBCcbNop48plOuZ2ySX3">状态命名</strong>：通用 <code data-page-node-id="8c30rxPdPY7IGSFvCgCE7e">$resName</code> 小驼峰；页签切换 <code data-page-node-id="WkCybQEyPtPFIrqWUNy5z6">$GameFuncName</code>；资源状态 <code data-page-node-id="S133GFIT86g4t96UUGMLot">$IconRes</code>（需与 itemRes 统一）；品质状态无需命名
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 9 资源流程规范 ===== -->
+<div class="section" id="s9" data-page-node-id="5Vl6MguwHdtdRKUd5ZLVtn">
+  <div class="section-header" data-page-node-id="dtkvzOBo1VBvhv1A8Jtb8J">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="EkYnWrTezW3Gh0WlHDnz13">09</span>
+    <span class="section-title" data-page-node-id="VzEG4CAC1LlOZHG0VUCokm">资源流程规范</span>
+    <span class="section-desc" data-page-node-id="Y9gUFaxQeOiG4nBI2QKEQv">需求 → 会议 → 制作 → 验收 → 提交 → 发布 → 归档</span>
+  </div>
+
+  <div class="flow-wrap" style="margin-bottom:16px;" data-page-node-id="DoZuO3OlKjmHUsylvFeGh0">
+    <div class="flow-title" data-page-node-id="JBaLbEvw9AzboV4Bw27API">🔄 全流程主干（6 阶段）</div>
+    <div class="flow-row" data-page-node-id="DihKkHczwwcZKm5AMXFnnG">
+      <div class="flow-label" data-page-node-id="dBOicespzsbUhnYDcofmJ5">9.1 流程</div>
+      <div class="flow-nodes" data-page-node-id="T72LzeL8DsRPQZiaYKB2pj">
+        <div class="flow-node fn-purple" data-page-node-id="YPcYUwx9hQGH09jMSd8ZfJ">① 资源需求</div><div class="flow-arrow" data-page-node-id="TQ5UHGj88UREULo0GX0t6U"></div>
+        <div class="flow-node fn-pink" data-page-node-id="IAHOlQBfKdJqcHUhozsVoE">会议规范</div><div class="flow-arrow" data-page-node-id="AeBnZ21D7Kp8EuwsVBdJMz"></div>
+        <div class="flow-node fn-blue" data-page-node-id="Z0Ty3eBLJhg8eNowfvuAJz">资源制作</div><div class="flow-arrow" data-page-node-id="mGsigdFPZBZ78re0jSjSYg"></div>
+        <div class="flow-node fn-teal" data-page-node-id="IPNOKJN0Rpus6GAoFNbSBt">资源验收</div><div class="flow-arrow" data-page-node-id="Kwa0q0efEuG89NWmACOTwp"></div>
+        <div class="flow-node fn-orange" data-page-node-id="aL6xNmvFS0CYqCGGpHrUgl">资源提交</div><div class="flow-arrow" data-page-node-id="d5JOdoe1fu4s4dZbIA6tv0"></div>
+        <div class="flow-node fn-gray" data-page-node-id="sKH0BshQeaYTuelwGLHHEc">资源发布</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-2" data-page-node-id="vH0fLJjMhHeHKeHGqmwdr0">
+    <div class="card" style="border-top-color:var(--purple);" data-page-node-id="0bxegywnHMulJjBDLz7kNf">
+      <div class="card-title" data-page-node-id="Mq6XDsamANvrPmuhmufxST">9.1.1 资源需求</div>
+      <div class="sub-desc" style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="Ylz9HOrD82PxiiHMAiQNBg">资源策划 → 系统策划 → 文案/交互 → 资源策划 → 美术</div>
+      <ul class="item-list" data-page-node-id="O6AGKzysAjzO34vzf29ZQG">
+        <li data-page-node-id="0S5ql2dU8qAhcVPh8uJIj7">【资源策划】美术周会后反馈需求补充；评估存量并提出下周增补</li>
+        <li data-page-node-id="PDWDEQjEIWoc20iFwLKlfU">【系统策划/文案策划】当天完成，最晚不迟于美术开工</li>
+        <li data-page-node-id="BXoeiZTctbKyr3BBQ2DPGj">【文案/交互策划】最迟周三下班前交付资源策划</li>
+        <li data-page-node-id="CKf2D9chhlIQkXJhKY3J05">需求中须明确：<strong style="color:var(--text);" data-page-node-id="Ou1QVQBMWN5L9n5VXbljnw">资源分类、命名、输出标准 &amp; 规格、提交路径</strong></li>
+      </ul>
+    </div>
+    <div class="card" style="border-top-color:var(--pink);" data-page-node-id="LBrpswSJn710NDmjkUmsXY">
+      <div class="card-title" data-page-node-id="BrJXvRTaoqQTzR1K35D9rd">9.1.2 会议规范</div>
+      <ul class="item-list" data-page-node-id="B1muiXGeSDMJBWPOYxY3qi">
+        <li data-page-node-id="a1AcEWpLO1CPLKK4WxaIF0"><strong style="color:var(--text);" data-page-node-id="DLmHWifYK6IrYMjQowclMO">分单双周</strong>：版本内容 vs 常规铺量（由资源策划发起）</li>
+        <li data-page-node-id="ygYqU7tkH2vaSR3GbaJD2V"><strong style="color:var(--text);" data-page-node-id="yUmk0qSkL3d7tg3HcvRU35">会前</strong>：文案策划提前完成需求文档，资源策划核对后协调时间</li>
+        <li data-page-node-id="QSi4STBktGPb9ToYehqFFX"><strong style="color:var(--text);" data-page-node-id="KE9XnkZMIP8ZXMlwj5CXfA">参会</strong>：版本内容会 — 制作人+文案+资源策划+美术全员+PM/APM</li>
+        <li data-page-node-id="u1NzPDJVDndfigbpylWB6B"><strong style="color:var(--text);" data-page-node-id="1jbCPZXUSC59RgUFIRp4Ax">常规铺量会</strong>：制作人+文案+资源策划+相关制作人员+PM/APM</li>
+        <li data-page-node-id="rNHbIJyNfdW3wqlg7CQMzF"><strong style="color:var(--text);" data-page-node-id="ybeD9ABTVLHuY9ZuXQRJ3Q">会议形式</strong>：文案主持讲解 → 美术提问 → PM/APM 分工排期 → 资源策划落地 Jira 子任务</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top-color:var(--blue);" data-page-node-id="HZ0ZES5AfbYByyjz4y05BV">
+      <div class="card-title" data-page-node-id="lToaoFX3bIlCGHoV0MzVhv">9.1.3 资源制作</div>
+      <div class="sub-desc" style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="ku3aKB88so0AoemJ2yVfR2">组长/APM → 执行美术 → 外包制作 → 日常提交</div>
+      <ul class="item-list" data-page-node-id="4YZ0tLJ2W4s6bodDeB9FBH">
+        <li data-page-node-id="EjhUV74De4PBKkPwBfTEPx">业务组长/主美指导分析，APM 确认排期</li>
+        <li data-page-node-id="9Hp8vorvfMvGNLQUIeBDm4">执行美术自制作或推进外包</li>
+        <li data-page-node-id="lBknjC5SU7jwMVSBNgBP9F">参照美术 SVN 分类日常目录提交规则执行；外包需必要约束和规则说明</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top-color:var(--teal);" data-page-node-id="i4x8YmzWFiQFyp5sElKKuW">
+      <div class="card-title" data-page-node-id="uFTeyFe7tXaSnr4cWuvqYz">9.1.4 资源验收</div>
+      <div class="sub-desc" style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="VUmUXjdrA9ixdNBCA2m10O">组长/文案 → 资源策划 → 系统策划</div>
+      <ul class="item-list" data-page-node-id="hmc0z6gEB65GEDzs25n0Tm">
+        <li data-page-node-id="HBVuWAF5OfVWCHEzWelvbX"><strong style="color:var(--text);" data-page-node-id="9DIAZ3j3HtehMZLSiNDmom">组长/文案</strong>验收：确认提交内容、数量的准确性</li>
+        <li data-page-node-id="xQCxjpOpGTVWZBhAWGITHH"><strong style="color:var(--text);" data-page-node-id="YkMeiD75VCzAds9urft2n3">资源策划</strong>验收：确认<strong data-page-node-id="cGzNucdmYNOyXVrrWUAbqX">路径、命名、规格</strong>的准确性</li>
+        <li data-page-node-id="HDEVBHWC9zuGxSw7ZdAF56"><strong style="color:var(--text);" data-page-node-id="mLkaihAAWXGvJnn8hiNADB">系统策划</strong>验收：确认内容、适用、数量的准确性</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top-color:var(--orange);" data-page-node-id="EJ8K4GyazKjmW5tETSE1Dk">
+      <div class="card-title" data-page-node-id="LUDi43stybQu6WS1K0MhCI">9.1.5 资源提交</div>
+      <div class="sub-desc" style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="ymVy9NrHQNoaFiETJguewF">执行美术 → 资源输出</div>
+      <ul class="item-list" data-page-node-id="Cq1tcDU2Dfii7JB1hToyu8">
+        <li data-page-node-id="MEJ6n24ijkyF2JtNXb5RdS">制作完成且需求方确认效果后，由美术执行人员提交输出至<strong data-page-node-id="sRFDztvSdz1lPNR5X0Mx2M">项目 SVN 资源库</strong></li>
+        <li data-page-node-id="38zNMeNh7t5yi2OeQV3lCn">输出时核对：分类、命名、输出标准 &amp; 规格、提交路径</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top-color:var(--gray);" data-page-node-id="EAzHxlOfd6Wh55ijwmXH9u">
+      <div class="card-title" data-page-node-id="clHiYwmrJsYJMfsVW96Zj3">9.1.6 资源发布</div>
+      <div class="sub-desc" style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="m4RxDdeWmK5AKIXvyPj0d0">资源策划 → 系统策划 → 客户端程序</div>
+      <ul class="item-list" data-page-node-id="4D3TFMM3XWXg9vJNgd7Xr3">
+        <li data-page-node-id="VK0oY6pSnNnSBGKvEnvKql">资源策划核对后将导出资源迁入<strong data-page-node-id="t9bzA2COjkBAAlkFHGdyYR">工程 SVN 资源库</strong>，进行必要拼制</li>
+        <li data-page-node-id="vmHBAm5rPQN9YAQrs5uphG">提交系统策划最终验收展示效果</li>
+        <li data-page-node-id="enX4TaSmOBvBD7CmKBwTWi">提交<strong data-page-node-id="H2tu5YRqIrvXKVYAYamiY9">客户端程序</strong>实装应用</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="1owoRXgk0X8tuiWTrDf13Q">
+    <div class="panel-title" data-page-node-id="TEU5VtcCctmjXFYPhZjnJs"><div class="dot" style="background:var(--accent);" data-page-node-id="eeLTaL4HYCvjiBOlS9LYUW"></div>9.2 资源归档<span class="no" data-page-node-id="dBNiU4GT6EObxuOPqvxd4R">3 类</span></div>
+
+    <div class="card-grid card-grid-3" data-page-node-id="O1F3WxbC6G0EeA2DrIipkC">
+      <div class="card" style="border-top-color:var(--purple);" data-page-node-id="OJ38tlZI8ZhXInaigIs5cv">
+        <div class="card-title" data-page-node-id="gqdKka9eZImTKGIN0QyJm7">9.2.1 源文件归档</div>
+        <ul class="item-list" data-page-node-id="sCWgBhXLi66AaWoA1bY5AG">
+          <li data-page-node-id="QaOrRYsV35aicNvNAO4PvA">执行美术提交至<strong data-page-node-id="0iWZTyIBiiEUObEGxHrPE7">美术 SVN 资产库</strong>归档目录</li>
+          <li data-page-node-id="6OWPOPeDFmAAV0JXfGuC7A">包含：制作源文件 + 效果预览图/视频</li>
+          <li data-page-node-id="6W4ZydZhFZeljz2hnSoSt0">资源策划定期<strong data-page-node-id="LL41wqnvHF3SxntOurUQaB">核对检查</strong></li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--teal);" data-page-node-id="yTKaERXQL0z8l4Fp5iDhjc">
+        <div class="card-title" data-page-node-id="BRQ0Ued5uMDeH7da651f74">9.2.2 资产库备份</div>
+        <ul class="item-list" data-page-node-id="t4DphOUa7jEgzGuWu6uUsv">
+          <li data-page-node-id="b7gVVWwnuxhaoTfdQ0JZAZ">美术资产库已通过 SVN 管理，<strong data-page-node-id="yMtAJCQjUfocLl7IaXdvU7">日常无需人工备份</strong></li>
+          <li data-page-node-id="rLYhzy8ezojPjuh2xs8RAH">重大改版前预期资源复用度低时，针对整个资产库备份</li>
+          <li data-page-node-id="Irw69Hk7xwWoiYJnOXXGeJ">命名格式：<code data-page-node-id="UKznX6uVCEAZNaEwGb6cb0">_backup + 年月</code>（如 <code data-page-node-id="cruCjsaHG3i6VLFhF8yIPG">_backup2022.12</code>）</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--orange);" data-page-node-id="Y9kIEpBbfQV80Wju3Zewfj">
+        <div class="card-title" data-page-node-id="H7bF3lx5BdHz0HyWfqmD7g">9.2.3 资源库备份</div>
+        <ul class="item-list" data-page-node-id="hmwp3ECvnSC8Qla00blWYV">
+          <li data-page-node-id="VXUJKKJmXP3hFGIXj6ehpE"><strong data-page-node-id="fyteQPOlZ8HBWRHB0Q5ThR">工程资源库</strong>：永远保留当前版本实际应用资源，<strong data-page-node-id="XA4c7RMi21GRIBqkUB1dcI">不保留历史资源</strong>，不涉及备份</li>
+          <li data-page-node-id="R1sOCSzCa7hcZvVgG6wW2v"><strong data-page-node-id="IVjuYqJcfJ6UwvO5I7DreL">项目资源库</strong>：日常通过 SVN 历史版本管理即可；重大版本节点可备份</li>
+          <li data-page-node-id="PCgO6cgkyDKH9XsoHy8NSn">命名：<code data-page-node-id="4RdpxWE5CGm3uJLG7XYZOi">_backup/art_1.3.5</code> = ver1.3.5 版本美术资源备份</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 10 美术日常工作规范（保留 V240827 旧版） ===== -->
+<div class="section" id="s10" data-page-node-id="f1R88uPQXBr3ixFiufSGFh">
+  <div class="section-header" data-page-node-id="rjJdcYMcJDEvHAbE8vY6da">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="0ypHByyyiGgnAS7RQhKiNQ">10</span>
+    <span class="section-title" data-page-node-id="F1PqfhsHrIk2vYg88XwThx">美术日常工作规范</span>
+    <span class="section-desc" data-page-node-id="Y7vrjm4lnTueNsol4HGDqQ">需求对齐 · 计划管理 · 周会 · 月报 · 绩效 <em data-page-node-id="AJkDAs9izPSCJ6XGXzzezl">(PDF 未涵盖 · 保留 V240827 旧版)</em></span>
+  </div>
+
+  <div class="note" style="margin-bottom:16px;" data-page-node-id="H0cNH3fBMmcSNYeFjDiov5">
+    ⚠️ <strong data-page-node-id="nV9cu4qFX6eaKOcEUydUlM">说明：</strong>本章节内容来自 <strong data-page-node-id="73mW25E35NCa93fVURvZq7">V240827 旧版资源管理规范</strong>，是 V260429 PDF <strong data-page-node-id="J3mpBDJiFbpHlPuoekt3u2">未涵盖</strong>的运营/管理维度，故保留作为日常管理规范的补充。
+  </div>
+
+  <div class="card-grid card-grid-3" style="margin-bottom:16px;" data-page-node-id="PWEaDvKMcmHp32VGlaHZAN">
+    <div class="card teal" data-page-node-id="VJjED0SrJJvK2UhkLPzdFr">
+      <div class="card-icon" data-page-node-id="1FhOqa82QZufxqPu3qP8vI">📋</div>
+      <div class="card-title" data-page-node-id="3dzuZ9632URVQA5F7820eG">美术需求对齐</div>
+      <ul class="item-list" data-page-node-id="WrFXdGiXJ0GrrAOGJpNafj">
+        <li data-page-node-id="79B6UAEhPUaXxiMMEqbvuf">需求更新：版本需求冻结前完成评审</li>
+        <li data-page-node-id="Q5fIzOtuZKFJ0T4DcKaksC">金额需求：外包预算确认 → 制作人审批</li>
+        <li data-page-node-id="0RYrz9xYXrBUKOizRfq7TT">变更需求：策划主导变更单，主美确认影响</li>
+      </ul>
+    </div>
+    <div class="card teal" data-page-node-id="nujkOL6eGcCyF7DkygNjO0">
+      <div class="card-icon" data-page-node-id="VNLxZ73FYHFq8FF6Oo98Pd">📅</div>
+      <div class="card-title" data-page-node-id="gTNVDTbnOn9Op3r4TFWXgh">美术计划管理</div>
+      <ul class="item-list" data-page-node-id="ZNPBgtuuXL0B2VOQ9B8bsp">
+        <li data-page-node-id="6ZnvPi4aVGBVEO9PTVbBnQ"><strong data-page-node-id="r5YIieykitSxjC5ppZXucb">版本/迭代计划</strong>：对应 Sprint 排期</li>
+        <li data-page-node-id="zCwzU7DoyZlIHcP4YJG0gC"><strong data-page-node-id="ovMQpThGUot8b1GhEBx8w8">周计划</strong>：每周一更新，周五复盘</li>
+        <li data-page-node-id="S2gIJs4DANNOXMW3WLmBaP"><strong data-page-node-id="I2a94hLi5eEp5kVqCOGDJC">月计划</strong>：月初制定，含资源里程碑</li>
+      </ul>
+      <div class="tag-list" data-page-node-id="DEOG7PHZZJ2AJ5wreULK4D"><span class="tag tag-teal" data-page-node-id="XibArVFl6ItFWUhaKbnCHG">版本计划</span><span class="tag tag-teal" data-page-node-id="t2thCATvMHHfwG1aQYq7Ei">周计划</span><span class="tag tag-teal" data-page-node-id="ueE5ar4rImpVJsCKYU8XJ3">月计划</span></div>
+    </div>
+    <div class="card teal" data-page-node-id="z2Ihp2kDgqAOUckVzhPHrj">
+      <div class="card-icon" data-page-node-id="fLCyQ1x929RF9aL4cNe614">🗓️</div>
+      <div class="card-title" data-page-node-id="FS32pe0d4VhOWODNSVKMMn">美术周会规范</div>
+      <ul class="item-list" data-page-node-id="tkMhoHpir4Su8o6PzMBJHP">
+        <li data-page-node-id="8nDdbO0pdgCaLsTzkeuWrq"><strong data-page-node-id="ZSFpBBcgGRbisPBoj9brFm">时间：</strong>每周固定（建议周一/周五）</li>
+        <li data-page-node-id="hEdXswBsQGoJrToKaFENtC"><strong data-page-node-id="K7CStTPXgpmHQ6904XEKH5">内容：</strong>进度同步 / 问题暴露 / 方向对齐</li>
+        <li data-page-node-id="yORJKCnFeu2EVXJWcNevLu"><strong data-page-node-id="dq2UWwBgOHSkavUX6Rbw7h">流程：</strong>各成员 3min 汇报 → 议题讨论</li>
+        <li data-page-node-id="FnMkyalwxSGTS5COQcB4Gc"><strong data-page-node-id="RCas07f9ushHH3yCWwvAEn">形式：</strong>线上 or 线下，需要有会议纪要</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col" data-page-node-id="9rGGubl1yo1zf1kQRc9SCB">
+    <div class="panel" data-page-node-id="FvWFy4YCGQk2nAxD25gEGK">
+      <div class="panel-title" data-page-node-id="OVvihOzt8MdcjwEPJklEKT"><div class="dot" style="background:var(--teal);" data-page-node-id="CyQXNuQJX8k1NByeilAX9D"></div>美术月报规范</div>
+      <div class="field-group" data-page-node-id="B9IEzBJRow2LqAN64088ZE">
+        <div class="field-group-title" data-page-node-id="65NoOMQzcEFonWW33l8QGY">📊 月报内容结构</div>
+        <ul class="item-list" data-page-node-id="zALNcqr4XaBEOEcRvu1Cvf">
+          <li data-page-node-id="KEna5EV6VYTB5Ykoo5Vfto">本月完成资源清单（按类型统计数量）</li>
+          <li data-page-node-id="cKQvedPCUhDECq3kqAqejG">本月计划达成率（计划 vs 实际对比）</li>
+          <li data-page-node-id="guQAAPIcKnWLS7xCNcky3n">下月计划概览（重点里程碑标注）</li>
+          <li data-page-node-id="DDqGudRN2pXYRzyEkBYdaA">问题与风险（已解决 / 待解决 分类）</li>
+          <li data-page-node-id="p60YhRkBejHbZMd7MSIrhk">外包执行情况（供应商评价汇总）</li>
+        </ul>
+      </div>
+      <div class="field-group" data-page-node-id="Oa3sYdZ9Pwj8pSVaUS3jq6">
+        <div class="field-group-title" data-page-node-id="0qVUBAImQ4Bg5i1y3zd4tU">📁 月报格式</div>
+        <div class="badge-row" data-page-node-id="eEwOJuzIe5NaT3zWJ6RcE0">
+          <span class="badge badge-task" data-page-node-id="cL0BBTFudsnIg9AiX41buE">Word / PPT</span>
+          <span class="badge badge-task" data-page-node-id="uWvdMma4qsu9EEC7LGIVlE">每月最后一个工作日</span>
+          <span class="badge badge-eval" data-page-node-id="2wVyX0tDFpWqNhQcoYLFat">发至制作人 + 产品</span>
+        </div>
+      </div>
+    </div>
+    <div class="panel" data-page-node-id="Jzd6COORGBMI7U8plBBcIV">
+      <div class="panel-title" data-page-node-id="dzFdzoaQCMtoRq2Ik3NLgn"><div class="dot" style="background:var(--pink);" data-page-node-id="Hdw4H6Cbi19oCzbYk466gP"></div>美术绩效评估</div>
+      <div class="field-group" data-page-node-id="3TPCsRXAr3Qq4TAYss8haH">
+        <div class="field-group-title" data-page-node-id="LTT19VByKRo8ewP6UqOc0D">📏 评估标准维度</div>
+        <ul class="item-list" data-page-node-id="vXufTZnBuZ60WWJSXAoYYA">
+          <li data-page-node-id="WqTMRf3Zo7YzrJZyFLErjA"><strong data-page-node-id="D1cHXTSYyzMqkuNvvQuyN5">品质标准：</strong>美术标准达成率 / 返工率</li>
+          <li data-page-node-id="Fu02wecbDKpqOZjbQC1OkE"><strong data-page-node-id="vpQullq21OOCtqMwvr6MW8">交付标准：</strong>准时交付率 / 工时偏差</li>
+          <li data-page-node-id="RUwXoX1Hy3TQ63VUyG3Rhr"><strong data-page-node-id="i75Rs2pEmOnKWWKogDiDcl">效率标准：</strong>单位产量 / 流程规范遵守</li>
+          <li data-page-node-id="AYZeFdt5yx97zqqPJSorrV"><strong data-page-node-id="clCW1HGlp9N6B5FHPW8igk">协作标准：</strong>跨部门评价 / 沟通响应速度</li>
+        </ul>
+      </div>
+      <div class="field-group" data-page-node-id="OssyLC772AcAkff4noDfGM">
+        <div class="field-group-title" data-page-node-id="RFUo5ThyHhtWuQi0doqWGO">📅 评估周期</div>
+        <div class="badge-row" data-page-node-id="n4JpjaDvSVMjZnZcXQ6QCd">
+          <span class="badge badge-req" data-page-node-id="tQF4D64XLHHUI4DwWSRb0H">季度绩效</span>
+          <span class="badge badge-task" data-page-node-id="D1F7R3G7JPZFiGI9kC4TFF">半年复盘</span>
+          <span class="badge badge-eval" data-page-node-id="A4zsF6Yu44t9Q0jNRTsI2U">年度评估</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- /container -->
+
+<div class="container" style="text-align:center; padding-top:24px; padding-bottom:24px; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border);" data-page-node-id="yDuWx8qEutOsJOun7Q2hm4">
+  Anthea Project · 资源管理规范 · <a href="index.html" style="color:var(--accent);text-decoration:none;" data-page-node-id="0E20E8HD4q4kQZBjKtDeGL">返回首页</a> · <a href="https://github.com/ProMarkel/anthea" style="color:var(--accent);text-decoration:none;" data-page-node-id="Q8gSgSHA24arI0mdsYXKUA">GitHub</a>
+</div>
+
+<button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部" data-page-node-id="YNi45tzvs7onoHQJ5tzOtt">↑</button>
+
+<script>
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+backToTop.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+(function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
+</script>
+<script>
+/* ANT_NAV_DROPDOWN_JS */
+(function(){
+  var groups = document.querySelectorAll('.nav-group');
+  function closeAll(){ groups.forEach(function(g){ g.classList.remove('open'); }); }
+  document.querySelectorAll('.nav-toggle').forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var g = t.parentElement, was = g.classList.contains('open');
+      closeAll();
+      if (!was) g.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest || !e.target.closest('.nav-group')) closeAll();
+  });
+})();
+</script>
+
+</body>
+</html>

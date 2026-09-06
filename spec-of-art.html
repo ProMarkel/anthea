@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美术工作规范 — Anthea</title>
+<style>
+
+  :root {
+    --accent: #0E9F8E;
+    --accent-dark: #0B7A6B;
+    --accent-light: #D1F2EB;
+    --accent-pale: #E8F8F5;
+    --pink: #E8547A;
+    --purple: #9B59B6;
+    --purple-light: #E8D5F5;
+    --teal: #1ABC9C;
+    --teal-light: #D5F5EE;
+    --orange: #E67E22;
+    --orange-light: #FDEBD0;
+    --gray: #6C757D;
+    --gray-light: #F8F9FA;
+    --border: #E2E8F0;
+    --text: #2D3748;
+    --text-muted: #718096;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: #F7F5FB; color: var(--text); line-height: 1.7;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* === NAVBAR === */
+  .navbar, .navbar * {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased; animation: none !important; opacity: 1 !important;
+  }
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08); height: 56px; font-size: 16px; line-height: 1.6;
+  }
+  .navbar .container { width:100%; max-width:1200px; margin:0 auto; padding:0 24px; display:flex; align-items:center; height:100%; }
+  .navbar .nav-brand { display:flex; align-items:center; gap:8px; font-size:16px; font-weight:700; color:#E8547A; text-decoration:none; }
+  .navbar .nav-icon { width:28px; height:28px; border-radius:8px; object-fit:cover; flex-shrink:0; }
+  .navbar .nav-icon-fb { width:28px;height:28px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,#E8547A,#9B59B6);color:white;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:center; }
+  .navbar .nav-links { display:flex; gap:24px; list-style:none; margin-left:auto; padding:0; align-items:center; }
+  .navbar .nav-links li { list-style:none; padding:0; margin:0; border:none; background:none; font-size:13px; }
+  .navbar .nav-links a { text-decoration:none; font-size:13px; font-weight:500; color:#888; padding:6px 0; border-bottom:2px solid transparent; display:inline-block; transition:color .2s,border-color .2s; }
+  .navbar .nav-links a:hover, .navbar .nav-links a.active { color:#E8547A; border-bottom-color:#E8547A; }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, #0E9F8E 0%, #9B59B6 100%);
+    color: white; padding: 40px 0 32px; position: relative; overflow: hidden;
+  }
+  .header::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header::after { content:''; position:absolute; bottom:-40px; right:100px; width:120px; height:120px; background:rgba(255,255,255,0.06); border-radius:50%; }
+  .header-tag { display:inline-block; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; font-size:12px; margin-bottom:12px; letter-spacing:1px; }
+  .header h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .header-sub { font-size:14px; opacity:0.85; margin-bottom:20px; }
+  .header-meta { display:flex; gap:24px; flex-wrap:wrap; }
+  .header-meta span { font-size:13px; opacity:0.75; }
+  .header-meta strong { opacity:1; font-weight:600; }
+
+  /* === SECTION === */
+  .section { margin-bottom: 28px; }
+  .section-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .section-tag { padding:4px 14px; border-radius:20px; font-size:12px; font-weight:600; letter-spacing:.5px; white-space:nowrap; }
+  .section-title { font-size:18px; font-weight:700; }
+  .section-desc { font-size:13px; color:var(--text-muted); margin-left:auto; }
+
+  /* === CARD === */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px; }
+  .card-grid-2 { grid-template-columns:repeat(2,1fr); }
+  .card-grid-3 { grid-template-columns:repeat(3,1fr); }
+  .card {
+    background:white; border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:20px; border-top:3px solid transparent; transition:transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.1); }
+  .card-icon { font-size:22px; margin-bottom:8px; }
+  .card-title { font-size:14px; font-weight:700; margin-bottom:8px; }
+  .card.blue { border-top-color:var(--accent); }
+  .card.purple { border-top-color:var(--purple); }
+  .card.teal { border-top-color:var(--teal); }
+  .card.orange { border-top-color:var(--orange); }
+  .card.pink { border-top-color:var(--pink); }
+
+  .item-list { list-style:none; }
+  .item-list li {
+    padding:6px 0; font-size:13px; color:var(--text-muted);
+    border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:8px;
+  }
+  .item-list li:last-child { border-bottom:none; }
+  .item-list li::before { content:'›'; color:var(--accent); font-weight:bold; flex-shrink:0; }
+
+  /* === PANEL === */
+  .panel { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:16px; }
+  .panel-title {
+    font-size:14px; font-weight:700; margin-bottom:14px; padding-bottom:10px;
+    border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px;
+  }
+  .panel-title .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .panel-title .no {
+    font-size:11px; font-weight:700; color:white; background:var(--accent);
+    padding:2px 8px; border-radius:10px; margin-left:auto;
+  }
+
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+
+  /* === SUB BLOCK === */
+  .sub-block { margin-bottom:18px; }
+  .sub-block:last-child { margin-bottom:0; }
+  .sub-title {
+    font-size:13px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px;
+  }
+  .sub-no {
+    font-size:11px; font-weight:700; color:var(--accent-dark);
+    background:var(--accent-pale); padding:2px 8px; border-radius:6px; flex-shrink:0;
+  }
+  .sub-desc { font-size:13px; color:var(--text-muted); margin-bottom:8px; }
+
+  /* === ORG CHART === */
+  .org { display:flex; flex-direction:column; align-items:center; gap:10px; padding:8px 0; }
+  .org-leader {
+    background:linear-gradient(135deg,#E8547A,#9B59B6); color:white; font-weight:700;
+    padding:10px 24px; border-radius:10px; font-size:14px;
+  }
+  .org-line { width:2px; height:16px; background:#CBD5E0; }
+  .org-row { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .org-box {
+    background:var(--accent-pale); border:1.5px solid #A3E4D7; color:var(--accent-dark);
+    padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600;
+  }
+  .org-box.pm { background:var(--purple-light); border-color:#D9B8EF; color:var(--purple); }
+  .org-sub {
+    display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px;
+  }
+  .org-sub span {
+    font-size:11px; background:white; border:1px solid var(--border);
+    padding:3px 10px; border-radius:12px; color:var(--text-muted);
+  }
+
+  /* === TREE (SVN) === */
+  .tree { font-size:13px; line-height:1.9; }
+  .tree-row { display:flex; align-items:baseline; gap:10px; padding:3px 0; border-bottom:1px dashed var(--border); }
+  .tree-row:last-child { border-bottom:none; }
+  .tree-path { font-family:'Cascadia Code','Consolas',monospace; font-size:12px; font-weight:600; color:var(--accent-dark); white-space:nowrap; flex-shrink:0; }
+  .tree-desc { font-size:12px; color:var(--text-muted); }
+
+  /* === FLOW === */
+  .flow-wrap { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; overflow-x:auto; }
+  .flow-title { font-size:14px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .flow-row { display:flex; align-items:center; gap:0; min-width:max-content; margin-bottom:12px; }
+  .flow-row:last-child { margin-bottom:0; }
+  .flow-label { font-size:12px; color:var(--text-muted); width:96px; flex-shrink:0; font-weight:600; text-align:right; padding-right:12px; }
+  .flow-nodes { display:flex; align-items:center; gap:0; flex:1; }
+  .flow-node {
+    padding:8px 14px; border-radius:8px; font-size:12px; font-weight:600;
+    text-align:center; min-width:92px; white-space:nowrap;
+  }
+  .flow-arrow { width:32px; height:2px; position:relative; flex-shrink:0; }
+  .flow-arrow::before { content:''; position:absolute; top:0; left:0; right:6px; height:2px; background:#CBD5E0; }
+  .flow-arrow::after { content:''; position:absolute; right:0; top:-4px; border:5px solid transparent; border-left-color:#CBD5E0; }
+  .fn-blue { background:var(--accent-light); color:var(--accent-dark); border:1.5px solid #A3E4D7; }
+  .fn-purple { background:var(--purple-light); color:var(--purple); border:1.5px solid #D9B8EF; }
+  .fn-pink { background:#FEF0F4; color:var(--pink); border:1.5px solid #F9D0DB; }
+  .fn-teal { background:var(--teal-light); color:var(--teal); border:1.5px solid #A9DFBF; }
+  .fn-orange { background:var(--orange-light); color:var(--orange); border:1.5px solid #F5CBA7; }
+  .fn-gray { background:var(--gray-light); color:var(--gray); border:1.5px solid #DEE2E6; }
+
+  /* === LANE (Jira) === */
+  .lane { display:flex; gap:0; min-width:max-content; }
+  .lane-col { min-width:170px; flex:1; }
+  .lane-head { font-size:12px; font-weight:700; text-align:center; padding:6px; border-radius:6px 6px 0 0; color:white; }
+  .lane-body { border:1px solid var(--border); border-top:none; border-radius:0 0 8px 8px; padding:8px; min-height:60px; background:white; }
+  .lane-body div {
+    font-size:11px; background:var(--gray-light); border:1px solid var(--border);
+    border-radius:6px; padding:5px 8px; margin-bottom:6px; color:var(--text-muted);
+  }
+  .lane-body div:last-child { margin-bottom:0; }
+  .lane-body div.hl { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); font-weight:600; }
+
+  /* === TABLE === */
+  .info-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .info-table th {
+    background:var(--gray-light); padding:10px 14px; text-align:left; font-weight:600;
+    border-bottom:2px solid var(--border); font-size:12px; color:var(--gray);
+    letter-spacing:.5px; white-space:nowrap;
+  }
+  .info-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-muted); font-size:13px; }
+  .info-table tr:hover td { background:var(--gray-light); }
+  .info-table td strong { color:var(--text); }
+
+  /* === BADGE === */
+  .badge-row { display:flex; flex-wrap:wrap; gap:6px; }
+  .badge { padding:5px 12px; border-radius:8px; font-size:12px; font-weight:500; }
+  .badge-p0 { background:#FEF0F4; color:#C0392B; }
+  .badge-p1 { background:#FEF9E7; color:#E67E22; }
+  .badge-p2 { background:var(--accent-pale); color:var(--accent-dark); }
+  .badge-px { background:#F2F2F2; color:#666; }
+  .badge-gen { background:var(--accent-pale); color:var(--accent-dark); }
+
+  .tag-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .tag { padding:3px 10px; border-radius:12px; font-size:11px; font-weight:500; }
+  .tag-blue { background:var(--accent-light); color:var(--accent-dark); }
+  .tag-purple { background:var(--purple-light); color:var(--purple); }
+  .tag-teal { background:var(--teal-light); color:var(--teal); }
+  .tag-orange { background:var(--orange-light); color:var(--orange); }
+  .tag-gray { background:#E2E8F0; color:var(--gray); }
+
+  /* === TOC === */
+  .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; }
+  .toc a {
+    display:block; text-decoration:none; color:var(--text); background:var(--gray-light);
+    border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-size:13px; font-weight:600;
+    transition:all .2s;
+  }
+  .toc a:hover { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); }
+  .toc a span { display:block; font-size:11px; color:var(--text-muted); font-weight:400; margin-top:2px; }
+
+  /* === NOTE === */
+  .note {
+    background:#FFFBEB; border-left:4px solid var(--orange); padding:12px 16px;
+    border-radius:0 8px 8px 0; font-size:12.5px; color:#7F5A2E; margin-top:12px;
+  }
+  .note strong { color:#B9770E; }
+
+  /* === STEPS === */
+  .steps { counter-reset:s; }
+  .steps li {
+    list-style:none; position:relative; padding-left:34px; margin-bottom:10px;
+    font-size:13px; color:var(--text-muted);
+  }
+  .steps li::before {
+    counter-increment:s; content:counter(s);
+    position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:50%;
+    background:var(--accent); color:white; font-size:11px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .steps li:last-child { margin-bottom:0; }
+
+  .divider { height:1px; background:var(--border); margin:14px 0; }
+
+  /* === BACK TO TOP === */
+  .back-to-top {
+    position:fixed; right:20px; bottom:30px; width:44px; height:44px; border-radius:50%;
+    background:white; border:1.5px solid var(--border); color:var(--text-muted); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:1.2em;
+    transition:all .3s; opacity:0; transform:translateY(20px); pointer-events:none; z-index:200;
+    box-shadow:0 2px 12px rgba(0,0,0,.1);
+  }
+  .back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+  .back-to-top:hover { border-color:var(--accent); color:var(--accent); }
+
+  @media (max-width:900px) {
+    .card-grid-3, .three-col { grid-template-columns:1fr 1fr; }
+    .two-col { grid-template-columns:1fr; }
+    .container { padding:0 16px; }
+  }
+  @media (max-width:600px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns:1fr; }
+    .container { padding:0 12px; }
+  }
+  @media print { body { background:white; } .navbar { display:none; } }
+
+  .header { background: linear-gradient(135deg, #E8547A 0%, #9B59B6 100%); }
+
+
+/* === ANT NAV DROPDOWN === */
+  .navbar .nav-links { gap:20px; flex-wrap:nowrap; }
+  .navbar .nav-group { position:relative; }
+  .navbar .nav-toggle { cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px; }
+  .navbar .nav-toggle .caret { font-size:9px; line-height:1; opacity:.7; transition:transform .2s; }
+  .navbar .nav-group.open .nav-toggle { color:#E8547A; }
+  .navbar .nav-group.open .nav-toggle .caret { transform:rotate(180deg); }
+  .navbar .nav-sub {
+    display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    min-width:196px; background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.13); padding:6px; margin:0; list-style:none; z-index:300;
+  }
+  .navbar .nav-group:hover > .nav-sub,
+  .navbar .nav-group.open > .nav-sub { display:block; }
+  .navbar .nav-sub::before { content:''; position:absolute; top:-9px; left:0; right:0; height:9px; }
+  .navbar .nav-sub li { display:block; font-size:13px; }
+  .navbar .nav-sub a {
+    display:block; padding:7px 12px; border-bottom:none; border-radius:6px;
+    font-size:12.5px; color:#666; white-space:nowrap; transition:background .15s,color .15s;
+  }
+  .navbar .nav-sub a:hover { background:#FEF0F4; color:#E8547A; }
+  .navbar .nav-sub a.active { background:#FEF0F4; color:#E8547A; border-bottom:none; font-weight:600; }
+  @media (max-width:900px) {
+    .navbar { height:auto; }
+    .navbar .container { height:auto; flex-wrap:wrap; padding-top:8px; padding-bottom:8px; gap:8px; }
+    .navbar .nav-links { gap:16px; margin-left:0; flex-wrap:wrap; width:100%; }
+    .navbar .nav-sub { left:0; transform:none; }
+  }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand">
+      <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+      <span class="nav-icon-fb">A</span>
+      Anthea
+    </a>
+    <ul class="nav-links" id="anthea-nav">
+      <li><a href="index.html">首页</a></li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="spec">流程规范文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="spec-of-project.html">① 项目流程规范</a></li>
+          <li><a href="spec-of-designer.html">② 策划工作规范</a></li>
+          <li><a href="spec-of-art.html">③ 美术工作规范</a></li>
+          <li><a href="spec-of-art-design.html">④ 美术设计规范</a></li>
+          <li><a href="spec-of-ue-ui.html">⑤ UI 设计制作规范</a></li>
+          <li><a href="spec-of-asset.html">⑥ 资源管理规范</a></li>
+        </ul>
+      </li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="ai">AI Coding 文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="guide-for-claude.html">ClaudeCode 白皮书</a></li>
+          <li><a href="guide-for-claude-md.html">CLAUDE.md 规则</a></li>
+          <li><a href="guide-for-sdd.html">AI Coding 清单</a></li>
+          <li><a href="guide-for-workbuddy.html">WorkBuddy 指南</a></li>
+          <li><a href="guide-for-openspec.html">OpenSpec 工作流</a></li>
+        </ul>
+      </li>
+      <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-tag">🎨 流程规范文档 · 03</div>
+    <h1>『海边的安西娅』美术工作规范</h1>
+    <div class="header-sub">Art Work Specification — 场景 / 角色 / 特效 / 界面 / 图标 制作流程与输出规范</div>
+    <div class="header-meta">
+      <span>📅 版本 <strong>Ver 230317</strong></span>
+      <span>📆 提交日期 <strong>2023.03</strong></span>
+      <span>🧩 流程模块 <strong>6 个</strong></span>
+      <span>📄 原文 <strong>24 页</strong></span>
+    </div>
+  </div>
+</header>
+
+<div class="container" style="padding-top:32px; padding-bottom:48px;">
+<!-- ===== 目录 ===== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">目录</span>
+    <span class="section-title">章节导航</span>
+  </div>
+  <div class="toc">
+    <a href="#p1">PART 1 · 场景制作<span>主场景 / 剧情场景流程</span></a>
+    <a href="#p2">PART 2 · 角色制作<span>特殊角色 / 普通角色 / Q版换装</span></a>
+    <a href="#p3">PART 3 · 特效制作<span>特效设计与输出</span></a>
+    <a href="#p4">PART 4 · 界面制作<span>UE → UI → 还原</span></a>
+    <a href="#p5">PART 5 · 图标制作<span>图标草图与细化</span></a>
+    <a href="#p6">PART 6 · 工作规范<span>美术日常文件</span></a>
+  </div>
+</div>
+
+<!-- ===== PART 1 场景制作 ===== -->
+<div class="section" id="p1">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 01</span>
+    <span class="section-title">场景制作</span>
+    <span class="section-desc">主场景 · 剧情场景</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--accent);"></div>1.1 主场景流程拆解<span class="no">4 步</span></div>
+    <div class="flow-wrap" style="box-shadow:none;padding:8px 0 4px;">
+      <div class="flow-row">
+        <div class="flow-label">流程</div>
+        <div class="flow-nodes">
+          <div class="flow-node fn-pink">① 需求分析确认</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-blue">② 绘制草图并上色</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-purple">③ 草图细化到绘制完成</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-teal">④ 输出提交</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-block" style="margin-top:14px;">
+      <div class="sub-title"><span class="sub-no">01</span>需求分析确认</div>
+      <div class="sub-desc">确认主场景区域规划，对理解上有疑义的部分同策划进行沟通讨论。</div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">02</span>绘制草图并上色</div>
+      <div class="sub-desc"><strong style="color:var(--text);">三版草图</strong>供主美及策划选择。</div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">03</span>草图细化到绘制完成</div>
+      <table class="info-table">
+        <thead><tr><th style="width:110px;">进度节点</th><th>审核要求</th></tr></thead>
+        <tbody>
+          <tr><td><strong>30%</strong></td><td>输出给主美审核，确保整体绘制方向无偏差</td></tr>
+          <tr><td><strong>70%</strong></td><td>输出给主美审核</td></tr>
+          <tr><td><strong>100%</strong></td><td>提交给主美及策划审核</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">04</span>输出提交</div>
+      <ul class="item-list">
+        <li>场景用于导入工程的资源内容，统一输出到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">/svn/flower/art/游戏场景 - Map</code></li>
+        <li>场景流程中的节点性内容，统一备份到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">\\10.235.100.60\花语恋\美术资源库\场景</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--purple);"></div>1.2 剧情场景流程拆解<span class="no">4 步</span></div>
+    <div class="flow-wrap" style="box-shadow:none;padding:8px 0 4px;">
+      <div class="flow-row">
+        <div class="flow-label">流程</div>
+        <div class="flow-nodes">
+          <div class="flow-node fn-pink">① 需求分析确认</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-blue">② 绘制草图并上色</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-purple">③ 草图细化到绘制完成</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-teal">④ 输出提交</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-block" style="margin-top:14px;">
+      <div class="sub-title"><span class="sub-no">01</span>需求分析确认</div>
+      <div class="sub-desc">确认剧情场景区域需求，对理解上有疑义的部分同策划进行沟通讨论。</div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">02</span>绘制草图并上色</div>
+      <div class="sub-desc"><strong style="color:var(--text);">三版草图</strong>供主美及策划选择。</div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">03</span>草图细化到绘制完成</div>
+      <table class="info-table">
+        <thead><tr><th style="width:110px;">进度节点</th><th>审核要求</th></tr></thead>
+        <tbody>
+          <tr><td><strong>20%</strong></td><td>输出给主美审核，确保整体绘制方向无偏差</td></tr>
+          <tr><td><strong>40%</strong></td><td>输出给主美审核</td></tr>
+          <tr><td><strong>70%</strong></td><td>提交给主美审核<strong>画面气氛</strong>以及细化进度</td></tr>
+          <tr><td><strong>100%</strong></td><td>提交给主美及策划审核</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">04</span>输出提交</div>
+      <ul class="item-list">
+        <li>场景用于导入工程的资源内容，统一输出到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">/svn/flower/art/游戏场景 - Map</code></li>
+        <li>场景流程中的节点性内容，统一备份到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">\\10.235.100.60\花语恋\美术资源库\场景</code></li>
+      </ul>
+    </div>
+    <div class="note">🔍 <strong>主场景 vs 剧情场景差异：</strong>剧情场景节点更密（20/40/70/100%），且 70% 节点需额外审核<strong>画面气氛</strong>；主场景为 30/70/100% 三节点。</div>
+  </div>
+</div>
+
+<!-- ===== PART 2 角色制作 ===== -->
+<div class="section" id="p2">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 02</span>
+    <span class="section-title">角色制作</span>
+    <span class="section-desc">特殊角色 · 普通角色 · Q版换装</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--accent);"></div>2.1 特殊角色流程拆解<span class="no">7 步</span></div>
+    <div class="flow-wrap" style="box-shadow:none;padding:8px 0 4px;">
+      <div class="flow-row">
+        <div class="flow-label">静态</div>
+        <div class="flow-nodes">
+          <div class="flow-node fn-pink">① 需求分析确认</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-blue">② 立绘草图并上色</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-purple">③ 立绘细化完成（含拆补）</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-purple">④ Q版草图细化完成（含拆补）</div>
+        </div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-label">动态</div>
+        <div class="flow-nodes">
+          <div class="flow-node fn-orange">⑤ 立绘动画制作输出</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-orange">⑥ Q版动画制作输出</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-teal">⑦ 输出提交</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-grid card-grid-2" style="margin-top:14px;">
+      <div class="card" style="border-top-color:var(--pink);">
+        <div class="card-title">① 需求分析确认</div>
+        <div style="font-size:13px;color:var(--text-muted);">确认特殊角色需求，对理解上有疑义的部分同策划进行沟通讨论。</div>
+      </div>
+      <div class="card" style="border-top-color:var(--blue);">
+        <div class="card-title">② 立绘草图并上色</div>
+        <div style="font-size:13px;color:var(--text-muted);"><strong style="color:var(--text);">二版草图</strong>供主美及策划选择。</div>
+      </div>
+      <div class="card" style="border-top-color:var(--purple);">
+        <div class="card-title">③ 立绘草图细化到绘制完成（包括拆补）</div>
+        <ul class="item-list">
+          <li>细化到 <strong style="color:var(--text);">50%</strong> 输出给主美审核，确保整体绘制方向无偏差</li>
+          <li>细化到 <strong style="color:var(--text);">100%</strong> 提交给主美及策划审核</li>
+          <li>根据动作需求，<strong style="color:var(--text);">拆分动作部件</strong></li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--purple);">
+        <div class="card-title">④ Q版草图细化到绘制完成（包括拆补）</div>
+        <ul class="item-list">
+          <li>细化到 <strong style="color:var(--text);">50%</strong> 输出给主美审核，确保整体绘制方向无偏差</li>
+          <li>细化到 <strong style="color:var(--text);">100%</strong> 提交给主美及策划审核</li>
+          <li>根据动作需求，<strong style="color:var(--text);">拆分动作部件</strong></li>
+        </ul>
+      </div>
+      <div class="card orange">
+        <div class="card-title">⑤ 立绘动画制作输出</div>
+        <ul class="item-list">
+          <li>根据策划需求和动作参考视频，<strong style="color:var(--text);">绑定骨骼</strong>进行动作制作</li>
+          <li>动作制作完成后，交至主美及策划审核</li>
+        </ul>
+      </div>
+      <div class="card orange">
+        <div class="card-title">⑥ Q版动画制作输出</div>
+        <ul class="item-list">
+          <li>根据策划需求和动作参考视频，<strong style="color:var(--text);">绑定骨骼</strong>进行动作制作</li>
+          <li>动作制作完成后，交至主美及策划审核</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub-block" style="margin-top:14px;">
+      <div class="sub-title"><span class="sub-no">07</span>输出提交</div>
+      <ul class="item-list">
+        <li>特殊角色用于导入工程的<strong style="color:var(--text);">静态、动态资源</strong>，统一输出到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">D:\flower\art\游戏角色 – Role</code>，<strong style="color:var(--text);">按角色文件夹存放</strong></li>
+        <li>特殊角色的节点性内容，统一备份到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">\\10.235.100.60\花语恋\美术资源库\2D角色</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--blue);"></div>2.2 普通角色流程拆解<span class="no">4 步</span></div>
+    <div class="flow-wrap" style="box-shadow:none;padding:8px 0 4px;">
+      <div class="flow-row">
+        <div class="flow-label">流程</div>
+        <div class="flow-nodes">
+          <div class="flow-node fn-pink">① 需求分析确认</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-blue">② Q版草图并上色</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-purple">③ Q版草图细化完成（含拆补）</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-orange">④ Q版动画制作输出</div>
+        </div>
+      </div>
+    </div>
+    <div class="sub-block" style="margin-top:14px;">
+      <div class="sub-title"><span class="sub-no">01</span>需求分析确认</div>
+      <div class="sub-desc">确认 Q版角色需求，对理解上有疑义的部分同策划进行沟通讨论。</div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">02</span>Q版草图并上色</div>
+      <div class="sub-desc"><strong style="color:var(--text);">二版草图</strong>供主美及策划选择。</div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">03</span>Q版草图细化到绘制完成（包括拆补）</div>
+      <ul class="item-list">
+        <li>细化到 <strong style="color:var(--text);">50%</strong> 输出给主美审核，确保整体绘制方向无偏差</li>
+        <li>细化到 <strong style="color:var(--text);">100%</strong> 提交给主美及策划审核</li>
+        <li>根据动作需求，<strong style="color:var(--text);">拆分动作部件</strong></li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">04</span>Q版动画制作输出</div>
+      <ul class="item-list">
+        <li>根据策划需求和动作参考视频，绑定骨骼进行动作制作</li>
+        <li>动作制作完成后，交至主美及策划审核</li>
+      </ul>
+    </div>
+    <div class="note">📌 <strong>输出提交位置与特殊角色相同。</strong></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--gray);"></div>2.3 Q版换装制作流程<span class="no">待定</span></div>
+    <div class="note" style="margin-top:0;">
+      ⏳ Q版换装内容，目前项目开发<strong>尚未准备好功能</strong>，美术内部也<strong>未进行过尝试</strong>，所以暂时不对流程进行约束，待后续实际尝试后，再行归纳总结。
+    </div>
+  </div>
+</div>
+
+<!-- ===== PART 3 特效制作 ===== -->
+<div class="section" id="p3">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 03</span>
+    <span class="section-title">特效制作</span>
+    <span class="section-desc">效果设计 → 优化 → 输出</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--orange);"></div>3.1 特效制作流程拆解<span class="no">4 步</span></div>
+    <div class="flow-wrap" style="box-shadow:none;padding:8px 0 4px;">
+      <div class="flow-row">
+        <div class="flow-label">流程</div>
+        <div class="flow-nodes">
+          <div class="flow-node fn-pink">① 需求分析确认</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-blue">② 特效效果设计</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-purple">③ 特效效果优化</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-teal">④ 制作输出</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-grid card-grid-2" style="margin-top:14px;">
+      <div class="card" style="border-top-color:var(--pink);">
+        <div class="card-title">① 需求分析确认</div>
+        <div style="font-size:13px;color:var(--text-muted);">确认特效需求，对理解上有疑义的部分同策划进行沟通讨论。</div>
+      </div>
+      <div class="card" style="border-top-color:var(--blue);">
+        <div class="card-title">② 特效效果设计</div>
+        <div style="font-size:13px;color:var(--text-muted);"><strong style="color:var(--text);">1-2 版特效视频</strong>供主美及策划选择。</div>
+      </div>
+    </div>
+
+    <div class="sub-block" style="margin-top:14px;">
+      <div class="sub-title"><span class="sub-no">03</span>特效效果优化</div>
+      <table class="info-table">
+        <thead><tr><th style="width:110px;">进度节点</th><th>审核要求</th></tr></thead>
+        <tbody>
+          <tr><td><strong>30%</strong></td><td>输出给主美审核，确保整体绘制方向无偏差</td></tr>
+          <tr><td><strong>80%</strong></td><td>提交给主美审核</td></tr>
+          <tr><td><strong>100%</strong></td><td>提交给主美<strong>和策划</strong>审核</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">04</span>制作输出</div>
+      <ul class="item-list">
+        <li><strong style="color:var(--text);">图案转矢量</strong>，按照要求输出尺寸</li>
+        <li>需要进入工程的特效资源，统一输出到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">/svn/flower/art/游戏特效 - Effect</code></li>
+        <li>特效制作期间的节点性内容，统一备份到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">\\10.235.100.60\花语恋\美术资源库\4. 特效</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PART 4 界面制作 ===== -->
+<div class="section" id="p4">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 04</span>
+    <span class="section-title">界面制作</span>
+    <span class="section-desc">UE 原型 → UI 切图 → 界面还原</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--teal);"></div>4.1 界面制作流程拆解<span class="no">5 步</span></div>
+    <div class="flow-wrap" style="box-shadow:none;padding:8px 0 4px;">
+      <div class="flow-row">
+        <div class="flow-label">流程</div>
+        <div class="flow-nodes">
+          <div class="flow-node fn-pink">① 需求分析确认</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-blue">② UE 原型设计（交互稿）</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-purple">③ UI 绘制界面 / 输切图</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-orange">④ UE / 策划界面还原</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-teal">⑤ 制作输出</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-block" style="margin-top:14px;">
+      <div class="sub-title"><span class="sub-no">01</span>需求分析确认</div>
+      <div class="sub-desc"><strong style="color:var(--text);">UE</strong> 确认需求，对交互上有疑义的部分同策划进行沟通讨论。</div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">02</span>UE 原型设计（交互稿）</div>
+      <div class="sub-desc">设计原型提供至策划确认。</div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">03</span>UI 绘制界面输切图</div>
+      <ul class="item-list">
+        <li>细化到 <strong style="color:var(--text);">50%</strong> 输出给 UE 以及策划，确保整体设计方向无偏差</li>
+        <li>细化到 <strong style="color:var(--text);">100%</strong> 提交给<strong style="color:var(--text);">主美、UE 和策划</strong>审核后输出切图</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">04</span>UE / 策划界面还原</div>
+      <div class="sub-desc">在 <strong style="color:var(--text);">Cocos</strong> 对界面进行还原后，UI 验收还原界面。</div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">05</span>制作输出</div>
+      <ul class="item-list">
+        <li>界面切图用于工程使用的素材，统一输出到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">/svn/flower/art/界面素材 - UI</code></li>
+        <li>界面制作过程中的节点内容，统一备份到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">\\10.235.100.60\花语恋\美术资源库\5. UI</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PART 5 图标制作 ===== -->
+<div class="section" id="p5">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 05</span>
+    <span class="section-title">图标制作</span>
+    <span class="section-desc">草图 → 细化 → 输出</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--purple);"></div>5.1 图标制作流程拆解<span class="no">4 步</span></div>
+    <div class="flow-wrap" style="box-shadow:none;padding:8px 0 4px;">
+      <div class="flow-row">
+        <div class="flow-label">流程</div>
+        <div class="flow-nodes">
+          <div class="flow-node fn-pink">① 需求分析确认</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-blue">② 图标草图绘制</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-purple">③ 图标细化到绘制完成</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-teal">④ 输出提交</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-block" style="margin-top:14px;">
+      <div class="sub-title"><span class="sub-no">01</span>需求分析确认</div>
+      <div class="sub-desc">确认图标需求，对理解上有疑义的部分同策划进行沟通讨论。</div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">02</span>图标草图绘制</div>
+      <div class="sub-desc"><strong style="color:var(--text);">三版草图</strong>供<strong style="color:var(--text);">主美、UE 和策划</strong>选择。</div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">03</span>图标细化到绘制完成</div>
+      <ul class="item-list">
+        <li>细化到 <strong style="color:var(--text);">30%</strong> 输出给 <strong style="color:var(--text);">UE</strong> 审核，确保整体绘制方向无偏差</li>
+        <li>细化到 <strong style="color:var(--text);">100%</strong> 提交给主美、UE 和策划审核</li>
+        <li>根据反馈进行迭代</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title"><span class="sub-no">04</span>输出提交</div>
+      <ul class="item-list">
+        <li>界面切图用于工程使用的素材，统一输出到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">/svn/flower/art/界面素材 - UI</code></li>
+        <li>界面制作过程中的节点内容，统一备份到：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">\\10.235.100.60\花语恋\美术资源库\5. UI</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PART 6 工作规范 ===== -->
+<div class="section" id="p6">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 06</span>
+    <span class="section-title">工作规范</span>
+    <span class="section-desc">美术日常文件管理</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--accent);"></div>美术日常<span class="no">规范</span></div>
+    <div class="sub-desc">美术日常文件详见：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;">\\10.235.100.60\花语恋\美术日常</code></div>
+    <ul class="item-list">
+      <li>每日日常工作中产生的物料文件，存放在<strong style="color:var(--text);">美术日常文件目录</strong>，便于美术内部维护</li>
+      <li>美术组每周的<strong style="color:var(--text);">周报内容</strong>，也存放于此</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--teal);"></div>各流程输出 &amp; 备份路径速查<span class="no">汇总</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:110px;">资源类型</th><th>工程导入输出路径</th><th>节点性内容备份路径</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>场景</strong></td>
+          <td><code>/svn/flower/art/游戏场景 - Map</code></td>
+          <td><code>\\10.235.100.60\花语恋\美术资源库\场景</code></td>
+        </tr>
+        <tr>
+          <td><strong>角色</strong></td>
+          <td><code>D:\flower\art\游戏角色 – Role</code>（按角色文件夹存放）</td>
+          <td><code>\\10.235.100.60\花语恋\美术资源库\2D角色</code></td>
+        </tr>
+        <tr>
+          <td><strong>特效</strong></td>
+          <td><code>/svn/flower/art/游戏特效 - Effect</code></td>
+          <td><code>\\10.235.100.60\花语恋\美术资源库\4. 特效</code></td>
+        </tr>
+        <tr>
+          <td><strong>界面 / 图标</strong></td>
+          <td><code>/svn/flower/art/界面素材 - UI</code></td>
+          <td><code>\\10.235.100.60\花语恋\美术资源库\5. UI</code></td>
+        </tr>
+        <tr>
+          <td><strong>美术日常</strong></td>
+          <td colspan="2"><code>\\10.235.100.60\花语恋\美术日常</code>（含美术组周报）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="container" style="text-align:center; padding-top:24px; padding-bottom:24px; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border);">
+  Anthea Project · 美术工作规范 · <a href="index.html" style="color:var(--accent);text-decoration:none;">返回首页</a> · <a href="https://github.com/ProMarkel/anthea" style="color:var(--accent);text-decoration:none;">GitHub</a>
+</div>
+
+<button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部">↑</button>
+
+<script>
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+backToTop.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+(function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
+</script>
+<script>
+/* ANT_NAV_DROPDOWN_JS */
+(function(){
+  var groups = document.querySelectorAll('.nav-group');
+  function closeAll(){ groups.forEach(function(g){ g.classList.remove('open'); }); }
+  document.querySelectorAll('.nav-toggle').forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var g = t.parentElement, was = g.classList.contains('open');
+      closeAll();
+      if (!was) g.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest || !e.target.closest('.nav-group')) closeAll();
+  });
+})();
+</script>
+
+</body>
+</html>

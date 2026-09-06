@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI设计制作规范 — Anthea</title>
+<style>
+
+  :root {
+    --accent: #0E9F8E;
+    --accent-dark: #0B7A6B;
+    --accent-light: #D1F2EB;
+    --accent-pale: #E8F8F5;
+    --pink: #E8547A;
+    --purple: #9B59B6;
+    --purple-light: #E8D5F5;
+    --teal: #1ABC9C;
+    --teal-light: #D5F5EE;
+    --orange: #E67E22;
+    --orange-light: #FDEBD0;
+    --gray: #6C757D;
+    --gray-light: #F8F9FA;
+    --border: #E2E8F0;
+    --text: #2D3748;
+    --text-muted: #718096;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: #F7F5FB; color: var(--text); line-height: 1.7;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* === NAVBAR === */
+  .navbar, .navbar * {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased; animation: none !important; opacity: 1 !important;
+  }
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08); height: 56px; font-size: 16px; line-height: 1.6;
+  }
+  .navbar .container { width:100%; max-width:1200px; margin:0 auto; padding:0 24px; display:flex; align-items:center; height:100%; }
+  .navbar .nav-brand { display:flex; align-items:center; gap:8px; font-size:16px; font-weight:700; color:#E8547A; text-decoration:none; }
+  .navbar .nav-icon { width:28px; height:28px; border-radius:8px; object-fit:cover; flex-shrink:0; }
+  .navbar .nav-icon-fb { width:28px;height:28px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,#E8547A,#9B59B6);color:white;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:center; }
+  .navbar .nav-links { display:flex; gap:24px; list-style:none; margin-left:auto; padding:0; align-items:center; }
+  .navbar .nav-links li { list-style:none; padding:0; margin:0; border:none; background:none; font-size:13px; }
+  .navbar .nav-links a { text-decoration:none; font-size:13px; font-weight:500; color:#888; padding:6px 0; border-bottom:2px solid transparent; display:inline-block; transition:color .2s,border-color .2s; }
+  .navbar .nav-links a:hover, .navbar .nav-links a.active { color:#E8547A; border-bottom-color:#E8547A; }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, #0E9F8E 0%, #9B59B6 100%);
+    color: white; padding: 40px 0 32px; position: relative; overflow: hidden;
+  }
+  .header::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header::after { content:''; position:absolute; bottom:-40px; right:100px; width:120px; height:120px; background:rgba(255,255,255,0.06); border-radius:50%; }
+  .header-tag { display:inline-block; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; font-size:12px; margin-bottom:12px; letter-spacing:1px; }
+  .header h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .header-sub { font-size:14px; opacity:0.85; margin-bottom:20px; }
+  .header-meta { display:flex; gap:24px; flex-wrap:wrap; }
+  .header-meta span { font-size:13px; opacity:0.75; }
+  .header-meta strong { opacity:1; font-weight:600; }
+
+  /* === SECTION === */
+  .section { margin-bottom: 28px; }
+  .section-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .section-tag { padding:4px 14px; border-radius:20px; font-size:12px; font-weight:600; letter-spacing:.5px; white-space:nowrap; }
+  .section-title { font-size:18px; font-weight:700; }
+  .section-desc { font-size:13px; color:var(--text-muted); margin-left:auto; }
+
+  /* === CARD === */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px; }
+  .card-grid-2 { grid-template-columns:repeat(2,1fr); }
+  .card-grid-3 { grid-template-columns:repeat(3,1fr); }
+  .card {
+    background:white; border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:20px; border-top:3px solid transparent; transition:transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.1); }
+  .card-icon { font-size:22px; margin-bottom:8px; }
+  .card-title { font-size:14px; font-weight:700; margin-bottom:8px; }
+  .card.blue { border-top-color:var(--accent); }
+  .card.purple { border-top-color:var(--purple); }
+  .card.teal { border-top-color:var(--teal); }
+  .card.orange { border-top-color:var(--orange); }
+  .card.pink { border-top-color:var(--pink); }
+
+  .item-list { list-style:none; }
+  .item-list li {
+    padding:6px 0; font-size:13px; color:var(--text-muted);
+    border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:8px;
+  }
+  .item-list li:last-child { border-bottom:none; }
+  .item-list li::before { content:'›'; color:var(--accent); font-weight:bold; flex-shrink:0; }
+
+  /* === PANEL === */
+  .panel { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:16px; }
+  .panel-title {
+    font-size:14px; font-weight:700; margin-bottom:14px; padding-bottom:10px;
+    border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px;
+  }
+  .panel-title .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .panel-title .no {
+    font-size:11px; font-weight:700; color:white; background:var(--accent);
+    padding:2px 8px; border-radius:10px; margin-left:auto;
+  }
+
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+
+  /* === SUB BLOCK === */
+  .sub-block { margin-bottom:18px; }
+  .sub-block:last-child { margin-bottom:0; }
+  .sub-title {
+    font-size:13px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px;
+  }
+  .sub-no {
+    font-size:11px; font-weight:700; color:var(--accent-dark);
+    background:var(--accent-pale); padding:2px 8px; border-radius:6px; flex-shrink:0;
+  }
+  .sub-desc { font-size:13px; color:var(--text-muted); margin-bottom:8px; }
+
+  /* === ORG CHART === */
+  .org { display:flex; flex-direction:column; align-items:center; gap:10px; padding:8px 0; }
+  .org-leader {
+    background:linear-gradient(135deg,#E8547A,#9B59B6); color:white; font-weight:700;
+    padding:10px 24px; border-radius:10px; font-size:14px;
+  }
+  .org-line { width:2px; height:16px; background:#CBD5E0; }
+  .org-row { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .org-box {
+    background:var(--accent-pale); border:1.5px solid #A3E4D7; color:var(--accent-dark);
+    padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600;
+  }
+  .org-box.pm { background:var(--purple-light); border-color:#D9B8EF; color:var(--purple); }
+  .org-sub {
+    display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px;
+  }
+  .org-sub span {
+    font-size:11px; background:white; border:1px solid var(--border);
+    padding:3px 10px; border-radius:12px; color:var(--text-muted);
+  }
+
+  /* === TREE (SVN) === */
+  .tree { font-size:13px; line-height:1.9; }
+  .tree-row { display:flex; align-items:baseline; gap:10px; padding:3px 0; border-bottom:1px dashed var(--border); }
+  .tree-row:last-child { border-bottom:none; }
+  .tree-path { font-family:'Cascadia Code','Consolas',monospace; font-size:12px; font-weight:600; color:var(--accent-dark); white-space:nowrap; flex-shrink:0; }
+  .tree-desc { font-size:12px; color:var(--text-muted); }
+
+  /* === FLOW === */
+  .flow-wrap { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; overflow-x:auto; }
+  .flow-title { font-size:14px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .flow-row { display:flex; align-items:center; gap:0; min-width:max-content; margin-bottom:12px; }
+  .flow-row:last-child { margin-bottom:0; }
+  .flow-label { font-size:12px; color:var(--text-muted); width:96px; flex-shrink:0; font-weight:600; text-align:right; padding-right:12px; }
+  .flow-nodes { display:flex; align-items:center; gap:0; flex:1; }
+  .flow-node {
+    padding:8px 14px; border-radius:8px; font-size:12px; font-weight:600;
+    text-align:center; min-width:92px; white-space:nowrap;
+  }
+  .flow-arrow { width:32px; height:2px; position:relative; flex-shrink:0; }
+  .flow-arrow::before { content:''; position:absolute; top:0; left:0; right:6px; height:2px; background:#CBD5E0; }
+  .flow-arrow::after { content:''; position:absolute; right:0; top:-4px; border:5px solid transparent; border-left-color:#CBD5E0; }
+  .fn-blue { background:var(--accent-light); color:var(--accent-dark); border:1.5px solid #A3E4D7; }
+  .fn-purple { background:var(--purple-light); color:var(--purple); border:1.5px solid #D9B8EF; }
+  .fn-pink { background:#FEF0F4; color:var(--pink); border:1.5px solid #F9D0DB; }
+  .fn-teal { background:var(--teal-light); color:var(--teal); border:1.5px solid #A9DFBF; }
+  .fn-orange { background:var(--orange-light); color:var(--orange); border:1.5px solid #F5CBA7; }
+  .fn-gray { background:var(--gray-light); color:var(--gray); border:1.5px solid #DEE2E6; }
+
+  /* === LANE (Jira) === */
+  .lane { display:flex; gap:0; min-width:max-content; }
+  .lane-col { min-width:170px; flex:1; }
+  .lane-head { font-size:12px; font-weight:700; text-align:center; padding:6px; border-radius:6px 6px 0 0; color:white; }
+  .lane-body { border:1px solid var(--border); border-top:none; border-radius:0 0 8px 8px; padding:8px; min-height:60px; background:white; }
+  .lane-body div {
+    font-size:11px; background:var(--gray-light); border:1px solid var(--border);
+    border-radius:6px; padding:5px 8px; margin-bottom:6px; color:var(--text-muted);
+  }
+  .lane-body div:last-child { margin-bottom:0; }
+  .lane-body div.hl { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); font-weight:600; }
+
+  /* === TABLE === */
+  .info-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .info-table th {
+    background:var(--gray-light); padding:10px 14px; text-align:left; font-weight:600;
+    border-bottom:2px solid var(--border); font-size:12px; color:var(--gray);
+    letter-spacing:.5px; white-space:nowrap;
+  }
+  .info-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-muted); font-size:13px; }
+  .info-table tr:hover td { background:var(--gray-light); }
+  .info-table td strong { color:var(--text); }
+
+  /* === BADGE === */
+  .badge-row { display:flex; flex-wrap:wrap; gap:6px; }
+  .badge { padding:5px 12px; border-radius:8px; font-size:12px; font-weight:500; }
+  .badge-p0 { background:#FEF0F4; color:#C0392B; }
+  .badge-p1 { background:#FEF9E7; color:#E67E22; }
+  .badge-p2 { background:var(--accent-pale); color:var(--accent-dark); }
+  .badge-px { background:#F2F2F2; color:#666; }
+  .badge-gen { background:var(--accent-pale); color:var(--accent-dark); }
+
+  .tag-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .tag { padding:3px 10px; border-radius:12px; font-size:11px; font-weight:500; }
+  .tag-blue { background:var(--accent-light); color:var(--accent-dark); }
+  .tag-purple { background:var(--purple-light); color:var(--purple); }
+  .tag-teal { background:var(--teal-light); color:var(--teal); }
+  .tag-orange { background:var(--orange-light); color:var(--orange); }
+  .tag-gray { background:#E2E8F0; color:var(--gray); }
+
+  /* === TOC === */
+  .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; }
+  .toc a {
+    display:block; text-decoration:none; color:var(--text); background:var(--gray-light);
+    border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-size:13px; font-weight:600;
+    transition:all .2s;
+  }
+  .toc a:hover { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); }
+  .toc a span { display:block; font-size:11px; color:var(--text-muted); font-weight:400; margin-top:2px; }
+
+  /* === NOTE === */
+  .note {
+    background:#FFFBEB; border-left:4px solid var(--orange); padding:12px 16px;
+    border-radius:0 8px 8px 0; font-size:12.5px; color:#7F5A2E; margin-top:12px;
+  }
+  .note strong { color:#B9770E; }
+
+  /* === STEPS === */
+  .steps { counter-reset:s; }
+  .steps li {
+    list-style:none; position:relative; padding-left:34px; margin-bottom:10px;
+    font-size:13px; color:var(--text-muted);
+  }
+  .steps li::before {
+    counter-increment:s; content:counter(s);
+    position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:50%;
+    background:var(--accent); color:white; font-size:11px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .steps li:last-child { margin-bottom:0; }
+
+  .divider { height:1px; background:var(--border); margin:14px 0; }
+
+  /* === BACK TO TOP === */
+  .back-to-top {
+    position:fixed; right:20px; bottom:30px; width:44px; height:44px; border-radius:50%;
+    background:white; border:1.5px solid var(--border); color:var(--text-muted); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:1.2em;
+    transition:all .3s; opacity:0; transform:translateY(20px); pointer-events:none; z-index:200;
+    box-shadow:0 2px 12px rgba(0,0,0,.1);
+  }
+  .back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+  .back-to-top:hover { border-color:var(--accent); color:var(--accent); }
+
+  @media (max-width:900px) {
+    .card-grid-3, .three-col { grid-template-columns:1fr 1fr; }
+    .two-col { grid-template-columns:1fr; }
+    .container { padding:0 16px; }
+  }
+  @media (max-width:600px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns:1fr; }
+    .container { padding:0 12px; }
+  }
+  @media print { body { background:white; } .navbar { display:none; } }
+
+  .header { background: linear-gradient(135deg, #E67E22 0%, #E8547A 100%); }
+
+  .tag-pink { background:#F9D0DB; color:#B5435E; }
+  .goodbad { margin-top:8px; }
+  .goodbad .gb-row { display:flex; align-items:flex-start; gap:10px; padding:6px 0; border-bottom:1px dashed var(--border); font-size:13px; color:var(--text-muted); }
+  .goodbad .gb-row:last-child { border-bottom:none; }
+  .goodbad .gb { flex-shrink:0; min-width:132px; font-size:11px; font-weight:700; padding:3px 10px; border-radius:6px; text-align:center; }
+  .goodbad .gb.good { background:#D5F5EE; color:#0E6655; }
+  .goodbad .gb.bad { background:#FDEDEC; color:#B03A2E; }
+  .goodbad .gb.mid { background:#FEF9E7; color:#9A7D0A; }
+
+
+/* === ANT NAV DROPDOWN === */
+  .navbar .nav-links { gap:20px; flex-wrap:nowrap; }
+  .navbar .nav-group { position:relative; }
+  .navbar .nav-toggle { cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px; }
+  .navbar .nav-toggle .caret { font-size:9px; line-height:1; opacity:.7; transition:transform .2s; }
+  .navbar .nav-group.open .nav-toggle { color:#E8547A; }
+  .navbar .nav-group.open .nav-toggle .caret { transform:rotate(180deg); }
+  .navbar .nav-sub {
+    display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    min-width:196px; background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.13); padding:6px; margin:0; list-style:none; z-index:300;
+  }
+  .navbar .nav-group:hover > .nav-sub,
+  .navbar .nav-group.open > .nav-sub { display:block; }
+  .navbar .nav-sub::before { content:''; position:absolute; top:-9px; left:0; right:0; height:9px; }
+  .navbar .nav-sub li { display:block; font-size:13px; }
+  .navbar .nav-sub a {
+    display:block; padding:7px 12px; border-bottom:none; border-radius:6px;
+    font-size:12.5px; color:#666; white-space:nowrap; transition:background .15s,color .15s;
+  }
+  .navbar .nav-sub a:hover { background:#FEF0F4; color:#E8547A; }
+  .navbar .nav-sub a.active { background:#FEF0F4; color:#E8547A; border-bottom:none; font-weight:600; }
+  @media (max-width:900px) {
+    .navbar { height:auto; }
+    .navbar .container { height:auto; flex-wrap:wrap; padding-top:8px; padding-bottom:8px; gap:8px; }
+    .navbar .nav-links { gap:16px; margin-left:0; flex-wrap:wrap; width:100%; }
+    .navbar .nav-sub { left:0; transform:none; }
+  }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand">
+      <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+      <span class="nav-icon-fb">A</span>
+      Anthea
+    </a>
+    <ul class="nav-links" id="anthea-nav">
+      <li><a href="index.html">首页</a></li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="spec">流程规范文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="spec-of-project.html">① 项目流程规范</a></li>
+          <li><a href="spec-of-designer.html">② 策划工作规范</a></li>
+          <li><a href="spec-of-art.html">③ 美术工作规范</a></li>
+          <li><a href="spec-of-art-design.html">④ 美术设计规范</a></li>
+          <li><a href="spec-of-ue-ui.html">⑤ UI 设计制作规范</a></li>
+          <li><a href="spec-of-asset.html">⑥ 资源管理规范</a></li>
+        </ul>
+      </li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="ai">AI Coding 文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="guide-for-claude.html">ClaudeCode 白皮书</a></li>
+          <li><a href="guide-for-claude-md.html">CLAUDE.md 规则</a></li>
+          <li><a href="guide-for-sdd.html">AI Coding 清单</a></li>
+          <li><a href="guide-for-workbuddy.html">WorkBuddy 指南</a></li>
+          <li><a href="guide-for-openspec.html">OpenSpec 工作流</a></li>
+        </ul>
+      </li>
+      <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-tag">🎨 流程规范文档 · 05</div>
+    <h1>『海边的安西娅』UI 设计制作规范</h1>
+    <div class="header-sub">UI Design & Production Specification — 美术表达 / UI 规范 / 参考动效</div>
+    <div class="header-meta">
+      <span>📅 版本 <strong>V230316</strong></span>
+      <span>📆 提交日期 <strong>2023.03</strong></span>
+      <span>🧩 模块 <strong>3 个 PART</strong></span>
+      <span>📄 原文 <strong>26 页</strong></span>
+    </div>
+  </div>
+</header>
+
+<div class="container" style="padding-top:32px; padding-bottom:48px;">
+<!-- ===== 目录 ===== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">目录</span>
+    <span class="section-title">章节导航</span>
+  </div>
+  <div class="toc">
+    <a href="#p1">PART 1 · 美术表达<span>设计目标 / 设计灵感</span></a>
+    <a href="#p2">PART 2 · UI 规范<span>常用界面样式 / 组件</span></a>
+    <a href="#p3">PART 3 · 参考动效<span>通用动效</span></a>
+  </div>
+</div>
+
+<!-- ===== PART 1 美术表达 ===== -->
+<div class="section" id="p1">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 01</span>
+    <span class="section-title">美术表达</span>
+    <span class="section-desc">设计目标 · 设计灵感</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--orange);"></div>1.1 设计目标<span class="no">目标</span></div>
+    <ul class="item-list">
+      <li>延续美术白皮书整体风格：<strong style="color:var(--text);">轻松 · 休闲 · 可爱 · 治愈</strong></li>
+      <li>UI 是玩家与游戏交互的<strong style="color:var(--text);">第一界面</strong>，需保证：风格统一、操作清晰、阅读舒适、节奏明快</li>
+      <li>UI 与场景、角色、特效保持视觉一体感，避免界面抢戏</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>1.2 设计灵感<span class="no">参考</span></div>
+    <div class="sub-desc">本章节汇总了主界面、邮件、剧情、小剧场、商店、合成、工坊等核心系统的<strong>设计灵感参考</strong>，以指导后续 UI 设计的<strong>视觉方向</strong>：</div>
+    <div class="card-grid card-grid-3">
+      <div class="card" style="border-top-color:var(--teal);"><div class="card-title">🌿 主界面 / 庭院</div><div style="font-size:13px;color:var(--text-muted);">庭院式的场景化布局，柔和的浅绿浅蓝渐变背景。</div></div>
+      <div class="card" style="border-top-color:var(--purple);"><div class="card-title">🎴 邮件 / 列表</div><div style="font-size:13px;color:var(--text-muted);">手帐风的纸纹底与花瓣装饰，强化叙事氛围。</div></div>
+      <div class="card" style="border-top-color:var(--pink);"><div class="card-title">🎭 剧情 / 小剧场</div><div style="font-size:13px;color:var(--text-muted);">浮窗式对话气泡 + 角色立绘遮罩，可爱风描边。</div></div>
+      <div class="card" style="border-top-color:var(--orange);"><div class="card-title">🛍 商店 / 交易</div><div style="font-size:13px;color:var(--text-muted);">货架感的物件陈列，购买按钮高亮强调。</div></div>
+      <div class="card" style="border-top-color:var(--blue);"><div class="card-title">🧪 合成 / 工坊</div><div style="font-size:13px;color:var(--text-muted);">木制工坊纹理背板，工艺感金属高光。</div></div>
+      <div class="card" style="border-top-color:var(--gray);"><div class="card-title">📜 通行证 / 任务</div><div style="font-size:13px;color:var(--text-muted);">奖牌式节点路径，节点状态用色阶区分。</div></div>
+    </div>
+    <div class="note">📌 完整参考图详见原 PDF P3-P4 美术表达板块（共 2 页）</div>
+  </div>
+</div>
+
+<!-- ===== PART 2 UI 规范 ===== -->
+<div class="section" id="p2">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 02</span>
+    <span class="section-title">UI 规范</span>
+    <span class="section-desc">常用界面样式 · 组件</span>
+  </div>
+
+  <!-- 2.1 界面设计尺寸 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--accent);"></div>2.1 界面设计尺寸<span class="no">基础</span></div>
+    <img src="assets/ui-spec/ui-size.png" alt="界面设计尺寸" style="width:100%;max-width:920px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.1);display:block;margin:8px auto 12px;">
+    <table class="info-table">
+      <thead><tr><th style="width:130px;">区域</th><th>尺寸（@2x）</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><strong>出血区</strong></td><td><code>88px / 44pt</code></td><td>顶部预留出血区</td></tr>
+        <tr><td><strong>iPhone 刘海区</strong></td><td><code>88px / 44pt</code></td><td>状态栏与刘海遮挡区域</td></tr>
+        <tr><td><strong>屏幕高度</strong></td><td><code>1624px / 812pt</code></td><td>iPhone X 安全高度基准</td></tr>
+        <tr><td><strong>交互操作区</strong></td><td><code>1470px / 735pt</code></td><td>主要交互内容区域</td></tr>
+        <tr><td><strong>Home 区</strong></td><td><code>66px / 33pt</code></td><td>底部 Home 指示条区域</td></tr>
+        <tr><td><strong>出血区</strong></td><td><code>88px / 44pt</code></td><td>底部预留出血区</td></tr>
+      </tbody>
+    </table>
+    <div class="note">📐 全部 UI 设计稿基于 <strong>iPhone X</strong> 基准进行输出。</div>
+  </div>
+
+  <!-- 2.2 主界面 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--teal);"></div>2.2 主界面<span class="no">2.2</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:160px;">元素</th><th>规范</th></tr></thead>
+      <tbody>
+        <tr><td><strong>交互操作区</strong></td><td>距大元素 1/96 · 距小元素 1/78<br><code>W735pt × H662-735pt</code></td></tr>
+        <tr><td><strong>延伸版</strong></td><td>延伸缩放后不随屏幕切割和 Home 区</td></tr>
+        <tr><td><strong>示例</strong></td><td>主界面（图示见原 PDF P6）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2.3 全屏按钮窗口 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--blue);"></div>2.3 全屏按钮窗口<span class="no">2.3</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:200px;">元素</th><th>规范</th></tr></thead>
+      <tbody>
+        <tr><td><strong>顶部按钮</strong></td><td>交互区顶部固定</td></tr>
+        <tr><td><strong>弹窗区域</strong></td><td>根据屏幕大小拉伸</td></tr>
+        <tr><td><strong>顶部信息区域</strong></td><td>大小固定</td></tr>
+        <tr><td><strong>按钮尺寸</strong></td><td>交互区顶部固定</td></tr>
+        <tr><td><strong>示例</strong></td><td>邮件界面（图示见原 PDF P7）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2.4 全屏弹窗 1 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--purple);"></div>2.4 全屏弹窗 1<span class="no">2.4</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:200px;">元素</th><th>规范</th></tr></thead>
+      <tbody>
+        <tr><td><strong>顶部装饰</strong></td><td>固定大小装饰背景</td></tr>
+        <tr><td><strong>弹窗区域</strong></td><td>顶部对齐窗口拉伸</td></tr>
+        <tr><td><strong>顶部信息区域</strong></td><td>大小固定</td></tr>
+        <tr><td><strong>示例</strong></td><td>仓库界面（图示见原 PDF P8）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2.5 全屏弹窗 2 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>2.5 全屏弹窗 2<span class="no">2.5</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:200px;">元素</th><th>规范</th></tr></thead>
+      <tbody>
+        <tr><td><strong>顶部装饰</strong></td><td>固定大小装饰背景</td></tr>
+        <tr><td><strong>弹窗区域</strong></td><td>顶部对齐窗口拉伸</td></tr>
+        <tr><td><strong>装饰上层</strong></td><td>上层装饰可根据内容动态增减</td></tr>
+        <tr><td><strong>示例</strong></td><td>交易台（图示见原 PDF P9）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2.6 功能弹窗 1 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--orange);"></div>2.6 功能弹窗 1（无外部按钮）<span class="no">2.6</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:200px;">元素</th><th>规范</th></tr></thead>
+      <tbody>
+        <tr><td><strong>弹窗最小高度</strong></td><td><code>200pt</code></td></tr>
+        <tr><td><strong>弹窗最大高度</strong></td><td><code>500pt</code></td></tr>
+        <tr><td><strong>弹窗位置</strong></td><td>在交互区域内上下居中</td></tr>
+        <tr><td><strong>弹窗大小</strong></td><td><strong>不会</strong>随着屏幕大小变化拉伸</td></tr>
+        <tr><td><strong>示例</strong></td><td>装饰等级 / 优先按钮（图示见原 PDF P10）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2.7 功能弹窗 2 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--orange);"></div>2.7 功能弹窗 2（有外部按钮）<span class="no">2.7</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:200px;">元素</th><th>规范</th></tr></thead>
+      <tbody>
+        <tr><td><strong>弹窗最小高度</strong></td><td><code>200pt</code></td></tr>
+        <tr><td><strong>弹窗最大高度</strong></td><td><code>450pt</code>（不包括按钮）</td></tr>
+        <tr><td><strong>弹窗大小</strong></td><td><strong>跟随</strong>屏幕大小变化拉伸</td></tr>
+        <tr><td><strong>弹窗-按钮</strong></td><td>在交互区域内上下居中</td></tr>
+        <tr><td><strong>弹窗大小跟随</strong></td><td>屏幕大小变化拉伸</td></tr>
+        <tr><td><strong>示例</strong></td><td>二级台侧工坊 / 配置购买（图示见原 PDF P11）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2.8 消息弹窗 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--gray);"></div>2.8 消息弹窗<span class="no">2.8</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:200px;">元素</th><th>规范</th></tr></thead>
+      <tbody>
+        <tr><td><strong>弹窗位置</strong></td><td>在交互区域内上下居中</td></tr>
+        <tr><td><strong>弹窗大小</strong></td><td><strong>不会</strong>随着屏幕大小变化拉伸</td></tr>
+        <tr><td><strong>按钮</strong></td><td>仅两个按钮（取消 / 确定）</td></tr>
+        <tr><td><strong>示例</strong></td><td>"撤销操作不可恢复，确认要撤销吗？"（图示见原 PDF P12）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2.9 无底框弹窗 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--teal);"></div>2.9 无底框弹窗<span class="no">2.9</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:200px;">元素</th><th>规范</th></tr></thead>
+      <tbody>
+        <tr><td><strong>结算展示</strong></td><td>位置固定</td></tr>
+        <tr><td><strong>奖励窗口</strong></td><td>根据屏幕高度拉伸</td></tr>
+        <tr><td><strong>示例</strong></td><td>结算奖励、升级界面（图示见原 PDF P13）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2.10 悬浮窗口 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--purple);"></div>2.10 悬浮窗口<span class="no">2.10</span></div>
+    <ul class="item-list">
+      <li><strong style="color:var(--text);">悬浮窗标起</strong>：单独所出顶部显示</li>
+      <li><strong style="color:var(--text);">悬浮窗圆角</strong>：要圆润，半径较大</li>
+    </ul>
+    <div class="note">📌 悬浮窗常用于叠加在主场景之上，例如黄子、早梅种子等物品图标提示。</div>
+  </div>
+
+  <!-- 2.11 气泡 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>2.11 气泡<span class="no">2.11</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:200px;">元素</th><th>规范</th></tr></thead>
+      <tbody>
+        <tr><td><strong>气泡文字显示 + 脚部</strong></td><td>脚部在左下</td></tr>
+        <tr><td><strong>点击气泡</strong></td><td>可跳转</td></tr>
+        <tr><td><strong>气泡大小和样式</strong></td><td>需保持位置兼容性</td></tr>
+        <tr><td><strong>警示或感叹号气泡</strong></td><td>会有右上角（位置）醒目文字或者图案显示</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2.12 通用信息弹窗 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--blue);"></div>2.12 通用信息弹窗<span class="no">2.12</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:200px;">元素</th><th>规范</th></tr></thead>
+      <tbody>
+        <tr><td><strong>通用信息展示</strong></td><td>圆形 + 名称 + 描述 + 数值（做标题）</td></tr>
+        <tr><td><strong>制作材料</strong></td><td>列出物品图标 + 数量</td></tr>
+        <tr><td><strong>制作物品</strong></td><td>物品图标 + 数量</td></tr>
+        <tr><td><strong>立刻前往</strong></td><td>跳转到对应获取途径</td></tr>
+        <tr><td><strong>购买信息弹窗</strong></td><td>物品图标 + 价格 + 按钮</td></tr>
+        <tr><td><strong>示例</strong></td><td>通用信息弹窗 / 开启区域（图示见原 PDF P16）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2.13 按钮 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--teal);"></div>2.13 按钮<span class="no">2.13</span></div>
+
+    <div class="sub-block">
+      <div class="sub-title">🎨 颜色</div>
+      <div class="card-grid card-grid-2">
+        <div class="card" style="border-top-color:#5DADE2;padding:14px;">
+          <div class="card-title"><span style="display:inline-block;width:14px;height:14px;background:#5DADE2;border-radius:4px;vertical-align:middle;margin-right:6px;"></span>确定 / 完成 / 正装弹窗</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">用于正向确认按钮（蓝色基调）</div>
+        </div>
+        <div class="card" style="border-top-color:#E74C3C;padding:14px;">
+          <div class="card-title"><span style="display:inline-block;width:14px;height:14px;background:#E74C3C;border-radius:4px;vertical-align:middle;margin-right:6px;"></span>取消 / 放弃 / 负反馈弹窗</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">用于取消/放弃按钮（红色基调）</div>
+        </div>
+        <div class="card" style="border-top-color:#F1C40F;padding:14px;">
+          <div class="card-title"><span style="display:inline-block;width:14px;height:14px;background:#F1C40F;border-radius:4px;vertical-align:middle;margin-right:6px;"></span>获得付费 / 消耗按钮</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">用于付费/消费相关按钮（黄色基调）</div>
+        </div>
+        <div class="card" style="border-top-color:#9B59B6;padding:14px;">
+          <div class="card-title"><span style="display:inline-block;width:14px;height:14px;background:#9B59B6;border-radius:4px;vertical-align:middle;margin-right:6px;"></span>游戏功能按钮</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">用于游戏内常规功能按钮（紫色基调）</div>
+        </div>
+        <div class="card" style="border-top-color:#2ECC71;padding:14px;">
+          <div class="card-title"><span style="display:inline-block;width:14px;height:14px;background:#2ECC71;border-radius:4px;vertical-align:middle;margin-right:6px;"></span>社交分享 / 操作按钮</div>
+          <div style="font-size:12.5px;color:var(--text-muted);">用于社交分享类按钮（绿色基调）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-block">
+      <div class="sub-title">🔘 外框样式</div>
+      <ul class="item-list">
+        <li><strong style="color:var(--text);">窗口外按钮</strong>：大圆角，整体设计要有<strong>立体感设计</strong></li>
+        <li><strong style="color:var(--text);">窗口内小按钮</strong>：要偏向于<strong>扁平设计</strong></li>
+        <li><strong style="color:var(--text);">界面内后续性按钮</strong>：要圆角小且<strong>几何感设计</strong></li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-block">
+      <div class="sub-title">🔤 文字显示</div>
+      <div class="goodbad">
+        <div class="gb-row"><span class="gb good">✓ 要求</span><span>文字显示类型按数字奇偶数 <strong>2-4 个字</strong></span></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-block">
+      <div class="sub-title">🧩 复杂文字显示</div>
+      <ul class="item-list">
+        <li><strong style="color:var(--text);">按钮 + 图标 + 按钮外框 + 按钮外信息文本</strong></li>
+        <li><strong style="color:var(--text);">按钮 + 图标 + 文本（功能类按钮）</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2.14 物品信息 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--orange);"></div>2.14 物品信息<span class="no">2.14</span></div>
+
+    <div class="sub-block">
+      <div class="sub-title">📦 基础</div>
+      <ul class="item-list">
+        <li>图标 + 数字：通常为好感度、金币等<strong>功能数值</strong></li>
+        <li>红点图标 + 副道具图标：图标有附加道具上售卖信息显示</li>
+        <li>额外功能信息标签：作为顶部额外展示</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-block">
+      <div class="sub-title">🧩 复杂物品信息</div>
+      <ul class="item-list">
+        <li>额外物品信息在最上方拉框显示</li>
+        <li>额外物品信息样式在文条底部</li>
+        <li>图样信息显示"999"或数值 + 数字</li>
+        <li>文本显示<strong>2-4 个字</strong></li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-block">
+      <div class="sub-title">💎 品质</div>
+      <div class="flow-row" style="min-width:0;">
+        <div class="flow-nodes">
+          <div class="flow-node fn-gray">灰</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-teal">绿</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-blue">蓝</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-purple">紫</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-orange">橙</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-block">
+      <div class="sub-title">📏 图标尺寸</div>
+      <ul class="item-list">
+        <li>日常物品图标为<strong style="color:var(--text);">标准尺寸</strong></li>
+        <li>大尺寸为 <code>120-120%</code></li>
+        <li>小尺寸为 <code>90-100%</code></li>
+        <li>大于 <code>120%</code> 或小于 <code>80%</code> 的图标均需要<strong style="color:var(--text);">重新缩放</strong>。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2.15 进度条/滑动条 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--purple);"></div>2.15 进度条 / 滑动条<span class="no">2.15</span></div>
+
+    <div class="sub-block">
+      <div class="sub-title">📊 进度条样式</div>
+      <table class="info-table">
+        <thead><tr><th style="width:220px;">类型</th><th>组合</th></tr></thead>
+        <tbody>
+          <tr><td><code>进度条 + 文本</code></td><td><code>4444/9999</code></td></tr>
+          <tr><td><code>图形 + 进度条 + 文本</code></td><td><code>◆ 4444/9999</code></td></tr>
+          <tr><td><code>图形 + 进度条 + 文本 + 按钮</code></td><td><code>◆ 4444/9999 ×××</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-block">
+      <div class="sub-title">🔄 进度条数值变化</div>
+      <p style="font-size:13px;color:var(--text-muted);">进度条数值变化时，通过图形色彩变化说明数量增加或减少情况：</p>
+      <ul class="item-list">
+        <li>进度条（增加部分颜色更深） → <strong style="color:var(--text);">数值增加</strong></li>
+        <li>进度条（减少部分颜色变浅） → <strong style="color:var(--text);">数值减少</strong></li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-block">
+      <div class="sub-title">🎚 滑动条</div>
+      <ul class="item-list">
+        <li><code>滑动条 + 文本 + 加减按钮</code></li>
+        <li>用于数值连续调整场景（如购买数量、调节设置）</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2.16 列表信息 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--blue);"></div>2.16 列表信息<span class="no">2.16</span></div>
+    <div class="sub-desc">列表信息在结构上分为<strong>三层</strong>：</div>
+    <table class="info-table">
+      <thead><tr><th style="width:120px;">层级</th><th>类型</th></tr></thead>
+      <tbody>
+        <tr><td><strong>对象层</strong></td><td>通常为标题或图标</td></tr>
+        <tr><td><strong>描述层</strong></td><td>通常为文本或功能数值</td></tr>
+        <tr><td><strong>补充说明层</strong></td><td>通常为补充类文本或交互按钮</td></tr>
+      </tbody>
+    </table>
+    <div class="note">📌 列表信息在展示上通常采用<strong>等高</strong>展示部分图标。</div>
+  </div>
+
+  <!-- 2.17 页签 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--teal);"></div>2.17 页签<span class="no">2.17</span></div>
+    <div class="two-col">
+      <div>
+        <div class="sub-title">📌 外页签页标 + 文字展示</div>
+        <div class="sub-desc">页签不能<strong>出屏幕高度</strong>。</div>
+      </div>
+      <div>
+        <div class="sub-title">📍 内页签</div>
+        <div class="sub-desc">本页签需要滑动到<strong>滚到可玩位置</strong>，根据需求选择样式。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.18 字体字号 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>2.18 字体字号<span class="no">2.18</span></div>
+    <img src="assets/ui-spec/ui-font.png" alt="字体字号表" style="width:100%;max-width:920px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.1);display:block;margin:8px auto 12px;">
+
+    <table class="info-table">
+      <thead><tr><th style="width:50px;">#</th><th>类型</th><th style="width:80px;">字号</th><th style="width:70px;">行高</th><th>字体</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>—</td><td><strong>44px</strong></td><td>单行</td><td><code>TTQinYunJ-W4</code></td><td>特殊情况（<span style="color:#C0392B;">结算标题，制作</span>）</td></tr>
+        <tr><td>2</td><td>标题 / 按钮 - 大</td><td><strong>32px</strong></td><td>单行</td><td><code>TTQinYunJ-W4</code></td><td>主要用于全屏弹窗标题，大按钮</td></tr>
+        <tr><td>3</td><td>标题 - 中</td><td><strong>30px</strong></td><td>单行</td><td><code>TTQinYunJ-W4</code></td><td>主要用于二级弹窗标题</td></tr>
+        <tr><td>4</td><td>文本文字</td><td><strong>30px</strong></td><td>32</td><td>迷你简准圆（不加粗）</td><td>主要用于剧情内对话文字</td></tr>
+        <tr><td>5</td><td>标题 - 小</td><td><strong>24px</strong></td><td>单行</td><td><code>TTQinYunJ-W4</code></td><td>主要用于邮件标题，弹窗栏，弹窗小标题，数字角标</td></tr>
+        <tr><td>6</td><td>按钮 - 中 / 数字</td><td><strong>22px</strong></td><td>单行</td><td><code>TTQinYunJ-W4</code></td><td>主要用于小按钮文字，数字角标，弹窗 tab，玩家名称处</td></tr>
+        <tr><td>7</td><td>按钮 - 小 / 气泡标题</td><td><strong>20px</strong></td><td>单行</td><td><code>TTQinYunJ-W4</code></td><td>主要用于主界面按钮，气泡标题</td></tr>
+        <tr><td>8</td><td>次级文字</td><td><strong>20px</strong></td><td>24</td><td>迷你简准圆（不加粗）</td><td>主要用于二级弹窗物品介绍，气泡正文，时间数字，跑马灯，主界面任务</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      📐 <strong>字号梯度：</strong>44 → 32 → 30 → 24 → 22 → 20<br>
+      🎨 <strong>字体家族：</strong><code>TTQinYunJ-W4</code>（华康）用于标题/按钮；<code>迷你简准圆（不加粗）</code>用于正文
+    </div>
+  </div>
+
+  <!-- 2.19 命名规范 -->
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--purple);"></div>2.19 命名规范（切图命名）<span class="no">2.19</span></div>
+    <img src="assets/ui-spec/ui-naming.png" alt="切图命名规范" style="width:100%;max-width:920px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.1);display:block;margin:8px auto 12px;">
+
+    <div class="sub-block">
+      <div class="sub-title">📐 基础命名规则</div>
+      <div class="sub-desc">命名格式：<code style="background:var(--gray-light);padding:3px 8px;border-radius:4px;">SCLASS_SResName_Starndard</code></div>
+      <table class="info-table">
+        <thead><tr><th style="width:130px;">字段</th><th>规范</th></tr></thead>
+        <tbody>
+          <tr><td><strong>SCLASS</strong></td><td>资源类型名称，全字母大写。包括目录分类和文件类型。通常在同一文件夹下，有多类型资源的时候使用</td></tr>
+          <tr><td><strong>SResName</strong></td><td>资源对象名称，大驼峰式书写格式，字母 + 数字。资源动态匹配时，对应配置标识的本体名</td></tr>
+          <tr><td><strong>Standard</strong></td><td>资源规格名称，全字母小写，字母 + 数字。用于区分应用场景，状态等</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-block">
+      <div class="sub-title">🏷 类型命名规则</div>
+      <table class="info-table">
+        <thead><tr><th style="width:140px;">类型</th><th>说明</th><th style="width:200px;">示例</th></tr></thead>
+        <tbody>
+          <tr><td><strong>背景图素材 BG</strong></td><td>自然感光，作为背景图，一般情况下素材的体积比较大</td><td><code>BG_Story_night</code></td></tr>
+          <tr><td><strong>框架素材 FRAME</strong></td><td>可以进行九宫格拉伸的素材。九宫区域大小以基本规范为准</td><td><code>FRAME_DiKuang</code></td></tr>
+          <tr><td><strong>虚化素材 TILE</strong></td><td>可以进行四向平铺的素材</td><td><code>TILE_HuaWen</code></td></tr>
+          <tr><td><strong>按钮素材 BTN</strong></td><td>自然得光，实际应用为按钮性质的素材</td><td><code>BTN_Confirm_small</code></td></tr>
+          <tr><td><strong>基础素材 IMG</strong></td><td>自然得光的非按钮类型素材</td><td><code>IMG_WenLi</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sub-block">
+      <div class="sub-title">📎 补充规则</div>
+      <ul class="item-list">
+        <li><strong style="color:var(--text);">动态图标</strong>：涉及到动态图标，单独在图标需求中进行说明</li>
+        <li><strong style="color:var(--text);">占位图</strong>：界面效果图中对应的动态图标，依旧需要提供占位图</li>
+        <li><strong style="color:var(--text);">例：</strong>主界面的动态图标等。属于动态图标，会在图标需求表中单独圆需求。但由于主界面效果画面完成钮，需要允许图。那么在切图的时候也需要附带至少<strong style="color:var(--text);">1 个</strong>可供关联制作方占位因素</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PART 3 参考动效 ===== -->
+<div class="section" id="p3">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 03</span>
+    <span class="section-title">参考动效</span>
+    <span class="section-desc">通用动效</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--orange);"></div>3.1 通用动效一览<span class="no">5 类</span></div>
+    <img src="assets/ui-spec/ui-motion.png" alt="参考动效" style="width:100%;max-width:920px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.1);display:block;margin:8px auto 12px;">
+    <div class="card-grid card-grid-3">
+      <div class="card" style="border-top-color:var(--gray);"><div class="card-title">① 主界面</div><div style="font-size:13px;color:var(--text-muted);">loading + MoveIn<br>登录进入主场景的过渡</div></div>
+      <div class="card" style="border-top-color:var(--blue);"><div class="card-title">② 通用全屏 MoveIn</div><div style="font-size:13px;color:var(--text-muted);">仓库 / 邮件 / 列表全屏界面的进入动画</div></div>
+      <div class="card" style="border-top-color:var(--teal);"><div class="card-title">③ 底部列表 MoveIn</div><div style="font-size:13px;color:var(--text-muted);">从底部上拉的列表式弹窗</div></div>
+      <div class="card" style="border-top-color:var(--purple);"><div class="card-title">④ 通用弹窗 MoveIn</div><div style="font-size:13px;color:var(--text-muted);">通用弹窗的缩放/淡入进入</div></div>
+      <div class="card" style="border-top-color:var(--pink);"><div class="card-title">⑤ 通用消息弹窗</div><div style="font-size:13px;color:var(--text-muted);">轻量消息提示弹窗（取消 / 确定）</div></div>
+    </div>
+    <div class="note">📌 动效时序、缓动曲线、持续时间等细节参数详见原 PDF P25。</div>
+  </div>
+</div>
+</div><!-- /container -->
+
+<div class="container" style="text-align:center; padding-top:24px; padding-bottom:24px; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border);">
+  Anthea Project · UI设计制作规范 · <a href="index.html" style="color:var(--accent);text-decoration:none;">返回首页</a> · <a href="https://github.com/ProMarkel/anthea" style="color:var(--accent);text-decoration:none;">GitHub</a>
+</div>
+
+<button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部">↑</button>
+
+<script>
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+backToTop.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+(function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
+</script>
+<script>
+/* ANT_NAV_DROPDOWN_JS */
+(function(){
+  var groups = document.querySelectorAll('.nav-group');
+  function closeAll(){ groups.forEach(function(g){ g.classList.remove('open'); }); }
+  document.querySelectorAll('.nav-toggle').forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var g = t.parentElement, was = g.classList.contains('open');
+      closeAll();
+      if (!was) g.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest || !e.target.closest('.nav-group')) closeAll();
+  });
+})();
+</script>
+
+</body>
+</html>

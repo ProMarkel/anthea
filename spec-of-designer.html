@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="HifHcTTaJlUnNbZXAtEQ9c">
+<head data-page-node-id="76GlUakSd4Z1X3DPzx6mDf">
+<meta charset="UTF-8" data-page-node-id="lTsjfHrwmFXdFtmVDdHgOj">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="C31hC4o38KowV9aZFqdRdC">
+<title>策划工作规范 — Anthea</title>
+<style>
+
+  :root {
+    --accent: #0E9F8E;
+    --accent-dark: #0B7A6B;
+    --accent-light: #D1F2EB;
+    --accent-pale: #E8F8F5;
+    --pink: #E8547A;
+    --purple: #9B59B6;
+    --purple-light: #E8D5F5;
+    --teal: #1ABC9C;
+    --teal-light: #D5F5EE;
+    --orange: #E67E22;
+    --orange-light: #FDEBD0;
+    --gray: #6C757D;
+    --gray-light: #F8F9FA;
+    --border: #E2E8F0;
+    --text: #2D3748;
+    --text-muted: #718096;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: #F7F5FB; color: var(--text); line-height: 1.7;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* === NAVBAR === */
+  .navbar, .navbar * {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased; animation: none !important; opacity: 1 !important;
+  }
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08); height: 56px; font-size: 16px; line-height: 1.6;
+  }
+  .navbar .container { width:100%; max-width:1200px; margin:0 auto; padding:0 24px; display:flex; align-items:center; height:100%; }
+  .navbar .nav-brand { display:flex; align-items:center; gap:8px; font-size:16px; font-weight:700; color:#E8547A; text-decoration:none; }
+  .navbar .nav-icon { width:28px; height:28px; border-radius:8px; object-fit:cover; flex-shrink:0; }
+  .navbar .nav-icon-fb { width:28px;height:28px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,#E8547A,#9B59B6);color:white;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:center; }
+  .navbar .nav-links { display:flex; gap:24px; list-style:none; margin-left:auto; padding:0; align-items:center; }
+  .navbar .nav-links li { list-style:none; padding:0; margin:0; border:none; background:none; font-size:13px; }
+  .navbar .nav-links a { text-decoration:none; font-size:13px; font-weight:500; color:#888; padding:6px 0; border-bottom:2px solid transparent; display:inline-block; transition:color .2s,border-color .2s; }
+  .navbar .nav-links a:hover, .navbar .nav-links a.active { color:#E8547A; border-bottom-color:#E8547A; }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, #0E9F8E 0%, #9B59B6 100%);
+    color: white; padding: 40px 0 32px; position: relative; overflow: hidden;
+  }
+  .header::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header::after { content:''; position:absolute; bottom:-40px; right:100px; width:120px; height:120px; background:rgba(255,255,255,0.06); border-radius:50%; }
+  .header-tag { display:inline-block; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; font-size:12px; margin-bottom:12px; letter-spacing:1px; }
+  .header h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .header-sub { font-size:14px; opacity:0.85; margin-bottom:20px; }
+  .header-meta { display:flex; gap:24px; flex-wrap:wrap; }
+  .header-meta span { font-size:13px; opacity:0.75; }
+  .header-meta strong { opacity:1; font-weight:600; }
+
+  /* === SECTION === */
+  .section { margin-bottom: 28px; }
+  .section-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .section-tag { padding:4px 14px; border-radius:20px; font-size:12px; font-weight:600; letter-spacing:.5px; white-space:nowrap; }
+  .section-title { font-size:18px; font-weight:700; }
+  .section-desc { font-size:13px; color:var(--text-muted); margin-left:auto; }
+
+  /* === CARD === */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px; }
+  .card-grid-2 { grid-template-columns:repeat(2,1fr); }
+  .card-grid-3 { grid-template-columns:repeat(3,1fr); }
+  .card {
+    background:white; border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:20px; border-top:3px solid transparent; transition:transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.1); }
+  .card-icon { font-size:22px; margin-bottom:8px; }
+  .card-title { font-size:14px; font-weight:700; margin-bottom:8px; }
+  .card.blue { border-top-color:var(--accent); }
+  .card.purple { border-top-color:var(--purple); }
+  .card.teal { border-top-color:var(--teal); }
+  .card.orange { border-top-color:var(--orange); }
+  .card.pink { border-top-color:var(--pink); }
+
+  .item-list { list-style:none; }
+  .item-list li {
+    padding:6px 0; font-size:13px; color:var(--text-muted);
+    border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:8px;
+  }
+  .item-list li:last-child { border-bottom:none; }
+  .item-list li::before { content:'›'; color:var(--accent); font-weight:bold; flex-shrink:0; }
+
+  /* === PANEL === */
+  .panel { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:16px; }
+  .panel-title {
+    font-size:14px; font-weight:700; margin-bottom:14px; padding-bottom:10px;
+    border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px;
+  }
+  .panel-title .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .panel-title .no {
+    font-size:11px; font-weight:700; color:white; background:var(--accent);
+    padding:2px 8px; border-radius:10px; margin-left:auto;
+  }
+
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+
+  /* === SUB BLOCK === */
+  .sub-block { margin-bottom:18px; }
+  .sub-block:last-child { margin-bottom:0; }
+  .sub-title {
+    font-size:13px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px;
+  }
+  .sub-no {
+    font-size:11px; font-weight:700; color:var(--accent-dark);
+    background:var(--accent-pale); padding:2px 8px; border-radius:6px; flex-shrink:0;
+  }
+  .sub-desc { font-size:13px; color:var(--text-muted); margin-bottom:8px; }
+
+  /* === ORG CHART === */
+  .org { display:flex; flex-direction:column; align-items:center; gap:10px; padding:8px 0; }
+  .org-leader {
+    background:linear-gradient(135deg,#E8547A,#9B59B6); color:white; font-weight:700;
+    padding:10px 24px; border-radius:10px; font-size:14px;
+  }
+  .org-line { width:2px; height:16px; background:#CBD5E0; }
+  .org-row { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .org-box {
+    background:var(--accent-pale); border:1.5px solid #A3E4D7; color:var(--accent-dark);
+    padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600;
+  }
+  .org-box.pm { background:var(--purple-light); border-color:#D9B8EF; color:var(--purple); }
+  .org-sub {
+    display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px;
+  }
+  .org-sub span {
+    font-size:11px; background:white; border:1px solid var(--border);
+    padding:3px 10px; border-radius:12px; color:var(--text-muted);
+  }
+
+  /* === TREE (SVN) === */
+  .tree { font-size:13px; line-height:1.9; }
+  .tree-row { display:flex; align-items:baseline; gap:10px; padding:3px 0; border-bottom:1px dashed var(--border); }
+  .tree-row:last-child { border-bottom:none; }
+  .tree-path { font-family:'Cascadia Code','Consolas',monospace; font-size:12px; font-weight:600; color:var(--accent-dark); white-space:nowrap; flex-shrink:0; }
+  .tree-desc { font-size:12px; color:var(--text-muted); }
+
+  /* === FLOW === */
+  .flow-wrap { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; overflow-x:auto; }
+  .flow-title { font-size:14px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .flow-row { display:flex; align-items:center; gap:0; min-width:max-content; margin-bottom:12px; }
+  .flow-row:last-child { margin-bottom:0; }
+  .flow-label { font-size:12px; color:var(--text-muted); width:96px; flex-shrink:0; font-weight:600; text-align:right; padding-right:12px; }
+  .flow-nodes { display:flex; align-items:center; gap:0; flex:1; }
+  .flow-node {
+    padding:8px 14px; border-radius:8px; font-size:12px; font-weight:600;
+    text-align:center; min-width:92px; white-space:nowrap;
+  }
+  .flow-arrow { width:32px; height:2px; position:relative; flex-shrink:0; }
+  .flow-arrow::before { content:''; position:absolute; top:0; left:0; right:6px; height:2px; background:#CBD5E0; }
+  .flow-arrow::after { content:''; position:absolute; right:0; top:-4px; border:5px solid transparent; border-left-color:#CBD5E0; }
+  .fn-blue { background:var(--accent-light); color:var(--accent-dark); border:1.5px solid #A3E4D7; }
+  .fn-purple { background:var(--purple-light); color:var(--purple); border:1.5px solid #D9B8EF; }
+  .fn-pink { background:#FEF0F4; color:var(--pink); border:1.5px solid #F9D0DB; }
+  .fn-teal { background:var(--teal-light); color:var(--teal); border:1.5px solid #A9DFBF; }
+  .fn-orange { background:var(--orange-light); color:var(--orange); border:1.5px solid #F5CBA7; }
+  .fn-gray { background:var(--gray-light); color:var(--gray); border:1.5px solid #DEE2E6; }
+
+  /* === LANE (Jira) === */
+  .lane { display:flex; gap:0; min-width:max-content; }
+  .lane-col { min-width:170px; flex:1; }
+  .lane-head { font-size:12px; font-weight:700; text-align:center; padding:6px; border-radius:6px 6px 0 0; color:white; }
+  .lane-body { border:1px solid var(--border); border-top:none; border-radius:0 0 8px 8px; padding:8px; min-height:60px; background:white; }
+  .lane-body div {
+    font-size:11px; background:var(--gray-light); border:1px solid var(--border);
+    border-radius:6px; padding:5px 8px; margin-bottom:6px; color:var(--text-muted);
+  }
+  .lane-body div:last-child { margin-bottom:0; }
+  .lane-body div.hl { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); font-weight:600; }
+
+  /* === TABLE === */
+  .info-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .info-table th {
+    background:var(--gray-light); padding:10px 14px; text-align:left; font-weight:600;
+    border-bottom:2px solid var(--border); font-size:12px; color:var(--gray);
+    letter-spacing:.5px; white-space:nowrap;
+  }
+  .info-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-muted); font-size:13px; }
+  .info-table tr:hover td { background:var(--gray-light); }
+  .info-table td strong { color:var(--text); }
+
+  /* === BADGE === */
+  .badge-row { display:flex; flex-wrap:wrap; gap:6px; }
+  .badge { padding:5px 12px; border-radius:8px; font-size:12px; font-weight:500; }
+  .badge-p0 { background:#FEF0F4; color:#C0392B; }
+  .badge-p1 { background:#FEF9E7; color:#E67E22; }
+  .badge-p2 { background:var(--accent-pale); color:var(--accent-dark); }
+  .badge-px { background:#F2F2F2; color:#666; }
+  .badge-gen { background:var(--accent-pale); color:var(--accent-dark); }
+
+  .tag-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .tag { padding:3px 10px; border-radius:12px; font-size:11px; font-weight:500; }
+  .tag-blue { background:var(--accent-light); color:var(--accent-dark); }
+  .tag-purple { background:var(--purple-light); color:var(--purple); }
+  .tag-teal { background:var(--teal-light); color:var(--teal); }
+  .tag-orange { background:var(--orange-light); color:var(--orange); }
+  .tag-gray { background:#E2E8F0; color:var(--gray); }
+
+  /* === TOC === */
+  .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; }
+  .toc a {
+    display:block; text-decoration:none; color:var(--text); background:var(--gray-light);
+    border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-size:13px; font-weight:600;
+    transition:all .2s;
+  }
+  .toc a:hover { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); }
+  .toc a span { display:block; font-size:11px; color:var(--text-muted); font-weight:400; margin-top:2px; }
+
+  /* === NOTE === */
+  .note {
+    background:#FFFBEB; border-left:4px solid var(--orange); padding:12px 16px;
+    border-radius:0 8px 8px 0; font-size:12.5px; color:#7F5A2E; margin-top:12px;
+  }
+  .note strong { color:#B9770E; }
+
+  /* === STEPS === */
+  .steps { counter-reset:s; }
+  .steps li {
+    list-style:none; position:relative; padding-left:34px; margin-bottom:10px;
+    font-size:13px; color:var(--text-muted);
+  }
+  .steps li::before {
+    counter-increment:s; content:counter(s);
+    position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:50%;
+    background:var(--accent); color:white; font-size:11px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .steps li:last-child { margin-bottom:0; }
+
+  .divider { height:1px; background:var(--border); margin:14px 0; }
+
+  /* === BACK TO TOP === */
+  .back-to-top {
+    position:fixed; right:20px; bottom:30px; width:44px; height:44px; border-radius:50%;
+    background:white; border:1.5px solid var(--border); color:var(--text-muted); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:1.2em;
+    transition:all .3s; opacity:0; transform:translateY(20px); pointer-events:none; z-index:200;
+    box-shadow:0 2px 12px rgba(0,0,0,.1);
+  }
+  .back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+  .back-to-top:hover { border-color:var(--accent); color:var(--accent); }
+
+  @media (max-width:900px) {
+    .card-grid-3, .three-col { grid-template-columns:1fr 1fr; }
+    .two-col { grid-template-columns:1fr; }
+    .container { padding:0 16px; }
+  }
+  @media (max-width:600px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns:1fr; }
+    .container { padding:0 12px; }
+  }
+  @media print { body { background:white; } .navbar { display:none; } }
+
+  .header { background: linear-gradient(135deg, #1ABC9C 0%, #3498DB 100%); }
+
+
+/* === ANT NAV DROPDOWN === */
+  .navbar .nav-links { gap:20px; flex-wrap:nowrap; }
+  .navbar .nav-group { position:relative; }
+  .navbar .nav-toggle { cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px; }
+  .navbar .nav-toggle .caret { font-size:9px; line-height:1; opacity:.7; transition:transform .2s; }
+  .navbar .nav-group.open .nav-toggle { color:#E8547A; }
+  .navbar .nav-group.open .nav-toggle .caret { transform:rotate(180deg); }
+  .navbar .nav-sub {
+    display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    min-width:196px; background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.13); padding:6px; margin:0; list-style:none; z-index:300;
+  }
+  .navbar .nav-group:hover > .nav-sub,
+  .navbar .nav-group.open > .nav-sub { display:block; }
+  .navbar .nav-sub::before { content:''; position:absolute; top:-9px; left:0; right:0; height:9px; }
+  .navbar .nav-sub li { display:block; font-size:13px; }
+  .navbar .nav-sub a {
+    display:block; padding:7px 12px; border-bottom:none; border-radius:6px;
+    font-size:12.5px; color:#666; white-space:nowrap; transition:background .15s,color .15s;
+  }
+  .navbar .nav-sub a:hover { background:#FEF0F4; color:#E8547A; }
+  .navbar .nav-sub a.active { background:#FEF0F4; color:#E8547A; border-bottom:none; font-weight:600; }
+  @media (max-width:900px) {
+    .navbar { height:auto; }
+    .navbar .container { height:auto; flex-wrap:wrap; padding-top:8px; padding-bottom:8px; gap:8px; }
+    .navbar .nav-links { gap:16px; margin-left:0; flex-wrap:wrap; width:100%; }
+    .navbar .nav-sub { left:0; transform:none; }
+  }
+  </style>
+</head>
+<body data-page-node-id="vmVLCk2RRQNmxnAHR16LAO">
+
+<!-- NAVBAR -->
+<nav class="navbar" data-page-node-id="mFjOfRI9oKVxLIpvlgPnpr">
+  <div class="container" data-page-node-id="KDtpP1BQZdZslF2WlPGhAU">
+    <a href="index.html" class="nav-brand" data-page-node-id="eEdkgAu5eYeX7P7RGmK6f8">
+      <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'" data-page-node-id="LvWcW92Rb34Vnrq9DxPJBE">
+      <span class="nav-icon-fb" data-page-node-id="6X3b9r3Z00gIFWaiCvraxa">A</span>
+      Anthea
+    </a>
+    <ul class="nav-links" id="anthea-nav">
+      <li><a href="index.html">首页</a></li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="spec">流程规范文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="spec-of-project.html">① 项目流程规范</a></li>
+          <li><a href="spec-of-designer.html">② 策划工作规范</a></li>
+          <li><a href="spec-of-art.html">③ 美术工作规范</a></li>
+          <li><a href="spec-of-art-design.html">④ 美术设计规范</a></li>
+          <li><a href="spec-of-ue-ui.html">⑤ UI 设计制作规范</a></li>
+          <li><a href="spec-of-asset.html">⑥ 资源管理规范</a></li>
+        </ul>
+      </li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="ai">AI Coding 文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="guide-for-claude.html">ClaudeCode 白皮书</a></li>
+          <li><a href="guide-for-claude-md.html">CLAUDE.md 规则</a></li>
+          <li><a href="guide-for-sdd.html">AI Coding 清单</a></li>
+          <li><a href="guide-for-workbuddy.html">WorkBuddy 指南</a></li>
+          <li><a href="guide-for-openspec.html">OpenSpec 工作流</a></li>
+        </ul>
+      </li>
+      <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="header" data-page-node-id="MtX39lsYdT8cIbiCrLhBw6">
+  <div class="container" data-page-node-id="XA4GakWX7Q1abvam0JQO4I">
+    <div class="header-tag" data-page-node-id="yRSerqHlLwPC2xjuMhkKHj">📐 流程规范文档 · 02</div>
+    <h1 data-page-node-id="Fn3worOrilNu9taQedVDY2">『海边的安西娅』策划工作规范</h1>
+    <div class="header-sub" data-page-node-id="WMmaAq5LBg0OAzDbSffpTN">Planning Work Specification — 人员职责 / 日常工作 / 设计流程 / 开发需求</div>
+    <div class="header-meta" data-page-node-id="fSZJYF7qXjWjYKkQuJ762L">
+      <span data-page-node-id="pEAkwPUmUX2jHOeD9KxKrs">📅 版本 <strong data-page-node-id="9bsq73jbJNNTQ1O0WBlT6T">Ver 230306</strong></span>
+      <span data-page-node-id="07SSlaXMsFon8X6BK0MULq">✍️ 修订人 <strong data-page-node-id="6Z3EWxAhQZKJWuAGzpHNTq">陆瑜</strong></span>
+      <span data-page-node-id="aNFtBQrgxRsdAkeBaObHO1">📆 提交日期 <strong data-page-node-id="RpiyP9aDLP8U83xbObKxYE">2023.03.06</strong></span>
+      <span data-page-node-id="MKEJpQyTs40dyTNIxC4iQA">📄 原文 <strong data-page-node-id="gg3oJ1EP4vETD2creBmMiN">14 页</strong></span>
+    </div>
+  </div>
+</header>
+
+<div class="container" style="padding-top:32px; padding-bottom:48px;" data-page-node-id="WnFl26aTlDA4ePBH1iuZjI">
+<!-- ===== 目录 ===== -->
+<div class="section" data-page-node-id="ahdjNg4l0K0y791QSb2GoS">
+  <div class="section-header" data-page-node-id="0xKu7wAoRIzU3qL3VDSeJQ">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="0wNUmMxYv816y50Af1ECmb">目录</span>
+    <span class="section-title" data-page-node-id="MOwb3JXVQQ471QH1FUmLBq">章节导航</span>
+  </div>
+  <div class="toc" data-page-node-id="qMxCXpk3pLhWw0whpbXJl9">
+    <a href="#s1" data-page-node-id="7dx5mcgoS3tZuYl3ybATZo">1 · 人员结构 &amp; 职责<span data-page-node-id="jr1U2R7UxhGwpZVejWIjFi">6 类策划岗位定义</span></a>
+    <a href="#s2" data-page-node-id="ammFcLCE8NpArOY9tJbYnv">2 · 日常工作规范<span data-page-node-id="tZEcZLc0hnp7D0KbNT7fMM">会议 / 文档 / 工作管理</span></a>
+    <a href="#s3" data-page-node-id="e9W2sBqlN25BV2zsAapGhw">3 · 项目设计流程<span data-page-node-id="7zfRRMdoAm0uCtfd8F2JWK">概念 → 整体 → 具体</span></a>
+    <a href="#s4" data-page-node-id="K4NXx4B6lkIcfXWRULmILq">4 · 开发需求规范<span data-page-node-id="UfxzOqENLE8WWHdFYe1plE">功能 / 美术 / 埋点需求</span></a>
+  </div>
+</div>
+
+<!-- ===== 1 人员结构&职责 ===== -->
+<div class="section" id="s1" data-page-node-id="TP00c7u7OfRHhWqd5K4PpO">
+  <div class="section-header" data-page-node-id="WhaaUtG8zj38zqcZYqnv23">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="ZbE9wJ6yJHk1Pif8TuCxSE">01</span>
+    <span class="section-title" data-page-node-id="bcryt7kEU1OUaz1bBPBstE">人员结构 &amp; 职责</span>
+    <span class="section-desc" data-page-node-id="uQPZ8EUST4A2lyXDdE9Odj">策划组构成 · 岗位职责定义</span>
+  </div>
+
+  <div class="panel" data-page-node-id="dqnAwAZ2Wdec8D7MGLWiv0">
+    <div class="panel-title" data-page-node-id="wYTFmAyAMy7vmTvPLS9Wfu"><div class="dot" style="background:var(--accent);" data-page-node-id="wjQZlR5EfhK0YBPR1wNJGm"></div>1.1 策划人员结构<span class="no" data-page-node-id="4xoyGsfJM4oeoOIfqQFSPA">1.1</span></div>
+    <div class="org" data-page-node-id="hNq3LPdV59J2cKSGsnSn4g">
+      <div class="org-leader" data-page-node-id="FrSck9xlNMEU7AMdlHAJwz">主策划（制作人兼任）</div>
+      <div class="org-line" data-page-node-id="0Kyf1ShHLsJ1rtLsxkgpDG"></div>
+      <div class="org-row" data-page-node-id="GK7F2nMD2Z5b7BAHeuwxin">
+        <div class="org-box" data-page-node-id="qfS5mnSl7wAmYA7qKy38VE">系统策划（1 主 1 辅）</div>
+        <div class="org-box" data-page-node-id="vVKc8SLCJ5Sw2hYQ62VHYm">交互策划</div>
+        <div class="org-box" data-page-node-id="tft6urJfmkMSOORt07pmFh">数值策划</div>
+        <div class="org-box" data-page-node-id="K2xcw7lsWZSQFmQgpFZCTa">内容策划（文案策划）</div>
+        <div class="org-box" data-page-node-id="kehglodY132oBD6SBmahJt">执行策划</div>
+      </div>
+    </div>
+    <div class="note" data-page-node-id="kGR0VPG5K3EYVrW4nYR4SX">📌 制作人兼任主策划时，部分职能由<strong data-page-node-id="ABK7TP0yMwqEAkIMbiwv4V">主系统策划</strong>分担。</div>
+  </div>
+
+  <div class="card-grid card-grid-3" data-page-node-id="WZEnEoaa66Dva9aCTmhJMV">
+    <div class="card" data-page-node-id="IEdeORSi0KA251B3JmFm0t">
+      <div class="card-icon" data-page-node-id="XXyvWxsZvShUKpkogZVyxd">👑</div>
+      <div class="card-title" data-page-node-id="aafgjg6owCye7AfrSeevnT">1.2.1 主策划（or 执行主策划）</div>
+      <ul class="item-list" data-page-node-id="HkowpY73ZqJe1WWkb3B5X2">
+        <li data-page-node-id="3oKf8iE7NAnL8aAjRKPnc5">协助制作人，确定项目整体设计方向</li>
+        <li data-page-node-id="B1QP6RP7reaLnEwH5uahWI">协助制作人，确定项目整体系统框架设计</li>
+        <li data-page-node-id="To5uLLOSs3wlWIDvRI1ANG">协同数值策划，确定项目整体数值结构设计</li>
+        <li data-page-node-id="26fbPF0QxcMLOTA59yvWH7">负责项目核心系统设计，及 Demo 版本内容规划</li>
+        <li data-page-node-id="bjBHRwLaqGqL3sE6bPi2na">制定并控制策划团队工作计划及分工，确保按进度实施</li>
+        <li data-page-node-id="w7C7A0EJp6jpAdLycQXY6b">指导、跟踪整体设计效果，确保各具体方案与整体设计理念吻合</li>
+        <li data-page-node-id="GSYb69Znliq9WBGlUFsBoc">协调策划团队与其他研发业务组的资源配合，保证项目整体进度</li>
+      </ul>
+    </div>
+    <div class="card" data-page-node-id="HSEkPrkVKDxto8oexC9VXJ">
+      <div class="card-icon" data-page-node-id="mcwrAsCHpoyHvECHS8BDW7">⚙️</div>
+      <div class="card-title" data-page-node-id="nzKxcTGQWjCQRSljXh24ix">1.2.2 系统策划</div>
+      <ul class="item-list" data-page-node-id="GPEVgp8wQDOVGXySQd8mRm">
+        <li data-page-node-id="ZTH7ACQJU9IjT7MnJcT5S3">配合主策划，参与项目整体系统框架设计</li>
+        <li data-page-node-id="LFIcTjLiijBkzBOFJgUm8B">协助主策划，确定项目核心系统设计方向</li>
+        <li data-page-node-id="qlj487mwiMPTPQbwtEBGCh">负责项目主要系统的设计，并制作完整开发需求</li>
+        <li data-page-node-id="oud7jwEbSiPDtbxre6y84X">负责跟进项目需求的开发制作，保证需求实现进度</li>
+        <li data-page-node-id="Liwbrd3a2MXS9abAgIljvl">负责需求验收及测试用例审核，保证实现准确性及体验标准</li>
+      </ul>
+    </div>
+    <div class="card" data-page-node-id="l8Kx0lDGiKNqPQShovPBry">
+      <div class="card-icon" data-page-node-id="BsY5FQvwa6pCGW9f6ozAHC">🖱️</div>
+      <div class="card-title" data-page-node-id="EPSl6BMFp6pi4G875n8JrK">1.2.3 交互策划</div>
+      <ul class="item-list" data-page-node-id="Uuq2o4ETRgbGp2k9niUEAp">
+        <li data-page-node-id="uKLbiAme5KJ0bTlZJVonvj">配合主策划，制定项目界面交互设计规范</li>
+        <li data-page-node-id="0NJFQ3pNlQ0zKCDcSdZwsx">协助具体系统策划，负责各系统的交互界面原型及动特效设计</li>
+        <li data-page-node-id="2GdmgCSoQWQpQwbAl32397">负责整理制作界面设计制作需求，协调跟进 UI 美术制作输出 UI 素材</li>
+        <li data-page-node-id="7NmZhTL0wnCNd0JXHDMzmD">负责验收反馈界面相关需求实现结果，并协调美术 &amp; 程序团队优化改进</li>
+      </ul>
+    </div>
+    <div class="card" data-page-node-id="rU5C230QZCEj9TknsSrgJF">
+      <div class="card-icon" data-page-node-id="v1eYP1eia8DdoNUjSPLpvP">🔢</div>
+      <div class="card-title" data-page-node-id="Ay8ZlKTY8a1L6xa0uuUlML">1.2.4 数值策划</div>
+      <ul class="item-list" data-page-node-id="0fgwtWT0xwwtDbo39ExD5k">
+        <li data-page-node-id="rG68QYkbij8EZe5rutAKha">配合主策划，负责项目整体数值结构设计及优化</li>
+        <li data-page-node-id="XYabJlQg66SWADuyveU99R">协同具体系统策划，负责各系统的具体数值设计及优化</li>
+        <li data-page-node-id="YfVLlSOGGvnhdqMMoJdvrd">负责项目所有配置结构的制定、更新、维护，以及数值专项文档的撰写、维护</li>
+        <li data-page-node-id="9j5rPNfl84El2T1vhRbhmR">负责项目经济体系的搭建、优化、完善，以及平衡性调整</li>
+        <li data-page-node-id="s6ecn6WHpNRmgWtrPEk83N">协助运营，完成运营相关数值工作</li>
+      </ul>
+    </div>
+    <div class="card" data-page-node-id="xEhM6aLEHNfweDTchN045k">
+      <div class="card-icon" data-page-node-id="V0L8bpD00Ht46RUAEEpByr">📖</div>
+      <div class="card-title" data-page-node-id="CxM2RIFgkQElIavmEbZiuz">1.2.5 内容策划（文案策划）</div>
+      <ul class="item-list" data-page-node-id="haQDGrOcQIXCjjoG5yMse5">
+        <li data-page-node-id="VInEpjzQWWBqdOhmU0cJ4n">配合制作人及主策划，确定项目世界观方向设定</li>
+        <li data-page-node-id="RGZ3x6i3ap1xk8C31RC09B">负责项目世界观具体元素设定，并制作基础设定文档</li>
+        <li data-page-node-id="9sOf8JtEzJuXESs5Hn47dy">负责项目各系统功能的包装设定，及所需资源需求的设计制作</li>
+        <li data-page-node-id="ZUHILAlfsNYX9csc3tXMtE">负责项目整体剧情故事、脚本，以及剧情表现相关系统规则的设计</li>
+        <li data-page-node-id="qcLOjkOqLE0yzrgsKILUKu">负责项目配置中所有文案性内容的填充</li>
+      </ul>
+    </div>
+    <div class="card" data-page-node-id="NRUWtEN9yCByOV5fb99AcV">
+      <div class="card-icon" data-page-node-id="3DIrhGzbT1UXszlCdEqw7q">🔧</div>
+      <div class="card-title" data-page-node-id="mPdo9mCz7hsB5oC1l4QeAV">1.2.6 执行策划</div>
+      <ul class="item-list" data-page-node-id="bjtGUKS8GSduyOfwkfsgBq">
+        <li data-page-node-id="EBrLI3J3NUM8385My8oOmc">根据项目制作进度需要，协助其他专职策划完成部分设计工作</li>
+        <li data-page-node-id="e7qb8MgACh6nfrtENPBHMJ">熟悉项目编辑类工具，负责项目资源、素材、配置的录入、测试及修正</li>
+        <li data-page-node-id="Nkky0jOcYOg6T3IDaOLW7j">负责基础策划文档的撰写、整理、修订等工作</li>
+        <li data-page-node-id="YO61or4BCK9v7riEwRWaGD">负责协调策划团队与其他研发业务组的沟通协作，并及时向需求责任人反馈</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2 日常工作规范 ===== -->
+<div class="section" id="s2" data-page-node-id="bgXBNgGKtFx4zaa9n3NkC6">
+  <div class="section-header" data-page-node-id="R7H7gRIglM3cPBqKjpAEln">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="iFCxEQNNI2CFOvCkLkWQVK">02</span>
+    <span class="section-title" data-page-node-id="c0NCty7LPcPA8uIfkVN5bp">日常工作规范</span>
+    <span class="section-desc" data-page-node-id="ibEaWuh4pNwGtrByJ32O5u">会议 · 文档 · 工作管理</span>
+  </div>
+
+  <div class="panel" data-page-node-id="9jeDswjD53KuYKFcqGJxCp">
+    <div class="panel-title" data-page-node-id="AWOfyZ3eQlGuVABqREgCJW"><div class="dot" style="background:var(--purple);" data-page-node-id="EVe2Q4yjlnvwVr2PoGmHR2"></div>2.1 策划会议规范<span class="no" data-page-node-id="lYUv9iEXkGXTGEAAUkWct1">2.1</span></div>
+
+    <div class="sub-block" data-page-node-id="EeT4Ewgl0hIOch2pACPxhg">
+      <div class="sub-title" data-page-node-id="UIiLHMeLnDyOQuslN8R5WW">💡 2.1.1 策划设计会议</div>
+      <ul class="item-list" data-page-node-id="ovMwmgpEMt3hKrReB7kK6y">
+        <li data-page-node-id="wYRD6S8aJSMITghGMFQC8r"><strong style="color:var(--text);" data-page-node-id="dW9mFEoj4ozuAi7FgoE8Xm">会议概述</strong>：策划最主要的业务会议；项目不同设计阶段，形式和目的略有差别。固定由策划业务负责人召集、主持，并于会后跟进会议结论的执行</li>
+        <li data-page-node-id="NMEc4XpfU0A31GaYLMiUOV"><strong style="color:var(--text);" data-page-node-id="1UrHzwjghbrFplhPNHCmAE">参会人员</strong>：策划业务组全体成员；涉及项目整体、核心内容的设计会议，项目负责人共同参与</li>
+      </ul>
+      <div class="card-grid card-grid-3" style="gap:12px;margin-top:12px;" data-page-node-id="8aAXbNeVuQNx003JPVVvO2">
+        <div class="card" style="border-top-color:var(--purple);padding:14px;" data-page-node-id="U447ZujaTJzeaAT7MjbIVt">
+          <div class="card-title" data-page-node-id="u2XCcyeBGm0KEPj7ZgmH8D">① 创意设计风暴</div>
+          <div style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="AZqLpIFnly30ZMMWhof83x">在一项具体设计启动之初，通常采用头脑风暴形式，各自提出针对该项设计的创意点，进行设计想法的碰撞和灵感触发。</div>
+        </div>
+        <div class="card" style="border-top-color:var(--purple);padding:14px;" data-page-node-id="K9KLt6ZAp69GGscNLlvOHc">
+          <div class="card-title" data-page-node-id="DNT87jEpGHGgahiNVer8lq">② 设计草案论证</div>
+          <div style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="fNBFwBcjP11qI2U3662lHK">基于达成共识的创意点筛选，责任策划草拟设计方案，主要关注设计核心及要点，经全员讨论、质疑、反馈，进行草案充分论证。</div>
+        </div>
+        <div class="card" style="border-top-color:var(--purple);padding:14px;" data-page-node-id="WeRGyDVE9xVzI2OTQwP6Yd">
+          <div class="card-title" data-page-node-id="c3lGd4NN8hjKXrsdHH7xL1">③ 正式方案校验</div>
+          <div style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="HpButvE0JHVZZwmMjQEFT6">经充分论证的草案，在进行必要可行性论证后，由责任策划在策划内部设计会议完整宣讲，其他成员提出查漏补缺意见，完成方案校验。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" data-page-node-id="4xv05GWsZjGZ5Gzfi0Sx2G"></div>
+
+    <div class="sub-block" data-page-node-id="6ZL3vUU821E9HhF3iWlsRR">
+      <div class="sub-title" data-page-node-id="oLDYCAJTmBs3CXQaHjNU5K">🗓 2.1.2 策划工作例会</div>
+      <ul class="item-list" data-page-node-id="H9etCKhqhqdCZJNBlvd9Ou">
+        <li data-page-node-id="y3s7lUAvGizrrZEtrw0mRM">考虑项目及策划团队规模，<strong style="color:var(--text);" data-page-node-id="ak8N2RYTZRD7YDGD4CrAPp">不单独安排策划工作例会</strong></li>
+        <li data-page-node-id="ie7gEl7YNqAAYkZMU9Yenv">策划全体参加项目组周会，直接参与项目组当周工作布置</li>
+        <li data-page-node-id="CCNWUqVe167ZXknH1LBhwO">策划作为「需求责任人」，及时汇报反馈工作进度</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="gLl9B8cXFnbtT2AhiIsTQJ">
+    <div class="panel-title" data-page-node-id="hogXIISGplNIRCHpAYx3Ay"><div class="dot" style="background:var(--accent);" data-page-node-id="He1CbBuStBvSavW6S3ZfI5"></div>2.2 策划文档规范<span class="no" data-page-node-id="6zCRILgXYSDxPxLrJJ26F1">2.2</span></div>
+
+    <div class="two-col" data-page-node-id="wTYCQEmu7We0ntVGUZ4Gn7">
+      <div class="sub-block" data-page-node-id="UvaZNHiQtVqmVHSigb2WBq">
+        <div class="sub-title" data-page-node-id="tx6v65FbaxFBvT3it6p1DK">📄 2.2.1 文档规范概述 — 项目统一规范重申</div>
+        <ul class="item-list" data-page-node-id="07Q76OMpGfS49bB3u1mM3y">
+          <li data-page-node-id="ukhGgJwF0epJOAcXLETMHe">统一使用 <strong style="color:var(--text);" data-page-node-id="7xfiyQR4izSbbwUR9ZFG7U">Microsoft Office Professional Plus 2021</strong> 作为文档类资料编辑工具</li>
+          <li data-page-node-id="g4XA2y1jJJuXdf9PjFPNVY">非特殊需要，所有文档类资料编辑完成后，均以 <strong style="color:var(--text);" data-page-node-id="ckhPWeeO8OAl22feb0gQbV">.pdf</strong> 格式输出</li>
+          <li data-page-node-id="uGAzjbCGyiNMWU3vpAiWVX">单纯流程图、原型图等示意图内容，也可使用 <strong style="color:var(--text);" data-page-node-id="FABzQAtoGmyouoEnAN0NEE">.png</strong> 格式输出</li>
+          <li data-page-node-id="7xkSWRSVG48NcJP5MeSDGE">表格类工作资料，以 <strong style="color:var(--text);" data-page-node-id="dXpLnNxd3ZpUubw2vC8ukP">.xlsx</strong> 或 <strong style="color:var(--text);" data-page-node-id="VEH2hCREVbjA7N0RIQ9zyH">.xlsm</strong> 格式输出</li>
+        </ul>
+        <div class="note" data-page-node-id="w5k5YKlJuSDEyFkhpXbIhU">规范主要针对策划<strong data-page-node-id="YfNSY5YRN0fJ8Uhb44aeJw">对外的需求文档</strong>以及<strong data-page-node-id="rmWIuNWh62Td4I3kAbbsu8">内部协作的正式文档</strong>；对个人业务草稿、设计草案无严格约束。</div>
+      </div>
+      <div class="sub-block" data-page-node-id="RbxEL2DJefP9Vk3rajTNR6">
+        <div class="sub-title" data-page-node-id="K1pvgBrWiYt1JgOAICRsUg">🛠 2.2.1 推荐编辑工具</div>
+        <table class="info-table" data-page-node-id="Z7GpCDbmUinuGBEUHt0Be5">
+          <thead data-page-node-id="NWldyjMHM2waKUe4Pz81u4"><tr data-page-node-id="pnqL508W73C8NEt5xAfDQc"><th style="width:100px;" data-page-node-id="yxKDPPjFija5I5NiWxyx64">工具</th><th data-page-node-id="pxg32XCgYt2DpHY1z44khI">推荐使用场景</th></tr></thead>
+          <tbody data-page-node-id="YK9VV2xb9uKoyZEkbfvFsg">
+            <tr data-page-node-id="eQMaGFOxgBQLTzzxRsmsxE"><td data-page-node-id="vc760taEyIX5ZOASHtKPXo"><strong data-page-node-id="Bo46icuuBP90WChbhab9C2">MS Word</strong></td><td data-page-node-id="jvYEv6qmrLRldojpJCFSCS">最基本文档编辑工具，对图文混排要求不高的文档</td></tr>
+            <tr data-page-node-id="cCJNU6GypeDj0GvDWmwe6J"><td data-page-node-id="hC8GH0KvUNdYMIznUkdMIh"><strong data-page-node-id="9GfZjWnSBLYMCTwa1JM7n9">MS Excel</strong></td><td data-page-node-id="3KUankgbznt3c62NA6oMXP">基础表格工具，配置类、清单类文档首选；前期草案为罗列方便也可使用</td></tr>
+            <tr data-page-node-id="8oUDmrP7JfZahHWrzwmT6e"><td data-page-node-id="sz0ugsH2KeXTIT5WHKAxvB"><strong data-page-node-id="0tP5IxxyRqHHpMaKRgYXve">MS PPT</strong></td><td data-page-node-id="XQdovKAuIVjMdsgrv8dALI">对文档演示属性需求较高时首选，必要时可制作动画演示</td></tr>
+            <tr data-page-node-id="sAjKzaLZzBeovSXUiTMqWX"><td data-page-node-id="YyxXxymXHliTCPTZE6Hwad"><strong data-page-node-id="rV8fqGm4aHO4i5LbOf1Qtl">MS Visio</strong></td><td data-page-node-id="C5ubSE5u7E8WKjeQWc5ink">基础流程图工具，制作结构、流程性图表时首选</td></tr>
+            <tr data-page-node-id="noh395hJCwOb7BkKfiMFdk"><td data-page-node-id="m4XlVax4SjAzS0Jdn0BMfL"><strong data-page-node-id="DYpDxNnc7AOCcBysIPk2Dt">Xmind</strong></td><td data-page-node-id="nGClYiYW5RWr5QWbUbTDKG">创意发散、设计要素整理的利器；推荐所有设计工作起始之初用于整理思路</td></tr>
+            <tr data-page-node-id="fu1xwaBJkdOqUetK5OIQ7N"><td data-page-node-id="dgnd64tgVmolYwDbEEqcat"><strong data-page-node-id="GKDim92vJ8hr4V8bHXqZzM">Axure RP</strong></td><td data-page-node-id="oCOI9UyZkdz1Z62VhsIo7y">经典 UI/UE 快速原型工具，制作功能界面原型及 Web 风格图标时强烈推荐</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="divider" data-page-node-id="IEGwlVKsZcEY9nZZrAWfIf"></div>
+
+    <div class="two-col" data-page-node-id="49BW6uZE3yho8BAbWL43zD">
+      <div class="sub-block" data-page-node-id="LL2kSuoUnvkeJRXAniPxw1">
+        <div class="sub-title" data-page-node-id="8kKk8x4zSaLzHayHEYaxKA">📐 2.2.2 文档模板管理</div>
+        <div class="sub-desc" data-page-node-id="nIwZpW6IE4AJEmUrH680Aq">针对策划实际业务需要制作常用文档模板，供全体策划成员使用。<br data-page-node-id="NyFMp4fvROe8nNrTwJSJVg">存放位置：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;" data-page-node-id="WkpWX5mZgox3xYRfrQxgPD">/svn/flower/doc/1. 开发规范/文档模板</code></div>
+        <ul class="item-list" data-page-node-id="YQPIxH5f52CXjVnakCjECF">
+          <li data-page-node-id="MFUc26km3bdInlzpKbNiHN"><strong style="color:var(--text);" data-page-node-id="BaBCrk6R9dmkLNFxIyWo0M">使用方式</strong>：所有模板文件可直接打开后「另存为」新建文档；Word 模板(.dotx)、PPT 模板(.potx) 还可复制到本地「自定义 Office 模板」目录，在新建面板查看使用</li>
+        </ul>
+        <table class="info-table" style="margin-top:8px;" data-page-node-id="7xrDsCEf2dZVRSrCASnCni">
+          <thead data-page-node-id="jtK9tiyKgsCDPOk2zA630m"><tr data-page-node-id="5Z5esOL1YwD8YnBw9I8Ixq"><th style="width:150px;" data-page-node-id="BDtGmDSLHFZTYGADNIQcaG">模板</th><th data-page-node-id="E7lhGx6AaMfLnKmxGaNbO2">应用说明</th></tr></thead>
+          <tbody data-page-node-id="fXU6D3D0odFxFCjjlNV2mU">
+            <tr data-page-node-id="iRkXGmn03Uc1I6jo4FStCM"><td data-page-node-id="kR40MHgJd4Qx7hddGZEHUP"><strong data-page-node-id="PbkHx01nM1c2VKQju7CaMA">通用文档.dotx</strong></td><td data-page-node-id="c0wVkZAHJwfHvYVdmf83Md">最基础 Word 模板，仅定义封面、目录、多级标题样式，可用于各种文档</td></tr>
+            <tr data-page-node-id="7sY5pWIaAhUuKBaUvHSpO4"><td data-page-node-id="wsYkmkwJW9Ox3p8XZlhLDI"><strong data-page-node-id="TV6tgeMBmG8R3G1otH0EEq">系统文档.dotx</strong></td><td data-page-node-id="MiQIDy7IvT0GeL3iY68MaH">系统功能需求使用模板，具体见「系统文档_使用说明」</td></tr>
+            <tr data-page-node-id="evPo5CXwbodZciyIefWUun"><td data-page-node-id="VR68WPng8qqGxyJ7f98BoP"><strong data-page-node-id="bh37PcPaZ1gENCFzE7oSiz">配置说明.dotx</strong></td><td data-page-node-id="gn1cx5z3dbs1uzGACxnhlb">数值策划创建维护，针对游戏所有系统配置表数据结构说明</td></tr>
+            <tr data-page-node-id="sXq24HW8p9JkZF8gGLguQq"><td data-page-node-id="7jM533vP66xFmnLES0FNc0"><strong data-page-node-id="z6Uh6cd0dJcDH28FQqYAYh">公式说明.dotx</strong></td><td data-page-node-id="OTJt8YHjtjcM946IBk8wOc">数值策划创建维护，针对游戏内所有数值公式说明</td></tr>
+            <tr data-page-node-id="GrawDBORsvhQCAQjakejpv"><td data-page-node-id="Bqsk1HcxWBE7X6l1A1FfyQ"><strong data-page-node-id="OJUSRUDM28feC87nVDfd3B">配置名称.xlsm</strong></td><td data-page-node-id="5ZsjDchAmQ3scUARNDHBQm">各系统配置表创建使用模板，默认为带宏格式</td></tr>
+            <tr data-page-node-id="0g8hWCR6DXRqWt9BpFnNKf"><td data-page-node-id="RYjYcehdlJGnAq02ADMfUC"><strong data-page-node-id="oOhn5QEVL1QIBOLmMCCkB9">设计脑图.xmind</strong></td><td data-page-node-id="mvRgypy4m6Z6kKhbyl8E0n">策划设计 or 统计整理常用脑图，统一脑图结构及配色方案</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sub-block" data-page-node-id="mT1rivDgXDGGjTHDpWDWEa">
+        <div class="sub-title" data-page-node-id="b1S5Ja26gntPz7100c4dqf">⚙️ 2.2.3 配置文件管理</div>
+        <div class="sub-desc" data-page-node-id="QJnKCZNcci3heobMm7D1vc">项目所有配置文件由<strong style="color:var(--text);" data-page-node-id="SzO8Tn7m3hc6dh2CeIRFKx">数值策划专职维护</strong>，统一存放于：<br data-page-node-id="qTaRKYodvfm6OCMgC9OGmN"><code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;" data-page-node-id="EaZC6oug6UOcagFXeEHYCU">/svn/flower/doc/4. 数据配置</code></div>
+        <ul class="item-list" data-page-node-id="vaJ64KIGa9NwvAepXKLzgv">
+          <li data-page-node-id="lm2hRF6R8S8O559iOIwkkp"><strong style="color:var(--text);" data-page-node-id="QtlkU4Y6ftSrXMBX76vkqh">配置文件类型</strong>：策划编辑、维护 <strong style="color:var(--text);" data-page-node-id="6DJg9ulpxXV8SNDga6bAYu">.xlsm</strong> → 使用 VBA 宏输出为 <strong style="color:var(--text);" data-page-node-id="WbYi6ZOH95ERP0vvxAXzfw">.xlsx</strong> → 经程序工具转为 <strong style="color:var(--text);" data-page-node-id="fBUBqS7MQTRwKTadjE0Vib">.json</strong> 等程序用配置文件；脚本类配置（如 .lua）可直接编辑使用</li>
+          <li data-page-node-id="0IDKNMx35hyoMOV1okIIK4"><strong style="color:var(--text);" data-page-node-id="NRBbYlDCeZvxbWieC1KT2M">配置输出版本</strong>：根据开发需要可能同时维护多个版本配置；输出时须根据配置版本号<strong style="color:var(--text);" data-page-node-id="Qqkrj8EoeXDdZ2zbnWAkfr">分目录对应输出</strong>（参照「Config 分支管理」说明）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider" data-page-node-id="hSWRpCqWKZC8tWzAwenAqD"></div>
+
+    <div class="sub-block" data-page-node-id="OX0UHikYtfHSvL9UZRkoJ8">
+      <div class="sub-title" data-page-node-id="xIwv6whAzCtcm2y4PXqjZV">🏷 2.2.4 命名 &amp; 编号规则</div>
+      <table class="info-table" data-page-node-id="DL5DarXITjUmaCpqrgVj08">
+        <thead data-page-node-id="J66kwAYCPP8XPd7b3Hzmhb"><tr data-page-node-id="SFPA2JNpg64Lmjnj3rLhKi"><th style="width:110px;" data-page-node-id="lVRB4wFmFXhFhm2548qIs2">规则</th><th data-page-node-id="Yvusfl0EdtRRCsDvtkMzpi">定义</th><th style="width:280px;" data-page-node-id="ndoBjc5nBSMeSFkuoREanX">示例</th></tr></thead>
+        <tbody data-page-node-id="7eRTCvqM9G9feL0LiC2prF">
+          <tr data-page-node-id="XuArom1rbMZTDCQBk1fg5o">
+            <td data-page-node-id="m3iotNJeTBnyladaZBsrTt"><strong data-page-node-id="aOwjqC5NqHf0RUyHNcmgLf">文档命名</strong></td>
+            <td data-page-node-id="N5kGIdUpJaCFotlr7Ysn9x">项目名称 + 文档名称 + 日期版本号<br data-page-node-id="IFjGnBdQvhvZfBiR0WNWBw">· 项目名称统一「『海边的安西娅』」（项目组名称沿用『花语恋』不作变更）<br data-page-node-id="Y3LWj92moeq2Z496GTsHJO">· 文档名称推荐 4～6 个汉字<br data-page-node-id="E3xvCMEiPrx3E1r4rnmCUo">· 日期版本号以 <strong data-page-node-id="hEvorYFYSZU9cKbkWorImL">_Vyymmdd</strong> 形式标记</td>
+            <td data-page-node-id="X2xzOLWxgar4EuCsa1Z3vi"><code data-page-node-id="WLsEMWN5IkC3DIkQNxotHt">『海边的安西娅』物品系统_V130308.pdf</code></td>
+          </tr>
+          <tr data-page-node-id="UroCZNo9MgxWhuQnDQIXe8">
+            <td data-page-node-id="P7Irg88AwKsMVi4OWwvkSh"><strong data-page-node-id="5FDP7jkQnIRE8hQbUAVA3N">配置命名</strong></td>
+            <td data-page-node-id="hGRZJPRbNDd3JH5nmeexR6">配置文件命名参照文档命名规则<br data-page-node-id="jtXOLEyvHdGTyZAJVaVv4T">· 配置表：<strong data-page-node-id="YLmwReTKiNWjMrDS4cPRfy">TableName</strong>（全英文，大驼峰，单词 ≤3）<br data-page-node-id="LiDFEHiKT3rdqA5rEUhqnI">· 配置字段：<strong data-page-node-id="3uKq1wNCLFBSHNV2Rg9Jid">field_name</strong>（全英文，小写下划线，单词 ≤3）<br data-page-node-id="dfJDoBwc4KxBgdkfYYW6cE">· 字段引用：<strong data-page-node-id="2VPSbzW7h5joowQLCVJ0c8">TableName.field_name</strong>（命名域方式）</td>
+            <td data-page-node-id="xfNJZtgcjsfC8pZbULELEH"><code data-page-node-id="eHhknUhyEgvAVUaKjkSiKE">Item.item_name</code><br data-page-node-id="vj5RFzHtCbHM5GMI2UnuaQ"><em style="font-size:12px;" data-page-node-id="kUGE25AGFcyjTKqD2myKgd">P.S. 可协同程序参照其内部命名规范确认最终规则</em></td>
+          </tr>
+          <tr data-page-node-id="awZ1CbvCKw9Il34CEk2qb0">
+            <td data-page-node-id="s49jHSKdzkv7TTi9NYGHEF"><strong data-page-node-id="9DAUgwYDkB4C1ENWJnsAIN">配置编号</strong></td>
+            <td data-page-node-id="JNzGXTyncQKxmyQ9bT01Qh">8 位数字 <strong data-page-node-id="6GLX0s9M6fxNyx6zQhNogR">AAABBCCC</strong>，原则上尽可能全局唯一（非单表唯一），由数值策划统一管理维护<br data-page-node-id="9FWkRKy5zPA7cc8dsCmiKX">· <strong data-page-node-id="8Z3dXFI4PRYCxVsjz4xFkX">AAA</strong> 配置分类标识（关联配置表，每表独立 3 位标识）<br data-page-node-id="NBRCrVxHlPBVc4o5AyeixT">· <strong data-page-node-id="VbB2IORrbD5C1Xxqv096Q8">BB</strong> 配置子分类标识（默认 00，取表内最主要分类枚举顺序数）<br data-page-node-id="TWpkojY7Bd3JcgPu5enzg0">· <strong data-page-node-id="7wfYYExBm7pOi3QASYlgpZ">CCC</strong> 配置流水编号（001～999）</td>
+            <td data-page-node-id="U1o2XW1bUrHoAwjbc41eme"><code data-page-node-id="fSdCRHoBw2QvAtWqYTXC6L">20101001</code><br data-page-node-id="oPdFKVmYKPEukeHT6nFEGr"><em style="font-size:12px;" data-page-node-id="DOUvWERU3ZmsloscVXrUcn">物品 Item 表(201) / 经验道具(01) / 最低经验值物品(001)</em></td>
+          </tr>
+          <tr data-page-node-id="QZWWPW2Qjzgz4JXSYo8zuz">
+            <td data-page-node-id="KTUKOIIymIkTnbM7c9lxN7"><strong data-page-node-id="FI6mR1rY0m8B3SSzXMvqB5">版本编号</strong></td>
+            <td data-page-node-id="tRG5kpCFBuoyzAfCJaWlDH">区分逻辑版本与显示版本号，由数值策划统一管理维护。逻辑版本号至少 4 位 <strong data-page-node-id="Agxm0iytlfAJrc2ZW79zh1">ABCC</strong><br data-page-node-id="Gbq1M1PfTAKF9WvTuXzJ3h">· <strong data-page-node-id="7ykMV02TAws6deSJAoyf7r">A</strong> 大型资料片更新版本（1 位以上，起始 1）<br data-page-node-id="MhRSIFvAkh9BBAZuhBPg3o">· <strong data-page-node-id="j51P6IhTNJ0A7vrAL2uK3s">B</strong> 重大功能优化 or 问题修复（固定 1 位，0～9）<br data-page-node-id="YTHDaNVjOHxotjqKqqd6IX">· <strong data-page-node-id="Eq8k9VifuDTz1KApFBmCmj">C</strong> 微小功能优化 or 问题修复（1～2 位，0～99，不足补 0）<br data-page-node-id="fwk74VLzFkNvBHS33oI0wo">显示版本号为「Ver A.B.C」</td>
+            <td data-page-node-id="PJPTKyonpUdqDvBS5IpqS5"><code data-page-node-id="yjiTRCU5AN4eey1GGZbJkI">2302</code> → <code data-page-node-id="UM0i5Vi82arXD08wMxl6LT">Ver 2.3.2</code><br data-page-node-id="uSosefyo9rHO9llW0bZMKa"><em style="font-size:12px;" data-page-node-id="43vHGxWan615IgDXTiWNgs">资料片二的第三个重大更新的第二个 Bug 修复版本</em></td>
+          </tr>
+          <tr data-page-node-id="acNMnSYza6z45WEaUpV8GB">
+            <td data-page-node-id="rgUCwB27uc2mgh0DODXU7p"><strong data-page-node-id="FwHuZDW6oyEgDgZmkXXO7t">出包编号</strong></td>
+            <td data-page-node-id="YdjOshErLBvLYDHdpBNQce">6 位 <strong data-page-node-id="pfmRXE1nvi3tcVH4vrQNuk">AAABCC</strong>（以后续运营对接为准），由数值策划统一管理维护<br data-page-node-id="ltND9Zx6OPZH0eRwlZbXML">· <strong data-page-node-id="LrrqzTK0MZUzLE3ziwA328">AAA</strong> 渠道 or 代理方（1xx 国内 / 2xx 海外）<br data-page-node-id="kVrqoc0bws4J0wDIPxNPAC">· <strong data-page-node-id="f8FojI7iNozGxGj7hihyj0">B</strong> 包类型：0-H5(逻辑包)，1/3-iOS 逻辑/全资源包，2/4-android 逻辑/全资源包<br data-page-node-id="OXc7DArLNFeGgQaH2g9zFy">· <strong data-page-node-id="mzKZP8MyCoPJer9gImpnBg">CC</strong> 包流水号（01～99）</td>
+            <td data-page-node-id="9FrpGbIl95ccdcJfK9puKX"><code data-page-node-id="SDZAYtuKDCSHuSVRqvFtv3">101001</code><br data-page-node-id="nQRCfg8fqgFEiMRxX28uz5"><em style="font-size:12px;" data-page-node-id="kXJunbQBiViDHxkDCuxBQs">国内腾讯发行的序号为 1 的 H5 包</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="h9SVePxQBeVcZIFQoaAL3F">
+    <div class="panel-title" data-page-node-id="jhBiDDDdZaTuBUzoa7TJ6O"><div class="dot" style="background:var(--teal);" data-page-node-id="5MMkaxuFKK9kcOAtiaguPM"></div>2.3 日常工作管理<span class="no" data-page-node-id="Cp2Ba0z9P6XL42Hu2lm1vv">2.3</span></div>
+    <div class="two-col" data-page-node-id="4IhB5DTkjpaKyDPMZGB7f4">
+      <div class="sub-block" data-page-node-id="9YoaPSntsfMDXXjYEhVSPc">
+        <div class="sub-title" data-page-node-id="GljH1jEAR2EC3m7PAjby3X">📌 2.3.1 日常工作概述</div>
+        <ul class="item-list" data-page-node-id="74MSUF0pC3NkA21rVhAzYs">
+          <li data-page-node-id="ll2xxQsqoc8kFBkIXb6lBC"><strong style="color:var(--text);" data-page-node-id="rFBp5aVPZaXBTBsCOKJeA2">业务性工作</strong>：设计元素收集、设计方案拟定、项目需求制定、项目内容配置填充等具体设计相关工作</li>
+          <li data-page-node-id="U2zO7uOaLoSW70DmFxmcoS"><strong style="color:var(--text);" data-page-node-id="EgLk2uXhCATRndy3K8848e">协调性工作</strong>：协调推进所负责需求的具体制作、实现相关的所有工作，并监督整个需求进度情况</li>
+        </ul>
+        <div class="sub-title" style="margin-top:12px;" data-page-node-id="RyXgu2y6fV1Nyaqsi9Ic3s">📈 日常工作进度管理</div>
+        <ul class="item-list" data-page-node-id="V2EVHhnnqU7pQ53I1G7yfC">
+          <li data-page-node-id="EWayrLKHv73dHHuQtcZnT5"><strong style="color:var(--text);" data-page-node-id="CByAjSiMw4uJF7QgpkkFJ7">项目 PMS 系统</strong>：策划作为 Jira 工作流的核心，需在充分了解 Jira 工作原理的前提下，通过对具体 Jira 工作任务的管理、监控，主动积极监督并推进整个 Jira 工作流运转</li>
+          <li data-page-node-id="6txOivw8MriRlnA0RKQYIG"><strong style="color:var(--text);" data-page-node-id="eLAl7QliKj3hEHAtlkFHcK">个人 GTD 工具</strong>：个人琐碎工作事务推荐使用 GTD 工具（推荐「滴答清单」）进行有效管理</li>
+        </ul>
+      </div>
+      <div class="sub-block" data-page-node-id="Vojep3VneDP1FDPSeQebJT">
+        <div class="sub-title" data-page-node-id="O1bkQRz7tuOoExAIqaXgGZ">🗄 2.3.2 日常工作存档</div>
+        <ul class="item-list" data-page-node-id="fi5KNayVX1PeOu8KtT7cI5">
+          <li data-page-node-id="VTf7Renlz4GGImBMIOTYIV">原则上，策划日常工作内容都应<strong style="color:var(--text);" data-page-node-id="u1RSaFCCUFq7U2BkVH9Aus">在 SVN 进行存放备份</strong></li>
+          <li data-page-node-id="4vPq13M94Em12S0HmjKnQ7">存放位置：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;" data-page-node-id="d9ZruRcvHYQ1Z34hSd5lIH">/svn/flower/doc/6. 日常工作</code></li>
+          <li data-page-node-id="oTSVdEpY8Glr532hzcP58p">每个成员一个文件夹，其下建立 <strong style="color:var(--text);" data-page-node-id="CLj2enXhVLBoNMkR1LZEAJ">「yyyy.mm」</strong> 形式按月子文件夹</li>
+          <li data-page-node-id="jWsdaIHJjTlSyFSAsAtQ0d">日常工作备份存档，<strong style="color:var(--text);" data-page-node-id="vLn8Y9AGxPvSax2J1HoNGY">尽可能每天工作结束后进行一次</strong></li>
+          <li data-page-node-id="M69x5IXqjw8SefMrmBAHDd">与正式需求的输出、发布互不冲突，分别进行</li>
+        </ul>
+        <div class="note" data-page-node-id="eWLSCO6WZgifwOhypYBEdj">🔍 策划负责人、项目负责人将<strong data-page-node-id="qmqcYDsWNZs6UO5uzr0WRn">不定期</strong>对策划日常工作文件夹内容进行检查。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3 项目设计流程 ===== -->
+<div class="section" id="s3" data-page-node-id="GFHT6QeD88W9VQL71W6Dnl">
+  <div class="section-header" data-page-node-id="IxAsuaKMmtBB3wDj7eJiMy">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="uk09vv51TKqhRmButlUpnO">03</span>
+    <span class="section-title" data-page-node-id="eVTx8M7BbO5vpIAfKdQ7LO">项目设计流程</span>
+    <span class="section-desc" data-page-node-id="16kI4gdWe8Z28HMVpZk5yw">概念设计 → 整体设计 → 具体设计</span>
+  </div>
+
+  <div class="panel" data-page-node-id="CZD0e5o8NuJ2oLQR6dS4jI">
+    <div class="panel-title" data-page-node-id="aDMgVA2wDIFDYNdU3uDPwB"><div class="dot" style="background:var(--orange);" data-page-node-id="0zO2HmXleaL2NnppAbbKah"></div>3.1 项目概念设计<span class="no" data-page-node-id="PtxZdS1WuIlNkQrmNIDPPH">3.1</span></div>
+    <div class="card-grid card-grid-3" data-page-node-id="H5BFJBbdpKdAneeUvxC1mm">
+      <div class="card" style="border-top-color:var(--orange);" data-page-node-id="NII2VukmEbbvd6R7PiSMnI">
+        <div class="card-title" data-page-node-id="eJg20C0U2kRgjHxfZpdCoZ">3.1.1 类型风格定义</div>
+        <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="mFTYWe6N4VdmSa8lAYkZUy">
+          根据公司研发战略、市场需求判断，以及项目题材（IP）等外部条件，兼顾团队自身制作经验、业务擅长，确定项目具体的类型、风格定义。<br data-page-node-id="gyym7VNhvkjhb0bCvcHZgg"><br data-page-node-id="ZDaavbnxK9R4ZpvgPHu54S">
+          需全面评估外部市场需求、IP 题材特点，结合制作团队的技术实现、美术表达等各方面制作实力，最终制定包括 <strong style="color:var(--text);" data-page-node-id="AGvK1nYSCObfFTp5YK8A4h">IP 核心元素游戏化形式、竞品分析、美术表现形式及表现水准</strong> 的产品制作方向。
+        </div>
+      </div>
+      <div class="card" style="border-top-color:var(--orange);" data-page-node-id="R1iwl6tj86ov78Hf0vgXy5">
+        <div class="card-title" data-page-node-id="OgZzVrBkQm2aBA7aIhJWZU">3.1.2 核心概念设定</div>
+        <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="aCCU2G5sDMcFube2edSbNU">
+          基于对产品类型、风格的初步设定，深挖项目题材（IP）相关设计元素，罗列、筛选可进行游戏化的创意点，对产品中核心功能、核心表现的概念进行设定。<br data-page-node-id="CypUc3aG4CrDNvRqdCTLSg"><br data-page-node-id="ArUY9Exfx21I5mxvQfnwV6">
+          可在策划团队对项目题材（IP）深度调研、挖掘后，以 <strong style="color:var(--text);" data-page-node-id="9F1Pc39DWfjOJtYOMV8zYZ">创意风暴形式</strong> 进行。最终成果是在拟定产品制作方向基础上，补充完善 <strong style="color:var(--text);" data-page-node-id="2i3c19BV2FilsM5c52UW78">核心玩法、特色玩法、核心体验循环</strong> 等核心设定。
+        </div>
+      </div>
+      <div class="card" style="border-top-color:var(--orange);" data-page-node-id="j3XnUkD22s0PAr9jDMTH5c">
+        <div class="card-title" data-page-node-id="bbDTPc6P4uR55jn2abJaMq">3.1.3 核心 Demo 设计</div>
+        <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="08VANIszWifLIBe4XHvlny">
+          在产品制作方向、核心/特色玩法、核心体验循环设定完成的基础上，对 Demo 版本进行内容规划和需求设计。<br data-page-node-id="M5Zwg56y8aUQOFeFRNldfP"><br data-page-node-id="gI7WHtPvvA7BnScNpk71bN">
+          <strong style="color:var(--text);" data-page-node-id="NdNbWrfa3Iv4D4TS1i1rcM">Demo 版本定义与目的：</strong>将可能影响整个项目设计走向、类型选择、产品定位的核心内容进行验证、确认及可行性评估。在此原则下，提取 Demo 需优先实现或论证的内容，并进行核心规则及核心表现设计。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="NzkJklCYmPYafsSje6RAUP">
+    <div class="panel-title" data-page-node-id="c82Sf1sYOKv5viOrcW64IY"><div class="dot" style="background:var(--accent);" data-page-node-id="TpVBDXxugwHllvUFvjmGMe"></div>3.2 项目整体设计<span class="no" data-page-node-id="mhKQDofd1mK9wLSBFEi9Bv">3.2</span></div>
+
+    <div class="sub-block" data-page-node-id="RrKZLtGxlPjeuxcO8cJFky">
+      <div class="sub-title" data-page-node-id="EA3HmJNtdsFYYcEqGnqLux">🏗 3.2.1 系统框架设定</div>
+      <div class="two-col" data-page-node-id="zVaITMy5Efd5QjkxCB9c6w">
+        <div data-page-node-id="zBrWU4zmWMttNUSjSXVt1t">
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;" data-page-node-id="9NECR5mALO7uHOASUqP1W1">设计步骤</div>
+          <ol class="steps" data-page-node-id="zj6Rp8ul7tgEm96nkWyc9u">
+            <li data-page-node-id="cA51loKRP2N12agWluP6EU"><strong style="color:var(--text);" data-page-node-id="r1gCewLSdgDXEMk20FjFuR">首先</strong>：根据具体内容、实现方式、表现形式划分系统内容。可参照同类型经典项目划分方式，部分创新设计内容需独立划分系统</li>
+            <li data-page-node-id="3U3rYkJ2oJ228nYmlgYnqW"><strong style="color:var(--text);" data-page-node-id="eUWB9cDV0nHwVBEW4JeGsm">而后</strong>：根据各系统在项目中核心性、创新性地位差异构建基本系统框架。以核心系统为设计根本，以创新系统为设计重点，确保各系统的均衡与协调</li>
+          </ol>
+        </div>
+        <div data-page-node-id="lQ4KkEV8055ZK1CRhwFYyr">
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;" data-page-node-id="xM3ABb2fL3fHlIjm5fHPP5">开展方式</div>
+          <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="v6jUOhn7k7xmxfqscsVBK2">具体设计过程以<strong style="color:var(--text);" data-page-node-id="wleFZtykL4B9GUFRE7ZiGZ">多轮策划设计会议</strong>形式，策划团队主要成员参与系统内容梳理，由<strong style="color:var(--text);" data-page-node-id="SHHZ3LOsg9TLyns05mwgkJ">项目制作人、主策划主导</strong>进行框架设定。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" data-page-node-id="eDzRHNR6X9G5gkEmyqKDlM"></div>
+
+    <div class="sub-block" data-page-node-id="2nKZPWsFQvefvJCaeltSW3">
+      <div class="sub-title" data-page-node-id="dpI2TglZEgGLUB63dQtdAG">🔢 3.2.2 数值结构设定</div>
+      <div class="two-col" data-page-node-id="7TxEGdBzSzsoiZQZZb5x1X">
+        <div data-page-node-id="KLsYPoA4zV3lW8hH4etvUe">
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;" data-page-node-id="Xlz1u7W0gFixuqTkBxRkw2">设计步骤</div>
+          <ol class="steps" data-page-node-id="69q8N57x3qD7DScqf07fFq">
+            <li data-page-node-id="6Mac3tqSOpuD55AdH53pVO"><strong style="color:var(--text);" data-page-node-id="0GxRbWFfL3AVVw1zOcNF4S">首先</strong>：根据项目类型确定数值分类体系（如养成数值、战斗数值、经济数值等），并确定其运转关系</li>
+            <li data-page-node-id="oqgJBqfFnYAZDzYknFhC0h"><strong style="color:var(--text);" data-page-node-id="nYMa4REwlSdaC5LRFhkeum">其次</strong>：根据各主要系统在系统框架中的定位，划定所属的数值分类体系</li>
+            <li data-page-node-id="F8MPlHVmBmyQwoLMTs3pzW"><strong style="color:var(--text);" data-page-node-id="QSu5UQeBG3K8CSnDJDBBsg">最后</strong>：通过对同一数值分类体系中的各个主要系统综合考虑，设定各分类体系初步的数值结构</li>
+          </ol>
+        </div>
+        <div data-page-node-id="n341AQssRPTvjGWmDc1SeA">
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;" data-page-node-id="U4DdhD1aQAKACSI1JxxcqV">开展方式</div>
+          <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="0mFA3rmC7MD9dw60OioH1E">系统框架基本确认后，由<strong style="color:var(--text);" data-page-node-id="fPw7AkLvopkCLrlAcL4QMT">制作人、主策划、核心系统策划</strong>初步整理、罗列各主要系统数值关联需求（含关联方式、关联强度），交由<strong style="color:var(--text);" data-page-node-id="xk9bJsVOEUm28n1ruROUGB">数值策划</strong>完成初步设定。可通过 <strong style="color:var(--text);" data-page-node-id="fTXe540b3SAn9s4S310XfK">1～2 轮策划设计会议</strong> 完成该阶段设计工作。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" data-page-node-id="aZg78BbF4e6LrCVoMW0tow"></div>
+
+    <div class="sub-block" data-page-node-id="M5njrx06vtPlkzYIGDA2ht">
+      <div class="sub-title" data-page-node-id="w6OCa3OhOkJ1hISFiCalTA">🌍 3.2.3 世界构成设定（世界观设定）</div>
+      <div class="card-grid card-grid-3" style="gap:12px;" data-page-node-id="rYaiqzop1psk6SOh9JGsGF">
+        <div class="card" style="border-top-color:var(--accent);padding:14px;" data-page-node-id="ut5S3L4LsVqwNHCnvvxePT">
+          <div class="card-title" data-page-node-id="b2nzdKMsdcigayEW7EaJrg">世界观定义</div>
+          <div style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="4gLnzex06jzVMFrq0YSYAA">项目最终完成产品所表现且能被玩家感知的游戏世界内的所有元素，都属于世界观范畴，包括：角色、场景、背景故事，以及游戏内存在的所有物品、事件等。</div>
+        </div>
+        <div class="card" style="border-top-color:var(--accent);padding:14px;" data-page-node-id="aL17CFy6YYmcG9VEJk9AP8">
+          <div class="card-title" data-page-node-id="XVU6H4A6fuoD8Q9TvHwqNQ">设计原则</div>
+          <div style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="IEH0NsdtYz8ZBmblsmscZf">世界观虽是包装性内容，却是玩家最直观看到、感知到的设定。因此必须吻合游戏设计的定位、风格、概念以及调性，需要有高度统一的设计出发点和设计诉求。</div>
+        </div>
+        <div class="card" style="border-top-color:var(--accent);padding:14px;" data-page-node-id="L4f1vfmcSH1SjPFF4VfMXG">
+          <div class="card-title" data-page-node-id="PprjoFgcHqQrKqSgE5gM2g">开展方式</div>
+          <div style="font-size:12.5px;color:var(--text-muted);" data-page-node-id="4HBcSkyr2tNApO9jLkbAUm">在充分理解认知项目类型、风格及题材（IP）的前提下，首先确定设计边界；而后自大及小地对整体世界观进行设定。此过程需要一定周期补充完善，由制作人、主策划把握整体调性，内容策划具体负责。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="ta4vmVk5uNPrWQFGnAC2dB">
+    <div class="panel-title" data-page-node-id="YL8XD3SlkAdI6vqy1nIAva"><div class="dot" style="background:var(--purple);" data-page-node-id="M7PTkaZGcTw3e9zbRXYxE1"></div>3.3 项目具体设计<span class="no" data-page-node-id="KMfZZZ1KLK23SUwj4ktfSK">3.3</span></div>
+
+    <div class="sub-block" data-page-node-id="ryimvAP0fXYYtibi4sWav0">
+      <div class="sub-title" data-page-node-id="fuFBpW0kYp57fG5MFEnIuZ">⚙️ 3.3.1 具体系统设计 — 三阶段</div>
+      <div class="flow-wrap" style="box-shadow:none;padding:8px 0 4px;" data-page-node-id="m4ZvAvDpXQhBB3RwMg0mY9">
+        <div class="flow-row" data-page-node-id="qyeKPApffm2sHDnsigLC5L">
+          <div class="flow-label" data-page-node-id="Eg4Pp2rqDgc2iOUnb4Fu7u">阶段一</div>
+          <div class="flow-nodes" data-page-node-id="ZeKfAFHCdxYtXiZzoxozNn">
+            <div class="flow-node fn-orange" data-page-node-id="lFeCLWqxCuyFf0b8ZbVZDd">创意风暴</div><div class="flow-arrow" data-page-node-id="JqlSsGEh6ZDM3fGodSWxVt"></div>
+            <div class="flow-node fn-gray" data-page-node-id="eUWimzbGh6IDUSEYT0pEPd">全员预备素材创意</div><div class="flow-arrow" data-page-node-id="06LmSugNMCevDs7KmKPiYm"></div>
+            <div class="flow-node fn-gray" data-page-node-id="BOkyd7yUtBJoUMeGQHIEiW">1～2 次风暴会议</div><div class="flow-arrow" data-page-node-id="DTy0EUIJE0B2RYWCTZt6mB"></div>
+            <div class="flow-node fn-teal" data-page-node-id="TvFkWHADI5TXwbT3LXOJ3R">核心创意提供者任负责人</div>
+          </div>
+        </div>
+        <div class="flow-row" data-page-node-id="2tOgNVZyq3fgK3Y2mj69yv">
+          <div class="flow-label" data-page-node-id="fWcMwevMI3aKN3h6IzHg0R">阶段二</div>
+          <div class="flow-nodes" data-page-node-id="PEk87gTm0FDrhtWQtdy4mZ">
+            <div class="flow-node fn-purple" data-page-node-id="CC5X2INE9JE7d23nnyxSPH">设计草案</div><div class="flow-arrow" data-page-node-id="89LIm9nnRWNmu5p6nKTWQj"></div>
+            <div class="flow-node fn-gray" data-page-node-id="0BGI0ZiG6AttSWQmB35Nz0">脑图/表单形式</div><div class="flow-arrow" data-page-node-id="NA2wv33JgnkZww4J2rvlur"></div>
+            <div class="flow-node fn-gray" data-page-node-id="0Il7p8xd8qRFUK9liCr397">1～2 次论证会议</div><div class="flow-arrow" data-page-node-id="TKvmn5FlIlMv7BFirzeC5D"></div>
+            <div class="flow-node fn-blue" data-page-node-id="ZjFPDEc38V2tTzhYbauaq7">协同程序&美术可行性论证</div><div class="flow-arrow" data-page-node-id="AOy6dbZgQNGrepdfrjLFaN"></div>
+            <div class="flow-node fn-teal" data-page-node-id="tdQRRLHYQCG4hjYIQbRWal">最终设计方案</div>
+          </div>
+        </div>
+        <div class="flow-row" data-page-node-id="iQE5b8iOgRWvbQDeHbFD91">
+          <div class="flow-label" data-page-node-id="zBdx2nVVXQEl1dRf7BmrF8">阶段三</div>
+          <div class="flow-nodes" data-page-node-id="tBn9lmy1c18euNJgNQnCyz">
+            <div class="flow-node fn-pink" data-page-node-id="sdpIFNQmohC80yRWblYZpE">正式需求制作</div><div class="flow-arrow" data-page-node-id="W73tjFBEfXj6LawJggp6kB"></div>
+            <div class="flow-node fn-gray" data-page-node-id="GHsADdaZaAFc6RvE0H2SW5">参见「4 开发需求规范」</div><div class="flow-arrow" data-page-node-id="YJSjPDlrC9AKmrfN3QswuI"></div>
+            <div class="flow-node fn-blue" data-page-node-id="EPd6DXp2p5NCriLaOfQA7n">1 次内部需求审核会议</div><div class="flow-arrow" data-page-node-id="W3NEMRZP0yzpRCnzrf8d9g"></div>
+            <div class="flow-node fn-teal" data-page-node-id="tLP2awKaaClY5x8Q2oWnOs">校验 &amp; 审核完成</div>
+          </div>
+        </div>
+      </div>
+      <div class="note" data-page-node-id="tNrms1PPiw53XPKmJeq8CS">📌 草案阶段只需达到<strong data-page-node-id="mUUNCtBtvZZspr3OgMONdy">核心体验循环明确</strong>即可，文档形式不作严格要求（推荐脑图、表单）；经策划团队整体共识<strong data-page-node-id="gMN1ShwqAmeMP8bp91CEBG">且</strong>完成可行性论证的方案，即为最终设计方案。</div>
+    </div>
+
+    <div class="divider" data-page-node-id="MxDhpSidwVZd0DkPg6zlpE"></div>
+
+    <div class="two-col" data-page-node-id="JO3yNkjp1W3HEljylkOPC3">
+      <div class="sub-block" data-page-node-id="WLeUov7vneZmOQiqzguSOO">
+        <div class="sub-title" data-page-node-id="z0eH9eD1U3DDqJCiZ5bOPG">📊 3.3.2 具体数值设计</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;" data-page-node-id="JGLelnJQh8aFZH1E0tFg7E">系统参数结构</div>
+        <ol class="steps" data-page-node-id="67TIM2gVZ5Lh7SDAzSovg1">
+          <li data-page-node-id="N5dFbK88FZD0S5MVdjz4ao">根据确定的系统设计方案，与系统责任策划沟通明确对数值效果的期望及要求</li>
+          <li data-page-node-id="04BAlGf01GKSmxkByPvgxd">在整体数值架构框架内，设计本系统参数结构，并与系统责任策划协调确认</li>
+          <li data-page-node-id="8uUQDkJHxq5LFHj3TsGiFR">与程序协调调整，最终确认系统参数结构</li>
+        </ol>
+        <div class="note" data-page-node-id="VSGOPZAqrBp1YuhWFcNCMb">本阶段数值设计工作应当<strong data-page-node-id="oHlPshxoBC2Fr6b31i0Tpx">与系统正式需求制作同步</strong>，并作为正式需求中的必要内容完成输出。</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin:12px 0 6px;" data-page-node-id="idgq2ghUaebNZN4uMg1nc1">数值效果调试</div>
+        <ol class="steps" data-page-node-id="e1DSZ6dcdaUnYWwJmbobCs">
+          <li data-page-node-id="gKHD1awuxyul8BTURA4rTV">根据系统策划的效果预期，设计数值基础参数及关联效果运算方式</li>
+          <li data-page-node-id="qJGwbx9SSWLZ6hPlljLk2T">以自制测试工具（Excel 等）进行模拟测试，调试优化相关设计</li>
+          <li data-page-node-id="9QX66xeBOc3tqc891HWew4">在需求已实现的游戏版本中反复体验、调试，完善数值设计</li>
+        </ol>
+        <div class="note" data-page-node-id="empwlszZVu5Dg179s9r5LB">💡 <strong data-page-node-id="ifhXSScUNbeL06iVIjtyZF">数值设计原则（口诀）：</strong>系统方案确定了 → 就应该有数据配置结构；有数据配置结构了 → 就应该有功能测试数据；系统功能完成了 → 就应该有正式体验数据。<br data-page-node-id="gkQU9CmBOSBoqxjNbvGPF8"><br data-page-node-id="UrBoGalM4GalVHXEGiWJI8">模拟测试调试主要存在于设计阶段；游戏实际体验调试存在于整个设计、开发，甚至运营阶段。<br data-page-node-id="sBjN9hCUrMW13ATIqXid2Q"><br data-page-node-id="H28SIwad8l00JjrA2He2rn">由<strong data-page-node-id="V19VmqeivQCnqek1myCQXA">数值策划总体负责</strong>，系统责任策划提出数值期望及要求并负责验收；意见不一致时可通过策划设计会议协调或调整。</div>
+      </div>
+      <div class="sub-block" data-page-node-id="C2LL8P0beKfmxyHhsmCTRp">
+        <div class="sub-title" data-page-node-id="tGEO039MGvK9LHzMWuUA7d">✍️ 3.3.3 具体内容设计</div>
+        <table class="info-table" data-page-node-id="HpgZ9i2EtzhgdzJ45WYfp3">
+          <thead data-page-node-id="BbQ2PcRmJhscc5SAW8C5ub"><tr data-page-node-id="mOzXIwS1Xj3jxspnv7oKh5"><th style="width:96px;" data-page-node-id="gen0yzzC0DlSjYZgZQoBl7">类别</th><th data-page-node-id="kksPu48AwhWPeSM641XHTw">设计要点</th></tr></thead>
+          <tbody data-page-node-id="XVvjkrYJgrEoByFxExcA2d">
+            <tr data-page-node-id="iTug91Jus52qSEwnvGVjmT">
+              <td data-page-node-id="Oj2ZVONXDzPDD2dTtzIPlk"><strong data-page-node-id="UcdTlj8sgaxfZzCeGDSfUa">包装类设计</strong></td>
+              <td data-page-node-id="mTUDbNb5YYpECIWCPap5D0">根据确定的系统设计方案，结合世界观基础设定，对整个功能进行包装设计，包括：功能名称、物品名称、功能表现形式等包装内容</td>
+            </tr>
+            <tr data-page-node-id="X6fCHi7U8iHnOEWXV1Zixp">
+              <td data-page-node-id="TjWaNB4h2gU3pgSDNJHLGo"><strong data-page-node-id="dQoRmCGAYEG3JyLRSc4sYf">剧情类设计</strong></td>
+              <td data-page-node-id="8zCtoFdozu8ELacHvugJAR">① 符合世界观背景基础设定，根据背景故事设计具体剧情的推进演绎<br data-page-node-id="25CjPe6sxEonSBNvod8OOB">② 明确游戏剧情是一项<strong data-page-node-id="XJHDyvLh7lVBxiTIJPhqQW">包装属性</strong>，如何运用系统功能去表达剧情、丰富表现是重要的设计考量点<br data-page-node-id="TBePyEEtXQdIgqrYpOlE3G">③ 设计剧情的同时，需要结合游戏美术资源的设计和应用</td>
+            </tr>
+            <tr data-page-node-id="d8l7v1fWk7mFrFl83PCfbr">
+              <td data-page-node-id="YKzk8Avy7hzTMR4hZzVFUp"><strong data-page-node-id="8JU8T7xaHOyO7cnU7LsEQW">资源类设计</strong></td>
+              <td data-page-node-id="GNqO7AGTAumZcPJqOUAr0l">① <strong data-page-node-id="pB43sDvchh7i349ZycLCEv">界面类资源</strong>：由系统策划根据系统功能需要设计，并作为正式需求的必要部分<br data-page-node-id="pkQT9qi2NA2eQAISzR3Fmp">② <strong data-page-node-id="CV1BhDw3xB9Tfyhckq25vU">场景、角色、特效等各类资源</strong>：由内容策划负责设计，以配合整体世界观表达<br data-page-node-id="83BycKCKl1D79HGENX8u0f">③ 部分美术资源涉及功能逻辑和应用时，内容策划需与相关策划协调开展设计</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note" data-page-node-id="nXMFxBYPHqCKzT5sXr0L6V">由<strong data-page-node-id="rIkrZgXuFmcVAiNUIE8EJV">内容策划总体负责</strong>，系统责任策划提出期望及要求并负责验收内容设计成果；双方不能达成一致时，可通过策划设计会议形式进行协调或调整。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 4 开发需求规范 ===== -->
+<div class="section" id="s4" data-page-node-id="eWwoLdDoH6JTSuzGr6wWQ3">
+  <div class="section-header" data-page-node-id="pgEf6gl0KxvE2Br0yQ9VAu">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);" data-page-node-id="JmujtQ9PBM4TzEMFEdVv5x">04</span>
+    <span class="section-title" data-page-node-id="PrcuMUnuHdfVMBYXRWerEj">开发需求规范</span>
+    <span class="section-desc" data-page-node-id="Qfcll69r8Zt7jTRHhwOFGG">系统功能 / 美术资源 / 数据埋点</span>
+  </div>
+
+  <div class="panel" data-page-node-id="9UAt5FVkRwKH4U42eDTNh9">
+    <div class="panel-title" data-page-node-id="UZwGErJfHOQNmo5ydwDhJq"><div class="dot" style="background:var(--accent);" data-page-node-id="CBDKnOuhl346e009qq65wb"></div>4.1 系统功能需求<span class="no" data-page-node-id="RluS6etwnhL8mEmNkNFqFL">4.1</span></div>
+    <div class="card-grid card-grid-2" data-page-node-id="cBiuxwtC8he06MyAFyCa6g">
+      <div class="card" style="border-top-color:var(--accent);" data-page-node-id="vQE6QyOItACXHFDZdPWZuC">
+        <div class="card-title" data-page-node-id="iioDCT9vOtvDrLuZx4s1AG">4.1.1 功能概述</div>
+        <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="rAdazntObdIryCsauM8m4d">对该功能进行整体性简述，使阅读者快速了解该文档对应的需求，其包含的主要功能点及特殊内容，形成初步印象。同时可根据需要，简单说明该需求的设计目的、系统定位、设计思路等基础信息。</div>
+      </div>
+      <div class="card" style="border-top-color:var(--accent);" data-page-node-id="iJPCnGpx6cSxSVSZX63fwf">
+        <div class="card-title" data-page-node-id="A2xiYLqFU6jHBu1DnMPz9n">4.1.2 配置参数</div>
+        <div style="font-size:13px;color:var(--text-muted);" data-page-node-id="EYD3ZB0o9jjfBcStadx4tU">主要由该需求策划人员定义配置方式及配置数据结构；如执行过程有困难，可通过与策划负责人、数值策划，甚或相关开发人员协商确定。<br data-page-node-id="SVglTjyz3HR5unSAH3ktNJ"><br data-page-node-id="yLmyAiEWJ9phszQ0JlH3Xh">无论何种方式，最终确定的<strong style="color:var(--text);" data-page-node-id="NgqmgFcTFvdrDVlC2az6Oz">配置结构及说明需在需求中列明：字段名、字段类型、字段说明及配置方式说明</strong>，并与后续规则相对应。</div>
+      </div>
+    </div>
+
+    <div class="sub-block" style="margin-top:16px;" data-page-node-id="S6rpVGZJCF15wShC6XdjTS">
+      <div class="sub-title" data-page-node-id="m5wDVqFYpPlhNJVWBqwKGn">📏 4.1.3 功能规则 — 「总-分-总-分」模式</div>
+      <div class="two-col" data-page-node-id="QSltWgxCvBDltxFyiQHVsq">
+        <div data-page-node-id="Jxrn1BGgjrXuZKKwdIJkP4">
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;" data-page-node-id="yrO2DkPh26guh4tEeloxch">设计方式</div>
+          <table class="info-table" data-page-node-id="NdaAKf471ypXYDGSAWKNxA">
+            <thead data-page-node-id="4LmOVWEwwnpSoRW2Im9hjH"><tr data-page-node-id="v5VcA873AIHPxRqjHTnZfP"><th style="width:44px;" data-page-node-id="U9OWcfAmb1Q2ZxwA4Xe8J1">环节</th><th data-page-node-id="9TdKbpW1d7Q2FQT9Vxl3iO">说明</th></tr></thead>
+            <tbody data-page-node-id="cIriGZF2VY1VNjMLEl5jq2">
+              <tr data-page-node-id="eAAz7siIBPkj4Jfn4pVn0Z"><td data-page-node-id="NO7WN3VGN4TgZPIoap0NY3"><strong data-page-node-id="rFMW6eWYkvijXsgwyNDOZE">总</strong></td><td data-page-node-id="KYOpVVLmz59sNLtp8qTjZm">明确整体需求目的和定位</td></tr>
+              <tr data-page-node-id="OPC40VPbaf8CTH6r69BEyQ"><td data-page-node-id="01INDMp47NijXeg1mUFQnU"><strong data-page-node-id="O9Lr1ifNaUyi9xbp7IzAq3">分</strong></td><td data-page-node-id="2DqIm53UES3ELrJZKRX8YL">需求项目/内容分项逐一列举，并标注多维度分类标签</td></tr>
+              <tr data-page-node-id="Sx9xkKAtPh0qv2NDcV9Jiw"><td data-page-node-id="4LlvkMmBA9T3DreFtXtIVW"><strong data-page-node-id="JUdVs9Fc0JGcPcOR3CrdSt">总</strong></td><td data-page-node-id="RlFLlcuZeiv6gINwHjH6G0">汇总各个分类维度，整理一个主要划分维度</td></tr>
+              <tr data-page-node-id="6uRTnP0NEy0GMEFt03WDQn"><td data-page-node-id="YxzmXbGARdFqznXLDWsXkp"><strong data-page-node-id="fOy7mcDaSSOoHvPVQbcKA0">分</strong></td><td data-page-node-id="ymozCSBVj9feeaTCbwSYLX">基于选择的主维度，将各项内容分别进行具体设定</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div data-page-node-id="FHvIuSLEsVJXX6PqyUXvpC">
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;" data-page-node-id="OMtRNZswNeqGuJ76l7vWg4">整理步骤</div>
+          <ol class="steps" data-page-node-id="wEI1PuAQQM6JVTNYZY55LY">
+            <li data-page-node-id="ZOLsk4LtVEE5wZQ3nmhewx">将该需求涉及内容进行罗列</li>
+            <li data-page-node-id="KRijRFCBzpk5GsPLabaFmY">将所有罗列项目，按不同分类标准（维度）进行分类（标签）</li>
+            <li data-page-node-id="3YZpj02RJjDpBEjTxr5Ech">根据所有项目间的层级、关联强度，决定各分类维度的优先级别</li>
+            <li data-page-node-id="GyzkzRIn5aGtHgZDiJtGH2">依据确认的分类维度层级，确定规则说明标题层级（1～3 个层级）</li>
+            <li data-page-node-id="FWA37vBAQ85A7BSvEvjbzt">根据已划分确定的规则说明层级结构，补全各块规则的详细说明</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-block" data-page-node-id="hYS2CGvrsh5dAOal1ZHe4H">
+      <div class="sub-title" data-page-node-id="wQwly202Hw4DpkgBXUyeyj">🖱 4.1.4 交互规则</div>
+      <div class="sub-desc" data-page-node-id="tGHopLynhFZdzj5FTFKd8Y">独立于功能规则，主要针对具体功能界面进行交互规则详细说明：</div>
+      <ul class="item-list" data-page-node-id="NEXix1qgSNO68zIIEkHKPG">
+        <li data-page-node-id="sKZxzrYQkz75hG6F0vkcCC"><strong style="color:var(--text);" data-page-node-id="mHZk9aCoVNshP9nmOHDWm8">界面信息</strong>：包括界面具体展示的信息，以及信息展示的形式、样式</li>
+        <li data-page-node-id="EPVmxP5uRtG9S5JeZMLv98"><strong style="color:var(--text);" data-page-node-id="O1PIQaIu0gLVUq4cszqFmo">界面操作</strong>：包括界面操作的内容、操作的方式，以及操作的效果以及各种反馈</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="w0I0y3vEUNxOto8W3jy7TB">
+    <div class="panel-title" data-page-node-id="iX2uk9E267w9UwOkYK7Gm3"><div class="dot" style="background:var(--pink);" data-page-node-id="8adH0yswNGigkKeSjUCH88"></div>4.2 美术资源需求<span class="no" data-page-node-id="mosRSaIqVKECN0VS7MJek3">4.2</span></div>
+
+    <div class="sub-block" data-page-node-id="YclrolHSxFShCDKrN6zXEb">
+      <div class="sub-title" data-page-node-id="MNFFyKBpzLBzwDNRG6hs28">🖥 4.2.1 界面资源需求</div>
+      <div class="sub-desc" data-page-node-id="XNBCn5EJSBacvElffe0A22">系统功能的界面资源需求，由<strong style="color:var(--text);" data-page-node-id="nFBWl96wuM3vre8pID79lq">系统策划</strong>在系统功能设计方案确认时，以 <strong style="color:var(--text);" data-page-node-id="egRLyuCoqAE9jFHgNPSu02">UE 设计需求</strong> 形式交由<strong style="color:var(--text);" data-page-node-id="Vd09wWjVuQNoh4tn8PWM8A">交互策划</strong>进行交互原型设计后，以 <strong style="color:var(--text);" data-page-node-id="9344PKssAxCAi9ySagn9z9">UI 制作需求</strong> 形式提交给 UI 美术制作。</div>
+      <div class="two-col" data-page-node-id="ZSB2yOcKoIiBGHEz6xaOKo">
+        <div class="card" style="border-top-color:var(--pink);" data-page-node-id="EQavkbtDbFOHPeZ2YDlWk7">
+          <div class="card-title" data-page-node-id="5Tqx80yFgfBPuvffqQwQ4s">UE 设计需求 <span style="font-size:11px;color:var(--text-muted);font-weight:400;" data-page-node-id="TqU65pahcZfU88OTwEB6M7">系统策划 → 交互策划</span></div>
+          <ul class="item-list" data-page-node-id="ypEbJsq4Kxld7w6ARxUSiU">
+            <li data-page-node-id="V4DOXGn6sIqzMboyz9Szlh"><strong style="color:var(--text);" data-page-node-id="8fmXBGJPapHIYnpDzgKBA9">交互原型</strong>：以 Axure 制作的简单线框原型图，确认交互层级和基本样式需求</li>
+            <li data-page-node-id="hjyVRCCNGADsXvxuZNBgD9"><strong style="color:var(--text);" data-page-node-id="vReXDzOrp7ZLbdndvp94fg">交互说明</strong>：简单列举说明界面需展示的信息、操作、状态，并标注必要性等级</li>
+            <li data-page-node-id="V0wEoYUBw0Pna8ftB3hjaf"><strong style="color:var(--text);" data-page-node-id="O7BWaygwehCiCHEO1fPpZE">包装建议</strong>：可针对整个交互界面的整体包装建议，也可针对个别元素的包装建议</li>
+            <li data-page-node-id="k7YD2bTUZdpVoRdfV0tf17"><strong style="color:var(--text);" data-page-node-id="yTNLaXumRVJB98RbNMaU5s">形式</strong>：系统文档中图文说明，或 Jira 任务中独立的图文说明</li>
+          </ul>
+        </div>
+        <div class="card" style="border-top-color:var(--purple);" data-page-node-id="sNzADyPcp2moAn8uCwc6iZ">
+          <div class="card-title" data-page-node-id="quCljqQ1iq4i1EdVzfrgQx">UI 制作需求 <span style="font-size:11px;color:var(--text-muted);font-weight:400;" data-page-node-id="wG02gOB9zxOsuRjb2JyUxJ">交互策划 → UI 美术</span></div>
+          <ul class="item-list" data-page-node-id="jA9YGRC3bZKeH2sFYvlfBo">
+            <li data-page-node-id="ZDVmyqkKLOgcO4sTTuCq8H"><strong style="color:var(--text);" data-page-node-id="Myjp6II97YSJNAmfsGqK6e">交互原型</strong>：高保真界面原型图（蓝湖），并辅以样式、控件的具体规格说明</li>
+            <li data-page-node-id="rHpEdFi7aZF4GhN0m88Gev"><strong style="color:var(--text);" data-page-node-id="Ro8guzo6uw4lBqUG5wq4pR">交互示意</strong>：以简单交互预览，表现界面交互逻辑及状态样式</li>
+            <li data-page-node-id="6Jnw7aPAz0TuH3epGgSzhm"><strong style="color:var(--text);" data-page-node-id="DXlBalIzP2uOKgU83RoY6I">动效示意</strong>：以动画预览形式展示动效设计方案，并补充特效设计说明</li>
+            <li data-page-node-id="rp2GwvUF8DoEv6itFEGqNd"><strong style="color:var(--text);" data-page-node-id="Vl7Vu8u6cLgOCKGBY94voR">形式</strong>：以蓝湖为主，可辅以简单的文字说明</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note" data-page-node-id="VjxdmIgyHFSlWE0Z5xC4C1">✅ 界面资源制作确认后，由<strong data-page-node-id="7uLL6oVau85ZHkWWF0KK8D">系统策划</strong>将美术界面效果图附于系统功能文档，并补充交互规则说明。</div>
+    </div>
+
+    <div class="divider" data-page-node-id="GzPnolLcGOI7SMKtFsK5oR"></div>
+
+    <div class="two-col" data-page-node-id="WCE19drghBVIubhrAKGTMc">
+      <div class="sub-block" data-page-node-id="kguEhSYyKQr2e3XgDYlRMH">
+        <div class="sub-title" data-page-node-id="IYyFzvDEZQkfpihLOpR3bW">🎨 4.2.2 其他资源需求</div>
+        <ul class="item-list" data-page-node-id="q57NkC5Q810XSUyMpjJkMJ">
+          <li data-page-node-id="OvzztmI9JbcH48uiBsuhcP">除界面资源外，其他美术类资源在系统功能文档中需<strong style="color:var(--text);" data-page-node-id="11fZgFel75hm1T7r8SLtim">列举所需资源种类及制作规格</strong></li>
+          <li data-page-node-id="d8KmppuTFAOdHxrt8QUXYo">具体需求由<strong style="color:var(--text);" data-page-node-id="kS2FuSgysm25tHaaDAEpaJ">内容策划</strong>负责设计，并由内容策划协同美术制作人员制定标准需求清单进行提交</li>
+          <li data-page-node-id="HBGrHBclxyMGiFVpV5lB0d">资源需求清单位置：<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:11px;" data-page-node-id="fRfTamyE1SSCvcDMTXvD0v">/svn/flower/doc/5. 美术需求</code></li>
+        </ul>
+      </div>
+      <div class="sub-block" data-page-node-id="hSC66nMqPFmBZ9REjOns3S">
+        <div class="sub-title" data-page-node-id="l1xBbjDAjh1Fb54Dz7bHEG">📡 4.3 数据埋点需求</div>
+        <ul class="item-list" data-page-node-id="TEeOs1qGZgYoowBfD2xwW3">
+          <li data-page-node-id="ysVdwmtmMWBdJwzYbX9xrI"><strong style="color:var(--text);" data-page-node-id="56kbVLifybmE4DWYiQC6I7">前期规划</strong>：系统责任策划完成系统方案设计、制作正式需求的同时，可对本系统的数据埋点需求进行简单规划；规划的埋点需求简单汇总，由<strong style="color:var(--text);" data-page-node-id="1qVnAjHPjKQAIJGgGk45rU">数值策划统一记录</strong></li>
+          <li data-page-node-id="US7Ke9uOHsuCNzdVsy4rRN"><strong style="color:var(--text);" data-page-node-id="O2WWFAVEUfHF61U88W5ybC">后期整理</strong>：上线版本整体开发完成进入发布前准备阶段时，由<strong style="color:var(--text);" data-page-node-id="twAkGnPKfFQuxJXxo7h7tB">数值策划</strong>负责整理本发布版本各个系统的埋点需求，并正式制作数据埋点清单，提交开发</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="container" style="text-align:center; padding-top:24px; padding-bottom:24px; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border);" data-page-node-id="7BVpAfhFMCbUPRSkNSQtag">
+  Anthea Project · 策划工作规范 · <a href="index.html" style="color:var(--accent);text-decoration:none;" data-page-node-id="U9B64uOsLi01DIwFvnVNRP">返回首页</a> · <a href="https://github.com/ProMarkel/anthea" style="color:var(--accent);text-decoration:none;" data-page-node-id="LnBrQLBZbIDsZLiKW2B9jh">GitHub</a>
+</div>
+
+<button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部" data-page-node-id="GgEVUuHBMwJmzVgYpwRkGl">↑</button>
+
+<script>
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+backToTop.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+(function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
+</script>
+<script>
+/* ANT_NAV_DROPDOWN_JS */
+(function(){
+  var groups = document.querySelectorAll('.nav-group');
+  function closeAll(){ groups.forEach(function(g){ g.classList.remove('open'); }); }
+  document.querySelectorAll('.nav-toggle').forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var g = t.parentElement, was = g.classList.contains('open');
+      closeAll();
+      if (!was) g.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest || !e.target.closest('.nav-group')) closeAll();
+  });
+})();
+</script>
+
+</body>
+</html>

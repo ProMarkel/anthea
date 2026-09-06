@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="L7JZv7MCgciJs6kpgyavLa">
+<head data-page-node-id="qJE23LUhKLpfXbD6HWxzJW">
+<meta charset="UTF-8" data-page-node-id="eRyDEEGYFJSiAY2fyWIKcC">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="IcqHSGYkiu04x7blUNFqsV">
+<title>OpenSpec 提案工作流 — Anthea</title>
+<style>
+
+  :root {
+    --accent: #0E9F8E;
+    --accent-dark: #0B7A6B;
+    --accent-light: #D1F2EB;
+    --accent-pale: #E8F8F5;
+    --pink: #E8547A;
+    --purple: #9B59B6;
+    --purple-light: #E8D5F5;
+    --teal: #1ABC9C;
+    --teal-light: #D5F5EE;
+    --orange: #E67E22;
+    --orange-light: #FDEBD0;
+    --gray: #6C757D;
+    --gray-light: #F8F9FA;
+    --border: #E2E8F0;
+    --text: #2D3748;
+    --text-muted: #718096;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: #F7F5FB; color: var(--text); line-height: 1.7;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* === NAVBAR === */
+  .navbar, .navbar * {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased; animation: none !important; opacity: 1 !important;
+  }
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08); height: 56px; font-size: 16px; line-height: 1.6;
+  }
+  .navbar .container { width:100%; max-width:1200px; margin:0 auto; padding:0 24px; display:flex; align-items:center; height:100%; }
+  .navbar .nav-brand { display:flex; align-items:center; gap:8px; font-size:16px; font-weight:700; color:#E8547A; text-decoration:none; }
+  .navbar .nav-icon { width:28px; height:28px; border-radius:8px; object-fit:cover; flex-shrink:0; }
+  .navbar .nav-icon-fb { width:28px;height:28px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,#E8547A,#9B59B6);color:white;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:center; }
+  .navbar .nav-links { display:flex; gap:24px; list-style:none; margin-left:auto; padding:0; align-items:center; }
+  .navbar .nav-links li { list-style:none; padding:0; margin:0; border:none; background:none; font-size:13px; }
+  .navbar .nav-links a { text-decoration:none; font-size:13px; font-weight:500; color:#888; padding:6px 0; border-bottom:2px solid transparent; display:inline-block; transition:color .2s,border-color .2s; }
+  .navbar .nav-links a:hover, .navbar .nav-links a.active { color:#E8547A; border-bottom-color:#E8547A; }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, #0E9F8E 0%, #9B59B6 100%);
+    color: white; padding: 40px 0 32px; position: relative; overflow: hidden;
+  }
+  .header::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header::after { content:''; position:absolute; bottom:-40px; right:100px; width:120px; height:120px; background:rgba(255,255,255,0.06); border-radius:50%; }
+  .header-tag { display:inline-block; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; font-size:12px; margin-bottom:12px; letter-spacing:1px; }
+  .header h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .header-sub { font-size:14px; opacity:0.85; margin-bottom:20px; }
+  .header-meta { display:flex; gap:24px; flex-wrap:wrap; }
+  .header-meta span { font-size:13px; opacity:0.75; }
+  .header-meta strong { opacity:1; font-weight:600; }
+
+  /* === SECTION === */
+  .section { margin-bottom: 28px; }
+  .section-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .section-tag { padding:4px 14px; border-radius:20px; font-size:12px; font-weight:600; letter-spacing:.5px; white-space:nowrap; }
+  .section-title { font-size:18px; font-weight:700; }
+  .section-desc { font-size:13px; color:var(--text-muted); margin-left:auto; }
+
+  /* === CARD === */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px; }
+  .card-grid-2 { grid-template-columns:repeat(2,1fr); }
+  .card-grid-3 { grid-template-columns:repeat(3,1fr); }
+  .card {
+    background:white; border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:20px; border-top:3px solid transparent; transition:transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.1); }
+  .card-icon { font-size:22px; margin-bottom:8px; }
+  .card-title { font-size:14px; font-weight:700; margin-bottom:8px; }
+  .card.blue { border-top-color:var(--accent); }
+  .card.purple { border-top-color:var(--purple); }
+  .card.teal { border-top-color:var(--teal); }
+  .card.orange { border-top-color:var(--orange); }
+  .card.pink { border-top-color:var(--pink); }
+
+  .item-list { list-style:none; }
+  .item-list li {
+    padding:6px 0; font-size:13px; color:var(--text-muted);
+    border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:8px;
+  }
+  .item-list li:last-child { border-bottom:none; }
+  .item-list li::before { content:'›'; color:var(--accent); font-weight:bold; flex-shrink:0; }
+
+  /* === PANEL === */
+  .panel { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:16px; }
+  .panel-title {
+    font-size:14px; font-weight:700; margin-bottom:14px; padding-bottom:10px;
+    border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px;
+  }
+  .panel-title .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .panel-title .no {
+    font-size:11px; font-weight:700; color:white; background:var(--accent);
+    padding:2px 8px; border-radius:10px; margin-left:auto;
+  }
+
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+
+  /* === SUB BLOCK === */
+  .sub-block { margin-bottom:18px; }
+  .sub-block:last-child { margin-bottom:0; }
+  .sub-title {
+    font-size:13px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px;
+  }
+  .sub-no {
+    font-size:11px; font-weight:700; color:var(--accent-dark);
+    background:var(--accent-pale); padding:2px 8px; border-radius:6px; flex-shrink:0;
+  }
+  .sub-desc { font-size:13px; color:var(--text-muted); margin-bottom:8px; }
+
+  /* === ORG CHART === */
+  .org { display:flex; flex-direction:column; align-items:center; gap:10px; padding:8px 0; }
+  .org-leader {
+    background:linear-gradient(135deg,#E8547A,#9B59B6); color:white; font-weight:700;
+    padding:10px 24px; border-radius:10px; font-size:14px;
+  }
+  .org-line { width:2px; height:16px; background:#CBD5E0; }
+  .org-row { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .org-box {
+    background:var(--accent-pale); border:1.5px solid #A3E4D7; color:var(--accent-dark);
+    padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600;
+  }
+  .org-box.pm { background:var(--purple-light); border-color:#D9B8EF; color:var(--purple); }
+  .org-sub {
+    display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px;
+  }
+  .org-sub span {
+    font-size:11px; background:white; border:1px solid var(--border);
+    padding:3px 10px; border-radius:12px; color:var(--text-muted);
+  }
+
+  /* === TREE (SVN) === */
+  .tree { font-size:13px; line-height:1.9; }
+  .tree-row { display:flex; align-items:baseline; gap:10px; padding:3px 0; border-bottom:1px dashed var(--border); }
+  .tree-row:last-child { border-bottom:none; }
+  .tree-path { font-family:'Cascadia Code','Consolas',monospace; font-size:12px; font-weight:600; color:var(--accent-dark); white-space:nowrap; flex-shrink:0; }
+  .tree-desc { font-size:12px; color:var(--text-muted); }
+
+  /* === FLOW === */
+  .flow-wrap { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; overflow-x:auto; }
+  .flow-title { font-size:14px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .flow-row { display:flex; align-items:center; gap:0; min-width:max-content; margin-bottom:12px; }
+  .flow-row:last-child { margin-bottom:0; }
+  .flow-label { font-size:12px; color:var(--text-muted); width:96px; flex-shrink:0; font-weight:600; text-align:right; padding-right:12px; }
+  .flow-nodes { display:flex; align-items:center; gap:0; flex:1; }
+  .flow-node {
+    padding:8px 14px; border-radius:8px; font-size:12px; font-weight:600;
+    text-align:center; min-width:92px; white-space:nowrap;
+  }
+  .flow-arrow { width:32px; height:2px; position:relative; flex-shrink:0; }
+  .flow-arrow::before { content:''; position:absolute; top:0; left:0; right:6px; height:2px; background:#CBD5E0; }
+  .flow-arrow::after { content:''; position:absolute; right:0; top:-4px; border:5px solid transparent; border-left-color:#CBD5E0; }
+  .fn-blue { background:var(--accent-light); color:var(--accent-dark); border:1.5px solid #A3E4D7; }
+  .fn-purple { background:var(--purple-light); color:var(--purple); border:1.5px solid #D9B8EF; }
+  .fn-pink { background:#FEF0F4; color:var(--pink); border:1.5px solid #F9D0DB; }
+  .fn-teal { background:var(--teal-light); color:var(--teal); border:1.5px solid #A9DFBF; }
+  .fn-orange { background:var(--orange-light); color:var(--orange); border:1.5px solid #F5CBA7; }
+  .fn-gray { background:var(--gray-light); color:var(--gray); border:1.5px solid #DEE2E6; }
+
+  /* === LANE (Jira) === */
+  .lane { display:flex; gap:0; min-width:max-content; }
+  .lane-col { min-width:170px; flex:1; }
+  .lane-head { font-size:12px; font-weight:700; text-align:center; padding:6px; border-radius:6px 6px 0 0; color:white; }
+  .lane-body { border:1px solid var(--border); border-top:none; border-radius:0 0 8px 8px; padding:8px; min-height:60px; background:white; }
+  .lane-body div {
+    font-size:11px; background:var(--gray-light); border:1px solid var(--border);
+    border-radius:6px; padding:5px 8px; margin-bottom:6px; color:var(--text-muted);
+  }
+  .lane-body div:last-child { margin-bottom:0; }
+  .lane-body div.hl { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); font-weight:600; }
+
+  /* === TABLE === */
+  .info-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .info-table th {
+    background:var(--gray-light); padding:10px 14px; text-align:left; font-weight:600;
+    border-bottom:2px solid var(--border); font-size:12px; color:var(--gray);
+    letter-spacing:.5px; white-space:nowrap;
+  }
+  .info-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-muted); font-size:13px; }
+  .info-table tr:hover td { background:var(--gray-light); }
+  .info-table td strong { color:var(--text); }
+
+  /* === BADGE === */
+  .badge-row { display:flex; flex-wrap:wrap; gap:6px; }
+  .badge { padding:5px 12px; border-radius:8px; font-size:12px; font-weight:500; }
+  .badge-p0 { background:#FEF0F4; color:#C0392B; }
+  .badge-p1 { background:#FEF9E7; color:#E67E22; }
+  .badge-p2 { background:var(--accent-pale); color:var(--accent-dark); }
+  .badge-px { background:#F2F2F2; color:#666; }
+  .badge-gen { background:var(--accent-pale); color:var(--accent-dark); }
+
+  .tag-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .tag { padding:3px 10px; border-radius:12px; font-size:11px; font-weight:500; }
+  .tag-blue { background:var(--accent-light); color:var(--accent-dark); }
+  .tag-purple { background:var(--purple-light); color:var(--purple); }
+  .tag-teal { background:var(--teal-light); color:var(--teal); }
+  .tag-orange { background:var(--orange-light); color:var(--orange); }
+  .tag-gray { background:#E2E8F0; color:var(--gray); }
+
+  /* === TOC === */
+  .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; }
+  .toc a {
+    display:block; text-decoration:none; color:var(--text); background:var(--gray-light);
+    border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-size:13px; font-weight:600;
+    transition:all .2s;
+  }
+  .toc a:hover { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); }
+  .toc a span { display:block; font-size:11px; color:var(--text-muted); font-weight:400; margin-top:2px; }
+
+  /* === NOTE === */
+  .note {
+    background:#FFFBEB; border-left:4px solid var(--orange); padding:12px 16px;
+    border-radius:0 8px 8px 0; font-size:12.5px; color:#7F5A2E; margin-top:12px;
+  }
+  .note strong { color:#B9770E; }
+
+  /* === STEPS === */
+  .steps { counter-reset:s; }
+  .steps li {
+    list-style:none; position:relative; padding-left:34px; margin-bottom:10px;
+    font-size:13px; color:var(--text-muted);
+  }
+  .steps li::before {
+    counter-increment:s; content:counter(s);
+    position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:50%;
+    background:var(--accent); color:white; font-size:11px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .steps li:last-child { margin-bottom:0; }
+
+  .divider { height:1px; background:var(--border); margin:14px 0; }
+
+  /* === BACK TO TOP === */
+  .back-to-top {
+    position:fixed; right:20px; bottom:30px; width:44px; height:44px; border-radius:50%;
+    background:white; border:1.5px solid var(--border); color:var(--text-muted); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:1.2em;
+    transition:all .3s; opacity:0; transform:translateY(20px); pointer-events:none; z-index:200;
+    box-shadow:0 2px 12px rgba(0,0,0,.1);
+  }
+  .back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+  .back-to-top:hover { border-color:var(--accent); color:var(--accent); }
+
+  @media (max-width:900px) {
+    .card-grid-3, .three-col { grid-template-columns:1fr 1fr; }
+    .two-col { grid-template-columns:1fr; }
+    .container { padding:0 16px; }
+  }
+  @media (max-width:600px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns:1fr; }
+    .container { padding:0 12px; }
+  }
+  @media print { body { background:white; } .navbar { display:none; } }
+
+  /* === ANT NAV DROPDOWN === */
+  .navbar .nav-links { gap:20px; flex-wrap:nowrap; }
+  .navbar .nav-group { position:relative; }
+  .navbar .nav-toggle { cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px; }
+  .navbar .nav-toggle .caret { font-size:9px; line-height:1; opacity:.7; transition:transform .2s; }
+  .navbar .nav-group.open .nav-toggle { color:#E8547A; }
+  .navbar .nav-group.open .nav-toggle .caret { transform:rotate(180deg); }
+  .navbar .nav-sub {
+    display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    min-width:196px; background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.13); padding:6px; margin:0; list-style:none; z-index:300;
+  }
+  .navbar .nav-group:hover > .nav-sub,
+  .navbar .nav-group.open > .nav-sub { display:block; }
+  .navbar .nav-sub::before { content:''; position:absolute; top:-9px; left:0; right:0; height:9px; }
+  .navbar .nav-sub li { display:block; font-size:13px; }
+  .navbar .nav-sub a {
+    display:block; padding:7px 12px; border-bottom:none; border-radius:6px;
+    font-size:12.5px; color:#666; white-space:nowrap; transition:background .15s,color .15s;
+  }
+  .navbar .nav-sub a:hover { background:#FEF0F4; color:#E8547A; }
+  .navbar .nav-sub a.active { background:#FEF0F4; color:#E8547A; border-bottom:none; font-weight:600; }
+  @media (max-width:900px) {
+    .navbar { height:auto; }
+    .navbar .container { height:auto; flex-wrap:wrap; padding-top:8px; padding-bottom:8px; gap:8px; }
+    .navbar .nav-links { gap:16px; margin-left:0; flex-wrap:wrap; width:100%; }
+    .navbar .nav-sub { left:0; transform:none; }
+  }
+
+  .header { background: linear-gradient(135deg, #6C5CE7 0%, #3498DB 100%); }
+
+  section[id], .section[id] { scroll-margin-top: 72px; }
+  .toc a.active { background:var(--accent-pale); border-color:var(--accent-border, #B8AEE8); color:var(--accent-dark); }
+  code { font-family:'Cascadia Code','Consolas',monospace; font-size:12px; background:var(--accent-pale); color:var(--accent-dark); padding:1px 6px; border-radius:5px; }
+  .code-box { background:#F8F9FB; border:1px solid var(--border); border-radius:10px; padding:16px 18px; font-family:'Cascadia Code','Consolas',monospace; font-size:12.5px; line-height:1.95; white-space:pre-wrap; overflow-x:auto; color:var(--text-muted); margin-top:4px; }
+  .callout { border-radius:10px; padding:14px 18px; margin:14px 0; font-size:13px; border-left:4px solid; color:var(--text-muted); }
+  .callout strong { color:var(--text); }
+  .callout-info { background:var(--accent-pale); border-color:var(--accent); }
+  .callout-warn { background:#FEF9E7; border-color:#E67E22; }
+  .callout-green { background:#D5F5EE; border-color:#1ABC9C; }
+  .callout-red { background:#FDEDEC; border-color:#E8547A; }
+  .rac { display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:10px; }
+  .rac-r { background:var(--accent-light); color:var(--accent-dark); }
+  .rac-a { background:var(--orange-light); color:var(--orange); }
+  .rac-c { background:var(--purple-light); color:var(--purple); }
+  .rac-i { background:#E2E8F0; color:var(--gray); }
+  .rac-x { background:#F2F2F2; color:#AAA; }
+  .pipe { display:flex; align-items:stretch; overflow-x:auto; padding:6px 0 10px; -webkit-overflow-scrolling:touch; }
+  .pipe-step { flex-shrink:0; width:158px; text-align:center; background:#fff; border:1px solid var(--border); border-radius:10px; padding:14px 10px; box-shadow:var(--shadow); }
+  .pipe-icon { width:34px; height:34px; border-radius:50%; margin:0 auto 8px; color:#fff; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; }
+  .pipe-label { font-size:13px; font-weight:700; color:var(--text); }
+  .pipe-sub { font-size:11px; color:var(--text-muted); margin-top:2px; }
+  .pipe-arrow { flex-shrink:0; display:flex; align-items:center; font-size:20px; color:#CBD5E0; padding:0 8px; }
+  @media (max-width:900px) { .pipe-step { width:132px; } .pipe-arrow { font-size:16px; padding:0 4px; } }
+
+</style>
+</head>
+<body data-page-node-id="eRfCMj54FjykzPfiWiYuMV">
+
+<!-- NAVBAR -->
+<nav class="navbar" data-page-node-id="rx76yAaFvTyR1VVhHmhQLR">
+  <div class="container" data-page-node-id="xqaJ9BytGaEPBOfBeGcULB">
+    <a href="index.html" class="nav-brand" data-page-node-id="JSYvShR5fKygUmy9CkaMrd">
+      <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'" data-page-node-id="rpx6sd64grFlPWDQc0v4qy">
+      <span class="nav-icon-fb" data-page-node-id="OQRxgZoT6a2DX9nftEuhHC">A</span>
+      Anthea
+    </a>
+    <ul class="nav-links" id="anthea-nav" data-page-node-id="kG1eiU9xheVjJBJM9Jta86">
+      <li data-page-node-id="8BDiTNVZXaOZsO9QbCW71O"><a href="index.html" data-page-node-id="cUIE3xp1FQl5sWLC3iWpXo">首页</a></li>
+      <li class="nav-group" data-page-node-id="C1ooE2TpDtK9374njLMH9D">
+        <a href="#" class="nav-toggle" data-group="spec" data-page-node-id="GEY3y40zIRjZQXApTDtS9a">流程规范文档 <span class="caret" data-page-node-id="zG3z8z96rFBOaHesiVFc6n">▾</span></a>
+        <ul class="nav-sub" data-page-node-id="i0BfOqaTPJUF3OGSYkgrJY">
+          <li data-page-node-id="QfZD0tOyNZrPv6FWcsqocU"><a href="spec-of-project.html" data-page-node-id="8NBpNZFAoFdigTk5D5RzRF">① 项目流程规范</a></li>
+          <li data-page-node-id="XEctCHtAj4UO5FWm7NdexS"><a href="spec-of-designer.html" data-page-node-id="DoEFGKtSUUIGpYM88zH6rM">② 策划工作规范</a></li>
+          <li data-page-node-id="LS10BZya5lKDTBpnKMA9de"><a href="spec-of-art.html" data-page-node-id="zA3HXzt9xuL1Om51Avukd3">③ 美术工作规范</a></li>
+          <li data-page-node-id="iAH3j1TkCq9juvP20sIv25"><a href="spec-of-art-design.html" data-page-node-id="FiLa2miqYonwShzWWts5tv">④ 美术设计规范</a></li>
+          <li data-page-node-id="ykWFWVJOFfLBffAnTeDMCC"><a href="spec-of-ue-ui.html" data-page-node-id="G3dsaXTtXH9zIjXDvm37x5">⑤ UI 设计制作规范</a></li>
+          <li data-page-node-id="TdgxasP4AdlyfTNEH3GuRj"><a href="spec-of-asset.html" data-page-node-id="AdM7nrC9h0Dp6hRgoayUT8">⑥ 资源管理规范</a></li>
+        </ul>
+      </li>
+      <li class="nav-group" data-page-node-id="sDBJbMiQ1IL1p8XeLGYW2f">
+        <a href="#" class="nav-toggle" data-group="ai" data-page-node-id="lEOoVGbE4NPRWCOJDogj4N">AI Coding 文档 <span class="caret" data-page-node-id="Zk3AZLJAAYW46v07Ilpq97">▾</span></a>
+        <ul class="nav-sub" data-page-node-id="EFkO8DowobuLi1KXVLftWa">
+          <li data-page-node-id="Csd3q81Z4do7kuAFm5663R"><a href="guide-for-claude.html" data-page-node-id="rxvKEALwWwBjD5bBDljpC8">ClaudeCode 白皮书</a></li>
+          <li data-page-node-id="MsG80xsePc6kF1Vu4n5u65"><a href="guide-for-claude-md.html" data-page-node-id="QhuhMRsQnIVrYwDc9x487b">CLAUDE.md 规则</a></li>
+          <li data-page-node-id="4DlwGDvvatWWiLLVF1LAt3"><a href="guide-for-sdd.html" data-page-node-id="XbBPkSerEdDodrKwc9gVPs">AI Coding 清单</a></li>
+          <li data-page-node-id="GPEeyMW7bHVOq056qbj2Mp"><a href="guide-for-workbuddy.html" data-page-node-id="UpNAYbL83AP0TQb0limmId">WorkBuddy 指南</a></li>
+          <li data-page-node-id="BFINoPpk9QtjP4cNc8dkAH"><a href="guide-for-openspec.html" data-page-node-id="e6b60hQaWyxS3NGiBJugBc">OpenSpec 工作流</a></li>
+        </ul>
+      </li>
+      <li data-page-node-id="KPARZ0NtLHtLOZXr7Ar1VZ"><a href="https://github.com/ProMarkel/anthea" target="_blank" data-page-node-id="EvQoYMLtFO45aLIExJCHVt">GitHub ↑</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="header" data-page-node-id="0EaQtB9OOh6sdzCjWBOhGx">
+  <div class="container" data-page-node-id="N3zEPDHrSYN86Urgm6g6f6">
+    <div class="header-tag" data-page-node-id="uiueOjSBoeTsDqUKIXWykd">📝 AI Coding 工作流 · OpenSpec</div>
+    <h1 data-page-node-id="Tvt8tDBWzVfzXiaTKbmCtY">OpenSpec 需求提案工作流</h1>
+    <div class="header-sub" data-page-node-id="dxsIhx8DZT4jDB458app3j">叙事驱动的产品需求规格框架 — 提案 / 规则 / 数值 / 包装 / 交互 五步流水线 · 让每一次决策都有据可查、可追溯、可复盘</div>
+    <div class="header-meta" data-page-node-id="BcuFVCuPg0VY5R1OhrjZNh">
+      <span data-page-node-id="oRDrArzQpAHnWdDKCpdM32">🔧 工具 <strong data-page-node-id="hmiokoyPcfDpEqrETnTwCH">hyl-propose</strong></span>
+      <span data-page-node-id="czgyspwuCizucyZxxQ0Do1">👥 角色 <strong data-page-node-id="hPEdPsU0K98feMcqDSqNtL">9 种</strong></span>
+      <span data-page-node-id="C253gLkg5QGlRRahIV78vy">🔄 流程 <strong data-page-node-id="AZAZ9wqQtZLz39GAWJ8j33">5 步</strong></span>
+      <span data-page-node-id="hy1TQ5kDan6fBWbMcFbegv">📦 产物 <strong data-page-node-id="SOn7l8YSXDnWTx9Dt2KcGI">5 份</strong></span>
+      <span data-page-node-id="ldxOKUEnblChvjSovxylB5">🏷️ 阶段 <strong data-page-node-id="0zrF7n1XWFwfpiuQXPVMb1">propose</strong></span>
+    </div>
+  </div>
+</header>
+
+<div class="container" style="padding-top:32px; padding-bottom:48px;" data-page-node-id="OACzRTdCu4vpNAnBjA0TCH">
+<!-- ════════════ 目录导航 ════════════ -->
+<div class="section" id="toc" data-page-node-id="yWEuoUQyHC3xGzH42BymlC">
+  <div class="section-header" data-page-node-id="aFvfeEQho5R3Si3FYQtpw3">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="6UgLF3CUL4OGwSWUNHZqml">目录</span>
+    <span class="section-title" data-page-node-id="rALGnA7dbn6N5LY1mDyPKR">文档导航</span>
+    <span class="section-desc" data-page-node-id="GY89edL3o7p2mH1Q4AVQ5T">11 个章节 · 点击快速跳转</span>
+  </div>
+  <div class="toc" data-page-node-id="u6NBOhpRjFubqGImddFPUs">
+    <a href="#why" data-page-node-id="iL1QTsd1POx9Ru4fl6Qi1O"><span data-page-node-id="jN2iDudvvC9jqfsAGZ4OpJ">01</span>为什么需要 OpenSpec</a>
+    <a href="#identity" data-page-node-id="lUzUtZ167ElHOBeDBmNx9t"><span data-page-node-id="VsbWEu7LSqtPhU1PuOY8Ms">02</span>用户身份与权限</a>
+    <a href="#pipeline" data-page-node-id="swMpx2J3Fcko6CFO5BKg0O"><span data-page-node-id="ccstkkNg0xwASzDaSOv4sq">03</span>五步流水线</a>
+    <a href="#roles" data-page-node-id="rJAtdNUpGyzJDfxX7gqHqX"><span data-page-node-id="0ih9dOJe6tn9SmUnDh10ha">04</span>角色矩阵 RACI</a>
+    <a href="#details" data-page-node-id="vx7Rwpiz70Ut2IF2NYRage"><span data-page-node-id="Bz8CGcs008XD3cn9813H0G">05</span>步骤详情</a>
+    <a href="#revision" data-page-node-id="EzRPDH8jXiwNFE602LCXEr"><span data-page-node-id="6VUlaW265IgRigXkT4GljH">06</span>修订规则</a>
+    <a href="#iron-law" data-page-node-id="IzYn4N34O2XwOedFRGmRfp"><span data-page-node-id="DgmUFby2K2Zd6ShLX5ZhnT">07</span>proposal-index 铁律</a>
+    <a href="#relay" data-page-node-id="8flYkBxTfF1UJzFmdBHtKc"><span data-page-node-id="hFHAkT8a8XIMRJYCczePe5">08</span>多人协作接力</a>
+    <a href="#example" data-page-node-id="YH22Ik97oyCiaVxJJQ1r2M"><span data-page-node-id="FFvJ4aouQhSbo5DBb7k8b6">09</span>真实案例</a>
+    <a href="#structure" data-page-node-id="Hk7t0WkB8quAQq267oBFcw"><span data-page-node-id="na1IMP2GECBRM3WVmNmPpp">10</span>目录结构</a>
+    <a href="#start" data-page-node-id="zSNAGspMX7H6J94vNUUOWC"><span data-page-node-id="iR6VuHOwCv47eNIi5TAMgb">11</span>快速开始</a>
+  </div>
+</div>
+
+<!-- ════════════ 01 为什么 ════════════ -->
+<div class="section" id="why" data-page-node-id="dnM193kHjYAheegKhXTQcJ">
+  <div class="section-header" data-page-node-id="GjH4nTfOOWHF04IC1hnDyG">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="qQMGDIa7H19U9RMGX3kjZG">01</span>
+    <span class="section-title" data-page-node-id="E8mIsBnGOq7PP6HdgJnnc1">为什么需要 OpenSpec？</span>
+    <span class="section-desc" data-page-node-id="C9Hhkjwu13RlVTLVJddwC9">让每一次决策都有据可查、可追溯、可复盘</span>
+  </div>
+
+  <div class="panel" data-page-node-id="eB8HCohR7hl2CaundorOsb">
+    <div class="panel-title" data-page-node-id="pBuu2GogORZ21nP3MBgjWm"><span class="dot" style="background:var(--accent);" data-page-node-id="BEHiOJbT6b0dXu4fYJlpQ3"></span>问题背景</div>
+    <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="yoGIFdTmlKRbwuuM6CkgTr">软件项目持续产生大量决策——做什么、为什么、怎么做。没有一致的记录方式，上下文就会散落在 Slack 聊天、PR 描述和半遗忘的会议中。OpenSpec 让规格流程变得<strong style="color:var(--text);" data-page-node-id="MGeAupRQ8fNMB2S21o0yy9">刻意、可审阅、可版本化</strong>。</p>
+  </div>
+
+  <div class="card-grid card-grid-3" data-page-node-id="AA5I1MeIFhgqIJXJdkBFfo">
+    <div class="card" data-page-node-id="HmceMAZpr1ZszwSS9NSGrS">
+      <div class="card-icon" data-page-node-id="pNNAPIxUd0QRH3ijJmMoIY">📖</div>
+      <div class="card-title" data-page-node-id="0r2oDBZywdNJVMZ4KM1kHF">原则 1 · 叙事优于表单</div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="vZHcU9QFmHephoHfNpuHZ4">提案、规格、决策以可读文档形式存在。无论是人还是 LLM，都无需交叉引用工单系统就能理解设计依据。</p>
+    </div>
+    <div class="card" data-page-node-id="2RjhFe6uOaIpJy189cOLnz">
+      <div class="card-icon" data-page-node-id="j3edsvsqSUXaXMInsyiOa6">🔄</div>
+      <div class="card-title" data-page-node-id="7KERqRU0HWTVG3lEXucehc">原则 2 · 变更即仪式</div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="uNB79Oc2L3MVelcCOf3iiO">每一次有意义的变更都经历：提案 → 审阅 → 批准 → 实施 → 关闭。跳过任何阶段本身就是一次值得记录的决定。</p>
+    </div>
+    <div class="card" data-page-node-id="30QzSKHSj8z47EpigHbwKJ">
+      <div class="card-icon" data-page-node-id="544qGaL15aNg1ah6njnJEA">✂️</div>
+      <div class="card-title" data-page-node-id="bHAwivI11BU9KaLAYbbpzJ">原则 3 · 不做 BPMN</div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="5gMjGbev6PXBpAx004162i">流程应该简单到一张作弊小抄就能装下。过度工程化流程本身，恰恰违背了流程的初衷。</p>
+    </div>
+    <div class="card" data-page-node-id="sUCdBUwG24XkuyA2T2KaJK">
+      <div class="card-icon" data-page-node-id="Ms1HHsm7rGzK2EDgJD5Fyw">🙋</div>
+      <div class="card-title" data-page-node-id="gsi4KR2VQjLeUV4ACOaCjP">原则 4 · 人人可提案，非人人可决策</div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="3vAzRvq6DqqVndSXryMEag">提案者和最终审批者分离，保持提案的诚实性和决策的连贯性。</p>
+    </div>
+    <div class="card" data-page-node-id="hCJGE3wb6B9MLKD45yEdAa">
+      <div class="card-icon" data-page-node-id="M2kWVdQ0XpWZ9PrX0aqtkP">🗂️</div>
+      <div class="card-title" data-page-node-id="GriHwBJj858ZAWR2Cp7dkt">原则 5 · 意图版本化</div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="jw358ZLOwSlyRJzgjKGlol">规格文档一旦批准即冻结。增补内容以追加方式记录，从不编辑历史文本，确保设计意图的完整溯源。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ 02 用户身份 ════════════ -->
+<div class="section" id="identity" data-page-node-id="AGDdDlAHlzcPH76U6jgQt7">
+  <div class="section-header" data-page-node-id="IfB7aGhys20cUfIyXNDshV">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="plJDmXNKHvQEFakSxEq3TG">02</span>
+    <span class="section-title" data-page-node-id="V9ufzLepaBiRUdxGX52a8F">用户身份与权限</span>
+    <span class="section-desc" data-page-node-id="XCFQwnuZyk8RRG3wYXCclx">CLAUDE.local.md · 9 种角色 · 三种模式判定</span>
+  </div>
+
+  <div class="panel" data-page-node-id="wXRxnHwWC3JgKj7OyFGOFG">
+    <div class="panel-title" data-page-node-id="z8ecSqP3WyW64hmYwVUMqz"><span class="dot" style="background:var(--accent);" data-page-node-id="YC5CzoN8CSnbK9DrJOtYm1"></span>CLAUDE.local.md — 本地身份文件<span class="no" data-page-node-id="tKlbDgHYTczg0CZncCoaHC">身份源</span></div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;" data-page-node-id="d8N8hPDvkSPzHFA4Dbf18M">hyl-propose 在每次触发时自动读取 <code data-page-node-id="g0LnF8unkPD3Tdm8Mv2Hml">CLAUDE.local.md</code> 获取当前用户身份，用于角色判定和权限控制。<strong style="color:var(--text);" data-page-node-id="D5oWKWuYrWnV2Yjsm7YiSR">PO（提案负责人）</strong>是流程中的临时角色——发起提案并撰写 story.md 的策划自动成为该提案的 PO。</p>
+    <div class="code-box" data-page-node-id="tWso6PRbk1qLgcEpwKIoiR"># 本地用户身份配置
+
+**姓名**：张三（昵称：小张）
+**角色**：系统策划
+
+&gt; PO（提案负责人）是提案流程中的临时角色，发起提案并撰写 story.md 的人自动成为该提案的 PO。制作人或主策划可指定更换。</div>
+    <div class="note" style="margin-top:12px;" data-page-node-id="skgcVoVqjqpFmEmHnSO4ct"><strong data-page-node-id="vNTI9cocU738ydPnOMOMt6">模板文件　</strong><code data-page-node-id="3cBSMILBo7cKx2Yp4wlyCe">CLAUDE.local.template.md</code> 可供团队成员复制并填写。如果首次使用 hyl-propose 时尚未创建此文件，AI 会自动引导你完成身份配置。</div>
+  </div>
+
+  <div class="section" style="margin-bottom:16px;" data-page-node-id="GBncFy987K31vcq7u2eJEf">
+    <div class="sub-title" data-page-node-id="VE2SaH32NxlUjBhflzxTAT"><span class="sub-no" data-page-node-id="BcnSNy0UmQiEvwPB1jDvFC">身份引导</span>四步引导流程</div>
+    <div class="sub-desc" data-page-node-id="OhSEGeUwXZ5vpHMbpQzSDa">当 <code data-page-node-id="OcPxFIky3L8DRdxdyw8E0T">CLAUDE.local.md</code> 不存在或无法读取时，AI 不会继续任何流程，而是先引导用户完成身份配置。</div>
+    <ol class="steps" data-page-node-id="VpExHPHHY69MTLBxeSgwLc">
+      <li data-page-node-id="kstLHYrRrY6EGJNkdqYr5u"><strong style="color:var(--text);" data-page-node-id="G0uWDmP5A6umXNs8X1itAk">询问姓名</strong> — AI："未检测到你的本地身份配置。在继续之前，请先告诉我——你的姓名（全名）和常用昵称是什么？"</li>
+      <li data-page-node-id="HRM3CrqMTQE9neBFClcFfF"><strong style="color:var(--text);" data-page-node-id="TSXUWHnD2a361YZADL1liM">选择角色</strong> — AI 列出 9 种角色选项：制作人、主策划、系统策划、数值策划、文案策划、交互设计师、主程序、开发程序、QA。</li>
+      <li data-page-node-id="M1qt3pncPHBfbM7wcfgVJe"><strong style="color:var(--text);" data-page-node-id="Qi8Ny1iTixooGhiBV3kqEO">保存配置</strong> — AI 将信息写入 <code data-page-node-id="81PyESHWeBgmJAp4amzD94">CLAUDE.local.md</code>，提示："身份信息已保存到 CLAUDE.local.md，之后可以直接使用。"</li>
+      <li data-page-node-id="Bu5d7Q3HtTrQjx5uuX6CZQ"><strong style="color:var(--text);" data-page-node-id="ncMY3n5cUCWgeRzZphgPVL">继续流程</strong> — 身份配置完成后，AI 自动回到原来的流程（新建 / 续接 / 检查模式），后续每次触发均自动识别。</li>
+    </ol>
+  </div>
+
+  <div class="panel" data-page-node-id="HdKRpqzR4Xd6jJLDa4jacL">
+    <div class="panel-title" data-page-node-id="IRPmzasiChNwZ8PeHBVk3F"><span class="dot" style="background:var(--teal);" data-page-node-id="DHfoEvnZDRiKzarqDbOIAt"></span>角色分类与权限</div>
+    <table class="info-table" data-page-node-id="YNES3SjIcDuvtbkqfNf144">
+      <tr data-page-node-id="8wrky3vLmrcDHioOw9qti0"><th style="width:110px;" data-page-node-id="nlasokXL9TGyJgAZKX0fCD">类别</th><th data-page-node-id="ISsEDgkXq2QjSJ7DB79ttA">包含角色</th><th style="width:280px;" data-page-node-id="6bYFek3mkwRcWlKxIP01J6">propose 阶段权限</th></tr>
+      <tr data-page-node-id="yusG2rlmfJxL5IpKM8OGIO"><td data-page-node-id="yRhO3doB0ZywDUFPTVOA4G"><strong data-page-node-id="woG1oQCYMkJobyhK2NQwWM">策划类</strong></td><td data-page-node-id="oRSYcWUTvYKc8IidPfCivA">制作人、主策划、系统策划、数值策划、文案策划、交互设计师</td><td data-page-node-id="wGQ0PWIxgnvmESPEW9TZPg">可新建提案 · 可执行步骤 · 可审阅产物</td></tr>
+      <tr data-page-node-id="GlcuQxg4CFDQe0HGKmvWJG"><td data-page-node-id="rJRr1MULYW6FLFunBwP57W"><strong data-page-node-id="G3B84pJefggPDU5mZR24p8">程序类</strong></td><td data-page-node-id="35fIPNnFx9WUHQ6I6cUV6C">主程序、开发程序、QA</td><td data-page-node-id="tHxb3bjWIPErb4dH9A4T6R">不可新建提案 · 不可执行步骤 · propose 完成后知会</td></tr>
+    </table>
+  </div>
+
+  <div class="panel" data-page-node-id="doVFtBOwxZ1SlcJP29jaiE">
+    <div class="panel-title" data-page-node-id="3gG2saEHohwiupxkTP0ZLM"><span class="dot" style="background:var(--orange);" data-page-node-id="ZiXB93nP0kPxchinqOZDnj"></span>三种模式下的角色判定</div>
+    <table class="info-table" data-page-node-id="mwskJs7chAHjxGfBhX8SAT">
+      <tr data-page-node-id="QOM5aMZuMugJTZv1OaJCDv"><th style="width:100px;" data-page-node-id="42n0LmE7CzpqeL74GokqQX">模式</th><th style="width:44%;" data-page-node-id="i7qYzyNcACAfSN2xCICfGq">策划类角色</th><th data-page-node-id="ABpre9zWcbFsddzPBDPt9H">程序类角色</th></tr>
+      <tr data-page-node-id="jC7Ps8asxHxczP8me7v393">
+        <td data-page-node-id="fBJbml0stRItDDP7RpkXRP"><strong data-page-node-id="8Fykjj4c8TcGiLvXoJXDAS">新建模式</strong></td>
+        <td data-page-node-id="lcrII8CGLqzHyAIkGZ8DED"><span class="tag tag-teal" data-page-node-id="Xo4yst4gGsgwjlt6XkKvUF">✅ 允许</span> 发起提案的策划自动成为该提案的 PO。</td>
+        <td data-page-node-id="DKskuHfku6OlNDxxzXr1qz"><span class="tag tag-gray" data-page-node-id="OiLIv4rlJO8DOLKUs725qw">⛔ 阻止</span> 提示："程序类角色无法直接新建提案。如有功能优化建议，可转达策划团队评估后发起提案。"</td>
+      </tr>
+      <tr data-page-node-id="XnFKUz69iy4fm26b2AAljv">
+        <td data-page-node-id="9L1o5xXrHJabC68itmTxP4"><strong data-page-node-id="lWXV3pZRwdZS1OEaB5p6GJ">检查模式</strong></td>
+        <td data-page-node-id="U3kNByClOJqxzHkBVuXVWo"><span class="tag tag-teal" data-page-node-id="FFexoN5ltqMQMMBs7KjvJW">✅ 允许</span> 展示各步骤状态。若当前用户是进行中步骤的执行人，高亮提示「是否继续完成？」；若角色符合下一步要求，主动提示「你的角色可以接续执行，是否继续推进？」。</td>
+        <td data-page-node-id="OIF046Ye0LHA8DcYdHdOml"><span class="tag tag-teal" data-page-node-id="zNLCvtF7cN4IzfLBCvCyRU">✅ 允许</span> 展示状态。若提案未完成，提示："此提案仍在 propose 阶段，你将在最终审核通过后收到通知。"</td>
+      </tr>
+      <tr data-page-node-id="aaCGvqmVR74TYnOndbjUS2">
+        <td data-page-node-id="Fs1B6dLgpFNjHxad6ADVv2"><strong data-page-node-id="o6PRX7bf1xs1F1Qt1UrzKc">续接模式</strong></td>
+        <td data-page-node-id="eEj2uPFn4d9z5RnyIYoHTd"><span class="tag tag-teal" data-page-node-id="yzqdxvofiEqJlSCrwWTA2W">✅ 允许</span> AI 进行三级身份匹配：<br data-page-node-id="dVwxMjBFCyqIhRFjEyo4GA">• <strong style="color:var(--text);" data-page-node-id="pQJ0KPIOTmsTnBlmMCUbPN">角色完全匹配</strong>（姓名 = 执行人列）→ 直接进入<br data-page-node-id="h09mFnN50c8IF46Ka2NS1J">• <strong style="color:var(--text);" data-page-node-id="ZWraiEGNaMH4lC3LMsfp6G">角色不完全匹配</strong>（姓名 ≠ 执行人列，但角色一致）→ 二次确认「是否替代接续？」<br data-page-node-id="fOh1YPK86YFEQ4Ij9XEPhj">• <strong style="color:var(--text);" data-page-node-id="8B01Ta5bpHggTMT988GP2N">角色不匹配</strong>（角色与步骤要求不符）→ 二次确认「是否仍然接续？」</td>
+        <td data-page-node-id="uI4cKBChshwyycWk2BWA7c"><span class="tag tag-gray" data-page-node-id="avoyyq0YxYvyoFUHXBGxtr">⛔ 阻止</span> 提示："程序类角色不参与 propose 阶段的执行和审阅。此提案当前处于步骤 N，完成后将通知你。"</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section" data-page-node-id="nPKCr02kA7nrFIwLAGIyYE">
+    <div class="sub-title" data-page-node-id="D6T1NGc14NumkgEx8A0u4e"><span class="sub-no" data-page-node-id="OqJfYJM3Y4yUnlUM8rhQdg">PO 更换</span>两种更换途径</div>
+    <div class="card-grid card-grid-2" data-page-node-id="qBKV6OW2HETTWPcVC1jwZl">
+      <div class="card purple" data-page-node-id="wJyf3nKz73htakBQ8k42FO">
+        <div class="card-title" data-page-node-id="CoyAgDiKc8hrxWi0HMQGAX">👑 制作人指定更换</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="blfWpoyy1F4dfVyfT8RC2E">制作人在审阅 story 或后续步骤时，可指定新的 PO。更新 proposal-index.md 的 PO 字段和 story 执行人列。</p>
+      </div>
+      <div class="card purple" data-page-node-id="6cL1AD6UAIGBBVUyJVSI1Q">
+        <div class="card-title" data-page-node-id="Q1nfA4WZ1Wq2gWtsVesdam">📐 主策划指定更换</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="rQC4hjZtfIAM1Hw2irTo8w">主策划在审阅过程中，可提议更换 PO，经制作人确认后生效。写入状态变更记录。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ 03 五步流水线 ════════════ -->
+<div class="section" id="pipeline" data-page-node-id="FbMjDBRDmZYnunaq0H3LDJ">
+  <div class="section-header" data-page-node-id="9SUWtaJHhoJmPrY0I3gKOO">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="7wCMnrw9pla5SbWdSV7Rrm">03</span>
+    <span class="section-title" data-page-node-id="3FhH4N2Zb4Mk5Meb1QOUQt">五步流水线</span>
+    <span class="section-desc" data-page-node-id="QiAwmQRtvnmdDANkT9PNy7">每步独立审阅 · 通过后产物锁定</span>
+  </div>
+
+  <div class="panel" style="margin-bottom:16px;" data-page-node-id="hU5bEXS5wzBGTOeNk63J5T">
+    <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="gTlVhd4YNZkvU4LX1y0cpA">提案按顺序推进，每步独立审阅。审阅通过后产物即锁定，<strong style="color:var(--text);" data-page-node-id="ZQrxsGGg9kapX0yB0w1vbF">不可回改</strong>——任何修订必须走正式的 fix 版本流程。</p>
+  </div>
+
+  <div class="flow-wrap" data-page-node-id="7ymUymA0AgCyRzJet1Svrk">
+    <div class="flow-title" data-page-node-id="j60P0uHdIWySfx3Us6iirM">📦 提案流水线</div>
+    <div class="pipe" data-page-node-id="7jicnOPzyM43CJ3Nz2b36G">
+      <div class="pipe-step" data-page-node-id="vF7XuWmz9HdDDoXFHqXfKC">
+        <div class="pipe-icon" style="background:#6C5CE7;" data-page-node-id="Cuay4oH6eaD1ZmwWvk0Gqr">1</div>
+        <div class="pipe-label" data-page-node-id="bfOXpmz7UsPpSK3bMbblgW">需求创建</div>
+        <div class="pipe-sub" data-page-node-id="3Ntc0rTrllwKB3vWwMZXKz">story.md</div>
+        <div class="pipe-sub" style="color:var(--accent-dark);font-weight:600;" data-page-node-id="UfDnigoOXj2PvtxpMfsVWr">PO → 制作人</div>
+      </div>
+      <div class="pipe-arrow" data-page-node-id="y7nEEaLtSJbcx5BkfrepzU">→</div>
+      <div class="pipe-step" data-page-node-id="SC47nXXXBBwIBAEr55N1fc">
+        <div class="pipe-icon" style="background:#0891B2;" data-page-node-id="vlJfduSZDaDDtaaaABlHne">2</div>
+        <div class="pipe-label" data-page-node-id="WBEyVy1z3flT92rO7nuBEX">规则设计</div>
+        <div class="pipe-sub" data-page-node-id="2qHN2cEAgIh3lyyupHExVn">mechanics.md</div>
+        <div class="pipe-sub" style="color:var(--accent-dark);font-weight:600;" data-page-node-id="6Nq0JBjv33UauFMh6rn00L">系统/主策 → PO+主策</div>
+      </div>
+      <div class="pipe-arrow" data-page-node-id="VTnRqFLICVSHHbeDOyFNyE">→</div>
+      <div class="pipe-step" data-page-node-id="ilU42et2J1aBu1XUlGPHtr">
+        <div class="pipe-icon" style="background:#1ABC9C;" data-page-node-id="qBFMnLMpPD6hFSjPSpdsZ4">3</div>
+        <div class="pipe-label" data-page-node-id="46e1mFzWA9HH1pFe3nXnIv">数值设计</div>
+        <div class="pipe-sub" data-page-node-id="fpVFcFCqRlwWSSsVEfK97k">params.md</div>
+        <div class="pipe-sub" style="color:var(--accent-dark);font-weight:600;" data-page-node-id="AGwMrDmQYg8iYLt5GdlzOW">数值策划 → PO+主策</div>
+      </div>
+      <div class="pipe-arrow" data-page-node-id="JPm3nn0NIGbEdSsgKqdtNC">→</div>
+      <div class="pipe-step" data-page-node-id="TS0DuPaTmE4KM7MfpKplHa">
+        <div class="pipe-icon" style="background:#E67E22;" data-page-node-id="b6B8Hlq7ifEDkUGKonvHsQ">4</div>
+        <div class="pipe-label" data-page-node-id="T7qmi5IhnIBKMLtvgZji69">包装设计</div>
+        <div class="pipe-sub" data-page-node-id="sm6Q7i38x9iv7ehcQIAcmb">theme.md</div>
+        <div class="pipe-sub" style="color:var(--accent-dark);font-weight:600;" data-page-node-id="am3euxNvmTmJrOhRyesI5C">文案策划 → PO+主策</div>
+      </div>
+      <div class="pipe-arrow" data-page-node-id="ym63oNxLGA59Ow5I5IoxGP">→</div>
+      <div class="pipe-step" data-page-node-id="rYz8MDFNKVuxU4YdDQxGO2">
+        <div class="pipe-icon" style="background:#9B59B6;" data-page-node-id="O2GD2QwzceblRDx9ByTTd3">5</div>
+        <div class="pipe-label" data-page-node-id="qScwZQBpbTGm4gMb7Kd5Vz">交互设计</div>
+        <div class="pipe-sub" data-page-node-id="uISIGhNTKqBRKr97WIYRkf">ux.md</div>
+        <div class="pipe-sub" style="color:var(--accent-dark);font-weight:600;" data-page-node-id="Xmr21REc8BJIeJEnSFM60U">交互设计 → PO+主策</div>
+      </div>
+    </div>
+
+    <div class="divider" data-page-node-id="NeZfWmXKLFsYN6XKSlYBZD"></div>
+
+    <table class="info-table" data-page-node-id="zGgAqkirgQXzFvTL1CzSQR">
+      <tr data-page-node-id="GUBu2BBy788YJU5oKvZSih"><th style="width:60px;" data-page-node-id="ktCAi8lGY99OSlyrfSWJyg">步骤</th><th style="width:100px;" data-page-node-id="PO4NrWUqGHFmGtAQXlv4Ti">术语</th><th style="width:130px;" data-page-node-id="kdTGKWYi0TDRED5lCPKC6m">产物</th><th data-page-node-id="Wj4Hn2IaHi2AESbS4sFs7y">执行人</th><th data-page-node-id="EiWCI3xM8kcR2Dn6nSZWXE">审阅人</th><th style="width:90px;" data-page-node-id="lg8GXP7e4PzZRrsJ4K9bqC">时限</th></tr>
+      <tr data-page-node-id="KIQe2GR0PuApEpxtIL2E4U"><td data-page-node-id="o5Yq6tCuHBQNYbDuEUVe4U">1</td><td data-page-node-id="teYg6eG9Qxsdcs1LY6qWPr"><strong data-page-node-id="ZsVB7Aqq5ByfaP8qyyW9cQ">需求创建</strong></td><td data-page-node-id="Ym1ybRgelct73BLnhw6yYV"><code data-page-node-id="x0VXoAEuPvZCqXYPOb0RI2">story.md</code></td><td data-page-node-id="H2lOdW1KXGqD3skGeWXM1G">PO</td><td data-page-node-id="IGtxYk49adFOtiyz1Rq02f">制作人</td><td data-page-node-id="29QFvSvM28uMLOKxEOwawO">1 工作日</td></tr>
+      <tr data-page-node-id="Kwz22M427fzxOa1gW7T4ri"><td data-page-node-id="s9CLsWb9C4tZ0YthV5WrDa">2</td><td data-page-node-id="6EMUMD0nGEQ8Znk2Pj0qhB"><strong data-page-node-id="pWO3XLWG8NGyBgZMlLpypP">规则设计</strong></td><td data-page-node-id="GaCfCb1zHfELlhvpp0YnuF"><code data-page-node-id="ZOnj5dOPQEzwppXuQPbGfA">mechanics.md</code></td><td data-page-node-id="wjpzPon9gNyps3ORItfbEY">系统策划 / 主策划</td><td data-page-node-id="dQjAQWSZxbvgtw7thVHuod">PO + 主策划</td><td data-page-node-id="kWRnF8LNGe5NpXX2wkffkq">1 工作日</td></tr>
+      <tr data-page-node-id="rs2vmUSSvwjirGsZDBkwHP"><td data-page-node-id="CWDZJYikktxOpT1W40HkG6">3</td><td data-page-node-id="Xgfif6gHm8tXc9HPXnQor4"><strong data-page-node-id="xP0qwN58h3tlHumAOFQS0Z">数值设计</strong></td><td data-page-node-id="X4MGEv900Np5AxKe1Xq11W"><code data-page-node-id="NPacF9rolQfB1kqGqODxD5">params.md</code></td><td data-page-node-id="Pyk56naqkDAUx4QBodusyE">数值策划</td><td data-page-node-id="tqoYGm0daU4eaJevKA6nM2">PO + 主策划</td><td data-page-node-id="Daqvj8AEGdtNda86jYEbMR">1 工作日</td></tr>
+      <tr data-page-node-id="A742a5I5MePAvTmi5VeO2V"><td data-page-node-id="BnkozvGREEamVXzwo0ubcx">4</td><td data-page-node-id="zZab1me9o59EHLhYguKAHm"><strong data-page-node-id="FaB9QG7Pl1xUNItKhJmdNq">包装设计</strong></td><td data-page-node-id="HDnLtVKEWj9asrS43soChw"><code data-page-node-id="zTaxfkQ68jPCzEK1vnq2KZ">theme.md</code></td><td data-page-node-id="NNID7Ejds6bsEkaCyWKzCR">文案策划</td><td data-page-node-id="0Dh1tdZHNZU7V0aptC80Mx">PO + 主策划</td><td data-page-node-id="VzfpAD2cDLLug1Hy634Yrw">1 工作日</td></tr>
+      <tr data-page-node-id="ZRbAM0VkeGP72SrTiMbEjS"><td data-page-node-id="gnlVrPKx5l8fFprLdovB2z">5</td><td data-page-node-id="phnoy9rZyzj0R4eTBTDtcc"><strong data-page-node-id="X5nypuoWXthB4mrIE3xAO3">交互设计</strong></td><td data-page-node-id="GyZY5YlND6Cr97bJXMNl4i"><code data-page-node-id="ESKZ3mwBUXVdFatiB4Dn6u">ux.md</code></td><td data-page-node-id="uh8VUNSxscJDVXQAtBxi9o">交互设计师</td><td data-page-node-id="fj5dbhyGBXQnzfTIfNndrh">PO + 主策划</td><td data-page-node-id="RvULnfSJTRMNOJwBOrlX1x">1 工作日</td></tr>
+      <tr data-page-node-id="2Po0APtk740GkOEAymVhvA"><td data-page-node-id="fNWeoNQSRqhYPZWpdPzmkv">—</td><td data-page-node-id="U1W9vizYOV3aQznDOibRII"><strong data-page-node-id="55j8U8lbfQbd1o0bC0ynZd">最终审核</strong></td><td data-page-node-id="GiFEYzBAwcb9ORGnBEzF65">—</td><td data-page-node-id="sbwRjYGNDG2QEmkHp8kAGB">—</td><td data-page-node-id="xLfiW2bNx9pFqDF7ZvFNrZ">制作人</td><td data-page-node-id="blj5aTrvhP0OivQiHP9UzU">1 工作日</td></tr>
+    </table>
+
+    <div class="note" style="margin-top:14px;" data-page-node-id="26C2CzjAjwVgtROQ7YlLRe"><strong data-page-node-id="1HNDq7zwdjgZhiDAH7Rsw7">每步通用循环　</strong>执行人撰写 → 提交审阅 → 审阅人审阅（1 工作日）→ 通过 / 打回。打回后直接修改原文件重新提交，不创建新版本。</div>
+    <div class="note" style="margin-top:10px;border-left-color:var(--purple);background:var(--purple-light);color:#6C3483;" data-page-node-id="jxKf4BrFNwmjcVkvcELL9y"><strong data-page-node-id="MtB7uBdyElO2ZQyeP6QEY6">特殊规则　</strong>当主策划同时是 PO 且执行 mechanics 时，审阅人中的「主策划」由制作人代替，避免自审。</div>
+  </div>
+</div>
+
+<!-- ════════════ 04 角色矩阵 ════════════ -->
+<div class="section" id="roles" data-page-node-id="bud2Z3GF99aq0M9X599IdQ">
+  <div class="section-header" data-page-node-id="OYPHVg8UjK99LcGgrYBldz">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="wRc3lP4be5RdIWkg5ezrNU">04</span>
+    <span class="section-title" data-page-node-id="Jk0PqVdoh3rOEC0V3MdB1X">角色矩阵（RACI）</span>
+    <span class="section-desc" data-page-node-id="dFQntgmdx1LusG1Qjfs0Do">R 执行 · A 审阅 · C 可按需加审 · I 知会</span>
+  </div>
+
+  <div class="panel" data-page-node-id="fF9vMegJAODcaSqpADLOcF">
+    <div class="panel-title" data-page-node-id="G1vcMZkULJAmIBbCw00LNf"><span class="dot" style="background:var(--teal);" data-page-node-id="FSDRhGbDqKEJKPHaqnq4dW"></span>职责分配矩阵</div>
+    <table class="info-table" data-page-node-id="qg5Qs13ebuyAIiY9hEq11M">
+      <tr data-page-node-id="EOQMXUj4l4c6n2TPRjcw5E">
+        <th style="width:120px;" data-page-node-id="gtTqqZTu8sAg5VOlfGmFgl">角色</th><th data-page-node-id="gAsJ5d0qDTtx1DsRCRuBbs">story</th><th data-page-node-id="YNd19YZg5OW0yJomd6CsVN">mechanics</th><th data-page-node-id="PCVCoTzqVFg3MiB7TcZ4Pt">params</th><th data-page-node-id="L1nIDgHAYBioxjN9ARNuwZ">theme</th><th data-page-node-id="TmlFqIrEevwagxeFImwOPy">ux</th><th data-page-node-id="W9L4mKPGI6xT5jkz0X3vvE">最终审核</th>
+      </tr>
+      <tr data-page-node-id="Gx8HVIgoWBTo6ZO1BxqAYF"><td data-page-node-id="6bU8Cr0f0Ek1OQW2AiE9W8"><strong data-page-node-id="ZZpUewOXqpT4nB5lFVZqgm">制作人</strong></td><td data-page-node-id="KTVeSJxAgTlhsovxNxGN5M"><span class="rac rac-a" data-page-node-id="PmJGyCgHWdTjKPmWdlLcc0">A</span></td><td data-page-node-id="pRZYHIRvEHayTr4DVeFo0h"><span class="rac rac-c" data-page-node-id="hyNt8s37itfC5K3UIvQICv">C / A*</span></td><td data-page-node-id="HtlwFGoAs4DPCVkkHFD76t"><span class="rac rac-c" data-page-node-id="3BNJJ09Sz391oYsJ5crVh0">C</span></td><td data-page-node-id="oo5iX5sq579qKrpEQPXFqF"><span class="rac rac-c" data-page-node-id="dxU7YpBKivPqdIAl0TA2Jx">C</span></td><td data-page-node-id="W9FhSvyJxCRyBku0KbfaRO"><span class="rac rac-c" data-page-node-id="FQ2TP4bKAkzo54d0hu3Rs4">C</span></td><td data-page-node-id="aISZqDZmr1q6c7zZwCnUXX"><span class="rac rac-a" data-page-node-id="hJXmVj4mD3CMf2hHE81vLh">A</span></td></tr>
+      <tr data-page-node-id="dCd9nQJKYqsurcVEVg68f0"><td data-page-node-id="DfvIgGIVMJ9p1ZpP3COwqf"><strong data-page-node-id="CzBq2VWjKVFaCrQWsh8hFS">PO</strong></td><td data-page-node-id="TmgjkWwupgsB3341IZj6Aw"><span class="rac rac-r" data-page-node-id="thAKan6OgZmxGdXQIoQFLE">R</span></td><td data-page-node-id="BQAPpXvUA8JkpPTtKh12JU"><span class="rac rac-a" data-page-node-id="ZW41MTwuzqDn4cXqZ9TE98">A</span></td><td data-page-node-id="3SOxaTFlqhq1gbBWE5jcpD"><span class="rac rac-a" data-page-node-id="jDP7Moq0BdEhzz9KA71EIN">A</span></td><td data-page-node-id="JarDXIHMlhPsjgN43o5rRS"><span class="rac rac-a" data-page-node-id="ct64DC57jYklQq2nPF7A9i">A</span></td><td data-page-node-id="BPmVMayBVTGSyl4kcKwLx1"><span class="rac rac-a" data-page-node-id="iBDPZO29VkGctWno3WMemw">A</span></td><td data-page-node-id="pa5uJYuDVFh2PPAhM6XX3E"><span class="rac rac-i" data-page-node-id="kSCpRzUA3h3sRfHTS7FZiu">I</span></td></tr>
+      <tr data-page-node-id="dvDaxUxrQJ8Z7iaxls3OWg"><td data-page-node-id="W20vXw6fYk4DF3acChjki9"><strong data-page-node-id="zzkOqhRTOqz1TA4L8HGr2b">主策划</strong></td><td data-page-node-id="dS0athVE8XKGuuIBww7oDN"><span class="rac rac-i" data-page-node-id="Qpt2svtZz80dtxLRzOK0wF">I</span></td><td data-page-node-id="7wySVtHavQbag8alxDODLN"><span class="rac rac-a" data-page-node-id="i5wvFdAwmRbI49T1hNUnnI">A / R</span></td><td data-page-node-id="W5yIfaQGOM6D2uSvdm2nNT"><span class="rac rac-a" data-page-node-id="gBN6XQJ3w5ldPo6a7iFs4d">A</span></td><td data-page-node-id="yA86mU5cCNr9F8SuBimELv"><span class="rac rac-a" data-page-node-id="sK1KGFDAXWiWO8kJFjcFzP">A</span></td><td data-page-node-id="IW00bQLvWKG779qtRX2201"><span class="rac rac-a" data-page-node-id="r74je6b6yipcm4MpJIknr2">A</span></td><td data-page-node-id="HadecusAVry4v4QliVYqpG"><span class="rac rac-i" data-page-node-id="HmiDvOEuIy7ys3gyGCKa1l">I</span></td></tr>
+      <tr data-page-node-id="kXfTnrZO9hZI94BIAxdOMk"><td data-page-node-id="coP0dJC5LNWpfXAeSffSq6"><strong data-page-node-id="kFb07Om1F5SYfrTs0dBoa5">系统策划</strong></td><td data-page-node-id="mZwXoWSFu1kg1MkrklytZo"><span class="rac rac-x" data-page-node-id="aTt95tGIGKXDQKD8PJfZL6">—</span></td><td data-page-node-id="JNpt9AE6yIu6AYY7XQkMaw"><span class="rac rac-r" data-page-node-id="v1S3qF5V6pqpoXtv1aMnXc">R</span></td><td data-page-node-id="P54Ydg0W6YcL8qmzwo14QL"><span class="rac rac-x" data-page-node-id="sSMrdmaLBJ2VTcJ5Dr4pI0">—</span></td><td data-page-node-id="lHtZ57gwoSaTMs7bKEkfhe"><span class="rac rac-x" data-page-node-id="3JRJmOTDPVAkoMKE3FvQkk">—</span></td><td data-page-node-id="E6fUhwiSgIwqGAuusdCzd2"><span class="rac rac-x" data-page-node-id="ON06630GIyJ8CH52YmoFDe">—</span></td><td data-page-node-id="y781cnET6FDHGDyUcPDDxU"><span class="rac rac-x" data-page-node-id="QhVJeQrvbnCZ1Z6h5tWMDE">—</span></td></tr>
+      <tr data-page-node-id="1IZtgsYfJvVuyMgSMQj0Pd"><td data-page-node-id="5IFDYoWhBxMXOv53CkFAMk"><strong data-page-node-id="cAlbxyJrMJYtxOsAL73qXR">数值策划</strong></td><td data-page-node-id="R6Qo4p8w49sUmCGWEPSNAh"><span class="rac rac-x" data-page-node-id="hHAWTIgE0p4ap4bCyneo4l">—</span></td><td data-page-node-id="nBXqLLfoXdaxqroSpDk4JR"><span class="rac rac-x" data-page-node-id="gOADy7byLe4CbItjjK70cC">—</span></td><td data-page-node-id="thD97IySUgNpAsvlQRkFzS"><span class="rac rac-r" data-page-node-id="h61aDZNIIx5OkcYJB05sof">R</span></td><td data-page-node-id="BHz958xrXREQAb9Glb5qxI"><span class="rac rac-x" data-page-node-id="axofxIHRhlFCj1kjYOAyqo">—</span></td><td data-page-node-id="JzeJlnSJAMzqxFkZzLlGlY"><span class="rac rac-x" data-page-node-id="rdwa5sScGChLaXIvglPShC">—</span></td><td data-page-node-id="wF5XS0HUtAiDCl42NrrQ1i"><span class="rac rac-x" data-page-node-id="JPAIYeITdNTaEEkr1cLb3Q">—</span></td></tr>
+      <tr data-page-node-id="0OBHMn5ghnRFJKAVpl7Gnt"><td data-page-node-id="ScHhcQmpaEBVE5ndKFVq5Y"><strong data-page-node-id="THDHktwLgH7esq8BXhUmPa">文案策划</strong></td><td data-page-node-id="aFgOvBbVMQPuCDEY9GM8HE"><span class="rac rac-x" data-page-node-id="sQUSTqBXRFFgGCRQCjxfO7">—</span></td><td data-page-node-id="ir0Cl8lqC8fZBBdO3AQz6S"><span class="rac rac-x" data-page-node-id="JpM13rOK4SvzDdjSzujd6z">—</span></td><td data-page-node-id="4UiilTbO6uK5MAqHMVAEVm"><span class="rac rac-x" data-page-node-id="ZpIQbcYZ7F7yGLkc1Ab67r">—</span></td><td data-page-node-id="W3rot6Na4Y3KYU89QOqdud"><span class="rac rac-r" data-page-node-id="HO1xiembtQGtg7GdeM9QCJ">R</span></td><td data-page-node-id="F2vPuWFEtNHq4juWBjauda"><span class="rac rac-x" data-page-node-id="TQ1d386ngJ2ceALith3R3A">—</span></td><td data-page-node-id="LatyLCDa5Re6cl2v6kQh7d"><span class="rac rac-x" data-page-node-id="CCsaxYZ6bkLFYKb7F4A4JG">—</span></td></tr>
+      <tr data-page-node-id="FdpVIrBXGLtDYnsgCVSHc8"><td data-page-node-id="woUWKOYcDXEV4kWPUIFHKC"><strong data-page-node-id="JfRWBy57Y3McQD5S1cidEt">交互设计师</strong></td><td data-page-node-id="kYlBMzEUoUeHsVesld26s4"><span class="rac rac-x" data-page-node-id="NJvayOV8FstNTKXdJ0IXI9">—</span></td><td data-page-node-id="eWF3TGDHZFRnDR7Sn3vJ7h"><span class="rac rac-x" data-page-node-id="w1dQsmiYgmKDyMFWCeDI24">—</span></td><td data-page-node-id="dpK1Nbz0ixwwmMFxSQ5kiJ"><span class="rac rac-x" data-page-node-id="ZrSR2KShJqGtyj8lq4py5r">—</span></td><td data-page-node-id="FCIhdIWtahForwEACuYLui"><span class="rac rac-x" data-page-node-id="j20UNVRozNlSlpXBnyZ6zM">—</span></td><td data-page-node-id="zBcZgg5XV4OqViWZt0S2f6"><span class="rac rac-r" data-page-node-id="ddMLFn3iWJXRT8eBQdwXin">R</span></td><td data-page-node-id="7GPudST4zEHULSqWQ7ZmD6"><span class="rac rac-x" data-page-node-id="i8HbWhgsEGvhTDLR9cppZA">—</span></td></tr>
+      <tr data-page-node-id="DKSxwI4N7jZAqV6OhdDFop"><td data-page-node-id="YawxFDpHy30z8DFVsSb6Nk"><strong data-page-node-id="ZR7DeZFZjQBTZFmcemLWUC">主程序</strong></td><td data-page-node-id="n38avfBeXyxG99qcTupvjP"><span class="rac rac-x" data-page-node-id="sVApXZj24SEE0nyfE1oHgg">—</span></td><td data-page-node-id="AfaAeRFNrJjQcZIz5B8n3Q"><span class="rac rac-x" data-page-node-id="JnOQoNRdlIQT5WFa6rRdc5">—</span></td><td data-page-node-id="Rh5suQqPLaaDtdcUu48b7M"><span class="rac rac-x" data-page-node-id="8UVm6TKmHV9GZGmO3Rstzx">—</span></td><td data-page-node-id="62GsbEcQoXKFzX4BJswFgR"><span class="rac rac-x" data-page-node-id="IgywD3c42LJ5CahzqumoAL">—</span></td><td data-page-node-id="MEqRHVO2TXPToKLzYDkBgc"><span class="rac rac-x" data-page-node-id="ZQfc4CH5hbhP3HeP73Foge">—</span></td><td data-page-node-id="xvmcBnr8F1EILXhytVet2p"><span class="rac rac-i" data-page-node-id="LjgnxBXfCziw8sewp5WDAr">I</span></td></tr>
+      <tr data-page-node-id="KLMc6AMDvwVe8Vhq4VDfT1"><td data-page-node-id="aphPJkevr2d1HueUeP5j95"><strong data-page-node-id="5JTmUsq7jJsRR5xpJ73wR2">开发程序</strong></td><td data-page-node-id="imxxDVuadGTmaBky4kUhbs"><span class="rac rac-x" data-page-node-id="pDwMxJpxBhQBEiN41HYPPF">—</span></td><td data-page-node-id="h0Q7p9vVQJShE5zYGlczfb"><span class="rac rac-x" data-page-node-id="gnvuEt00E9mS7QN1cpllra">—</span></td><td data-page-node-id="UAZirOyLAavPuXuakWtz6A"><span class="rac rac-x" data-page-node-id="BuiJFuHRqNL5Tr9AOxLmtR">—</span></td><td data-page-node-id="UIx0KA4NFy8XCPykVW2iUZ"><span class="rac rac-x" data-page-node-id="aLTBkVqei3Jb7khEPDS0tu">—</span></td><td data-page-node-id="xuOf0zCoMXoRiGox7xY1GX"><span class="rac rac-x" data-page-node-id="lnAV0SZsQZpT6pXdOX3gnM">—</span></td><td data-page-node-id="Zv09I9AXgPyTwklhbBfcTO"><span class="rac rac-i" data-page-node-id="OvEcCoq1yEh20eeq4BhN5m">I</span></td></tr>
+      <tr data-page-node-id="XeMCnu7i4CmvncYoNEFGIQ"><td data-page-node-id="MGsuoK5mAuHJKyJT3ntoO4"><strong data-page-node-id="fywo3uABH71sMGwjLL3i5x">QA</strong></td><td data-page-node-id="if4WoBVFghtkKDJB8y3P2N"><span class="rac rac-x" data-page-node-id="LWfzGsBwIq6xZhh2r7WYBb">—</span></td><td data-page-node-id="0wGhJteWuAs0jDNR3ZAgoK"><span class="rac rac-x" data-page-node-id="DowYB0sHb4j0xI0MqNu7P2">—</span></td><td data-page-node-id="zC18v7fy7MHgNyUD69SLJY"><span class="rac rac-x" data-page-node-id="yvloGagAHSOB7TRCbkICXN">—</span></td><td data-page-node-id="lzcb13TB9QvWrNVOmMSU6Z"><span class="rac rac-x" data-page-node-id="ZJFyyMd5VpXlhlQwc3Rqt5">—</span></td><td data-page-node-id="h4OUWZNFF8sfr816BJDcBV"><span class="rac rac-x" data-page-node-id="OCcfacrqhXHeI2WFPsXIWU">—</span></td><td data-page-node-id="R3u7TXi0QdzyQ6QfsriEQb"><span class="rac rac-i" data-page-node-id="zqa2wteCYA4iLXHyojD3vy">I</span></td></tr>
+    </table>
+
+    <div class="note" style="margin-top:14px;" data-page-node-id="2lZz32APfrVAyKKBdhi0PA"><strong data-page-node-id="hwFwBPbshIgLxLlY4UEPor">* 特殊规则　</strong>主策划同时是 PO 且执行 mechanics 时，制作人由 C（可加审）升级为 A（审阅），代替主策划履行审阅职责。</div>
+  </div>
+
+  <div class="panel" data-page-node-id="5L2fXkhS1c2hcAW9tF7ekm">
+    <div class="panel-title" data-page-node-id="q4EksvTPDMgD0XhNAauLl0"><span class="dot" style="background:var(--pink);" data-page-node-id="jZN5ao8fW4pZWDu9xaqHuP"></span>冲突处理</div>
+    <div class="flow-row" style="justify-content:flex-start;" data-page-node-id="xkOWHKKQHlySNPMtc2QBN0">
+      <div class="flow-node fn-gray" style="min-width:130px;" data-page-node-id="oRaobeCAYzrb4WdxyR3YSR">PO 与主策划意见不一致</div>
+      <div class="flow-arrow" data-page-node-id="R2LEjCUvj2gXAU1NHjBLbV"></div>
+      <div class="flow-node fn-blue" style="min-width:110px;" data-page-node-id="OFvahCbBt3s4vNzAL5oGaB">双方协商</div>
+      <div class="flow-arrow" data-page-node-id="arTYO6gYy1851OBglRxNx0"></div>
+      <div class="flow-node fn-orange" style="min-width:130px;" data-page-node-id="4vV91KibDHC1d91Vpo0rlM">协商不成</div>
+      <div class="flow-arrow" data-page-node-id="D2qlLdR6Rn9PFecEsZDhBf"></div>
+      <div class="flow-node fn-pink" style="min-width:150px;" data-page-node-id="3JE4rcG4Omewr9WB4bK3pF">制作人介入裁决</div>
+    </div>
+    <p style="font-size:13px;color:var(--text-muted);margin-top:12px;" data-page-node-id="YXyuOkyiYVecBvGSoIAerA">制作人拥有<strong style="color:var(--text);" data-page-node-id="KmvLrmD5kK892sgkGuDRHw">最终裁决权</strong>。</p>
+  </div>
+</div>
+
+<!-- ════════════ 05 步骤详情 ════════════ -->
+<div class="section" id="details" data-page-node-id="thYxk6ACEmZbGVCub4zT1W">
+  <div class="section-header" data-page-node-id="Rk60ztdB5wIuQ7eGl6c8Wp">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="TjbgdXmAKFoVmKzzbtXRea">05</span>
+    <span class="section-title" data-page-node-id="cid3d4WPKvtqEljlNIjVwA">步骤详情</span>
+    <span class="section-desc" data-page-node-id="SG0j9NdUNe1C1ofzBFoE7m">每步聚焦单一职责，依赖前置产物审阅通过状态</span>
+  </div>
+
+  <div class="card-grid card-grid-3" data-page-node-id="HGun3rgnxi1diX71CBv0VU">
+    <div class="card" style="border-top-color:#6C5CE7;" data-page-node-id="JECXYJcriO36mrEsKrFEU4">
+      <div class="card-icon" data-page-node-id="UkIMN4KB6I0QleS3om8adp">1️⃣</div>
+      <div class="card-title" data-page-node-id="jWJcl7DZE3WkG2lijI9JKC">需求创建</div>
+      <p style="font-size:12px;color:var(--text-muted);" data-page-node-id="nJs0Yu2QfVsFsg69yRKI5t">产物 <code data-page-node-id="vnb8PJuDeisEXO7ofHji41">story.md</code> · 执行 <strong data-page-node-id="s3sFbXQfGgmaq3GaN0ESwx">PO</strong> · 审阅 <strong data-page-node-id="y9B46Dy3YrMLG0F4w5scEr">制作人</strong></p>
+      <div class="divider" data-page-node-id="smFGVPJkCM4EgWaViLdFQq"></div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="3Jsa2apJ9QoOQb2UOGXt0p">从特定玩家角度出发，描述行为目标和价值。使用「作为…（角色），我想要…（目标），以便…（价值）」句式。审阅通过后 PO 正式成为该提案的 Proposal Owner。</p>
+    </div>
+    <div class="card" style="border-top-color:#0891B2;" data-page-node-id="UxoeZql3nDzbyDT4xxBHSQ">
+      <div class="card-icon" data-page-node-id="UFfZUaeu4912dpCEO6YxP0">2️⃣</div>
+      <div class="card-title" data-page-node-id="85A7iM2m2SfQrUjO7KQCBP">规则设计</div>
+      <p style="font-size:12px;color:var(--text-muted);" data-page-node-id="FhCaduLJYKvkJWsCTEJtYb">产物 <code data-page-node-id="MzDAyo77q1r8ZmbhR3WW8R">mechanics.md</code> · 执行 <strong data-page-node-id="VOJTNg0jclpVwpb7iYU5xW">系统/主策</strong> · 审阅 <strong data-page-node-id="Oh2btZHU2E27RtEDC5gmdf">PO + 主策</strong></p>
+      <div class="divider" data-page-node-id="3wiAcBdiw89ZHnaqzVp4zZ"></div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="hVBJtlpi3gn9rs04OtWOcy">基于 story 进行核心机制和逻辑规则设计。包含状态机 / 流程图、规则逻辑详述、边界条件、异常路径、与现有系统交互点。</p>
+    </div>
+    <div class="card" style="border-top-color:#1ABC9C;" data-page-node-id="t1E3vml5VmlCTNad8Pw6s5">
+      <div class="card-icon" data-page-node-id="c8h15ZWv0fi11luWWHgsoO">3️⃣</div>
+      <div class="card-title" data-page-node-id="OQMhMscDdsXX0P3E1ugehh">数值设计</div>
+      <p style="font-size:12px;color:var(--text-muted);" data-page-node-id="p0RAbkQG5YMdDT16wERCAZ">产物 <code data-page-node-id="MVfs2vpNpZUErL4PU1C9rQ">params.md</code> · 执行 <strong data-page-node-id="6GOTvTFWBVPAxZIW44fpby">数值策划</strong> · 审阅 <strong data-page-node-id="kvHEvomYReWGGODMa6aLAr">PO + 主策</strong></p>
+      <div class="divider" data-page-node-id="UJAILVFp1VIHEMlZnHOVRk"></div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="b0WKD7dd7vHSrbLcuCRHpY">基于 mechanics 进行配置表结构、常量参数、数值阈值、运算公式设计，并生成覆盖正常 / 边界 / 异常的开发调试数据。</p>
+    </div>
+    <div class="card" style="border-top-color:#E67E22;" data-page-node-id="xr7iof5UU6z9GXCWREaiaK">
+      <div class="card-icon" data-page-node-id="jcFdRWmyO1jDVnSkCufBFD">4️⃣</div>
+      <div class="card-title" data-page-node-id="FFWwzAiqWJFjARJ9mNnkEp">包装设计</div>
+      <p style="font-size:12px;color:var(--text-muted);" data-page-node-id="IOXyfJEwFCy4eOWwSlDtCt">产物 <code data-page-node-id="kLADFWnEMjkh4pACdmaHdc">theme.md</code> · 执行 <strong data-page-node-id="JC3qf6R0jDKdXW9HUrTqGn">文案策划</strong> · 审阅 <strong data-page-node-id="EAXagYnMaIprnqrF9hRMtq">PO + 主策</strong></p>
+      <div class="divider" data-page-node-id="ZvAJ6F6es03liW3TnRECJW"></div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="Hh3TC87mHTvAL0WNW8PPmh">基于 mechanics 和 params，结合游戏世界观，进行功能名称、道具描述、UI 文本、视觉方向的全面设计。</p>
+    </div>
+    <div class="card" style="border-top-color:#9B59B6;" data-page-node-id="qV6JA2Eb3cgvJE6TdNCOHA">
+      <div class="card-icon" data-page-node-id="DATYkjUOSAdFtBaH062EN0">5️⃣</div>
+      <div class="card-title" data-page-node-id="3iDVxtGtyhjJWjwHBZNoWt">交互设计</div>
+      <p style="font-size:12px;color:var(--text-muted);" data-page-node-id="Nu4rzuBc53bNabijCBZNjz">产物 <code data-page-node-id="RK6qhPtITSEihdrm7BsEkD">ux.md</code> · 执行 <strong data-page-node-id="rjFdV5rxXo7F9oOO6ieJcU">交互设计师</strong> · 审阅 <strong data-page-node-id="TDsZuGmZzWjZQFeIgYBTde">PO + 主策</strong></p>
+      <div class="divider" data-page-node-id="kxSSIebSwsn5medD8T1ZsM"></div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="zelpNbezkKuZHT0aLKgkNT">基于 mechanics 和 theme，进行界面层级、信息架构、交互流程、状态覆盖、分辨率适配的设计。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ 06 修订规则 ════════════ -->
+<div class="section" id="revision" data-page-node-id="StDayZsZnkbstUN5dnNHEv">
+  <div class="section-header" data-page-node-id="fs4L55nGbU3g9WwkYqwkvA">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="CjdYAAtFqcgry9Mcm7QoYG">06</span>
+    <span class="section-title" data-page-node-id="r0CsZ2wZfRwkWA1wY4q6oJ">修订规则</span>
+    <span class="section-desc" data-page-node-id="nuXWOw3nEfJkb3CXUgkD1z">通过后产物不可修改，修订必须走 -fixNN 版本</span>
+  </div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:16px;" data-page-node-id="1RQgVPJl6gr12F9WV8mmUl">
+    <div class="card orange" data-page-node-id="jtSnmoygfItCDxcNqoI1ej">
+      <div class="card-title" data-page-node-id="LiuuYaXGjXWhgc4BVERJXZ">场景 A · 审阅通过前 · 打回</div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="B2ZPQn6QOBwJ3jvS6qK6Av">当前步骤被审阅人打回 → 执行人直接修改<strong style="color:var(--text);" data-page-node-id="hKLMuARX5S2YHGlrefVenc">原文件</strong>，重新提交审阅。<strong style="color:var(--text);" data-page-node-id="6IbrElwMl4PyKax0D7ADya">不创建 -fix 版本</strong>。</p>
+    </div>
+    <div class="card pink" data-page-node-id="wdcqbZw1aFBUNoeFtwX7ZG">
+      <div class="card-title" data-page-node-id="ujVce5JZuIeo9e7GFmfzdJ">场景 B · 审阅通过后 · 修订</div>
+      <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="lyY7lLd88XVYPAmInCfGWH">后续步骤发现前置产物需修订 → 创建 <code data-page-node-id="ZZshZUlwnz6Xl9LtaZON0w">-fixNN</code> 版本，<strong style="color:var(--text);" data-page-node-id="mFXRJ0BrkyvafNwqRVuN0k">原文件保留不动</strong>。修订后从问题步骤重启，按序重走后续步骤。</p>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="5lppikMLN2Rh1mUlMHAeeP">
+    <div class="panel-title" data-page-node-id="HtdSH0ExJbCFlWyG0rH6eO"><span class="dot" style="background:var(--orange);" data-page-node-id="ayc1TcmgArfIzttiSsEzhs"></span>级联规则<span class="no" data-page-node-id="9LBtApKsbKhokWB7mXqMYX">取决于当前状态</span></div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;" data-page-node-id="IBYd8VmuFzqPtTQpIw8GCN">修订发起后，后续步骤是否需要创建 -fix 版本，取决于该步骤的当前状态：</p>
+    <div class="card-grid card-grid-2" data-page-node-id="xD7FHaqEdEqBxkOGhkvhuZ">
+      <div class="card" style="border-top-color:#E8547A;" data-page-node-id="T5bQAfmeRLMX7xJPxhHDME">
+        <div class="card-title" data-page-node-id="6OWwSzVdPRWDFijaClDcXX">🔒 已审阅通过</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="RXOqdALZbCP4yqNIYrqiis"><strong style="color:var(--text);" data-page-node-id="IyPx2uTc3kPCYgt7vajY4d">必须创建 -fix 版本</strong> —— 已锁定的产物不可修改。</p>
+      </div>
+      <div class="card" style="border-top-color:#1ABC9C;" data-page-node-id="Gb6r5Ltuyf5p5vXXNihAAH">
+        <div class="card-title" data-page-node-id="I2k0eRIwTxr1Dayth2URSI">📝 未提交审阅（撰写中 / 待审阅）</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="HyQ7mq8RuSb3aH82oleJqr"><strong style="color:var(--text);" data-page-node-id="Nvf4j7suYTuRKTC1Ndn4bX">直接在原稿内修改</strong>，不创建 -fix 版本。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="CWPkCI7YiIdjHbCd9bT1GQ">
+    <div class="panel-title" data-page-node-id="ypDecRKypbPtlvMLraOP2a"><span class="dot" style="background:var(--accent);" data-page-node-id="u8fSxo0wapplMIMOBLiNI6"></span>修订状态流转</div>
+    <div class="code-box" data-page-node-id="nb5ZBwpdznurUr3chKEZ84">story.md → [审阅通过] → mechanics.md → [审阅通过] → params.md → [审阅通过]
+→ ux.md（撰写中，发现 mechanics 需修订）
+→ 创建 mechanics-fix01.md → [审阅通过]
+→ params.md 已审阅通过 → 创建 params-fix01.md（级联修订）→ [审阅通过]
+→ ux.md 未提交审阅 → 在原稿内直接修订 → [审阅通过]
+→ 制作人最终审核 → [通过] → propose 完成</div>
+  </div>
+
+  <div class="panel" data-page-node-id="VSeTgdYWM1uCnzuQu9l1dO">
+    <div class="panel-title" data-page-node-id="OoaAosOjBxHsC60aFiYv02"><span class="dot" style="background:var(--purple);" data-page-node-id="NDANFrGBv3NgbqvHsikvjs"></span>产物状态变更</div>
+    <table class="info-table" data-page-node-id="D8L5h9fnW87N4DbJlenUTT">
+      <tr data-page-node-id="Ipos0M8Wjm0oSt1vBAhuZv"><th style="width:140px;" data-page-node-id="IQcAiVHaYx3zHN11fmpg15">阶段</th><th style="width:240px;" data-page-node-id="Lp7eKthGn7OGxlPaElOMtC">原产物状态</th><th data-page-node-id="yTBzUOEwD5aTKjRI8bzDOb">操作</th></tr>
+      <tr data-page-node-id="lQiy0DxfA2yhpSgGn2ffOQ"><td data-page-node-id="0RuNO8D9bemr8OHylVtSnl"><strong data-page-node-id="SIzg2YZJzmkbmVLcCOZqYd">修订发起</strong></td><td data-page-node-id="vH8v0BQPLTyDvqGx2Gc3B7">已通过 → <strong style="color:var(--text);" data-page-node-id="W5rmG6nmvyQnsESSGkAHaU">修订中</strong></td><td data-page-node-id="5Dc2TjfmhHMpIxaUkLDqD5">在修订备注中写明发起环节、原因、版本、修订人、审阅人</td></tr>
+      <tr data-page-node-id="P3j2uUul5AD0ez3Iyr9iNg"><td data-page-node-id="l1WKGooAO4KRDmHFo1JbeK"><strong data-page-node-id="tgzDcTIIA9Z4uKH5GSlK0m">fix 版本创建</strong></td><td data-page-node-id="1h8rFN5k2Q5wyAWHmTHJ9U">—</td><td data-page-node-id="YBmCyREhoA7v0n08z3RUQf">在修订备注中声明：修订版本、基于版本、发起环节、原因</td></tr>
+      <tr data-page-node-id="FQWElC5Y9P8cnrnqLxBTvT"><td data-page-node-id="9x9lLfPASmUIPWFxyelKL3"><strong data-page-node-id="SwEA4MAm09o45xJFG14051">fix 审阅通过</strong></td><td data-page-node-id="m7CqinJccAnxFo8dq7bu6Y">修订中 → <strong style="color:var(--text);" data-page-node-id="Bdh4bF7VBVG36y1wgKOLGY">已修订</strong></td><td data-page-node-id="mOIHWakNSMgWBYA3qzFEOe">更新「当前有效版本」指向 fix 版本</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ════════════ 07 铁律 ════════════ -->
+<div class="section" id="iron-law" data-page-node-id="KH7SEIi4LkUMgP1ut80Ejt">
+  <div class="section-header" data-page-node-id="HEZzjMxOrBstMWtZ7MKElG">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="ep0MBuVrdynr3zLj3kIXXL">07</span>
+    <span class="section-title" data-page-node-id="z374YebU4a1GHKsbGjDxGE">proposal-index.md 铁律</span>
+    <span class="section-desc" data-page-node-id="U5Pir5eOg8HLWh4sxPrY9b">提案的中枢神经系统 · 状态变更原子操作</span>
+  </div>
+
+  <div class="callout callout-red" data-page-node-id="b9B5LKG0L6sOrUWWCtUGja">
+    <strong data-page-node-id="nBzFwrE62nT3BZiyFXIeo5">铁律　</strong>状态变更和 proposal-index 更新是<strong data-page-node-id="HVI5HOAGbFb55CAkoqsWZZ">原子操作</strong>——先更新产物文件，再更新 proposal-index，两者必须在同一次操作中完成，不可拆分。
+  </div>
+
+  <div class="panel" data-page-node-id="Ed3wFmXRAuOvvriFPZOFE0">
+    <div class="panel-title" data-page-node-id="Mu28HoL0zKv0VgPgFK5iCz"><span class="dot" style="background:var(--pink);" data-page-node-id="3CjFRoswhIPzRQPxWubcC9"></span>更新触发点<span class="no" data-page-node-id="mEeESRcUvdEW15vI7uhnUn">12 项</span></div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;" data-page-node-id="AuvV0yrXA7p5TdxnXDrYH3">proposal-index.md 贯穿整个 propose 阶段。每次状态流转必须即时更新，不得延迟或遗漏。</p>
+    <table class="info-table" data-page-node-id="WVLq3DKzP0NUoN8lExbTdQ">
+      <tr data-page-node-id="23Bp2BlVcqR2nECIq5oByk"><th style="width:200px;" data-page-node-id="ztqkLmwJE9XbyVxbGgvCY3">事件</th><th data-page-node-id="QjHCYQT8lVLrbXRs3o5A54">更新的部分</th></tr>
+      <tr data-page-node-id="CXmiBjzH6Bm5zwEmXBaXeh"><td data-page-node-id="3VKQRr0HpvdvGuu1v411Gd"><strong data-page-node-id="ztnRF2MDQoMb9oGUxdOAgA">创建提案目录</strong></td><td data-page-node-id="k5dCCOPViC0gKnEhOndgFU">产物状态（story: 待创建→撰写中），PO 字段，状态变更记录</td></tr>
+      <tr data-page-node-id="lVrWzLPLcydl7VU2SWuJNb"><td data-page-node-id="d1B0ML7RGFBNHHJOSkQ92c"><strong data-page-node-id="Cnrwnaj2j9OZRmbZi9mb7P">确认执行人</strong></td><td data-page-node-id="seGDntQtArxQhwVV9M7FC2">产物状态表执行人列</td></tr>
+      <tr data-page-node-id="WLKW7WEQWn8BwvMb4OF6D2"><td data-page-node-id="NPmLtrg7pRRONl7YrrlaTu"><strong data-page-node-id="lUzBCh23EE6tKmsTA8ZiGE">更换 PO</strong></td><td data-page-node-id="2o89767jCl7EqwqkWyvgfI">PO 字段，story 执行人列，状态变更记录</td></tr>
+      <tr data-page-node-id="dkYB7aimxCDvqrxFhRAbvm"><td data-page-node-id="0k6WIRRmExHlN45Wx3dhsN"><strong data-page-node-id="TNQfOh1qNNqlLRC1FQUFZH">执行人提交产物审阅</strong></td><td data-page-node-id="RmylqGVSUGlm1BDyPMxJ37">产物状态（撰写中→待审阅），状态变更记录</td></tr>
+      <tr data-page-node-id="yCoFVSIajt2E9pTqsYhPU1"><td data-page-node-id="Z5RabLqlcYK9yN5ZfHfcEw"><strong data-page-node-id="RFca2dQZCbf37sZM5xL6Ta">审阅通过</strong></td><td data-page-node-id="1ojWuxNv9Bo5WAFK0CXAUb">产物状态（待审阅→已通过），审阅通过时间，审阅记录，状态变更记录</td></tr>
+      <tr data-page-node-id="EfbuzS4DsHyoEflV82XqkT"><td data-page-node-id="F0jBb2eJvSJYUaia7rDNxd"><strong data-page-node-id="DozKvpDMENPKJqDxViVWiq">审阅打回</strong></td><td data-page-node-id="odFeatnUIBmFhZGrr6DDIU">产物状态（待审阅→已打回），审阅记录，状态变更记录</td></tr>
+      <tr data-page-node-id="NEjgw8kK27mMF33LYKpz4B"><td data-page-node-id="9JONHFELSTc94RA3rjeAUb"><strong data-page-node-id="v7QYnDvTsl3hYTtbvEr2aE">打回后重新提交</strong></td><td data-page-node-id="rFVJOHECAdpFHV1Wm6rEKb">产物状态（已打回→待审阅），状态变更记录</td></tr>
+      <tr data-page-node-id="vVqESquweelY001JFLAHVE"><td data-page-node-id="ZGZTHKYDMe6gLS5tolNUGR"><strong data-page-node-id="ktMDZSucd0zVAS9jAalWrA">发起修订</strong></td><td data-page-node-id="ftpWBym7xXtDwFGhsYcrUs">原产物状态（已通过→修订中），产物状态表新增 fix 行，状态变更记录</td></tr>
+      <tr data-page-node-id="dpu5vnuc0fq9fdZ1TjoHN7"><td data-page-node-id="4d7X1JnL8tZzCe1VznoyA4"><strong data-page-node-id="yfkVuoE2IV7OflbThyLvPM">fix 审阅通过</strong></td><td data-page-node-id="3Vyg6OyWYlrHwsDOq4a4Fl">fix 产物状态→已通过，原产物状态→已修订，审阅记录，状态变更记录，当前有效版本，修订版本链</td></tr>
+      <tr data-page-node-id="dDP94xMwJZMGx6hDE5zfYS"><td data-page-node-id="z8Mgxs0tQ4DmGBCrpUDa4C"><strong data-page-node-id="owdNnfqFBaHbZhkWUpdFnS">fix 审阅打回</strong></td><td data-page-node-id="YzyJFlMIgPMJVqxEobkyzp">fix 产物状态更新，审阅记录，状态变更记录</td></tr>
+      <tr data-page-node-id="Qq9QEAtJYG5NUI8JuIWBFY"><td data-page-node-id="GSjjoCEnYA6WJsKuwCZIro"><strong data-page-node-id="WuP1fDrIYH7pmI0u9o7zca">级联修订（后续步骤）</strong></td><td data-page-node-id="O8eXj2DplkYPSjXlPsT0Fv">同上，按级联规则逐步骤更新</td></tr>
+      <tr data-page-node-id="YAw9zvDhWVG5BLREXRvmCs"><td data-page-node-id="pI3m6vEH8eQinf2aT741uZ"><strong data-page-node-id="ocqtVS67pEPdnzPHw28XbU">任意状态变更（暂停 / 恢复）</strong></td><td data-page-node-id="hZwr7K8lKJhfWkGvhVyBiv">状态变更记录</td></tr>
+      <tr data-page-node-id="IkWPpG22HKwXaeUw5OsNCd"><td data-page-node-id="VYMI8YsynNRKuDiB0r814v"><strong data-page-node-id="DoCt0r91LltVnva3lKq7UL">最终审核</strong></td><td data-page-node-id="ciGKLNWF0hQTq6xDp0L2hA">当前状态→已完成，最终审核详情</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ════════════ 08 多人协作接力 ════════════ -->
+<div class="section" id="relay" data-page-node-id="eAdVtfNsbY51L28bqAZ7xD">
+  <div class="section-header" data-page-node-id="sBs84XD8L4KRHxHwfXOHI9">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="oaDrG68X823KfMiidoUvLB">08</span>
+    <span class="section-title" data-page-node-id="pCeEcTfouQ7fGJ8xsSflZ5">多人协作接力</span>
+    <span class="section-desc" data-page-node-id="LcnFKJfvWWTzFHkXoVELkZ">7 种角色 · 5 个步骤 · Git 同步中枢</span>
+  </div>
+
+  <div class="panel" data-page-node-id="jqzgl5FeUJirb3kcJB6NWk">
+    <div class="panel-title" data-page-node-id="YAc3RKu4Qa7ZgSrYAEi1m5"><span class="dot" style="background:var(--accent);" data-page-node-id="RL8hwYFN99s3f77FuGF6qM"></span>接力总则</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;" data-page-node-id="5IohmSdBd7BF7E3G2Tfa95">本流程涉及 7 种角色在 5 个步骤间接力。proposal-index.md 是<strong style="color:var(--text);" data-page-node-id="Sn21jbPFWBLhkNAykYwIsX">唯一状态机</strong>，Git 是同步中枢，hyl-propose 是执行引擎。</p>
+    <div class="code-box" data-page-node-id="jDnKkm3PCW6Y5Hxd5GyF1z">执行人完成 → 更新产物 + proposal-index → git commit &amp; push → 通知下一人
+下一人 git pull → 打开 proposal-index 确认状态 → 用 hyl-propose 续接</div>
+  </div>
+
+  <div class="section" style="margin-bottom:16px;" data-page-node-id="a9TMbCP9Yu9oWhM4SpknGv">
+    <div class="sub-title" data-page-node-id="1Pc2KoAhb1mjAtcvzQr9aY"><span class="sub-no" data-page-node-id="yEZsSve4A07CLaaJwl6fPb">三种模式</span>hyl-propose 指令模式</div>
+    <div class="card-grid card-grid-3" data-page-node-id="LvQpwPQ0aiVCpSpWbmnBM1">
+      <div class="card" data-page-node-id="PxTDWPWLmiaR7d3frJtVDb">
+        <div class="card-icon" data-page-node-id="7b5k9tMGqId4GmlQMINADu">🆕</div>
+        <div class="card-title" data-page-node-id="cbkU59uKynGCEQISWrgNHi">新建模式</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="YGlxheqd3dG6N708nqgihZ">输入「发起提案 功能名」或「新建提案 功能名」。<strong style="color:var(--text);" data-page-node-id="QCBnryE40ODQBcmi0NvjG2">仅限策划类角色</strong>（制作人 / 主策划 / 系统策划 / 数值策划 / 文案策划 / 交互设计师）。发起提案的策划自动成为该提案的 PO。</p>
+      </div>
+      <div class="card" data-page-node-id="c7C40b29VXcRxgOG8bhnCa">
+        <div class="card-icon" data-page-node-id="2nmsdoh3KELdH8glGpZ9jf">🔁</div>
+        <div class="card-title" data-page-node-id="fhBXiaYKHCNQMxHkLbFULB">续接模式</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="FOFyIKYDMXU9h6CZAgMuBN">输入「继续提案 功能名」。AI 读取 proposal-index.md 识别当前状态，进行三级身份匹配（完全匹配 / 角色匹配 / 跨角色匹配），确认后引导进入对应步骤。</p>
+      </div>
+      <div class="card" data-page-node-id="GgQlGv3P81WndgMdgWBTT7">
+        <div class="card-icon" data-page-node-id="F1uyyUIzAERw8R8Y5bGxB4">🔍</div>
+        <div class="card-title" data-page-node-id="DmcVnwqFmyfX9uYtCBbqn5">检查模式</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="litxwioukyokdNEm4vEa84">输入「检查 功能名 的进度」。<strong style="color:var(--text);" data-page-node-id="3kEVXIQ1OLNuUMYvghDyDC">所有角色均可使用</strong>。AI 展示各步骤状态，进行中的步骤高亮执行人，主动提示可接续的步骤。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" data-page-node-id="EYSLIwvjDaEh57bfWklt9f">
+    <div class="panel-title" data-page-node-id="VBVfCuShIoKpr4DFR4RoZY"><span class="dot" style="background:var(--teal);" data-page-node-id="fCZ8Kz5AydGDlnLkTOHzrZ"></span>执行人列 — 身份验证</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;" data-page-node-id="mhLJw2d3AnfAw84pVcQX56">proposal-index.md 的产物状态表中包含「执行人」列，AI 在续接时通过 <code data-page-node-id="dizLPBu7lBymabw2Dhe6JX">CLAUDE.local.md</code> 获取当前用户身份，进行三级匹配：</p>
+    <table class="info-table" data-page-node-id="uPnWw9TLQl3hGMBySuzky2">
+      <tr data-page-node-id="beSSE6HvVuKGrG8U3ssbBl"><th style="width:50px;" data-page-node-id="ShZb6qicNfsF9iXF2tyu5x">步骤</th><th style="width:150px;" data-page-node-id="y5EuksmcI0EaUBDosklUWl">产物</th><th style="width:120px;" data-page-node-id="pcSc3VtmDs87NGMKNIfXmQ">执行人</th><th style="width:100px;" data-page-node-id="7qCbtz0Vh2kjSoLFVdGEhD">当前版本</th><th style="width:100px;" data-page-node-id="EsrtBjD4m7tigdVGlU5mBv">状态</th><th data-page-node-id="2OYCtZXK71Ao69UG9y0VlI">生成时间</th><th data-page-node-id="BwQrzDOIvTCo54gnCS1mWN">审阅通过时间</th></tr>
+      <tr data-page-node-id="f9d2owwwRajNqHutEk4zCJ"><td data-page-node-id="sR69Tre9YDj72O1EJAIGIv">1</td><td data-page-node-id="dpT4JlV8FsXHWCZHP8GACj"><code data-page-node-id="9eBZuq1Ba4THgPEtNDdPK7">story.md</code></td><td data-page-node-id="Gv5qI1YhI4s75ngaCPPWG7">@zhangsan</td><td data-page-node-id="2tpucWv5gxHTDftWKwsQKO">—</td><td data-page-node-id="gTjHSPj2ENNyeR0xAfG5Fl"><span class="tag tag-teal" data-page-node-id="PwIEF75kErn8GEOUkoiWki">已通过</span></td><td data-page-node-id="xLI3RpaFdswMuJTN2iXIwG">06-16 09:30</td><td data-page-node-id="cUxP7ek9CGgvO44Tr2BsKX">06-16 10:00</td></tr>
+      <tr data-page-node-id="lFjwJfA9xgOHGUTf7OvUYe"><td data-page-node-id="Nj0h6OJpqH5vh42f4sQEBM">2</td><td data-page-node-id="BhhXd5YPJNN1Sa5uA9xtcc"><code data-page-node-id="eOWZXxR9WZDdl8hcUXuZxz">mechanics.md</code></td><td data-page-node-id="7htBXk2f3K5R8K8QDpVDql">@lisi</td><td data-page-node-id="B2FMTxtWDWX4C8meuN4ZuB">—</td><td data-page-node-id="EqorClfwwKOhhAvyc4OpzE"><span class="tag tag-blue" data-page-node-id="bfG4gnl4SxrW2KGRZoWtym">待创建</span></td><td data-page-node-id="oOznNybdsTjG4txzUejrJr">—</td><td data-page-node-id="LCA3JWDDt7II4aMvujAwD3">—</td></tr>
+      <tr data-page-node-id="nAPyAm3di7RA9LwyYKvxSI"><td data-page-node-id="L3vqjPvEoYyDvs2IRP5q9r">3</td><td data-page-node-id="KTzhWGRyURkofPOiOdvDGC"><code data-page-node-id="4mKi9OQVGdBzcCCstqdI2d">params.md</code></td><td data-page-node-id="AYQYIGAS7GUvpRyS0mVBcQ">—</td><td data-page-node-id="ir4dhwQEqr75VDLRMWiM4h">—</td><td data-page-node-id="ECQRPyIKBZgBApXOfD6TFv"><span class="tag tag-gray" data-page-node-id="1t9VEO84T68uQ1BioVausL">待创建</span></td><td data-page-node-id="aOWflTneGDLyMrUlup2x2p">—</td><td data-page-node-id="wa8q141ovvG8MhQvJBZoPZ">—</td></tr>
+    </table>
+  </div>
+
+  <div class="panel" data-page-node-id="YVqzf7LHxPKUOHUIJpAn3l">
+    <div class="panel-title" data-page-node-id="AIVCxx9P7QQo16nWpXObQt"><span class="dot" style="background:var(--orange);" data-page-node-id="FBQTAWERoBPJCnyWXJm0d9"></span>三级身份匹配</div>
+    <table class="info-table" data-page-node-id="M7VoCBP9FHkPzQWYhcyFNE">
+      <tr data-page-node-id="qYukjJWmzDGHwLGw7cnm0m"><th style="width:180px;" data-page-node-id="ufTV8z0bDsDLeRsyC5rZ7S">匹配场景</th><th data-page-node-id="wo2TVCgwKcPcCJ3MWJEBEc">条件</th><th data-page-node-id="fKnRlDWzK0FcE16Df1RQmZ">行为</th></tr>
+      <tr data-page-node-id="OxDK8vVTA5yGMpCiaDGaT0"><td data-page-node-id="G9FVRg02EOrWK0ESanE5I0"><strong data-page-node-id="NJTrhEUq2qd82SCxMOBVPU">角色完全匹配</strong></td><td data-page-node-id="WnNmroqcnzBacedt82dz3s">当前用户姓名 = 执行人列</td><td data-page-node-id="BIbHLXNdXYF8pPz3UKU7W9"><span class="tag tag-teal" data-page-node-id="12ByG9Flksid96sjcUe2rV">✅</span> 直接进入对应步骤</td></tr>
+      <tr data-page-node-id="TqG9lFeN8krbDaaHQMfvnH"><td data-page-node-id="RDwFUUIw6N1Fn8gXDUKuNr"><strong data-page-node-id="VE10Q0bXaA3Z9QkdpqgAFO">角色不完全匹配</strong></td><td data-page-node-id="0ZrlBP7vAXNajx8J6AJX3w">姓名 ≠ 执行人列，但角色类型一致（如都是系统策划）</td><td data-page-node-id="1124XraLHHm2jBu1a9DeKK"><span class="tag tag-orange" data-page-node-id="x7tUhdDkbW1gQnZgBlsclZ">⚠️</span> 二次确认：「是否替代 @lisi 接续执行？」→ 确认后更新执行人列</td></tr>
+      <tr data-page-node-id="rFeeDd3drssD69xEdxonng"><td data-page-node-id="Ki0t35kQEbMf5ux0QgclAX"><strong data-page-node-id="tFAtJu9wrXHjF4DBXt5Gee">角色不匹配</strong></td><td data-page-node-id="e9uG0OH4bt5fdlubmVPyBC">当前用户角色与步骤要求不符</td><td data-page-node-id="0BV5j05oRXwsyndAGsxENz"><span class="tag tag-orange" data-page-node-id="tqLIpni1MKlqeyHjoUgZIS">⚠️</span> 二次确认：「是否仍然接续？这可能影响后续审阅流程。」</td></tr>
+      <tr data-page-node-id="V2kpHOi2zmWmoBpmRAjXl9"><td data-page-node-id="d0tQY5bZ6XZvPn23SLw3wg"><strong data-page-node-id="Qg8CrD9wTIBlNvqEjTl83Q">程序类角色</strong></td><td data-page-node-id="X43grBSOYGEUc2FxiOrAMc">主程序 / 开发程序 / QA</td><td data-page-node-id="vwSlVoYecuYlStww0fSd4g"><span class="tag tag-gray" data-page-node-id="oNfttBHPNcFQDfwr2QGlfD">⛔</span> 阻止：「程序类角色不参与 propose 阶段的执行和审阅。」</td></tr>
+    </table>
+  </div>
+
+  <div class="panel" data-page-node-id="KRwVmflskEXGncNP59AY8k">
+    <div class="panel-title" data-page-node-id="WJdeeXHfjvuJWJdoDRGAOB"><span class="dot" style="background:var(--purple);" data-page-node-id="EeJRPW7uAjvrtauuw4nrTh"></span>提交人操作</div>
+    <table class="info-table" data-page-node-id="k2p8VHBV2IUnwxMjOetert">
+      <tr data-page-node-id="UU3YLmhtTZRhjX3A9NRFR3"><th style="width:180px;" data-page-node-id="Bw0ISfCrYfdvGIUGp9DRB2">场景</th><th data-page-node-id="dYbz4BNT2qcEkujjVWBbl4">操作</th><th style="width:200px;" data-page-node-id="dAMxuIXuCcLn1APHC8XZ0H">后续动作</th></tr>
+      <tr data-page-node-id="FNR4rAMNXEVDsfzQ4tsKL8"><td data-page-node-id="cCpcKwDTNeiewvcM65kF4U"><strong data-page-node-id="EKRSEj2gebgZHXXDsM58OE">执行人完成撰写</strong></td><td data-page-node-id="rHDG4SqLKfDrmWmVGyFhDN">更新产物状态为「待审阅」，写入状态变更记录</td><td data-page-node-id="TgbFU129ZvUmmC2ZsCxNZY">git commit &amp; push，通知审阅人</td></tr>
+      <tr data-page-node-id="Ft1KYwA664bIfzz2iUl6PS"><td data-page-node-id="UzbBgXeOW1JM8DTdE0Ksrc"><strong data-page-node-id="Bh8XFzdSAqPQvAYUhNQNcy">审阅人审阅通过</strong></td><td data-page-node-id="PPpdMWAD1kCKV0UqRAQaz2">更新产物状态为「已通过」，写入审阅通过时间、审阅记录、状态变更记录</td><td data-page-node-id="zL4N7mWMIEmuHkmBA5C86L">git commit &amp; push，通知下一步执行人</td></tr>
+      <tr data-page-node-id="NFrb2O7lBTIOLpN8s9JDje"><td data-page-node-id="iE0giDnvMQkvFmDO4n8mR9"><strong data-page-node-id="uzeb8GMcuoT7B7umBj1xs7">审阅人审阅打回</strong></td><td data-page-node-id="MHw9qDpkDftWl5EIoU40qc">更新产物状态为「已打回」，写入审阅记录、状态变更记录</td><td data-page-node-id="6hVs2PqePFHFNAntVzwWbJ">git commit &amp; push，通知原执行人修改</td></tr>
+      <tr data-page-node-id="sQBK8B3am1jhFlLCpEpN7l"><td data-page-node-id="Dg8FYRWXMhIh3WJ4xC8jmT"><strong data-page-node-id="Qq8qIoEXTFz2Uy4el4QKZ7">执行人修改后重新提交</strong></td><td data-page-node-id="nwjBFGXFwRMjkNS7G2vcrj">更新产物状态为「待审阅」，写入状态变更记录</td><td data-page-node-id="tcxGFNGSUwMmIdF5tR5OA7">git commit &amp; push，通知审阅人</td></tr>
+      <tr data-page-node-id="BEl4DtTJHxDpZFFfOS1YEg"><td data-page-node-id="KuweBvpDu8FxR67TiCN8ln"><strong data-page-node-id="T0RxGmXllbXkx16Pi8LbLc">发起修订</strong></td><td data-page-node-id="dpy1kdo8f9EraXEnK9bA5o">更新原产物状态为「修订中」，新增 fix 行，写入状态变更记录</td><td data-page-node-id="Dg2kJChrXin4K0pbUZDS91">git commit &amp; push，通知原审阅人</td></tr>
+      <tr data-page-node-id="2Jzv4a7cwkamStnrvy0qBn"><td data-page-node-id="T9gfZ0GZJdvL65k5l1zLhe"><strong data-page-node-id="dFuFmPpqVc20pcQ52iWabj">最终审核通过</strong></td><td data-page-node-id="LgVyoYjzamsxuWWeKR7HeI">当前状态→已完成，写入最终审核详情</td><td data-page-node-id="x6GkltN9kwBLinRHFyN6xW">git commit &amp; push，通知主程序 / 开发程序 / 测试</td></tr>
+    </table>
+  </div>
+
+  <div class="callout callout-info" data-page-node-id="NKs4cwxhivD95L3nGR0gM3">
+    <strong data-page-node-id="wnFG7Mxgh9uEAd0ejTEU19">通知模板　</strong>Git 提交本身不主动通知。实际使用时，提交人通过团队即时通讯工具（Slack / 企业微信等）通知下一个人，附上提案名称和 proposal-index.md 链接：<br data-page-node-id="O7UaJhX0GW330s1JdGCCIO"><br data-page-node-id="jdHq0AT6K235AERx9ZrcyR">
+    <code data-page-node-id="9NWX13gERa3Rkmk80CEECQ">@张三 daily-checkin 的 story 已审阅通过，轮到你写 mechanics 了。proposal-index 已更新，pull 后用 /hyl-propose 继续。</code>
+  </div>
+
+  <div class="section" data-page-node-id="DwdmtMjECkSX7plGIHQkbp">
+    <div class="sub-title" data-page-node-id="yLDXOhxSKV36c89G0bFRsA"><span class="sub-no" data-page-node-id="8TeS5W7CicZvuUrbfh6aqR">接棒人</span>四步操作</div>
+    <div class="card-grid" data-page-node-id="jgN0WPGsGjqOirer7nVTIA">
+      <div class="card" data-page-node-id="CEBMEF9cNE657Kuw3HK4vl"><div class="card-title" data-page-node-id="LAI460UD82iGyi5WySo2fJ">1️⃣ git pull</div><p style="font-size:13px;color:var(--text-muted);" data-page-node-id="MECbFweYhbjtkD0BTnjgLG">获取最新代码，确保 proposal-index.md 和产物文件是最新状态。</p></div>
+      <div class="card" data-page-node-id="ngXBl7d95PRRUEkyUX7kDr"><div class="card-title" data-page-node-id="ALI7IjgadMXhHYwzpEAqT9">2️⃣ 确认状态</div><p style="font-size:13px;color:var(--text-muted);" data-page-node-id="rIozEEV2OOfGT2dZTcCzHH">查看 <code data-page-node-id="NcDLWYrUHBPSrZjfddeqIg">specs/in-progress/&lt;日期&gt;-&lt;功能名&gt;/proposal-index.md</code> 确认当前状态和待办事项。</p></div>
+      <div class="card" data-page-node-id="fBq8XqUGmFELWkMB2edd2l"><div class="card-title" data-page-node-id="qPWiNKi7gGXnmGu7qMDmCT">3️⃣ 输入续接指令</div><p style="font-size:13px;color:var(--text-muted);" data-page-node-id="za2rPAEz6sy6TfSJ51FglJ">在对话中输入「继续提案 功能名」，AI 自动识别当前提案并进入续接模式。</p></div>
+      <div class="card" data-page-node-id="6DSEdfGawn5BQvNOQqPwvO"><div class="card-title" data-page-node-id="tFoMxbNQFLDSpqxIN5IAxo">4️⃣ 确认身份</div><p style="font-size:13px;color:var(--text-muted);" data-page-node-id="AV3zr33Ei5sLbvDsiBwtO7">AI 根据 proposal-index 中的执行人列确认当前用户身份，确认后引导进入对应步骤。</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ 09 真实案例 ════════════ -->
+<div class="section" id="example" data-page-node-id="QNtiveLVj6t4DYHBkB2iFs">
+  <div class="section-header" data-page-node-id="q86zA9H0V80onz1asHDk2t">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="bY1gSe3QVcolzrS4fQtjUN">09</span>
+    <span class="section-title" data-page-node-id="3OdPgjs2Iqj2EYVgUClECg">真实案例：每日签到系统</span>
+    <span class="section-desc" data-page-node-id="ZNYVnD3KNR1v8YXmU0FdFL">specs/examples/daily-checkin/</span>
+  </div>
+
+  <div class="panel" data-page-node-id="sYwJTbVUYGsZqhCkDK4Swj">
+    <div class="panel-title" data-page-node-id="2T59aInxWQ52ogTIKAPU71"><span class="dot" style="background:var(--accent);" data-page-node-id="32DBDxxKqHYECWScaNHmVb"></span>提案全貌</div>
+    <table class="info-table" data-page-node-id="uuqNqVIMVFJdCT1ZRZ7dDC">
+      <tr data-page-node-id="wkt0y9myUzimPkhyUNkADz"><th style="width:50px;" data-page-node-id="TxDAhcufHCvPiApCZPBt4h">步骤</th><th style="width:180px;" data-page-node-id="fnMQ46RRfrwjTBYY06cv9z">产物</th><th style="width:100px;" data-page-node-id="V1EDvnFhINsa9XB2KfDghC">当前版本</th><th style="width:100px;" data-page-node-id="PihfhCHiOmALUb28Xg3LjK">状态</th><th data-page-node-id="qyobCG0nIZHdFk90B3X1fM">生成时间</th><th data-page-node-id="9vFcymUoqa6TuV5nIadaAK">审阅通过时间</th></tr>
+      <tr data-page-node-id="DGqwVBrzRhY3D4348AIttF"><td data-page-node-id="VvHGGkba5j6Hhm6sGC3Dlk">1</td><td data-page-node-id="j5zNHbA4jtaF3ZzvM4OmCT"><code data-page-node-id="Gm58XSwZ0CCPpIJBAALuS7">story.md</code></td><td data-page-node-id="AA5bqlOlZ26O7boDW4JgCw">—</td><td data-page-node-id="TQUtcKxNWUr0o88FtQEOZH"><span class="tag tag-teal" data-page-node-id="oCzCFYnz6RJEArW43Kas6x">已通过</span></td><td data-page-node-id="haiXNArQZD6kBR86lrz5tn">06-16 09:30</td><td data-page-node-id="ipE6kfOcdvfRPaY1FvvFPW">06-16 10:00</td></tr>
+      <tr data-page-node-id="GbmaJ6hRihlmWEt7chrQDF"><td data-page-node-id="Ks4vExHVyfxKChTErEYsxk">2</td><td data-page-node-id="6aqIW4nj09jTc8kK8vvadw"><code data-page-node-id="QoTmiDCH3G9OhhCYKxKgmM">mechanics.md</code></td><td data-page-node-id="LVUkeMM7zBM3LCBd8mUQFu">—</td><td data-page-node-id="03iv7nM6ajDUtFbgfSN7mC"><span class="tag tag-blue" data-page-node-id="SYcr0x9UTKLWge3bncKbEC">已修订</span></td><td data-page-node-id="AxZgvHWvME8AjeWLqtasRW">06-16 10:30</td><td data-page-node-id="EcwiLsTUz4zSRXdpsV2Yv1">06-16 15:00</td></tr>
+      <tr data-page-node-id="ThjCHfpomL3tAfqkGKcDSm"><td data-page-node-id="aXCYE7vDJRzgqzIUpPkiGD">2</td><td data-page-node-id="717E7Tn89Vk6U6UjZaCPmd"><code data-page-node-id="q7OsqFlWFgDPszyUDBeaWL">mechanics-fix01.md</code></td><td data-page-node-id="HxUnxEQ5eJfGABQdkl8fmX">fix01</td><td data-page-node-id="8YHtCn4aMzESly3fe4bXem"><span class="tag tag-teal" data-page-node-id="LhitJ3NP8thzHozMPjaOIw">已通过</span></td><td data-page-node-id="fkE3moZdDyICgPH4WhASsZ">06-17 11:00</td><td data-page-node-id="lWUDFFAczfsOoZr68dSlU0">06-17 12:00</td></tr>
+      <tr data-page-node-id="H1CdnAZu85OS1yIlpqawyg"><td data-page-node-id="xH5rJEYUqm8T6vNZY366UL">3</td><td data-page-node-id="MFV3Y6fjwEa1LvBHuAR1dV"><code data-page-node-id="CF3UszN1CJCt2W1fJNV1JL">params.md</code></td><td data-page-node-id="pqo3wV5WsOTTL8KIf4Pa5f">—</td><td data-page-node-id="iW03dQxu14UsCOxV9ozOmB"><span class="tag tag-blue" data-page-node-id="YdZwq9S0CAMtNYr6hnxuQP">已修订</span></td><td data-page-node-id="xLMPKKk0XyBE4TkqlhOWka">06-16 15:30</td><td data-page-node-id="uVP84iIkjMIxJkGmn0QwyH">06-16 17:00</td></tr>
+      <tr data-page-node-id="LARQMKIBDE7Y25E4ViYQy7"><td data-page-node-id="B2UG6Rnu89Onzd3CBUAc1O">3</td><td data-page-node-id="k5mXbcvuCJzBZc0uNzPO2S"><code data-page-node-id="LBBja3OlcAjrcQHKRuqObP">params-fix01.md</code></td><td data-page-node-id="zU3VBlgm4vuCU9UynSCIdQ">fix01</td><td data-page-node-id="wmWc2pORTxutLXD92V1PRk"><span class="tag tag-teal" data-page-node-id="OHHeD3EAwWV9q3F2C2SNHS">已通过</span></td><td data-page-node-id="JsZBOGFFmFTIRrGixfazUW">06-17 13:00</td><td data-page-node-id="Hr3PkqICuHUcKaZO4yGkmF">06-17 14:00</td></tr>
+      <tr data-page-node-id="hdic8PRGlfrPp17jdbnUp4"><td data-page-node-id="rBL0FcZIIiB54sLD7jgfnH">4</td><td data-page-node-id="13SX4zIMShMY03uPQUJlKa"><code data-page-node-id="kry1z0XEQkeGWsfzjth0qB">theme.md</code></td><td data-page-node-id="XRXRw848Q78wB9hIpIJxZA">—</td><td data-page-node-id="MxyX9JKNwqKfzhLGyCFwNQ"><span class="tag tag-teal" data-page-node-id="CJmP2Fq3SD1UoHEJD0czcc">已通过</span></td><td data-page-node-id="juaIY6jClKlmr4aKz9uy9O">06-17 14:30</td><td data-page-node-id="KjkXKyNIayRfZJL6N9JV9C">06-17 16:00</td></tr>
+      <tr data-page-node-id="ec2f0fegSbHPecyaLOBjEL"><td data-page-node-id="YRCDVcdZqsrqdzVbZxldvE">5</td><td data-page-node-id="mADLeGMoJHNh5zzl8ptFbc"><code data-page-node-id="F2OEXpuDnGMDzUXGeaNdHn">ux.md</code></td><td data-page-node-id="bcvDaR22EQ3VbaOQehVR99">—</td><td data-page-node-id="qvYX6uJPufjfYtg6ajx31U"><span class="tag tag-teal" data-page-node-id="vEwjszHr2CIKRhLXPqLaXF">已通过</span></td><td data-page-node-id="XcCh2moj3VISlYRo0zMMBH">06-17 16:30</td><td data-page-node-id="wNIJY5cIPJ1F7xzuduPk7L">06-18 11:00</td></tr>
+    </table>
+  </div>
+
+  <div class="panel" data-page-node-id="aF5fFJhKrWIrExmVnzDfVn">
+    <div class="panel-title" data-page-node-id="FqEUuUebRDGO2pC8DW2laX"><span class="dot" style="background:var(--orange);" data-page-node-id="0qtzYxkA5WpHxFjPXVUlun"></span>修订链</div>
+    <table class="info-table" data-page-node-id="QfEi6pLwYPTCPKkYoGQ0px">
+      <tr data-page-node-id="vNKPTC4lh93n1ArJhM1Tqz"><th style="width:150px;" data-page-node-id="c5zGiCruss0tUlHNoIXfVl">原始产物</th><th style="width:170px;" data-page-node-id="iCY1r88SXm0a2N0KaGF2f6">修订版本</th><th data-page-node-id="8whqSpUpAfAt1UguMhXA4K">修订原因</th><th style="width:110px;" data-page-node-id="9gnen2VgHjFtmdz4skD3tj">触发步骤</th><th style="width:90px;" data-page-node-id="yGArCV6WAUoPofjiyAN5Tc">审阅状态</th><th data-page-node-id="Mvw2A23jP4BWHbgSTb16OK">级联影响</th></tr>
+      <tr data-page-node-id="VxaW3kT5UEDu4aP15ufEVK"><td data-page-node-id="BynDUF4KuAJuG9IBO3BwuX"><code data-page-node-id="0HnV50PGTVc51koDno9s7o">mechanics.md</code></td><td data-page-node-id="g9BvCt32PNlJedksFp6Wnn"><code data-page-node-id="LDQWPqR1G9REzCDmBEKVxp">mechanics-fix01.md</code></td><td data-page-node-id="WkUwk00nuKJNLqVEGiszRR">补签天数(7) 与周期逻辑不一致，应为周期-1=6 天</td><td data-page-node-id="c2rGKS1bWHyzPaFUKdhcz4">theme</td><td data-page-node-id="hfRmncuA86HGuKvea6zHct"><span class="tag tag-teal" data-page-node-id="35HlrvbZT1fEaKdZkdrVkA">已通过</span></td><td data-page-node-id="BovfvcZ7GgHmdNYasJT0ql">params-fix01.md</td></tr>
+      <tr data-page-node-id="0Qtie8MJRCeQGjm1xvEX5s"><td data-page-node-id="pLXGKpdzDkjBWHtqxR9fvE"><code data-page-node-id="C5GK5NXWFYDbe9yDfMLn7i">params.md</code></td><td data-page-node-id="sjH4t2ZXBHMdwb7FaJgtq1"><code data-page-node-id="AJ3z53KHBwJxeCZpPuxo38">params-fix01.md</code></td><td data-page-node-id="iHivwUOa4APOeVBdlmtAGU">跟随 mechanics-fix01，MAX_RETROACTIVE_DAYS 7→6</td><td data-page-node-id="V1Cj7oYZDEdBEZ6J6A3wYG">因 mechanics-fix01 级联</td><td data-page-node-id="PFALmVb3kuwcNERfjxVnUn"><span class="tag tag-teal" data-page-node-id="pidF5MREAIJFfyvtwHnuur">已通过</span></td><td data-page-node-id="aEP8z0g4rJSv24mJ06zF0L">theme 基于 fix01 继续</td></tr>
+    </table>
+    <div class="callout callout-green" data-page-node-id="X6CCaJ4XLkV63s5aAlkWxv">
+      <strong data-page-node-id="CO9EuSBLMu4oOwDXFcT89V">关键点　</strong>theme 在撰写中发现 mechanics 的补签天数逻辑问题，发起修订。theme 自身尚未提交审阅，因此在 mechanics-fix01 和 params-fix01 通过后，直接在原稿内继续撰写（无需创建 theme-fix），最终一次审阅通过。
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ 10 目录结构 ════════════ -->
+<div class="section" id="structure" data-page-node-id="R0u2Ai7SQQocm2GeiX2stw">
+  <div class="section-header" data-page-node-id="YsN3kCqLQNzP4cIDpOYmNq">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="CvjfKNk1lHFLQXIMS49kQ2">10</span>
+    <span class="section-title" data-page-node-id="wHp6wZIjaaqhCL8zWbW3oe">目录结构</span>
+    <span class="section-desc" data-page-node-id="FPVzcFWYMjMoyDxFp7UBc6">仓库布局与产物文档结构</span>
+  </div>
+
+  <div class="panel" data-page-node-id="nbhqvprc5Ei8CDnE30ZWmd">
+    <div class="panel-title" data-page-node-id="rx7h0Q5jwsAlFrAPsk7JeN"><span class="dot" style="background:var(--accent);" data-page-node-id="ABumUMBEpz9mNC1Bf3ejes"></span>仓库目录</div>
+    <div class="code-box" data-page-node-id="mJ27e6ELTMcM9t5DsrBL8W">.
+├── CLAUDE.md                 # 项目理念、上下文和规格方法论
+├── CLAUDE.local.md           # 本地用户身份（hyl-propose 自动读取）
+├── CLAUDE.local.template.md  # 本地身份模板（供团队成员复制填写）
+├── README.md                 # 入门和快速开始
+├── templates/                # 规范文档模板
+│   ├── proposal-index-template.md
+│   ├── story-template.md
+│   ├── mechanics-template.md
+│   ├── params-template.md
+│   ├── theme-template.md
+│   └── ux-template.md
+├── specs/                    # 活跃和已归档规格
+│   ├── in-progress/          # 撰写中或审阅中的规格
+│   ├── examples/             # 示例提案
+│   │   └── daily-checkin/    # 每日签到系统（完整示例）
+│   ├── approved/             # 已通过、待实施
+│   ├── implemented/          # 已实施
+│   └── archived/             # 已废弃规格
+├── workflow/                 # 流程定义
+│   ├── workflow.md           # 步骤流程描述
+│   ├── roles.md              # 角色定义
+│   └── review-check.md       # 审阅检查清单
+└── config/
+    └── review-rules.yaml     # 机器可读的审阅阈值和自动检查</div>
+  </div>
+
+  <div class="panel" data-page-node-id="zuZQMKxkyRzxaEXPCqz64o">
+    <div class="panel-title" data-page-node-id="fbB1q2qqf3akMTIDmhVbc4"><span class="dot" style="background:var(--purple);" data-page-node-id="BObf253XTP9QEPjIQSQCb5"></span>产物文档结构<span class="no" data-page-node-id="K7AsT7d25Sw4IAIZegerCa">统一模板</span></div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;" data-page-node-id="YHY7sK0p0ChQ7QWwLV6wTR">所有产物文档统一按以下顺序组织，基础信息字段直接以 <code data-page-node-id="w1iwjry9hNpdnDTMB3YHGT">**key**：value</code> 格式换行，无需标题项。</p>
+    <div class="code-box" data-page-node-id="2PVAExpGAszBEG0H9HxnhV"># 标题
+
+**功能 ID**：`模块-功能名`
+**创建时间**：YYYY-MM-DD
+**更新时间**：YYYY-MM-DD
+**提案负责人（PO）**：@name
+**执行人**：@name（角色）
+**前置依赖**：mechanics.md（审阅通过）
+**状态**：撰写中 | 待审阅 | 已通过 | 已打回 | 修订中 | 已修订
+**当前有效版本**：—
+
+&gt; **修订备注**：无
+
+---
+
+## 版本历史
+...
+
+## 审阅记录
+...
+
+## 正文...</div>
+  </div>
+</div>
+
+<!-- ════════════ 11 快速开始 ════════════ -->
+<div class="section" id="start" data-page-node-id="sjn8ovDhi4MnZYnYOIlpKC">
+  <div class="section-header" data-page-node-id="zgX3DBXCp3qcfppaJuqORf">
+    <span class="section-tag" style="background:var(--accent-light);color:var(--accent-dark);" data-page-node-id="bn6W12JSGUwUxGa88WejwP">11</span>
+    <span class="section-title" data-page-node-id="AlDE9vzyxzz1z7vyGAlsp4">快速开始</span>
+    <span class="section-desc" data-page-node-id="9J7KvEriXsQYQAy7xFteuL">使用 hyl-propose，一句话发起提案</span>
+  </div>
+
+  <div class="panel" style="margin-bottom:16px;" data-page-node-id="IQHYNPO1aSjqysqKaRGqa2">
+    <div class="panel-title" data-page-node-id="2BiLURHDSEBMnqM7d3mTGb"><span class="dot" style="background:var(--teal);" data-page-node-id="tAQmvGuqE8TPoPJxBTP1vt"></span>首次使用：身份配置</div>
+    <ol class="steps" data-page-node-id="cVEQYqmXmGK8SBxIEbcxW2">
+      <li data-page-node-id="xFeLAFTWkE4xvvRuvcTZo1"><strong style="color:var(--text);" data-page-node-id="CHK4pv1alRovinFvKguQi2">配置身份</strong> — 复制 <code data-page-node-id="gyyOYXlWCYsQYmJRrsTp8z">CLAUDE.local.template.md</code> 为 <code data-page-node-id="HYTmxGSs50Dg3ZTtinkuei">CLAUDE.local.md</code>，填写姓名和角色。如果跳过此步，首次触发 hyl-propose 时 AI 会自动引导你完成身份配置。</li>
+      <li data-page-node-id="jhj3LPuB5fxAPZfnkcpuWJ"><strong style="color:var(--text);" data-page-node-id="otrBkg750iU3ozCwHneSxm">发起提案</strong> — 在对话中告诉 AI：<em data-page-node-id="fFE2cc9kVLbfFUjsJ4yjPL">"发起提案 功能名"</em>（格式：模块-功能名，如 <code data-page-node-id="cHR1h3tRZJoCN7EmQLvSdF">shop-daily-checkin</code>）。<strong data-page-node-id="1UAI4fuzSM5SpcWEyvCXRv">仅限策划类角色</strong>，AI 自动创建提案目录和初始文件，引导进入 story 撰写。发起提案的策划自动成为该提案的 PO。</li>
+      <li data-page-node-id="B2kPsem8GoDrwy1o8PUtXH"><strong style="color:var(--text);" data-page-node-id="RWmzEB1BBlC1a3qlDTPnct">续接提案</strong> — 当上一个步骤完成后，pull 代码后输入 <em data-page-node-id="143R1HmGQVryeMtXBNGVlQ">"继续提案 功能名"</em>。AI 自动读取 <code data-page-node-id="SgFPKxYoGvsMarrjAU52sy">CLAUDE.local.md</code> 识别身份，进行三级匹配，确认后引导进入对应步骤。</li>
+      <li data-page-node-id="lpyo5ji16y8LTYyyAKac1m"><strong style="color:var(--text);" data-page-node-id="GZXCBHayuKAeFcNsISiz7s">检查进度</strong> — 随时输入 <em data-page-node-id="x3WRBpKxvIM3UEDrSHn0JN">"检查 功能名 的进度"</em>。<strong data-page-node-id="MbX60YsPwLEpBrdgd3GhWQ">所有角色可用</strong>。AI 展示各步骤状态，若你是进行中步骤的执行人，会高亮提示「是否继续完成？」。</li>
+      <li data-page-node-id="MwgbO9PejEfkAaUR0QtsVL"><strong style="color:var(--text);" data-page-node-id="Z5ceKaOswq8H0aruIzFKek">接力提交</strong> — 完成当前步骤后：更新产物文件 + proposal-index.md → <code data-page-node-id="ohEo9AItPMaKL2P0bGvAct">git commit &amp; push</code> → 通过 IM 通知下一个人。下一个人 <code data-page-node-id="YszTmhu9nBNrVCm62WwW7Y">git pull</code> 后用续接模式继续。</li>
+      <li data-page-node-id="jUhk3sgnfF4J1T3JYjWoAg"><strong style="color:var(--text);" data-page-node-id="T155Ffkn8l4u0XjB0DrFPv">最终审核</strong> — 5 步全部通过后，制作人最终审核 → 通知主程序、开发程序、测试 → 提案进入 design 阶段。</li>
+    </ol>
+  </div>
+
+  <div class="section" data-page-node-id="HggYZolFFQL7CJXpR31VBd">
+    <div class="sub-title" data-page-node-id="Ya5SIs1ZMbGDAQObkQDo9O"><span class="sub-no" data-page-node-id="r8yBEbCnOof4FhBuo0cDzC">FAQ</span>常见问题</div>
+    <div class="card-grid card-grid-2" data-page-node-id="Ih4ODzMWYvjCm0UMFEQLCU">
+      <div class="card" data-page-node-id="cI5E3TuEAApnn30FlSGhSP">
+        <div class="card-title" data-page-node-id="OEARPVQIOpnRfVdJ2yHGtH">Q：我是程序 / QA，能发起提案吗？</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="joBEJhIYyQFiFtQHt2t7Gl">程序类角色无法直接新建提案。如有功能优化建议，可转达策划团队（制作人 / 主策划 / 系统策划 / 数值策划 / 文案策划 / 交互设计师）评估后发起提案。你可以在检查模式中查看提案进度。</p>
+      </div>
+      <div class="card" data-page-node-id="6jhKDjcSfFautCn1mqssnR">
+        <div class="card-title" data-page-node-id="7FRZkahktI8nJl97YpAwnz">Q：审阅被打回了怎么办？</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="P0ybk7wZV6QPGv26eotLDa">直接修改原文件，重新提交审阅。不需要创建 -fix 版本。</p>
+      </div>
+      <div class="card" data-page-node-id="rz9bga1x5P09OcBr1KZLkQ">
+        <div class="card-title" data-page-node-id="VVzdFZFyYCAH6AYIHXZ51S">Q：发现前面已通过的步骤需要改怎么办？</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="bryeExNh9ZUGkC77B8JnSe">创建 <code data-page-node-id="xXPpPEaCvdnEhBzankilYx">-fixNN</code> 版本，走修订流程。后续步骤根据自身状态（已审阅 / 未审阅）决定是否级联创建 -fix。</p>
+      </div>
+      <div class="card" data-page-node-id="tjaZsFXiMeF65CppV4my8l">
+        <div class="card-title" data-page-node-id="RNwYgp29KVw9XGJF95VyNw">Q：PO 和主策划意见不一致怎么办？</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="QlbkASyUoOGxBz2WaTeYQo">先协商，协商不成由任意一方请求制作人介入裁决。制作人拥有最终裁决权。</p>
+      </div>
+      <div class="card" data-page-node-id="3M61UFZaxivSuAoxu9l7vR">
+        <div class="card-title" data-page-node-id="gdtZxQ77Isqg9zzbTTXPxE">Q：技术团队什么时候介入？</div>
+        <p style="font-size:13px;color:var(--text-muted);" data-page-node-id="3QWZgBLdCyUFDi8vOiV9Va">propose 阶段全部完成后，通知主程序、开发程序、测试。他们在 design 和 tasks 阶段介入。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var links = document.querySelectorAll('.toc a');
+  var secs = [];
+  links.forEach(function(a){
+    var t = document.querySelector(a.getAttribute('href'));
+    if (t) secs.push({a:a, el:t});
+  });
+  if (!secs.length) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        links.forEach(function(x){ x.classList.remove('active'); });
+        var hit = null;
+        secs.forEach(function(s){ if (s.el === e.target) hit = s; });
+        if (hit) hit.a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-80px 0px -70% 0px' });
+  secs.forEach(function(s){ obs.observe(s.el); });
+})();
+</script>
+
+</div><!-- /container -->
+
+<div class="container" style="text-align:center; padding-top:24px; padding-bottom:24px; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border);" data-page-node-id="QZGi0PzgrjptREQ6n24Eh4">
+  Anthea Project · OpenSpec 提案工作流 · <a href="index.html" style="color:var(--accent);text-decoration:none;" data-page-node-id="em5R8KjpGa9FfeViDeNxSr">返回首页</a> · <a href="https://github.com/ProMarkel/anthea" style="color:var(--accent);text-decoration:none;" data-page-node-id="YKRkIcpDHBQ1hMoDdeMLpM">GitHub</a>
+</div>
+
+<button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部" data-page-node-id="MJjmtmSnu1eco1EIwHvmsT">↑</button>
+
+<script>
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+backToTop.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+(function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
+</script>
+<script>
+/* ANT_NAV_DROPDOWN_JS */
+(function(){
+  var groups = document.querySelectorAll('.nav-group');
+  function closeAll(){ groups.forEach(function(g){ g.classList.remove('open'); }); }
+  document.querySelectorAll('.nav-toggle').forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var g = t.parentElement, was = g.classList.contains('open');
+      closeAll();
+      if (!was) g.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest || !e.target.closest('.nav-group')) closeAll();
+  });
+})();
+</script>
+
+</body>
+</html>

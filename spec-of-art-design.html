@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美术设计规范 — Anthea</title>
+<style>
+
+  :root {
+    --accent: #0E9F8E;
+    --accent-dark: #0B7A6B;
+    --accent-light: #D1F2EB;
+    --accent-pale: #E8F8F5;
+    --pink: #E8547A;
+    --purple: #9B59B6;
+    --purple-light: #E8D5F5;
+    --teal: #1ABC9C;
+    --teal-light: #D5F5EE;
+    --orange: #E67E22;
+    --orange-light: #FDEBD0;
+    --gray: #6C757D;
+    --gray-light: #F8F9FA;
+    --border: #E2E8F0;
+    --text: #2D3748;
+    --text-muted: #718096;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: #F7F5FB; color: var(--text); line-height: 1.7;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* === NAVBAR === */
+  .navbar, .navbar * {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased; animation: none !important; opacity: 1 !important;
+  }
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08); height: 56px; font-size: 16px; line-height: 1.6;
+  }
+  .navbar .container { width:100%; max-width:1200px; margin:0 auto; padding:0 24px; display:flex; align-items:center; height:100%; }
+  .navbar .nav-brand { display:flex; align-items:center; gap:8px; font-size:16px; font-weight:700; color:#E8547A; text-decoration:none; }
+  .navbar .nav-icon { width:28px; height:28px; border-radius:8px; object-fit:cover; flex-shrink:0; }
+  .navbar .nav-icon-fb { width:28px;height:28px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,#E8547A,#9B59B6);color:white;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:center; }
+  .navbar .nav-links { display:flex; gap:24px; list-style:none; margin-left:auto; padding:0; align-items:center; }
+  .navbar .nav-links li { list-style:none; padding:0; margin:0; border:none; background:none; font-size:13px; }
+  .navbar .nav-links a { text-decoration:none; font-size:13px; font-weight:500; color:#888; padding:6px 0; border-bottom:2px solid transparent; display:inline-block; transition:color .2s,border-color .2s; }
+  .navbar .nav-links a:hover, .navbar .nav-links a.active { color:#E8547A; border-bottom-color:#E8547A; }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, #0E9F8E 0%, #9B59B6 100%);
+    color: white; padding: 40px 0 32px; position: relative; overflow: hidden;
+  }
+  .header::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header::after { content:''; position:absolute; bottom:-40px; right:100px; width:120px; height:120px; background:rgba(255,255,255,0.06); border-radius:50%; }
+  .header-tag { display:inline-block; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; font-size:12px; margin-bottom:12px; letter-spacing:1px; }
+  .header h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .header-sub { font-size:14px; opacity:0.85; margin-bottom:20px; }
+  .header-meta { display:flex; gap:24px; flex-wrap:wrap; }
+  .header-meta span { font-size:13px; opacity:0.75; }
+  .header-meta strong { opacity:1; font-weight:600; }
+
+  /* === SECTION === */
+  .section { margin-bottom: 28px; }
+  .section-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .section-tag { padding:4px 14px; border-radius:20px; font-size:12px; font-weight:600; letter-spacing:.5px; white-space:nowrap; }
+  .section-title { font-size:18px; font-weight:700; }
+  .section-desc { font-size:13px; color:var(--text-muted); margin-left:auto; }
+
+  /* === CARD === */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px; }
+  .card-grid-2 { grid-template-columns:repeat(2,1fr); }
+  .card-grid-3 { grid-template-columns:repeat(3,1fr); }
+  .card {
+    background:white; border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:20px; border-top:3px solid transparent; transition:transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.1); }
+  .card-icon { font-size:22px; margin-bottom:8px; }
+  .card-title { font-size:14px; font-weight:700; margin-bottom:8px; }
+  .card.blue { border-top-color:var(--accent); }
+  .card.purple { border-top-color:var(--purple); }
+  .card.teal { border-top-color:var(--teal); }
+  .card.orange { border-top-color:var(--orange); }
+  .card.pink { border-top-color:var(--pink); }
+
+  .item-list { list-style:none; }
+  .item-list li {
+    padding:6px 0; font-size:13px; color:var(--text-muted);
+    border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:8px;
+  }
+  .item-list li:last-child { border-bottom:none; }
+  .item-list li::before { content:'›'; color:var(--accent); font-weight:bold; flex-shrink:0; }
+
+  /* === PANEL === */
+  .panel { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:16px; }
+  .panel-title {
+    font-size:14px; font-weight:700; margin-bottom:14px; padding-bottom:10px;
+    border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px;
+  }
+  .panel-title .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .panel-title .no {
+    font-size:11px; font-weight:700; color:white; background:var(--accent);
+    padding:2px 8px; border-radius:10px; margin-left:auto;
+  }
+
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+
+  /* === SUB BLOCK === */
+  .sub-block { margin-bottom:18px; }
+  .sub-block:last-child { margin-bottom:0; }
+  .sub-title {
+    font-size:13px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px;
+  }
+  .sub-no {
+    font-size:11px; font-weight:700; color:var(--accent-dark);
+    background:var(--accent-pale); padding:2px 8px; border-radius:6px; flex-shrink:0;
+  }
+  .sub-desc { font-size:13px; color:var(--text-muted); margin-bottom:8px; }
+
+  /* === ORG CHART === */
+  .org { display:flex; flex-direction:column; align-items:center; gap:10px; padding:8px 0; }
+  .org-leader {
+    background:linear-gradient(135deg,#E8547A,#9B59B6); color:white; font-weight:700;
+    padding:10px 24px; border-radius:10px; font-size:14px;
+  }
+  .org-line { width:2px; height:16px; background:#CBD5E0; }
+  .org-row { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .org-box {
+    background:var(--accent-pale); border:1.5px solid #A3E4D7; color:var(--accent-dark);
+    padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600;
+  }
+  .org-box.pm { background:var(--purple-light); border-color:#D9B8EF; color:var(--purple); }
+  .org-sub {
+    display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px;
+  }
+  .org-sub span {
+    font-size:11px; background:white; border:1px solid var(--border);
+    padding:3px 10px; border-radius:12px; color:var(--text-muted);
+  }
+
+  /* === TREE (SVN) === */
+  .tree { font-size:13px; line-height:1.9; }
+  .tree-row { display:flex; align-items:baseline; gap:10px; padding:3px 0; border-bottom:1px dashed var(--border); }
+  .tree-row:last-child { border-bottom:none; }
+  .tree-path { font-family:'Cascadia Code','Consolas',monospace; font-size:12px; font-weight:600; color:var(--accent-dark); white-space:nowrap; flex-shrink:0; }
+  .tree-desc { font-size:12px; color:var(--text-muted); }
+
+  /* === FLOW === */
+  .flow-wrap { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; overflow-x:auto; }
+  .flow-title { font-size:14px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .flow-row { display:flex; align-items:center; gap:0; min-width:max-content; margin-bottom:12px; }
+  .flow-row:last-child { margin-bottom:0; }
+  .flow-label { font-size:12px; color:var(--text-muted); width:96px; flex-shrink:0; font-weight:600; text-align:right; padding-right:12px; }
+  .flow-nodes { display:flex; align-items:center; gap:0; flex:1; }
+  .flow-node {
+    padding:8px 14px; border-radius:8px; font-size:12px; font-weight:600;
+    text-align:center; min-width:92px; white-space:nowrap;
+  }
+  .flow-arrow { width:32px; height:2px; position:relative; flex-shrink:0; }
+  .flow-arrow::before { content:''; position:absolute; top:0; left:0; right:6px; height:2px; background:#CBD5E0; }
+  .flow-arrow::after { content:''; position:absolute; right:0; top:-4px; border:5px solid transparent; border-left-color:#CBD5E0; }
+  .fn-blue { background:var(--accent-light); color:var(--accent-dark); border:1.5px solid #A3E4D7; }
+  .fn-purple { background:var(--purple-light); color:var(--purple); border:1.5px solid #D9B8EF; }
+  .fn-pink { background:#FEF0F4; color:var(--pink); border:1.5px solid #F9D0DB; }
+  .fn-teal { background:var(--teal-light); color:var(--teal); border:1.5px solid #A9DFBF; }
+  .fn-orange { background:var(--orange-light); color:var(--orange); border:1.5px solid #F5CBA7; }
+  .fn-gray { background:var(--gray-light); color:var(--gray); border:1.5px solid #DEE2E6; }
+
+  /* === LANE (Jira) === */
+  .lane { display:flex; gap:0; min-width:max-content; }
+  .lane-col { min-width:170px; flex:1; }
+  .lane-head { font-size:12px; font-weight:700; text-align:center; padding:6px; border-radius:6px 6px 0 0; color:white; }
+  .lane-body { border:1px solid var(--border); border-top:none; border-radius:0 0 8px 8px; padding:8px; min-height:60px; background:white; }
+  .lane-body div {
+    font-size:11px; background:var(--gray-light); border:1px solid var(--border);
+    border-radius:6px; padding:5px 8px; margin-bottom:6px; color:var(--text-muted);
+  }
+  .lane-body div:last-child { margin-bottom:0; }
+  .lane-body div.hl { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); font-weight:600; }
+
+  /* === TABLE === */
+  .info-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .info-table th {
+    background:var(--gray-light); padding:10px 14px; text-align:left; font-weight:600;
+    border-bottom:2px solid var(--border); font-size:12px; color:var(--gray);
+    letter-spacing:.5px; white-space:nowrap;
+  }
+  .info-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-muted); font-size:13px; }
+  .info-table tr:hover td { background:var(--gray-light); }
+  .info-table td strong { color:var(--text); }
+
+  /* === BADGE === */
+  .badge-row { display:flex; flex-wrap:wrap; gap:6px; }
+  .badge { padding:5px 12px; border-radius:8px; font-size:12px; font-weight:500; }
+  .badge-p0 { background:#FEF0F4; color:#C0392B; }
+  .badge-p1 { background:#FEF9E7; color:#E67E22; }
+  .badge-p2 { background:var(--accent-pale); color:var(--accent-dark); }
+  .badge-px { background:#F2F2F2; color:#666; }
+  .badge-gen { background:var(--accent-pale); color:var(--accent-dark); }
+
+  .tag-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .tag { padding:3px 10px; border-radius:12px; font-size:11px; font-weight:500; }
+  .tag-blue { background:var(--accent-light); color:var(--accent-dark); }
+  .tag-purple { background:var(--purple-light); color:var(--purple); }
+  .tag-teal { background:var(--teal-light); color:var(--teal); }
+  .tag-orange { background:var(--orange-light); color:var(--orange); }
+  .tag-gray { background:#E2E8F0; color:var(--gray); }
+
+  /* === TOC === */
+  .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; }
+  .toc a {
+    display:block; text-decoration:none; color:var(--text); background:var(--gray-light);
+    border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-size:13px; font-weight:600;
+    transition:all .2s;
+  }
+  .toc a:hover { background:var(--accent-pale); border-color:#A3E4D7; color:var(--accent-dark); }
+  .toc a span { display:block; font-size:11px; color:var(--text-muted); font-weight:400; margin-top:2px; }
+
+  /* === NOTE === */
+  .note {
+    background:#FFFBEB; border-left:4px solid var(--orange); padding:12px 16px;
+    border-radius:0 8px 8px 0; font-size:12.5px; color:#7F5A2E; margin-top:12px;
+  }
+  .note strong { color:#B9770E; }
+
+  /* === STEPS === */
+  .steps { counter-reset:s; }
+  .steps li {
+    list-style:none; position:relative; padding-left:34px; margin-bottom:10px;
+    font-size:13px; color:var(--text-muted);
+  }
+  .steps li::before {
+    counter-increment:s; content:counter(s);
+    position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:50%;
+    background:var(--accent); color:white; font-size:11px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .steps li:last-child { margin-bottom:0; }
+
+  .divider { height:1px; background:var(--border); margin:14px 0; }
+
+  /* === BACK TO TOP === */
+  .back-to-top {
+    position:fixed; right:20px; bottom:30px; width:44px; height:44px; border-radius:50%;
+    background:white; border:1.5px solid var(--border); color:var(--text-muted); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:1.2em;
+    transition:all .3s; opacity:0; transform:translateY(20px); pointer-events:none; z-index:200;
+    box-shadow:0 2px 12px rgba(0,0,0,.1);
+  }
+  .back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+  .back-to-top:hover { border-color:var(--accent); color:var(--accent); }
+
+  @media (max-width:900px) {
+    .card-grid-3, .three-col { grid-template-columns:1fr 1fr; }
+    .two-col { grid-template-columns:1fr; }
+    .container { padding:0 16px; }
+  }
+  @media (max-width:600px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns:1fr; }
+    .container { padding:0 12px; }
+  }
+  @media print { body { background:white; } .navbar { display:none; } }
+
+  .header { background: linear-gradient(135deg, #9B59B6 0%, #E8547A 100%); }
+
+  .tag-pink { background:#F9D0DB; color:#B5435E; }
+  .goodbad { margin-top:8px; }
+  .goodbad .gb-row { display:flex; align-items:flex-start; gap:10px; padding:6px 0; border-bottom:1px dashed var(--border); font-size:13px; color:var(--text-muted); }
+  .goodbad .gb-row:last-child { border-bottom:none; }
+  .goodbad .gb { flex-shrink:0; min-width:132px; font-size:11px; font-weight:700; padding:3px 10px; border-radius:6px; text-align:center; }
+  .goodbad .gb.good { background:#D5F5EE; color:#0E6655; }
+  .goodbad .gb.bad { background:#FDEDEC; color:#B03A2E; }
+  .goodbad .gb.mid { background:#FEF9E7; color:#9A7D0A; }
+
+
+/* === ANT NAV DROPDOWN === */
+  .navbar .nav-links { gap:20px; flex-wrap:nowrap; }
+  .navbar .nav-group { position:relative; }
+  .navbar .nav-toggle { cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px; }
+  .navbar .nav-toggle .caret { font-size:9px; line-height:1; opacity:.7; transition:transform .2s; }
+  .navbar .nav-group.open .nav-toggle { color:#E8547A; }
+  .navbar .nav-group.open .nav-toggle .caret { transform:rotate(180deg); }
+  .navbar .nav-sub {
+    display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    min-width:196px; background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.13); padding:6px; margin:0; list-style:none; z-index:300;
+  }
+  .navbar .nav-group:hover > .nav-sub,
+  .navbar .nav-group.open > .nav-sub { display:block; }
+  .navbar .nav-sub::before { content:''; position:absolute; top:-9px; left:0; right:0; height:9px; }
+  .navbar .nav-sub li { display:block; font-size:13px; }
+  .navbar .nav-sub a {
+    display:block; padding:7px 12px; border-bottom:none; border-radius:6px;
+    font-size:12.5px; color:#666; white-space:nowrap; transition:background .15s,color .15s;
+  }
+  .navbar .nav-sub a:hover { background:#FEF0F4; color:#E8547A; }
+  .navbar .nav-sub a.active { background:#FEF0F4; color:#E8547A; border-bottom:none; font-weight:600; }
+  @media (max-width:900px) {
+    .navbar { height:auto; }
+    .navbar .container { height:auto; flex-wrap:wrap; padding-top:8px; padding-bottom:8px; gap:8px; }
+    .navbar .nav-links { gap:16px; margin-left:0; flex-wrap:wrap; width:100%; }
+    .navbar .nav-sub { left:0; transform:none; }
+  }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand">
+      <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+      <span class="nav-icon-fb">A</span>
+      Anthea
+    </a>
+    <ul class="nav-links" id="anthea-nav">
+      <li><a href="index.html">首页</a></li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="spec">流程规范文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="spec-of-project.html">① 项目流程规范</a></li>
+          <li><a href="spec-of-designer.html">② 策划工作规范</a></li>
+          <li><a href="spec-of-art.html">③ 美术工作规范</a></li>
+          <li><a href="spec-of-art-design.html">④ 美术设计规范</a></li>
+          <li><a href="spec-of-ue-ui.html">⑤ UI 设计制作规范</a></li>
+          <li><a href="spec-of-asset.html">⑥ 资源管理规范</a></li>
+        </ul>
+      </li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="ai">AI Coding 文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="guide-for-claude.html">ClaudeCode 白皮书</a></li>
+          <li><a href="guide-for-claude-md.html">CLAUDE.md 规则</a></li>
+          <li><a href="guide-for-sdd.html">AI Coding 清单</a></li>
+          <li><a href="guide-for-workbuddy.html">WorkBuddy 指南</a></li>
+          <li><a href="guide-for-openspec.html">OpenSpec 工作流</a></li>
+        </ul>
+      </li>
+      <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-tag">🖼️ 流程规范文档 · 04</div>
+    <h1>『海边的安西娅』美术设计规范</h1>
+    <div class="header-sub">Art Design Specification — 基于《项目美术白皮书》整理 · 9 大模块品质标准</div>
+    <div class="header-meta">
+      <span>📅 源文档版本 <strong>V20240305</strong></span>
+      <span>📆 提交日期 <strong>2024.03</strong></span>
+      <span>🧩 规范模块 <strong>9 个</strong></span>
+      <span>📄 原文 <strong>80 页</strong></span>
+    </div>
+  </div>
+</header>
+
+<div class="container" style="padding-top:32px; padding-bottom:48px;">
+<!-- ===== 目录 ===== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">目录</span>
+    <span class="section-title">章节导航</span>
+  </div>
+  <div class="toc">
+    <a href="#p1">PART 1 · 规范概览<span>参考原型与整体风格</span></a>
+    <a href="#p2">PART 2 · 角色立绘<span>品质标杆与细节要求</span></a>
+    <a href="#p3">PART 3 · 角色 Q 版<span>体型比例与勾边刻画</span></a>
+    <a href="#p4">PART 4 · 角色动画<span>拆分细节与骨骼布点</span></a>
+    <a href="#p5">PART 5 · 游戏场景<span>风格 / 布局 / 迭代</span></a>
+    <a href="#p6">PART 6 · 剧情场景<span>室外 &amp; 室内绘制标准</span></a>
+    <a href="#p7">PART 7 · 场景物件<span>品质标准与刻画</span></a>
+    <a href="#p8">PART 8 · 游戏界面<span>风格 / 颜色 / 字体 / 交互</span></a>
+    <a href="#p9">PART 9 · 游戏图标<span>构图 / 透视 / 上色 / 输出</span></a>
+  </div>
+</div>
+
+<!-- ===== PART 1 规范概览 ===== -->
+<div class="section" id="p1">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 01</span>
+    <span class="section-title">规范概览</span>
+    <span class="section-desc">参考原型 · 整体风格 · 规范说明</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--accent);"></div>1.1 主要参考原型<span class="no">标杆</span></div>
+    <div class="card-grid card-grid-2">
+      <div class="card" style="border-top-color:var(--purple);">
+        <div class="card-icon">🏪</div>
+        <div class="card-title">《魔法精品店》</div>
+        <div style="font-size:13px;color:var(--text-muted);">模拟经营比重增强 · 清新明亮</div>
+      </div>
+      <div class="card" style="border-top-color:var(--pink);">
+        <div class="card-icon">🏡</div>
+        <div class="card-title">《来我家玩吧！》</div>
+        <div style="font-size:13px;color:var(--text-muted);">装饰布置为主体 · 可爱精致</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>1.2 整体风格要求<span class="no">核心</span></div>
+    <div class="sub-desc" style="font-size:14px;color:var(--text);">结合产品定位及玩法类型，游戏整体风格为 <strong>轻松 · 休闲 · 可爱 · 治愈</strong>。</div>
+    <div class="card-grid card-grid-3" style="margin-top:12px;">
+      <div class="card" style="border-top-color:var(--teal);padding:14px;">
+        <div class="card-title">《来我家玩吧！》</div>
+        <div class="tag-list" style="margin-top:6px;"><span class="tag tag-teal">可爱精致</span></div>
+      </div>
+      <div class="card" style="border-top-color:var(--blue);padding:14px;">
+        <div class="card-title">《魔法精品店》</div>
+        <div class="tag-list" style="margin-top:6px;"><span class="tag tag-blue">清新明亮</span></div>
+      </div>
+      <div class="card" style="border-top-color:var(--orange);padding:14px;">
+        <div class="card-title">《饼干人王国》</div>
+        <div class="tag-list" style="margin-top:6px;"><span class="tag tag-orange">风格独特</span></div>
+      </div>
+    </div>
+    <div class="note">
+      📖 <strong>规范说明：</strong>本白皮书旨在明确游戏的美术规范，以确保游戏的美术风格、色彩搭配、字体与文字、图像处理、图标与按钮以及交互界面等方面的一致性和规范性。通过遵循这些规范，我们将为玩家呈现一个<strong>温馨、可爱且具有吸引力</strong>的游戏世界。
+    </div>
+  </div>
+</div>
+
+<!-- ===== PART 2 角色立绘 ===== -->
+<div class="section" id="p2">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 02</span>
+    <span class="section-title">角色立绘</span>
+    <span class="section-desc">品质标杆 · 颜色 / 比例 / 五官 / 刻画</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--accent);"></div>2.1 品质标杆 &amp; 特点汇总<span class="no">标杆</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:150px;">参考作品</th><th>风格标签</th><th>特点汇总</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>《七日之都》</strong></td>
+          <td><span class="tag tag-purple">休闲都市风</span> <span class="tag tag-purple">轻魔幻</span> <span class="tag tag-purple">半厚涂</span></td>
+          <td>立绘注重<strong>时尚感和现代感</strong>，色彩运用<strong>低饱和</strong>的色彩基调，<strong>线条简洁明了</strong>；采用<strong>半厚涂</strong>绘画技巧，使画面更加立体、有层次感</td>
+        </tr>
+        <tr>
+          <td><strong>《原神》</strong></td>
+          <td><span class="tag tag-blue">休闲都市风</span> <span class="tag tag-blue">现代治愈</span> <span class="tag tag-blue">半厚涂</span></td>
+          <td>联动中立绘注重时尚感和现代感，色彩运用低饱和基调，线条简洁明了；采用半厚涂技法，画面立体、有层次感</td>
+        </tr>
+        <tr>
+          <td><strong>《原神同人》</strong></td>
+          <td><span class="tag tag-orange">休闲都市风</span> <span class="tag tag-orange">半厚涂</span></td>
+          <td>线条简洁明了、个性鲜明</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note">📌 选型原则：<strong>差异太大，不建议使用，无法匹配风格</strong>；<strong>存在共性，可以综合使用或分情况使用</strong>。</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>2.2 细节要求<span class="no">细节</span></div>
+    <div class="card-grid card-grid-2">
+      <div class="card" style="border-top-color:var(--teal);">
+        <div class="card-title">🎨 颜色</div>
+        <div class="goodbad">
+          <div class="gb-row"><span class="gb good">✓ 推荐</span><span>低饱和 / 高级灰 / 简洁清新</span></div>
+          <div class="gb-row"><span class="gb good">✓ 可用</span><span>低饱和 / 色彩清晰明了</span></div>
+          <div class="gb-row"><span class="gb bad">✗ 避免</span><span>高饱和 / 重色彩</span></div>
+        </div>
+      </div>
+      <div class="card" style="border-top-color:var(--blue);">
+        <div class="card-title">📏 比例</div>
+        <ul class="item-list">
+          <li>立绘基础头身比为 <strong style="color:var(--text);">【7-8 头身】</strong>，特殊 pose 或体型可适当放宽身体比例</li>
+          <li>因身高变化产生的头身数变化<strong style="color:var(--text);">一般不作为比例标准</strong>，通常取<strong style="color:var(--text);">男性 175 / 女性 165</strong> 的中间值</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--purple);">
+        <div class="card-title">👁 眼睛</div>
+        <div class="goodbad">
+          <div class="gb-row"><span class="gb good">✓ 推荐</span><span>瞳孔交界线清晰 / 色彩分割清楚</span></div>
+          <div class="gb-row"><span class="gb bad">✗ 避免</span><span>瞳孔色彩分割不清晰 / 眼珠灰蒙蒙</span></div>
+        </div>
+        <ul class="item-list">
+          <li>角色的睫毛<strong style="color:var(--text);">不要过多</strong></li>
+          <li>尽量让<strong style="color:var(--text);">眼白的分界线清楚明了</strong>些</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--orange);">
+        <div class="card-title">💇 头发</div>
+        <div class="goodbad">
+          <div class="gb-row"><span class="gb good">✓ 推荐</span><span>分组层次分明 / 高光明确 / 边缘变化</span></div>
+          <div class="gb-row"><span class="gb bad">✗ 避免</span><span>高光细碎 / 层次太多</span></div>
+        </div>
+        <ul class="item-list">
+          <li>不需要过多细碎的高光</li>
+          <li>头发明暗关系注意要有<strong style="color:var(--text);">体积和结构</strong>的表达</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--pink);">
+        <div class="card-title">👤 面部肤色</div>
+        <div class="goodbad">
+          <div class="gb-row"><span class="gb good">✓ 推荐</span><span>微立体 / 直射光</span></div>
+          <div class="gb-row"><span class="gb mid">◐ 视情况</span><span>平涂 / 弱光影（根据角色性格、性别、年龄适当采用）</span></div>
+          <div class="gb-row"><span class="gb bad">✗ 避免</span><span>强光影 / 油腻</span></div>
+        </div>
+      </div>
+      <div class="card" style="border-top-color:var(--teal);">
+        <div class="card-title">✋ 肢体皮肤</div>
+        <div class="goodbad">
+          <div class="gb-row"><span class="gb good">✓ 正确风格</span><span>平涂 / 微立体</span></div>
+          <div class="gb-row"><span class="gb mid">◐ 可选</span><span>薄涂 / 平面</span></div>
+          <div class="gb-row"><span class="gb bad">✗ 避免</span><span>强光影 / 油腻</span></div>
+        </div>
+      </div>
+      <div class="card" style="border-top-color:var(--gray);">
+        <div class="card-title">🖌 刻画</div>
+        <div class="goodbad">
+          <div class="gb-row"><span class="gb good">✓ 推荐</span><span>平涂 / 明快</span></div>
+          <div class="gb-row"><span class="gb bad">✗ 避免</span><span>细碎 / 繁杂</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="note">🖼 各细节要求均配有<strong>游戏内展示</strong>对照，实际制作请以白皮书内图示为准。</div>
+  </div>
+</div>
+
+<!-- ===== PART 3 角色Q版 ===== -->
+<div class="section" id="p3">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 03</span>
+    <span class="section-title">角色 Q 版</span>
+    <span class="section-desc">体型 · 五官 · 勾边刻画</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--accent);"></div>3.1 品质标杆 — 《来我家玩吧》<span class="no">标杆</span></div>
+    <div class="sub-desc">风格标签：<span class="tag tag-teal">简约清新</span> <span class="tag tag-teal">卡通可爱</span></div>
+    <div class="card-grid card-grid-3">
+      <div class="card" style="border-top-color:var(--teal);padding:16px;">
+        <div class="card-title">✨ 简约可爱</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Q 版人物造型简约，线条简洁，没有过多的细节和修饰，整体呈现出可爱、萌化的特点。</div>
+      </div>
+      <div class="card" style="border-top-color:var(--teal);padding:16px;">
+        <div class="card-title">😆 夸张表情</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Q 版人物的表情夸张，肢体动作可爱，能够突出角色的个性和特点，增加游戏的趣味性和互动性。</div>
+      </div>
+      <div class="card" style="border-top-color:var(--teal);padding:16px;">
+        <div class="card-title">🌈 色彩清新</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Q 版人物色彩清馨，对比和谐，能够吸引玩家注意力，同时营造出轻松愉快的氛围。</div>
+      </div>
+    </div>
+    <div class="note">📌 选型原则：<strong>差异太大，不建议使用，无法匹配风格</strong>；<strong>存在共性，可以综合使用或分情况使用</strong>。</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>3.2 细节要求<span class="no">细节</span></div>
+    <div class="two-col">
+      <div class="sub-block">
+        <div class="sub-title">🧍 体型 &amp; 比例</div>
+        <div class="sub-desc">按<strong style="color:var(--text);">男 / 女</strong>分别设定体型与比例基准（详见白皮书 Q 版体型比例图示）。</div>
+      </div>
+      <div class="sub-block">
+        <div class="sub-title">👁 五官 &amp; 头发</div>
+        <div class="goodbad">
+          <div class="gb-row"><span class="gb good">✓ 推荐</span><span>高光随意，或用发丝表现</span></div>
+          <div class="gb-row"><span class="gb mid">◐ 可选</span><span>高光分散，用点表现</span></div>
+          <div class="gb-row"><span class="gb bad">✗ 避免</span><span>高光散、细碎</span></div>
+          <div class="gb-row"><span class="gb bad">✗ 避免</span><span>眼神黯淡</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="sub-block">
+      <div class="sub-title">✏️ 细节刻画 — 勾边规范（关键量化指标）</div>
+      <table class="info-table">
+        <thead><tr><th style="width:160px;">项目</th><th>规范要求</th></tr></thead>
+        <tbody>
+          <tr><td><strong>面部勾边</strong></td><td>角色面部勾边特殊处理，面部勾边<strong>明度在 65 左右</strong>，可以用饱和度较高的颜色去勾边</td></tr>
+          <tr><td><strong>外轮廓勾边</strong></td><td>框架下粗细为 <strong>7~8 像素</strong>（常规用 <strong>7 像素</strong>，结构部分需要加强的用 <strong>8 像素</strong>）</td></tr>
+        </tbody>
+      </table>
+      <div class="goodbad" style="margin-top:10px;">
+        <div class="gb-row"><span class="gb good">✓ 推荐</span><span>勾边均匀 · 过渡自然</span></div>
+        <div class="gb-row"><span class="gb bad">✗ 避免</span><span>勾边不均匀 · 残缺不齐</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PART 4 角色动画 ===== -->
+<div class="section" id="p4">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 04</span>
+    <span class="section-title">角色动画</span>
+    <span class="section-desc">拆分细节 · 骨骼与布点</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--accent);"></div>4.1 制作要求 — 拆分细节<span class="no">拆分</span></div>
+    <div class="note" style="margin-top:0;">📌 选型原则：<strong>差异太大，不建议使用，无法匹配风格</strong>；<strong>存在共性，可以综合使用或分情况使用</strong>。</div>
+    <div class="card-grid card-grid-2">
+      <div class="card" style="border-top-color:var(--purple);">
+        <div class="card-title">👁 五官的拆分</div>
+        <div style="font-size:13px;color:var(--text-muted);">五官需要单独拆分：<strong style="color:var(--text);">眉毛、睫毛、上下眼皮、虹膜、眼白、鼻子、上下唇、上下（齿）、牙、口腔</strong></div>
+      </div>
+      <div class="card" style="border-top-color:var(--blue);">
+        <div class="card-title">✋ 手部的拆分</div>
+        <ul class="item-list">
+          <li>手部动作复杂的情况下需要<strong style="color:var(--text);">单独拆分手指</strong></li>
+          <li>如果有手背 → 手掌侧面的动画，可能需要单独拆分<strong style="color:var(--text);">指节</strong></li>
+        </ul>
+      </div>
+      <div class="card" style="border-top-color:var(--teal);">
+        <div class="card-title">🦴 关节的拆分</div>
+        <div style="font-size:13px;color:var(--text-muted);">关节处建议<strong style="color:var(--text);">全部拆分</strong>，可以减少蒙皮复杂程度，以减少动画过程中可能的蒙皮非必要拉伸情况</div>
+      </div>
+      <div class="card" style="border-top-color:var(--orange);">
+        <div class="card-title">💇 头发的拆分</div>
+        <div style="font-size:13px;color:var(--text-muted);">头发之类的需要<strong style="color:var(--text);">多拆几片</strong>增加动画的层次感</div>
+      </div>
+      <div class="card" style="border-top-color:var(--pink);">
+        <div class="card-title">🩹 遮挡的补全</div>
+        <div style="font-size:13px;color:var(--text-muted);">例如<strong style="color:var(--text);">刘海后面要画一个大概的发际线</strong>，防止动画可能出现的穿帮；动画中不会露出的部分则不需要</div>
+      </div>
+      <div class="card" style="border-top-color:var(--gray);">
+        <div class="card-title">🔍 透明部件的处理</div>
+        <div style="font-size:13px;color:var(--text-muted);">原画中透明的部分，拆分的时候<strong style="color:var(--text);">也要拆成透明的</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>4.2 制作要求 — 动画细节（骨骼 &amp; 布点）<span class="no">动画</span></div>
+    <div class="two-col">
+      <div class="sub-block">
+        <div class="sub-title">🦴 骨骼数量</div>
+        <ul class="item-list">
+          <li>短发 <strong style="color:var(--text);">3-5 根骨骼</strong>，长发可以根据短发依比例增加骨骼</li>
+          <li>发梢末端骨骼数量可以视情况增加（例如<strong style="color:var(--text);">发梢弯曲弧度比较大</strong>）</li>
+          <li>作为 <strong style="color:var(--text);">Q 版角色</strong>，头发和裙子的骨骼数量可以<strong style="color:var(--text);">适当减少</strong>；腰部的系带、耳环和鼻涕泡骨骼明显过多</li>
+        </ul>
+        <div class="goodbad" style="margin-top:10px;">
+          <div class="gb-row"><span class="gb good">✓ 推荐</span><span>适当的骨骼数量</span></div>
+          <div class="gb-row"><span class="gb bad">✗ 避免</span><span>过多的骨骼数量</span></div>
+        </div>
+      </div>
+      <div class="sub-block">
+        <div class="sub-title">📍 顶点布点</div>
+        <ul class="item-list">
+          <li>使用<strong style="color:var(--text);">适当的顶点</strong>强调结构，或者表现物体柔软度</li>
+          <li>过多的布点会影响<strong style="color:var(--text);">运行性能</strong>，而且动画效果并不会得到提高，反而在后期需要调整时增加工作量</li>
+        </ul>
+        <div class="goodbad" style="margin-top:10px;">
+          <div class="gb-row"><span class="gb good">✓ 推荐</span><span>适当的布点</span></div>
+          <div class="gb-row"><span class="gb bad">✗ 避免</span><span>过多的布点</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PART 5 游戏场景 ===== -->
+<div class="section" id="p5">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 05</span>
+    <span class="section-title">游戏场景</span>
+    <span class="section-desc">风格 · 布局比例 · 迭代记录</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--teal);"></div>5.1 品质标杆 — 主场景 Q 版匹配<span class="no">标杆</span></div>
+    <div class="sub-desc">清新整体干净的用色下，会结合一些<strong style="color:var(--text);">灰度色过渡带</strong>交代场景的虚实远近对比。主场景的色彩应以<strong style="color:var(--text);">温暖、柔和</strong>的色调为主，如<strong style="color:var(--text);">浅绿、浅灰、淡蓝</strong>等。色彩搭配应注重<strong style="color:var(--text);">层次感和对比度</strong>，营造出温馨舒适的氛围。</div>
+    <div class="tag-list"><span class="tag tag-teal">多元化</span><span class="tag tag-teal">真实性</span><span class="tag tag-teal">社交性</span><span class="tag tag-teal">装饰性</span></div>
+    <div class="note">参考：《来我家玩吧》《魔法精品店》— 简约清新 / 卡通可爱</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--orange);"></div>5.2 细节要求 — 风格<span class="no">细节</span></div>
+    <div class="goodbad">
+      <div class="gb-row"><span class="gb bad">✗ 建筑结构比例不符合需求</span><span>结构关系需贴合设定</span></div>
+      <div class="gb-row"><span class="gb bad">✗ 刻画方式过于轻薄</span><span>需保证足够的刻画厚度</span></div>
+      <div class="gb-row"><span class="gb bad">✗ 刻画上结构夸张过大</span><span>需控制夸张幅度</span></div>
+      <div class="gb-row"><span class="gb bad">✗ 色调相比偏灰</span><span>需保持清新明亮</span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--blue);"></div>5.3 细节要求 — 布局 &amp; 比例<span class="no">细节</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:130px;">方案</th><th>效果特征</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>小比例家具效果</strong></td>
+          <td>· 更接近<strong>写实比例</strong>效果，主建筑内可摆放物件数量比大版<strong>多</strong><br>· 游戏前期家具投放数量不多时，建筑内家具摆放后<strong>会略显空旷</strong><br>· 引擎镜头缩小时，场景内容会出现<strong>过于密集</strong></td>
+        </tr>
+        <tr>
+          <td><strong>大比例家具效果</strong></td>
+          <td>· 整体效果和比例更有 <strong>Q 版效果</strong>，整体可爱程度比小版<strong>好</strong><br>· 引擎镜头放至最大时，物件刻画内容<strong>更清晰</strong><br>· 引擎缩小时<strong>减少画面密集性</strong><br>· 游戏前期家具投放数量不多时，整个主建筑<strong>不会空旷</strong><br>· 主建筑内可摆放物件数量比小版<strong>少</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--purple);"></div>5.4 主场景迭代设计过程<span class="no">迭代</span></div>
+    <div class="flow-row" style="min-width:0;margin-bottom:8px;">
+      <div class="flow-nodes" style="flex-wrap:wrap;gap:8px;">
+        <div class="flow-node fn-gray">第一版设计</div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node fn-orange">迭代进行中版本</div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node fn-teal">最终确认布局</div>
+      </div>
+    </div>
+    <div class="note">📐 最终确认布局尺寸：<strong>3766 × 5872</strong></div>
+  </div>
+</div>
+
+<!-- ===== PART 6 剧情场景 ===== -->
+<div class="section" id="p6">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 06</span>
+    <span class="section-title">剧情场景</span>
+    <span class="section-desc">室外 &amp; 室内 · 绘制标准</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--teal);"></div>6.1 品质标杆<span class="no">标杆</span></div>
+    <div class="card-grid card-grid-2">
+      <div class="card" style="border-top-color:var(--teal);">
+        <div class="card-title">🌳 剧情场景 — 室外 &amp; 近景</div>
+        <div style="font-size:13px;color:var(--text-muted);">符合游戏风格的参考色调，氛围<strong style="color:var(--text);">清新舒适</strong>。</div>
+      </div>
+      <div class="card" style="border-top-color:var(--blue);">
+        <div class="card-title">🛋 剧情场景 — 室内 &amp; 近景</div>
+        <div style="font-size:13px;color:var(--text-muted);">符合游戏风格的参考色调，氛围<strong style="color:var(--text);">清新舒适</strong>。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--orange);"></div>6.2 细节要求 — 绘制标准<span class="no">细节</span></div>
+    <div class="sub-title" style="margin-bottom:8px;">🎨 色调 / 氛围</div>
+    <div class="goodbad">
+      <div class="gb-row"><span class="gb bad">✗ 整体冷暖色调表现不够</span><span>需强化冷暖对比关系</span></div>
+      <div class="gb-row"><span class="gb bad">✗ 脏 / 暗 / 乱</span><span>需保持画面干净、明亮、有序</span></div>
+    </div>
+    <div class="note">📌 选型原则：<strong>差异太大，不建议使用，无法匹配风格</strong>；<strong>存在共性，可以综合使用或分情况使用</strong>。</div>
+  </div>
+</div>
+
+<!-- ===== PART 7 场景物件 ===== -->
+<div class="section" id="p7">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 07</span>
+    <span class="section-title">场景物件</span>
+    <span class="section-desc">品质标准 · 刻画</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--accent);"></div>7.1 品质标杆 — 《来我家玩吧》<span class="no">标杆</span></div>
+    <div class="sub-desc">风格标签：<span class="tag tag-teal">简约清新</span> <span class="tag tag-teal">卡通可爱</span></div>
+    <div class="card-grid card-grid-4">
+      <div class="card" style="border-top-color:var(--teal);padding:14px;"><div class="card-title">1 · 多样性和独特性</div></div>
+      <div class="card" style="border-top-color:var(--teal);padding:14px;"><div class="card-title">2 · 家具的互动性</div></div>
+      <div class="card" style="border-top-color:var(--teal);padding:14px;"><div class="card-title">3 · 家具的层次感</div></div>
+      <div class="card" style="border-top-color:var(--teal);padding:14px;"><div class="card-title">4 · 反映现实生活的细节</div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>7.2 细节要求 — 品质标准<span class="no">细节</span></div>
+    <div class="sub-block">
+      <div class="sub-title">🎯 风格关键词</div>
+      <div class="tag-list" style="margin-top:0;">
+        <span class="tag tag-purple">现代 + 微魔法</span>
+        <span class="tag tag-pink">色彩明亮</span>
+        <span class="tag tag-blue">刻画细腻</span>
+        <span class="tag tag-teal">材质明确</span>
+        <span class="tag tag-orange">哑光</span>
+      </div>
+    </div>
+    <div class="sub-block">
+      <div class="sub-title">📶 品质递进关系</div>
+      <div class="flow-row" style="min-width:0;">
+        <div class="flow-nodes">
+          <div class="flow-node fn-gray">灰</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-teal">绿</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-blue">蓝</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-purple">紫</div><div class="flow-arrow"></div>
+          <div class="flow-node fn-orange">橙</div>
+        </div>
+      </div>
+    </div>
+    <div class="note">📦 <strong>提交要求：</strong>提交内容为<strong>不带底的图标</strong>，图标<strong>勿和底图合层</strong>。</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--orange);"></div>7.3 细节要求 — 刻画<span class="no">细节</span></div>
+    <div class="goodbad">
+      <div class="gb-row"><span class="gb good">✓ 推荐</span><span>精致 / 半厚涂 / 材质明确 / 哑光</span></div>
+      <div class="gb-row"><span class="gb bad">✗ 避免</span><span>油腻 / 写实 / 粗糙</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PART 8 游戏界面 ===== -->
+<div class="section" id="p8">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 08</span>
+    <span class="section-title">游戏界面</span>
+    <span class="section-desc">风格 / 颜色 / 字体 / 图标按钮 / 交互</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--accent);"></div>8.1 品质标杆 &amp; 设计风格<span class="no">标杆</span></div>
+    <div class="two-col">
+      <div class="sub-block">
+        <div class="sub-title">🎨 设计风格</div>
+        <ul class="item-list">
+          <li>色彩搭配以<strong style="color:var(--text);">明亮、低饱和色系</strong>为主，符合泛女性游戏的特点，同时能够吸引玩家注意力</li>
+          <li><strong style="color:var(--text);">扁平的材质与简约的形式</strong>，营造轻松的视觉感受</li>
+          <li>游戏图标设计简洁明了，易于识别和理解，方便玩家快速找到所需功能和内容</li>
+        </ul>
+      </div>
+      <div class="sub-block">
+        <div class="sub-title">✨ 风格规范</div>
+        <div class="sub-desc">UI 美术风格以<strong style="color:var(--text);">卡通可爱风格</strong>为主，注重细节呈现和色彩搭配和谐，同时运用<strong style="color:var(--text);">动态元素</strong>进行点缀，为玩家提供可爱、温馨的游戏体验。</div>
+        <div class="tag-list"><span class="tag tag-purple">卡通可爱</span><span class="tag tag-purple">细节丰富</span><span class="tag tag-purple">色彩和谐</span><span class="tag tag-purple">动态元素点缀</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>8.2 细节要求 — 颜色 &amp; 字体<span class="no">细节</span></div>
+    <div class="two-col">
+      <div class="sub-block">
+        <div class="sub-title">🌈 颜色</div>
+        <ol class="steps">
+          <li><strong style="color:var(--text);">主色调</strong>：淡粉色、淡蓝色、淡黄色等温暖色调为主</li>
+          <li><strong style="color:var(--text);">辅助色调</strong>：根据游戏主题和场景需求，可适当运用其他色彩进行点缀和对比</li>
+          <li><strong style="color:var(--text);">色彩搭配原则</strong>：遵循和谐统一的原则，避免色彩过于杂乱或冲突</li>
+        </ol>
+      </div>
+      <div class="sub-block">
+        <div class="sub-title">🔤 字体</div>
+        <ol class="steps">
+          <li><strong style="color:var(--text);">字体选择</strong>：选用简洁、易读的字体，以提升用户体验</li>
+          <li><strong style="color:var(--text);">文字排版</strong>：文字排版整齐、清晰，避免拥挤或重叠</li>
+          <li><strong style="color:var(--text);">文字颜色</strong>：文字颜色与背景颜色形成对比，确保文字可读性</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--blue);"></div>8.3 细节要求 — 图标 &amp; 按钮 / 交互<span class="no">细节</span></div>
+    <div class="two-col">
+      <div class="sub-block">
+        <div class="sub-title">🔘 图标 &amp; 按钮</div>
+        <ol class="steps">
+          <li><strong style="color:var(--text);">图标设计</strong>：图标简洁明了，易于识别和理解</li>
+          <li><strong style="color:var(--text);">按钮设计</strong>：按钮大小适中，位置合理，方便玩家操作</li>
+          <li><strong style="color:var(--text);">交互反馈</strong>：当玩家点击图标或按钮时，应给出相应的反馈和效果</li>
+        </ol>
+      </div>
+      <div class="sub-block">
+        <div class="sub-title">🖱 交互</div>
+        <ol class="steps">
+          <li><strong style="color:var(--text);">界面布局</strong>：界面布局简洁明了，信息展示清晰</li>
+          <li><strong style="color:var(--text);">操作流程</strong>：操作流程顺畅，符合用户习惯和预期</li>
+          <li><strong style="color:var(--text);">交互提示</strong>：在关键操作环节提供明确的交互提示，帮助玩家更好地理解和操作</li>
+        </ol>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="sub-block">
+      <div class="sub-title">🖼 设计示意</div>
+      <div class="tag-list" style="margin-top:0;">
+        <span class="tag tag-purple">仓库界面</span>
+        <span class="tag tag-purple">编辑界面</span>
+        <span class="tag tag-purple">弹窗</span>
+        <span class="tag tag-purple">小剧场</span>
+        <span class="tag tag-purple">换装</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PART 9 游戏图标 ===== -->
+<div class="section" id="p9">
+  <div class="section-header">
+    <span class="section-tag" style="background:var(--accent-pale);color:var(--accent-dark);">PART 09</span>
+    <span class="section-title">游戏图标</span>
+    <span class="section-desc">风格 / 构图 / 透视 / 上色 / 输出</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--accent);"></div>9.1 品质标杆 &amp; 风格标准<span class="no">标杆</span></div>
+    <div class="sub-desc">参考《来我家玩吧》：<span class="tag tag-teal">简洁明了</span> <span class="tag tag-teal">卡通可爱</span> <span class="tag tag-teal">色彩鲜明</span></div>
+    <div class="sub-desc">游戏图标通常以<strong style="color:var(--text);">简单的图形和鲜明的色彩</strong>为主，能够快速吸引玩家的注意力。同时，图标的设计也与游戏的主题和风格相符合，能够让玩家一眼就能看出游戏的类型和玩法。</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--orange);"></div>9.2 细节要求 — 比例 &amp; 构图<span class="no">细节</span></div>
+    <div class="sub-desc">典型物件：冰激凌 · 饮品 · 花 · 水果 · 屏风 · 床 · 小摆件 · 落地灯</div>
+    <ul class="item-list">
+      <li><strong style="color:var(--text);">大家具和小家具</strong>可根据需求调整构图中占比的比例</li>
+      <li><strong style="color:var(--text);">冰激凌和饮品</strong>：底部的中心点和透视需一致统一，顶部的瓶口、碗口的透视需一致统一</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--blue);"></div>9.3 细节要求 — 朝向 &amp; 透视<span class="no">细节</span></div>
+    <table class="info-table">
+      <thead><tr><th style="width:110px;">项目</th><th>规范要求</th></tr></thead>
+      <tbody>
+        <tr><td><strong>朝向统一</strong></td><td>统一为 <strong>右上打光</strong>，高光位置<strong>右或右上</strong></td></tr>
+        <tr><td><strong>透视统一</strong></td><td>统一升级递进关系</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>9.4 细节要求 — 上色 &amp; 刻画<span class="no">细节</span></div>
+    <div class="sub-desc">画法区间：<strong style="color:var(--text);">偏平 ⟷ 半厚涂</strong></div>
+    <table class="info-table">
+      <thead><tr><th style="width:130px;">项目</th><th>规范要求</th></tr></thead>
+      <tbody>
+        <tr><td><strong>投影 &amp; 描边</strong></td><td>图标绘制以<strong>无投影、描边</strong>为主。所有描边投影如需添加会<strong>提前沟通</strong></td></tr>
+        <tr><td><strong>图层样式</strong></td><td>如需添加图层样式，<strong>勿在原图层上添加</strong>，需复制图层添加；提交版本<strong>需保留图层样式，勿合层</strong></td></tr>
+        <tr><td><strong>边缘处理</strong></td><td>图标边缘需要处理干净，<strong>钢笔勾边</strong>，避免有马赛克或边缘模糊的情况</td></tr>
+        <tr><td><strong>描边 &amp; 渐变</strong></td><td>描边 <strong>10px</strong>，细微变化的同色系渐变，<strong>上浅下深</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--gray);"></div>9.5 细节要求 — 规范示例<span class="no">示例</span></div>
+    <ul class="item-list">
+      <li><strong style="color:var(--text);">勺子、叉子</strong>：注意朝向和透视</li>
+      <li><strong style="color:var(--text);">小装饰</strong>：尽可能避免吸管等不必要的过长装饰，会对四个角的信息数字有影响，容易被遮挡</li>
+      <li><strong style="color:var(--text);">所有同款式类型的物品</strong>：要注意<strong style="color:var(--text);">大小的统一</strong></li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--teal);"></div>9.6 图标输出要求<span class="no">输出</span></div>
+    <ol class="steps">
+      <li><strong style="color:var(--text);">图像分辨率</strong>：保证图像分辨率足够，避免出现模糊或失真现象</li>
+      <li><strong style="color:var(--text);">图像质量</strong>：图像处理清晰、细腻，符合游戏主题和风格</li>
+      <li><strong style="color:var(--text);">图像优化</strong>：对图像进行适当的压缩和优化，以降低游戏加载时间和资源消耗</li>
+    </ol>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><div class="dot" style="background:var(--pink);"></div>总结<span class="no">END</span></div>
+    <div class="sub-desc" style="font-size:14px;color:var(--text);">
+      花语恋的美术品质重点在于<strong>色彩运用、空间布局、物品摆放、光线处理、情感表达、创作手法和表现主题</strong>等方面。这些细节品质要求在游戏中得到了充分体现和应用，为玩家营造出一个<strong>温馨可爱的花神世界</strong>。
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="container" style="text-align:center; padding-top:24px; padding-bottom:24px; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border);">
+  Anthea Project · 美术设计规范 · <a href="index.html" style="color:var(--accent);text-decoration:none;">返回首页</a> · <a href="https://github.com/ProMarkel/anthea" style="color:var(--accent);text-decoration:none;">GitHub</a>
+</div>
+
+<button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部">↑</button>
+
+<script>
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+backToTop.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+(function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
+</script>
+<script>
+/* ANT_NAV_DROPDOWN_JS */
+(function(){
+  var groups = document.querySelectorAll('.nav-group');
+  function closeAll(){ groups.forEach(function(g){ g.classList.remove('open'); }); }
+  document.querySelectorAll('.nav-toggle').forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var g = t.parentElement, was = g.classList.contains('open');
+      closeAll();
+      if (!was) g.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest || !e.target.closest('.nav-group')) closeAll();
+  });
+})();
+</script>
+
+</body>
+</html>

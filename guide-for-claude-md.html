@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="E34Y0OgHZAfeAOlCYOHlnw">
+<head data-page-node-id="A4SWHqDQ3cJi1VgJg6gecF">
+<meta charset="UTF-8" data-page-node-id="K1kQGrKiNYxGtmERlETEoD">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="rqucnbBFIlFiFkQBd1aCZl">
+<title>CLAUDE.md 规则技巧 · Anthea AI Coding 文档</title>
+<style>
+  :root {
+    --bg: #FAF6F0;
+    --bg-warm: #F5EDE3;
+    --card-bg: #FFFFFF;
+    --border: #E5D9CB;
+    --border-strong: #D4C4B0;
+    --text: #3D3328;
+    --text-heading: #2D221A;
+    --text-secondary: #8B7B68;
+    --accent: #D97757;
+    --accent-hover: #C5684A;
+    --accent-light: #F5E1D6;
+    --accent2: #4A9E8F;
+    --accent2-light: #D6EDE8;
+    --accent3: #7B5EA7;
+    --accent3-light: #E8DFF2;
+    --accent4: #D9A440;
+    --accent4-light: #F5EDD6;
+    --code-bg: #F8F3ED;
+    --code-border: #E5D9CB;
+    --table-stripe: #FCF9F5;
+    --highlight: rgba(217, 119, 87, 0.08);
+    --highlight-border: rgba(217, 119, 87, 0.25);
+    --shadow-sm: 0 1px 3px rgba(61, 51, 40, 0.06);
+    --shadow-md: 0 4px 16px rgba(61, 51, 40, 0.08);
+    --radius: 12px;
+    --radius-lg: 16px;
+  }
+  * { margin:0; padding:0; box-sizing: border-box; }
+  body {
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', 'PingFang SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.85;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* === NAVBAR === */
+  .navbar,
+  .navbar * {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    animation: none !important;
+    opacity: 1 !important;
+  }
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    height: 56px;
+    font-size: 16px;
+    line-height: 1.6;
+    box-sizing: border-box;
+  }
+  .navbar .container {
+    width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; height: 100%;
+    box-sizing: border-box;
+  }
+  .navbar .nav-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 16px; font-weight: 700;
+    color: #E8547A;
+    text-decoration: none;
+  }
+  .navbar .nav-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    object-fit: cover; flex-shrink: 0;
+  }
+  .navbar .nav-icon-fb {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    background: linear-gradient(135deg, #E8547A, #9B59B6);
+    color: white; font-size: 13px; font-weight: 700;
+    display: none; align-items: center; justify-content: center;
+  }
+  .navbar .nav-links {
+    display: flex; gap: 20px; list-style: none;
+    margin-left: auto; padding: 0;
+    align-items: center;
+  }
+  .navbar .nav-links li {
+    list-style: none; padding: 0; margin: 0;
+    border: none; background: none;
+    font-size: 13px;
+    display: block;
+    counter-increment: none;
+  }
+  .navbar .nav-links a {
+    text-decoration: none; font-size: 13px; font-weight: 500;
+    color: #888; padding: 6px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    display: inline-block;
+  }
+  .navbar .nav-links a:hover,
+  .navbar .nav-links a.active {
+    color: #E8547A;
+    border-bottom-color: #E8547A;
+  }
+
+  /* === HERO === */
+  .hero {
+    background: linear-gradient(160deg, #F5EDE3 0%, #FAF6F0 30%, #FDF2E8 60%, #F5EDE3 100%);
+    padding: 80px 24px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.78em;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: 2.6em;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .hero h1 .accent {
+    color: var(--accent);
+    position: relative;
+  }
+  .hero .subtitle {
+    font-size: 1.1em;
+    color: var(--text-secondary);
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* === MAIN === */
+  .main { max-width: 960px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* === SECTION === */
+  .section { margin-bottom: 56px; }
+  .section-title {
+    font-size: 1.6em; font-weight: 800;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+    color: var(--text-heading);
+  }
+  .section-title .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    color: white; font-size: 0.75em; font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  /* === CARDS === */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 20px;
+    border-left: 4px solid var(--accent);
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: var(--shadow-md); }
+  .card h4 { font-size: 1em; font-weight: 700; margin-bottom: 8px; }
+  .card p { font-size: 0.9em; color: var(--text-secondary); line-height: 1.7; }
+
+  /* === TABLE === */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.92em; }
+  th { background: var(--bg-warm); color: var(--text-heading); font-weight: 700; padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-size: 0.88em; }
+  td { padding: 10px 14px; border: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--table-stripe); }
+
+  /* === CODE === */
+  pre { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 8px; padding: 16px; overflow-x: auto; margin: 12px 0 20px; font-size: 0.88em; line-height: 1.6; }
+  code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.9em; }
+
+  /* === HIGHLIGHT BOX === */
+  .highlight-box {
+    background: var(--highlight);
+    border: 1px solid var(--highlight-border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 16px 0 24px;
+    font-size: 0.95em;
+    line-height: 1.7;
+  }
+  .highlight-box.success { background: rgba(74,158,143,0.08); border-color: rgba(74,158,143,0.25); }
+  .highlight-box.warning { background: rgba(217,164,64,0.08); border-color: rgba(217,164,64,0.25); }
+
+  /* === RULE CARD === */
+  .rule-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    border-left: 5px solid var(--accent);
+    transition: box-shadow 0.2s;
+  }
+  .rule-card:hover { box-shadow: var(--shadow-md); }
+  .rule-card .rule-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: white; font-weight: 800; font-size: 0.85em;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+  .rule-card h4 { font-size: 1.05em; font-weight: 700; display: flex; align-items: center; margin-bottom: 8px; }
+  .rule-card p { font-size: 0.92em; color: var(--text-secondary); line-height: 1.7; }
+  .rule-card .prevents { font-size: 0.85em; color: var(--accent); font-weight: 600; margin-top: 6px; }
+
+  /* === TAG === */
+  .tag { display: inline-block; padding: 2px 10px; border-radius: 100px; font-size: 0.78em; font-weight: 600; margin-right: 6px; }
+  .tag.green { background: #D6EDE8; color: #2D6A5C; }
+  .tag.blue { background: #D6E8F5; color: #1A4F8B; }
+  .tag.orange { background: #F5EDD6; color: #8B6914; }
+  .tag.purple { background: #E8DFF2; color: #5B3A8C; }
+
+  /* === FOOTER === */
+  .footer { text-align: center; padding: 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); }
+  .footer a { color: var(--accent); text-decoration: none; }
+
+  /* === BACK TO TOP === */
+  .back-to-top {
+    position: fixed; right: 20px; bottom: 30px;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: white; border: 1.5px solid var(--border);
+    color: var(--text-secondary); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2em; transition: all 0.3s;
+    opacity: 0; transform: translateY(20px); pointer-events: none;
+    z-index: 200; box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  }
+  .back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .back-to-top:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 640px) {
+    .hero { padding: 48px 20px 40px; }
+    .hero h1 { font-size: 1.8em; }
+    .navbar .nav-links { gap: 12px; }
+    .navbar .nav-links a { font-size: 12px; }
+  }
+
+/* === ANT NAV DROPDOWN === */
+  .navbar .nav-links { gap:20px; flex-wrap:nowrap; }
+  .navbar .nav-group { position:relative; }
+  .navbar .nav-toggle { cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px; }
+  .navbar .nav-toggle .caret { font-size:9px; line-height:1; opacity:.7; transition:transform .2s; }
+  .navbar .nav-group.open .nav-toggle { color:#E8547A; }
+  .navbar .nav-group.open .nav-toggle .caret { transform:rotate(180deg); }
+  .navbar .nav-sub {
+    display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    min-width:196px; background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.13); padding:6px; margin:0; list-style:none; z-index:300;
+  }
+  .navbar .nav-group:hover > .nav-sub,
+  .navbar .nav-group.open > .nav-sub { display:block; }
+  .navbar .nav-sub::before { content:''; position:absolute; top:-9px; left:0; right:0; height:9px; }
+  .navbar .nav-sub li { display:block; font-size:13px; }
+  .navbar .nav-sub a {
+    display:block; padding:7px 12px; border-bottom:none; border-radius:6px;
+    font-size:12.5px; color:#666; white-space:nowrap; transition:background .15s,color .15s;
+  }
+  .navbar .nav-sub a:hover { background:#FEF0F4; color:#E8547A; }
+  .navbar .nav-sub a.active { background:#FEF0F4; color:#E8547A; border-bottom:none; font-weight:600; }
+  @media (max-width:900px) {
+    .navbar { height:auto; }
+    .navbar .container { height:auto; flex-wrap:wrap; padding-top:8px; padding-bottom:8px; gap:8px; }
+    .navbar .nav-links { gap:16px; margin-left:0; flex-wrap:wrap; width:100%; }
+    .navbar .nav-sub { left:0; transform:none; }
+  }
+  </style>
+</head>
+<body data-page-node-id="v5yXYkRoaKNFPGSxF5HGrC">
+
+<!-- NAVBAR -->
+<nav class="navbar" data-page-node-id="e3JcV8UIDFXAQj2tA63mxn">
+  <div class="container" data-page-node-id="ijzgyKmToI0F4w9NlyaNwm">
+    <a href="index.html" class="nav-brand" data-page-node-id="AbERqbZln4GZdGGG2DDchQ">
+      <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'" data-page-node-id="ENgHv1zuOSZDKzKyke44Te">
+      <span class="nav-icon-fb" data-page-node-id="6vttZKMt4Y2qPbKRCeOT8W">A</span>
+      Anthea
+    </a>
+    <ul class="nav-links" id="anthea-nav">
+      <li><a href="index.html">首页</a></li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="spec">流程规范文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="spec-of-project.html">① 项目流程规范</a></li>
+          <li><a href="spec-of-designer.html">② 策划工作规范</a></li>
+          <li><a href="spec-of-art.html">③ 美术工作规范</a></li>
+          <li><a href="spec-of-art-design.html">④ 美术设计规范</a></li>
+          <li><a href="spec-of-ue-ui.html">⑤ UI 设计制作规范</a></li>
+          <li><a href="spec-of-asset.html">⑥ 资源管理规范</a></li>
+        </ul>
+      </li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="ai">AI Coding 文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="guide-for-claude.html">ClaudeCode 白皮书</a></li>
+          <li><a href="guide-for-claude-md.html">CLAUDE.md 规则</a></li>
+          <li><a href="guide-for-sdd.html">AI Coding 清单</a></li>
+          <li><a href="guide-for-workbuddy.html">WorkBuddy 指南</a></li>
+          <li><a href="guide-for-openspec.html">OpenSpec 工作流</a></li>
+        </ul>
+      </li>
+      <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" data-page-node-id="bZhjWEgo4KTspHLFGiIUE8">
+  <div class="badge" data-page-node-id="vJDYlhyiuJcgJW1mSuv2vj">AI Coding 规则技巧</div>
+  <h1 data-page-node-id="a7bcu1si8jpNKbnagy9NjF">CLAUDE.md <span class="accent" data-page-node-id="OPg6qmIdFugaHkQcdxSigE">规则技巧</span></h1>
+  <p class="subtitle" data-page-node-id="I10qBcLJAIERBjkkYVhskx">同时适用 Codex / AGENTS.md · 让 AI 从"你说什么我做什么"变成"我们先对齐目标"</p>
+</div>
+
+<!-- MAIN -->
+<div class="main" data-page-node-id="kpQSHj1njmgseWCy8QnG55">
+
+  <!-- ========== 一、第一性原理 ========== -->
+  <div class="section" id="ch1" data-page-node-id="mUMAvtE14Jz8n6xDACYJka">
+    <div class="section-title" data-page-node-id="ctSbAl9dGavKcEyQ02leMb">
+      <span class="num" style="background:var(--accent)" data-page-node-id="Uah62Wh7lSHJjspf4jVGkr">一</span>
+      CLAUDE.md 里加入「第一性原理」
+    </div>
+    <p style="color:var(--text-secondary); margin-bottom:20px;" data-page-node-id="VwJAAzrNyuiNVkwHNLYzuS">来源：经验分享 · <a href="https://mp.weixin.qq.com/s/zvO_GnK1tUpf15agrVjr7Q" target="_blank" style="color:var(--accent)" data-page-node-id="o6QQ6ctk4lRNMS0tblBQGL">原文链接 ↗</a></p>
+
+    <p data-page-node-id="cCEOia53HZjipEljGBPgxr">在 <code data-page-node-id="zcdrDXtyMTmYCBb6P1k0yX">CLAUDE.md</code> 中加入以下提示词，让 Claude Code 从"执行者"变成"思考伙伴"：</p>
+
+    <pre data-page-node-id="z7IRqn0PUO7B8ZGgpnkCRT"><code data-page-node-id="QWf7iMcWOVAnpjllIndB5K"># 第一性原理思考
+请使用第一性原理思考。你不能总是假设我非常清楚自己想要什么和该怎么得到。
+请保持审慎，从原始需求和问题出发，如果动机和目标不清晰，停下来和我讨论。
+如果目标清晰但是路径不是最短，告诉我，并且建议更好的办法。</code></pre>
+
+    <div class="highlight-box success" data-page-node-id="DRIBCUoRKXbks22pmdbHbi">
+      <p data-page-node-id="18HWJaGBHY0aZqu0wOaRXn"><strong data-page-node-id="5UjnIgAebpEsyFXVIjOFyT">效果：</strong>加入后，Claude Code 会主动质疑不清晰的需求，建议更短路径，而不是盲目执行。作者借此删掉了别人 vibe coding 产出的大量冗余代码。</p>
+    </div>
+
+    <p data-page-node-id="BRviQevlAdjIZ51QBbGQCy"><strong data-page-node-id="53q0UZ4EL6yyFpbd01h1fv">一句话总结：</strong>让 AI 从"你说什么我做什么"变成"你说的我不确定，咱们先对齐"。</p>
+    <p style="margin-top:12px;" data-page-node-id="jMsYLdHHVCz3rtOwY0CtE2">此技巧同样适用于 <code data-page-node-id="xuvWhOhlJrOV3k64V8F4Ku">Codex.md</code>、<code data-page-node-id="qzaFdkQBhtBzRTpWFwy8YS">AGENTS.md</code>、<code data-page-node-id="3pDUGGbFzCS2xwWLsm3JHM">CODEBUDDY.md</code> 等同类文件（各 AI 编码工具的项目规则文件）。</p>
+  </div>
+
+  <!-- ========== 二、12 条天条 ========== -->
+  <div class="section" id="ch2" data-page-node-id="6RHFFTwkGjJhiPRpGE7OVk">
+    <div class="section-title" data-page-node-id="AbJFiTe2xHgFb3YlgZKDx0">
+      <span class="num" style="background:var(--accent2)" data-page-node-id="onaNzNKpJtJB8UBwcvge7l">二</span>
+      12 条"天条"让 Vibe Coding 错误率从 85% 降到 8%
+    </div>
+    <p style="color:var(--text-secondary); margin-bottom:8px;" data-page-node-id="WDEs8btOWKJLj4Y8oMaDls">来源：Ryan（AI炊事员Ryan）· <a href="https://github.com/twj515895394/andrej-karpathy-skills-12" target="_blank" style="color:var(--accent)" data-page-node-id="PUs5p9qVY7uIIeVIbTLqCo">GitHub ↗</a> · <a href="https://mp.weixin.qq.com/s/bMIEHYgogd7b-0qcJmQn9Q" target="_blank" style="color:var(--accent)" data-page-node-id="pmFnJnMW0FyCQC0VpHMVzg">原文链接 ↗</a></p>
+    <p style="margin-bottom:20px;" data-page-node-id="6aqOngcBb2OwmaLnLheq2n">Karpathy 原始 4 条规则不够用——Agent 工作流引入了新的失败模式，扩展为 12 条。</p>
+
+    <h3 style="font-size:1.15em;font-weight:700;margin:24px 0 16px;color:var(--text-heading);" data-page-node-id="z6YfYYRf51ktCmO0gmvGHf">编码阶段（原 Karpathy 4 条 + 扩展）</h3>
+
+    <div class="rule-card" style="border-left-color:var(--accent);" data-page-node-id="ZyEoixG1HG4WRQW6h1y3zA">
+      <h4 data-page-node-id="xaJDMoYcEu9IKSePhD3Gnq"><span class="rule-num" data-page-node-id="moA34qA8VzpWdryqOOptqv">1</span>Think Before Coding（编码前先思考）</h4>
+      <p data-page-node-id="IGDkGoPzagA5uWKMscq0Vi">编码前先说明假设和不确定性。防止：静默假设、误解需求。</p>
+      <p class="prevents" data-page-node-id="3gPjOzN3v4wTTBweDBvlCo">⚠️ 防止：静默假设、需求误解</p>
+    </div>
+
+    <div class="rule-card" style="border-left-color:var(--accent2);" data-page-node-id="kcU7ylUNXNrRZs26xJzopH">
+      <h4 data-page-node-id="qChJwAarM9n17kxSaAfhVh"><span class="rule-num" style="background:var(--accent2);" data-page-node-id="HTh16589M8qpXDTbmlJFPS">2</span>Simplicity First（简单优先）</h4>
+      <p data-page-node-id="AYxBxCwZcn5WD9EuFjpqbD">用最少代码解决问题。今天多写一行，明天多改十分钟。</p>
+      <p class="prevents" data-page-node-id="mfiBZyfBeeHxlucPQQvtEJ">⚠️ 防止：过度工程、臃肿抽象</p>
+    </div>
+
+    <div class="rule-card" style="border-left-color:var(--accent3);" data-page-node-id="GXSCliGE4GGyLheOgXoBdJ">
+      <h4 data-page-node-id="L6hLvmWuA6HMpDtjBOE0iF"><span class="rule-num" style="background:var(--accent3);" data-page-node-id="xdByR9zvnANPFZAS50gCQE">3</span>Surgical Changes（精准修改）</h4>
+      <p data-page-node-id="Br735m9OE2NzYDWyXYnosG">只改必须改的地方。改之前用 grep 确认影响范围。</p>
+      <p class="prevents" data-page-node-id="Efz9xqm6oOQgoMUtMDk8Ku">⚠️ 防止：无关修改、误伤代码</p>
+    </div>
+
+    <div class="rule-card" style="border-left-color:var(--accent4);" data-page-node-id="7wJ8dGnbPdsKSQA7zAdNks">
+      <h4 data-page-node-id="JfozXsGpHTZmhZibTKGwYQ"><span class="rule-num" style="background:var(--accent4);" data-page-node-id="tXKk5WAztDxfJT1VNLBMKK">4</span>Goal-Driven Execution（目标驱动执行）</h4>
+      <p data-page-node-id="jwiVvreIcWJVKfQkmnloWF">定义成功标准并循环验证。每次改动后回答：这个改动让我更接近目标吗？</p>
+      <p class="prevents" data-page-node-id="TFWzf9vlGEOiPkxdjXLzgn">⚠️ 防止："看起来完成了"的假象</p>
+    </div>
+
+    <h3 style="font-size:1.15em;font-weight:700;margin:32px 0 16px;color:var(--text-heading);" data-page-node-id="5LzgrVwVJNYnXXIFPkDGih">Agent 执行阶段（新增 8 条）</h3>
+
+    <div class="rule-card" style="border-left-color:#E8547A;" data-page-node-id="o7HPE2o3rhGsZuHJ6Xi1RI">
+      <h4 data-page-node-id="a8Y3XSQUy0zd08xCnX8gqC"><span class="rule-num" style="background:#E8547A;" data-page-node-id="nrd9FXUY9S68bCCAs3hliy">5</span>Use the Model Only for Judgment Calls（模型只做判断）</h4>
+      <p data-page-node-id="9u2MUK4R18fEo3oin3pGX4">确定性逻辑交给代码，AI 只做判断。能写 <code data-page-node-id="MmK0kYjY6ELVZvjqCAFLdZ">if-else</code> 就别让 AI 生成推理步骤。</p>
+      <p class="prevents" data-page-node-id="x7F8afnyFozBrYA3MXDLnb">⚠️ 防止：AI 替代 if-else、不必要的 token 消耗</p>
+    </div>
+
+    <div class="rule-card" style="border-left-color:#4A9E8F;" data-page-node-id="34ExYZadOH6k4gy1WOBCJ2">
+      <h4 data-page-node-id="DS1kGXnPBcnfqRb6nZFFge"><span class="rule-num" style="background:#4A9E8F;" data-page-node-id="ds849NbPrb0SI7PVdQ6wad">6</span>Token Budgets Are Not Advisory（Token 预算不是建议）</h4>
+      <p data-page-node-id="1fGuXQFIC6apW0zSGQE2VV">单任务 4k / 单 session 30k token 上限。超预算 = 质量悬崖。</p>
+      <p class="prevents" data-page-node-id="sp9oguUpIYAwkpOBAGbT91">⚠️ 防止：长 session 漂移、质量衰减</p>
+    </div>
+
+    <div class="rule-card" style="border-left-color:#7B5EA7;" data-page-node-id="fJt1kGUsrJ7DyGwf4gyZnA">
+      <h4 data-page-node-id="kQ9p2tD1qrZoAGKquvjpkk"><span class="rule-num" style="background:#7B5EA7;" data-page-node-id="TFFGSR6KDtcmZkeFUXFwfE">7</span>Surface Conflicts, Do Not Average Them（暴露冲突，不要和稀泥）</h4>
+      <p data-page-node-id="r55DxWKOuDoDkujw5tC1GY">遇到冲突模式显式选择，不和稀泥。让 AI 列出冲突点并给出建议。</p>
+      <p class="prevents" data-page-node-id="8tQDzFt4OQlk0BJ0h2mDHl">⚠️ 防止：代码风格混乱、逻辑不一致</p>
+    </div>
+
+    <div class="rule-card" style="border-left-color:#D9A440;" data-page-node-id="ZID1FgfiXuUKYnX9QzAb1N">
+      <h4 data-page-node-id="626SAS0FeuUqfV1SDzWQHo"><span class="rule-num" style="background:#D9A440;" data-page-node-id="7nblEpsWFRnK2wZEZck8NJ">8</span>Read Before You Write（先读后写）</h4>
+      <p data-page-node-id="f4S7ZUzXRvEK4H7YMa6DHz">写代码前先读现有上下文。目录结构、命名约定、依赖关系——先理解再动手。</p>
+      <p class="prevents" data-page-node-id="dGC2PYom7RfxNBrr4VTFqz">⚠️ 防止：重复实现、误判架构</p>
+    </div>
+
+    <div class="rule-card" style="border-left-color:#2D6A5C;" data-page-node-id="s0sSphIsf3rwCawaylRikD">
+      <h4 data-page-node-id="6CkvGFZKXBN8H6C13FR3Xm"><span class="rule-num" style="background:#2D6A5C;" data-page-node-id="ys2EXgZxlDK6e67hu9Gylb">9</span>Tests Verify Intent, Not Just Behavior（测试验证意图，不止行为）</h4>
+      <p data-page-node-id="8jG5BiyfKrK2txD0agxKv4">测试要说明"为什么这样写"，不只是"它通过了"。好测试 = 可执行的需求文档。</p>
+      <p class="prevents" data-page-node-id="oOlBCdldECp5gXSj4RE0Jr">⚠️ 防止：浅层测试、无意义通过</p>
+    </div>
+
+    <div class="rule-card" style="border-left-color:#5B3A8C;" data-page-node-id="PPV2YEJv87RgE6xVEETTul">
+      <h4 data-page-node-id="8Sh3WXsRcvv3SsuULMi5dm"><span class="rule-num" style="background:#5B3A8C;" data-page-node-id="kvCJahsuwV6eQDtTLs78Zp">10</span>Checkpoint After Every Significant Step（每步后做检查点）</h4>
+      <p data-page-node-id="Q8qgpQvncHTo2fJBm57uQP">每步后做状态总结，写在 <code data-page-node-id="Lj2KxQ8KWQOM02RCuKgPBc">CLAUDE.md</code> 或 session log。多步骤任务必须序列化思考。</p>
+      <p class="prevents" data-page-node-id="2lBKu1jUuHNWpZsoS9vmoR">⚠️ 防止：多步骤漂移</p>
+    </div>
+
+    <div class="rule-card" style="border-left-color:#8B6914;" data-page-node-id="JVEI7NN2w2wtM4ytgVJsVZ">
+      <h4 data-page-node-id="b7d0NnjvSBJr9BklSDXTbn"><span class="rule-num" style="background:#8B6914;" data-page-node-id="EJ9mA8aqanuJXiQQlm5b0k">11</span>Match Codebase Conventions（遵守代码库约定）</h4>
+      <p data-page-node-id="XAjQDy5PAbWFYoWqflBlgf">遵守现有约定，即使你不同意。一致性 > 个人喜好。先读懂项目的"方言"，再开口说话。</p>
+      <p class="prevents" data-page-node-id="JkpNTX9AfeJ2d1NGjyr0WF">⚠️ 防止：风格分叉</p>
+    </div>
+
+    <div class="rule-card" style="border-left-color:#C0392B;" data-page-node-id="fhC8T8IjHwSp3EUTdEUbhZ">
+      <h4 data-page-node-id="dkowikNvhS6a68LIy8vDmc"><span class="rule-num" style="background:#C0392B;" data-page-node-id="CJJSmx307DhpBybHYRri57">12</span>Fail Loud（不确定就大声说）</h4>
+      <p data-page-node-id="CV3MLZJFKme3OptJ4rCZ22">不确定就大声说，不许静默跳过。三种处理方式：问用户 / 中止 / 标记 TODO。</p>
+      <p class="prevents" data-page-node-id="Ot1S8jK7hRJSHRz8E1BDfG">⚠️ 防止：假成功、静默失败</p>
+    </div>
+
+    <div class="highlight-box" style="margin-top:24px;" data-page-node-id="xCWaNiRE2qZBc6m4G9RiFS">
+      <p data-page-node-id="QL1figfdBZCGE3eJHWWB0H"><strong data-page-node-id="Eyy5WVkSV4Bk1hxBfUtyA1">关键数据：</strong>加规则前 85% 轮次撞坑 → 加规则后降至 8%</p>
+      <p style="margin-top:8px;" data-page-node-id="3msvZeEhUg6kErbPISRVWf"><strong data-page-node-id="UhFZa5OmfeOwBLBTdErMNS">使用方式：</strong>CLAUDE.md / Cursor 规则 / Skill 三种格式均已准备好（<a href="https://github.com/twj515895394/andrej-karpathy-skills-12" target="_blank" style="color:var(--accent)" data-page-node-id="tvwL6C0e2tBLusPmjrYEnN">GitHub ↗</a>）</p>
+    </div>
+  </div>
+
+  <!-- ========== 三、AGENTS.md 规范 ========== -->
+  <div class="section" id="ch3" data-page-node-id="8Chx84LcSwrVTR7sy4nQnh">
+    <div class="section-title" data-page-node-id="QmXa419z1bfLuRnm8VDv5J">
+      <span class="num" style="background:var(--accent3)" data-page-node-id="dPyjJBRQA3zGuo38QVag6C">三</span>
+      一份 AGENTS.md 让代码规范率从 60% 飙升到 95%
+    </div>
+    <p style="color:var(--text-secondary); margin-bottom:8px;" data-page-node-id="A9F2S7WfWGi4p9PfmsWdTK">来源：天外飞星吆（Java进步）· <a href="https://mp.weixin.qq.com/s/F83W7FHMl_rgIEI4C2s7pg" target="_blank" style="color:var(--accent)" data-page-node-id="oR8SbQYD5zkFAyO2FGmyTJ">原文链接 ↗</a></p>
+    <p style="margin-bottom:20px;" data-page-node-id="0oC8GFaKW4K101Y9hm9ykL"><code data-page-node-id="xo0Jdk11D1bTASSvwAH6nh">AGENTS.md</code>（部分工具叫 <code data-page-node-id="ptee6Zug4fNOfkMO1duvBE">CLAUDE.md</code>）是给 AI 的"项目说明书"，放在项目根目录，AI 自动读取，永久生效。</p>
+
+    <h3 style="font-size:1.1em;font-weight:700;margin:20px 0 12px;color:var(--text-heading);" data-page-node-id="qboFQ7Fi5H7Ozxe7PgeeKl">模板核心板块</h3>
+    <table data-page-node-id="siO3oEhNahFv9p9uMmPMvf">
+      <tr data-page-node-id="3aVdVVMTWcix7Hn4WDExNt"><th data-page-node-id="0u1ZgTh7vq4YNOKNRFmHbh">板块</th><th data-page-node-id="JFvmjbm1GEJWTmBEDh8pVn">关键内容</th></tr>
+      <tr data-page-node-id="hRCsPvoJ2KCjD1VVe0QjX1"><td data-page-node-id="lrauHO0nbYOGCZrUa0Z3Ka"><strong data-page-node-id="sV337UWt9Dxz2atCeA22KD">项目概述</strong></td><td data-page-node-id="AVfMylF9Dz9hl7J5YGUPEp">技术栈、SDK 版本、目标用户、项目背景</td></tr>
+      <tr data-page-node-id="pR7UzlqBncOSiVpBxt0yWw"><td data-page-node-id="4j0BNGuslu5GDPGxIYn1Cm"><strong data-page-node-id="7G1mqy819r3ycxLsNGrynC">编码规范</strong></td><td data-page-node-id="SXiGMKGX3mUcpypmce4nHX">命名规则（变量/函数/类）、代码格式、注释规范、禁止操作</td></tr>
+      <tr data-page-node-id="7oGvQ4qFNSP5ly5rE8kSBK"><td data-page-node-id="z5SuRqqKc5WtNoe6JadNyE"><strong data-page-node-id="eExj1Zd74d6XbijzgQ3pPo">架构约束</strong></td><td data-page-node-id="atzq1VquenuG5ABDbUnbSA">分层规则、依赖方向、技术选型说明、数据流向</td></tr>
+      <tr data-page-node-id="0Ih34MERtAccpsFDvmGCe1"><td data-page-node-id="l9k50Adu8Vu5z7uVpgcykr"><strong data-page-node-id="UHFkDqsJAKyf4oCJn2SNLB">测试要求</strong></td><td data-page-node-id="yD1A8qt5I24xG7jFTfYtjQ">覆盖率目标、测试框架、Mock 策略</td></tr>
+      <tr data-page-node-id="X1MrMfjD3dMfeOs9liLuNm"><td data-page-node-id="E9vADbFhvRDPWx7zmVNR44"><strong data-page-node-id="oOns0jmecPaMuHh8d8JWvi">提交规范</strong></td><td data-page-node-id="F5BGplhed7PyyLUdh1aWFp">分支命名、Commit 格式（Conventional Commits）、PR 模板</td></tr>
+      <tr data-page-node-id="RNFYmAEOLSA0jEAuB6Nc6P"><td data-page-node-id="vlVNoRHeZlCKME9GVJfxtT"><strong data-page-node-id="pYL1qqwEszp2n145fDk3Ls">常见术语</strong></td><td data-page-node-id="7XFC9LFC9E8lGolMjVdytx">业务术语字典（AI 不懂你的业务黑话）</td></tr>
+      <tr data-page-node-id="iLSIuP5kQQm5RlBhIIfwU6"><td data-page-node-id="zpsPvX3FGH1BMaSeqqVyc7"><strong data-page-node-id="ML885EC9GJrsMKY1pqfP9k">性能约束</strong></td><td data-page-node-id="Z3rtgIVtOvuQsDEYSzdOA0">启动时间、内存上限、API 超时、并发限制</td></tr>
+    </table>
+
+    <h3 style="font-size:1.1em;font-weight:700;margin:28px 0 12px;color:var(--text-heading);" data-page-node-id="KrrGbw9HQ84JmWfH5hl052">进阶技巧</h3>
+
+    <div class="cards" data-page-node-id="b9p5xUELINmo1xLLW3QpJK">
+      <div class="card" style="border-left-color:var(--accent);" data-page-node-id="egSUH7kTa7uhu4VuY4cDph">
+        <h4 data-page-node-id="EUdhtkK0ek3I9iNwWBzHBB">① 添加负面示例</h4>
+        <p data-page-node-id="EUi1mK1G271EAxcAeNtjpU">告诉 AI <strong data-page-node-id="ZEkkfOxQUDDzFTzubbFoG1">不要做什么</strong>（比正面规则更有效）。例："禁止在渲染循环中创建新对象""禁止直接操作 DOM"</p>
+      </div>
+      <div class="card" style="border-left-color:var(--accent2);" data-page-node-id="rmtr4lLtLCDW3WGxMVbgdn">
+        <h4 data-page-node-id="PLJv4nn1FKdFRjQd0duA0D">② 添加常见错误和修复</h4>
+        <p data-page-node-id="wRUj1MCYdUJpe4TdYjZVvU">AI 能自动避免重复踩坑。例："之前在 XX 场景下误用了 YY，正确做法是 ZZ"</p>
+      </div>
+      <div class="card" style="border-left-color:var(--accent3);" data-page-node-id="2sRJHAeF6n20HpIquyHqCA">
+        <h4 data-page-node-id="wtdlJY4olXGQzoAA8TWNH5">③ 版本控制</h4>
+        <p data-page-node-id="lMwEGMAWPZcKmqPuEAVNHa">记录规范变更历史，AI 能理解"为什么现在是这样的"。在 AGENTS.md 末尾加变更日志。</p>
+      </div>
+      <div class="card" style="border-left-color:var(--accent4);" data-page-node-id="QTHRSSEPDxzHaMS5bX5TvJ">
+        <h4 data-page-node-id="aSR4AhpEScZ0ElsIF6exMI">④ 多项目共享</h4>
+        <p data-page-node-id="tuIL4rqJ74bKgS7xir6uU6">用 Git Submodule 复用通用规范。团队统一 AGENTS.md 基础版 + 各项目叠加定制版。</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:1.1em;font-weight:700;margin:28px 0 12px;color:var(--text-heading);" data-page-node-id="NuqaUmVU3JbO5wsBy4gFhd">建议长度</h3>
+    <table data-page-node-id="NyjDQWqzTDoZRK0bbw0I3k">
+      <tr data-page-node-id="cfB3IDekALbC6RrUVLKDzA"><th data-page-node-id="UxJnRPduMMOdDYIbjx921O">类型</th><th data-page-node-id="2P34MP236BdFs4n71DZ60e">长度</th><th data-page-node-id="NMNJWp1iHDHhYgZn5qnUlM">适用场景</th></tr>
+      <tr data-page-node-id="Ef35rT1KemjG0xA6xUNL1c"><td data-page-node-id="jfSsRlDMsIA5zuxGPoNfSh">基础规范</td><td data-page-node-id="20v3dzN5gMZslDs45IzBsi">500-1000 字</td><td data-page-node-id="wIvXkpwCPnMRilrr0zWJVW">小项目、个人项目</td></tr>
+      <tr data-page-node-id="mjpHBZAJh05d2GuMWyQPNK"><td data-page-node-id="ZwauCxspxfyvnO7jXYWGtO">详细规范</td><td data-page-node-id="XpmGUTdEAMquWOySlvBd7M">2000-3000 字</td><td data-page-node-id="Grj9Q4un5Ej44IAkbTnZIt">中型项目、团队协作</td></tr>
+      <tr data-page-node-id="S54gzsJvgG8HRvCdK24ClQ"><td data-page-node-id="bMSecMiqqKMsiiQKtgBtS1">拆分规范</td><td data-page-node-id="2MuMPgO4g7MaDbQ55aU8wR">超过 5000 字建议拆分</td><td data-page-node-id="btTzfEY5oTf1N2kQXX4AHX">大项目、多模块</td></tr>
+    </table>
+
+    <div class="highlight-box warning" style="margin-top:24px;" data-page-node-id="FmOQy8NBknXU51Ofqhqifs">
+      <p data-page-node-id="A0FkmTC5cXslP1sXqp3o0O"><strong data-page-node-id="PnHVTzFqSRQkbPwXjTcTXF">⚠️ 重要：</strong>AGENTS.md 不是项目说明文档！它是"给 AI 的操作手册"，不是"给人类的项目介绍"。不要把 README 的内容原样搬进来。</p>
+    </div>
+  </div>
+
+  <!-- ========== 四、三篇文章关系 ========== -->
+  <div class="section" id="ch4" data-page-node-id="BLA43QvvwXmeMdfakScEf1">
+    <div class="section-title" data-page-node-id="R8LLhkJTDug0KSTuhyZAII">
+      <span class="num" style="background:var(--accent4)" data-page-node-id="KCDUi5LDPgUYSB5eARd3l9">四</span>
+      三篇文章的关系：AI 编码规范实践链
+    </div>
+    <p style="margin-bottom:20px;" data-page-node-id="YjB3JWmQBoNyBXL1GCegXp">这三篇文章形成了一条清晰的 AI 编码规范实践链，从思维框架到行为规则到项目配置：</p>
+
+    <table data-page-node-id="QqJRyTedfnqwTHzyw2AI27">
+      <tr data-page-node-id="v7cKat3qYVzEvDZmG22XK7"><th data-page-node-id="Fw80SMn6n8sVHJGwHBXVX0">层次</th><th data-page-node-id="6VUq8QgKDzmkCTn6X1Sb9S">文章</th><th data-page-node-id="1SiIlFToHWlgnpHndNsuAC">核心</th><th data-page-node-id="kut2O66B1wX4sh5IitdaEv">解决什么问题</th></tr>
+      <tr data-page-node-id="pbCTmQ4CQD1qHPtwnia47i"><td data-page-node-id="4YcrBTqkj2nWfDkeS2oxW3"><strong data-page-node-id="paRCHfxObmRaPKRMkUPcpU">思维层</strong></td><td data-page-node-id="I4kADcgkYq2zpFX8hJbIME">第一性原理（文章1）</td><td data-page-node-id="mogWshHBUrxFqXuKhHfv5Y">让 AI 学会质疑需求</td><td data-page-node-id="Xmgbj8uZP4oVyfHEJc1s2H">AI 盲目执行、不思考</td></tr>
+      <tr data-page-node-id="bg4rrIAdrWlmSx7TvOCYf8"><td data-page-node-id="cf3JEip7YHXsmodMxC40ot"><strong data-page-node-id="TW4KfTU298oAccC8c4SM2S">行为层</strong></td><td data-page-node-id="H1bnZiBRBlWifDj5XWatg0">12 条天条（文章2）</td><td data-page-node-id="pdMcFW980HqMUxV1FkpisC">告诉 AI 什么不能做</td><td data-page-node-id="ucWr8eZvwCBSb9ZgS8VocB">Agent 工作流的失败模式</td></tr>
+      <tr data-page-node-id="RXeWNQwsetcsacfMCbmgG1"><td data-page-node-id="jkkvFUsFCAEkvQoJQAI34I"><strong data-page-node-id="21VSt2rT1Me0oApK5CKeEH">配置层</strong></td><td data-page-node-id="09WrwLxEAhkeG3aL6ZEEhB">AGENTS.md 规范（文章3）</td><td data-page-node-id="k8INeaysno7zLqJnkro93L">告诉 AI 你的项目怎么做</td><td data-page-node-id="qfta4Jfknqo2tSLgODSpg3">AI 不懂项目上下文</td></tr>
+    </table>
+
+    <div class="highlight-box" style="margin-top:24px;" data-page-node-id="PQbXn0oFElieETakTDoQ2e">
+      <p data-page-node-id="wAEC7BUVMBIHygDm4C5ZSd"><strong data-page-node-id="fJLWArxzv8pB0NYFpM55el">实践建议：</strong>先加第一性原理（5 分钟）→ 再写 AGENTS.md 基础版（15 分钟）→ 最后加 12 条天条（30 分钟）。顺序对了，AI 会越来越像同事。</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer" data-page-node-id="O7vnhAIi0dnZCAq1l02isx">
+  Anthea Project · <a href="https://github.com/ProMarkel/anthea" data-page-node-id="DYLfU1HiwT2yacA2GMoKHr">GitHub</a> · CLAUDE.md 规则技巧文档
+</div>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部" data-page-node-id="ElKoTXUfKKADefAXwdJANG">↑</button>
+
+<script>
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top:0, behavior:'smooth' });
+});
+</script>
+
+<script>
+/* Anthea Nav: auto-highlight current page */
+(function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
+</script>
+<script>
+/* ANT_NAV_DROPDOWN_JS */
+(function(){
+  var groups = document.querySelectorAll('.nav-group');
+  function closeAll(){ groups.forEach(function(g){ g.classList.remove('open'); }); }
+  document.querySelectorAll('.nav-toggle').forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var g = t.parentElement, was = g.classList.contains('open');
+      closeAll();
+      if (!was) g.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest || !e.target.closest('.nav-group')) closeAll();
+  });
+})();
+</script>
+
+</body>
+</html>

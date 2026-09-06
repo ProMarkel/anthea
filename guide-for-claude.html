@@ -1,0 +1,2064 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="11urPSQGsuGMl6L1MysnSz">
+<head data-page-node-id="hb7Vdhk00HDZymG49LGEMx">
+<meta charset="UTF-8" data-page-node-id="QraxI7YzjA8Slp0Dne5fye">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="2FNEyBMfUw1Boj7MBx9YSh">
+<title>Claude Code 快速使用白皮书</title>
+<style>
+  :root {
+    --bg: #FAF6F0;
+    --bg-warm: #F5EDE3;
+    --card-bg: #FFFFFF;
+    --border: #E5D9CB;
+    --border-strong: #D4C4B0;
+    --text: #3D3328;
+    --text-heading: #2D221A;
+    --text-secondary: #8B7B68;
+    --accent: #D97757;
+    --accent-hover: #C5684A;
+    --accent-light: #F5E1D6;
+    --accent2: #4A9E8F;
+    --accent2-light: #D6EDE8;
+    --accent3: #7B5EA7;
+    --accent3-light: #E8DFF2;
+    --accent4: #D9A440;
+    --accent4-light: #F5EDD6;
+    --code-bg: #F8F3ED;
+    --code-border: #E5D9CB;
+    --table-stripe: #FCF9F5;
+    --highlight: rgba(217, 119, 87, 0.08);
+    --highlight-border: rgba(217, 119, 87, 0.25);
+    --shadow-sm: 0 1px 3px rgba(61, 51, 40, 0.06);
+    --shadow-md: 0 4px 16px rgba(61, 51, 40, 0.08);
+    --radius: 12px;
+    --radius-lg: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', 'PingFang SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.85;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* === NAVBAR === */
+  .navbar,
+  .navbar * {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    animation: none !important;
+    opacity: 1 !important;
+  }
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    height: 56px;
+    font-size: 16px;
+    line-height: 1.6;
+    box-sizing: border-box;
+  }
+  .navbar .container {
+    width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; height: 100%;
+    box-sizing: border-box;
+  }
+  .navbar .nav-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 16px; font-weight: 700;
+    color: #E8547A;
+    text-decoration: none;
+  }
+  .navbar .nav-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    object-fit: cover; flex-shrink: 0;
+  }
+  .navbar .nav-icon-fb {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    background: linear-gradient(135deg, #E8547A, #9B59B6);
+    color: white; font-size: 13px; font-weight: 700;
+    display: none; align-items: center; justify-content: center;
+  }
+  .navbar .nav-links {
+    display: flex; gap: 24px; list-style: none;
+    margin-left: auto; padding: 0;
+    align-items: center;
+  }
+  .navbar .nav-links li {
+    list-style: none; padding: 0; margin: 0;
+    border: none; background: none;
+    font-size: 13px;
+    display: block;
+    counter-increment: none;
+  }
+  .navbar .nav-links a {
+    text-decoration: none; font-size: 13px; font-weight: 500;
+    color: #888; padding: 6px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    display: inline-block;
+  }
+  .navbar .nav-links a:hover,
+  .navbar .nav-links a.active {
+    color: #E8547A;
+    border-bottom-color: #E8547A;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(160deg, #F5EDE3 0%, #FAF6F0 30%, #FDF2E8 60%, #F5EDE3 100%);
+    padding: 90px 20px 70px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: -30%;
+    width: 160%;
+    height: 160%;
+    background: 
+      radial-gradient(ellipse 60% 50% at 30% 20%, rgba(217, 119, 87, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 70% 60%, rgba(74, 158, 143, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.78em;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+    position: relative;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: 3.2em;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 16px;
+    position: relative;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .hero h1 .accent {
+    color: var(--accent);
+    position: relative;
+  }
+  .hero h1 .accent::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--accent-light);
+    border-radius: 3px;
+    z-index: -1;
+    opacity: 0.7;
+  }
+  .hero .subtitle {
+    font-size: 1.2em;
+    color: var(--text-secondary);
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    line-height: 1.7;
+  }
+  .hero .meta {
+    margin-top: 36px;
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+    flex-wrap: wrap;
+    color: var(--text-secondary);
+    font-size: 0.92em;
+    position: relative;
+  }
+  .hero .meta span {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--card-bg);
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+  .hero .meta .icon {
+    font-size: 1.1em;
+  }
+
+  /* Nav */
+  nav.toc {
+    position: sticky;
+    top: 56px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    z-index: 90;
+    padding: 0 20px;
+    overflow-x: auto;
+    box-shadow: 0 1px 8px rgba(61,51,40,0.04);
+  }
+  nav.toc ul {
+    display: flex;
+    list-style: none;
+    gap: 4px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  nav.toc a {
+    display: block;
+    padding: 14px 18px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 500;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  nav.toc a:hover, nav.toc a.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: var(--accent-light);
+    border-radius: 4px;
+  }
+
+  /* Layout */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Sections */
+  section {
+    padding: 72px 0;
+  }
+  section:nth-child(even) {
+    background: var(--bg-warm);
+    margin: 0 -9999px;
+    padding: 72px 9999px;
+  }
+  section h2 {
+    font-size: 2em;
+    margin-bottom: 16px;
+    color: var(--text-heading);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  section h2 .num {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 44px; height: 44px;
+    border-radius: var(--radius);
+    font-size: 0.68em;
+    font-weight: 800;
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+  section h3 {
+    font-size: 1.35em;
+    color: var(--text-heading);
+    margin: 36px 0 14px;
+    font-weight: 700;
+  }
+  section h4 {
+    font-size: 1.1em;
+    color: var(--text-heading);
+    margin: 28px 0 10px;
+    font-weight: 700;
+  }
+  section p { margin-bottom: 16px; color: var(--text); }
+
+  /* Cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    transition: all 0.25s ease;
+    box-shadow: var(--shadow-sm);
+  }
+  .card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  .card h4 {
+    font-size: 1.1em;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .card p { color: var(--text-secondary); font-size: 0.94em; }
+
+  /* Comparison Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 0.94em;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  th, td {
+    padding: 14px 18px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+  th {
+    background: var(--bg-warm);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.92em;
+    letter-spacing: 0.02em;
+  }
+  tr:nth-child(even) td { background: var(--table-stripe); }
+  tr:hover td { background: var(--highlight); }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 0.88em;
+    line-height: 1.7;
+    box-shadow: var(--shadow-sm);
+  }
+  code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'SF Mono', monospace;
+  }
+  :not(pre) > code {
+    background: var(--accent-light);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Highlights */
+  .highlight-box {
+    background: var(--highlight);
+    border-left: 4px solid var(--accent);
+    padding: 18px 24px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 20px 0;
+  }
+  .highlight-box p { margin: 0; }
+  .highlight-box.warn {
+    background: rgba(217, 164, 64, 0.08);
+    border-left-color: var(--accent4);
+  }
+  .highlight-box.success {
+    background: rgba(74, 158, 143, 0.08);
+    border-left-color: var(--accent2);
+  }
+
+  /* Step numbers */
+  .step-list {
+    list-style: none;
+    counter-reset: step;
+  }
+  .step-list li {
+    counter-increment: step;
+    padding: 18px 0 18px 64px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 14px;
+    width: 40px; height: 40px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.95em;
+    box-shadow: 0 2px 8px rgba(217,119,87,0.3);
+  }
+  .step-list li strong { display: block; margin-bottom: 6px; color: var(--text-heading); font-size: 1.05em; }
+
+  /* Flow */
+  .flow {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 28px 0;
+    font-size: 0.92em;
+  }
+  .flow .node {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 22px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+  .flow .arrow { color: var(--accent); font-size: 1.3em; font-weight: 700; }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin: 2px;
+  }
+  .tag.blue { background: rgba(74, 158, 143, 0.12); color: #3A8A7E; }
+  .tag.green { background: rgba(74, 158, 143, 0.12); color: #3A8A7E; }
+  .tag.purple { background: rgba(123, 94, 167, 0.12); color: #6B4D96; }
+  .tag.orange { background: rgba(217, 164, 64, 0.12); color: #B88A2E; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    border-top: 1px solid var(--border);
+    background: var(--bg-warm);
+  }
+  footer a { color: var(--accent); font-weight: 600; }
+
+  /* ============================================= */
+  /* Floating Sidebar Navigation                   */
+  /* ============================================= */
+  .floating-nav {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .floating-nav .dot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+  }
+  .floating-nav .dot .circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid var(--border-strong);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+  .floating-nav .dot:hover .circle,
+  .floating-nav .dot.active .circle {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(217, 119, 87, 0.35);
+  }
+  .floating-nav .dot .label {
+    font-size: 0.78em;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(8px);
+    transition: all 0.25s ease;
+    pointer-events: none;
+    font-weight: 600;
+  }
+  .floating-nav .dot:hover .label,
+  .floating-nav .dot.active .label {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  /* Section-specific dot colors */
+  .floating-nav .dot.ch0-dir .circle { border-color: var(--border-strong); }
+  .floating-nav .dot.ch0-qs .circle { border-color: var(--border-strong); }
+  .floating-nav .dot.ch0-firstday .circle { border-color: var(--border-strong); }
+  .floating-nav .dot.ch1 .circle { border-color: var(--border-strong); }
+  .floating-nav .dot.ch2 .circle { border-color: var(--border-strong); }
+  .floating-nav .dot.ch3 .circle { border-color: var(--border-strong); }
+  .floating-nav .dot.ch4 .circle { border-color: var(--border-strong); }
+  .floating-nav .dot.ch5 .circle { border-color: var(--border-strong); }
+  .floating-nav .dot.ch6 .circle { border-color: var(--border-strong); }
+  .floating-nav .dot.ch7 .circle { border-color: var(--border-strong); }
+
+  .floating-nav .dot:hover .circle,
+  .floating-nav .dot.active .circle {
+    background: transparent;
+    border-color: var(--accent);
+    box-shadow: 0 0 12px rgba(217, 119, 87, 0.4);
+  }
+  .floating-nav .dot.ch0-dir:hover .circle,
+  .floating-nav .dot.ch0-dir.active .circle { border-color: var(--accent2); box-shadow: 0 0 12px rgba(74,158,143,0.4); }
+  .floating-nav .dot.ch0-qs:hover .circle,
+  .floating-nav .dot.ch0-qs.active .circle { border-color: var(--accent4); box-shadow: 0 0 12px rgba(217,164,64,0.4); }
+  .floating-nav .dot.ch0-firstday:hover .circle,
+  .floating-nav .dot.ch0-firstday.active .circle { border-color: var(--accent); box-shadow: 0 0 12px rgba(217,119,87,0.4); }
+  .floating-nav .dot.ch1:hover .circle,
+  .floating-nav .dot.ch1.active .circle { border-color: var(--accent); box-shadow: 0 0 12px rgba(217,119,87,0.4); }
+
+  /* ============================================= */
+  /* Back to Top Button                            */
+  /* ============================================= */
+  .back-to-top {
+    position: fixed;
+    right: 20px;
+    bottom: 30px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    z-index: 200;
+    box-shadow: var(--shadow-md);
+  }
+  .back-to-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .back-to-top:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 16px rgba(217, 119, 87, 0.3);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 2em; }
+    section { padding: 48px 0; }
+    section:nth-child(even) { padding: 48px 9999px; }
+    .cards { grid-template-columns: 1fr; }
+    table { font-size: 0.82em; }
+    th, td { padding: 10px 12px; }
+    .floating-nav { right: 6px; }
+    .floating-nav .dot .label { display: none; }
+    .floating-nav .dot .circle { width: 10px; height: 10px; }
+  }
+  /* 锚点跳转时预留导航栏空间，避免标题被固定导航栏遮挡 */
+  #ch0-quickstart, #ch0-firstday {
+    scroll-margin-top: 72px;
+  }
+
+/* === ANT NAV DROPDOWN === */
+  .navbar .nav-links { gap:20px; flex-wrap:nowrap; }
+  .navbar .nav-group { position:relative; }
+  .navbar .nav-toggle { cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px; }
+  .navbar .nav-toggle .caret { font-size:9px; line-height:1; opacity:.7; transition:transform .2s; }
+  .navbar .nav-group.open .nav-toggle { color:#E8547A; }
+  .navbar .nav-group.open .nav-toggle .caret { transform:rotate(180deg); }
+  .navbar .nav-sub {
+    display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    min-width:196px; background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.13); padding:6px; margin:0; list-style:none; z-index:300;
+  }
+  .navbar .nav-group:hover > .nav-sub,
+  .navbar .nav-group.open > .nav-sub { display:block; }
+  .navbar .nav-sub::before { content:''; position:absolute; top:-9px; left:0; right:0; height:9px; }
+  .navbar .nav-sub li { display:block; font-size:13px; }
+  .navbar .nav-sub a {
+    display:block; padding:7px 12px; border-bottom:none; border-radius:6px;
+    font-size:12.5px; color:#666; white-space:nowrap; transition:background .15s,color .15s;
+  }
+  .navbar .nav-sub a:hover { background:#FEF0F4; color:#E8547A; }
+  .navbar .nav-sub a.active { background:#FEF0F4; color:#E8547A; border-bottom:none; font-weight:600; }
+  @media (max-width:900px) {
+    .navbar { height:auto; }
+    .navbar .container { height:auto; flex-wrap:wrap; padding-top:8px; padding-bottom:8px; gap:8px; }
+    .navbar .nav-links { gap:16px; margin-left:0; flex-wrap:wrap; width:100%; }
+    .navbar .nav-sub { left:0; transform:none; }
+  }
+  </style>
+</head>
+<body data-page-node-id="O47Dyk2IkYOg6FjPUrLHk3">
+
+<!-- NAVBAR -->
+<nav class="navbar" data-page-node-id="kmCbvqjeLfcZnFHtW9znOf">
+  <div class="container" data-page-node-id="HDiivPpzetek8IIklwnAio">
+    <a href="index.html" class="nav-brand" data-page-node-id="otE6wNNh2bDSf7LM4yFdUJ">
+      <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'" data-page-node-id="HvNENk0CMbsSU9nldzCOhZ">
+      <span class="nav-icon-fb" data-page-node-id="wZmaJvT8W1HZ0VQ5AfUNPD">A</span>
+      Anthea
+    </a>
+    <ul class="nav-links" id="anthea-nav">
+      <li><a href="index.html">首页</a></li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="spec">流程规范文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="spec-of-project.html">① 项目流程规范</a></li>
+          <li><a href="spec-of-designer.html">② 策划工作规范</a></li>
+          <li><a href="spec-of-art.html">③ 美术工作规范</a></li>
+          <li><a href="spec-of-art-design.html">④ 美术设计规范</a></li>
+          <li><a href="spec-of-ue-ui.html">⑤ UI 设计制作规范</a></li>
+          <li><a href="spec-of-asset.html">⑥ 资源管理规范</a></li>
+        </ul>
+      </li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="ai">AI Coding 文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="guide-for-claude.html">ClaudeCode 白皮书</a></li>
+          <li><a href="guide-for-claude-md.html">CLAUDE.md 规则</a></li>
+          <li><a href="guide-for-sdd.html">AI Coding 清单</a></li>
+          <li><a href="guide-for-workbuddy.html">WorkBuddy 指南</a></li>
+          <li><a href="guide-for-openspec.html">OpenSpec 工作流</a></li>
+        </ul>
+      </li>
+      <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============================================= -->
+<!-- Floating Sidebar Navigation                   -->
+<!-- ============================================= -->
+<nav class="floating-nav" id="floatingNav" aria-label="页面导航" data-page-node-id="TcMDpU3VaJD4jFVmxNAslI">
+  <a class="dot ch1" href="#ch0" title="核心概念" data-page-node-id="jtBdxpUlcGrHnb9GywfCoM">
+    <span class="label" data-page-node-id="nKglemJVx2ZVvgfUdNyWqk">核心概念</span>
+    <span class="circle" data-page-node-id="DtUFHbRzJgsNBHwZlv3l9H"></span>
+  </a>
+  <a class="dot ch0-qs" href="#ch0-quickstart" title="开箱指南" data-page-node-id="Lmj1Hcl7Q0M5Zcz9xLRyoj">
+    <span class="label" data-page-node-id="2UQCTvSn9QKjLNgLWVAD9l">开箱指南</span>
+    <span class="circle" data-page-node-id="bY8G1SuLeauRitgWBC8H7I"></span>
+  </a>
+  <a class="dot ch0-firstday" href="#ch0-firstday" title="首日5步" data-page-node-id="nUMku69EAyEA3DR9IOZOkx">
+    <span class="label" data-page-node-id="BhvToSamcEFAxTo4T5LyYj">首日5步</span>
+    <span class="circle" data-page-node-id="QV10CkIFHBqBNCraVXuQFI"></span>
+  </a>
+  <a class="dot ch0-dir" href="#ch0-dir" title="目录结构" data-page-node-id="GcaUoAz6V3sAGHyFmkF4ia">
+    <span class="label" data-page-node-id="NFxfs81x4JzkT5Fds5DS1j">一·目录结构</span>
+    <span class="circle" data-page-node-id="FM9DdlnHbrIdcwRqUePeDQ"></span>
+  </a>
+  <a class="dot ch2" href="#ch1" title="四条黄金法则" data-page-node-id="sxZ9ZQgNMBp8HIqSgYU5GA">
+    <span class="label" data-page-node-id="DxXBErejJHknAY9wFz6UPW">二·黄金法则</span>
+    <span class="circle" data-page-node-id="k7KHOXX3pXyF3IpYilAzei"></span>
+  </a>
+  <a class="dot ch3" href="#ch2" title="五步搭建Harness" data-page-node-id="WxHx0Y1AVv65lg4MACBR6b">
+    <span class="label" data-page-node-id="neWPzQQcQacXWydu9B7N9E">三·搭建Harness</span>
+    <span class="circle" data-page-node-id="xcL96RhVRIuajfygRpuM4t"></span>
+  </a>
+  <a class="dot ch4" href="#ch3" title="Harness工程原理" data-page-node-id="1yoltD0tDXFXEyfDYMcgGM">
+    <span class="label" data-page-node-id="iVhMVTQomvzqQSQ6rczlm3">四·工程原理</span>
+    <span class="circle" data-page-node-id="Fr3PQ062mc8K2aXw8vTiso"></span>
+  </a>
+  <a class="dot ch5" href="#ch4" title="工作流选型(10套)" data-page-node-id="9EnDTueTNPvtw0wvFSIDoZ">
+    <span class="label" data-page-node-id="YFOWRjG1rJc1dPe4MGT5t5">五·工作流(10套)</span>
+    <span class="circle" data-page-node-id="t8Db2AkLSF9i1pS5DoohVm"></span>
+  </a>
+  <a class="dot ch6" href="#ch5" title="官方插件生态" data-page-node-id="wRYHeKGDDJ66sZ40j7Nitt">
+    <span class="label" data-page-node-id="oo1LKZnGUb5x6prB9yK2qo">六·插件生态</span>
+    <span class="circle" data-page-node-id="TLcKMzfGZoDj8eFnjA6FnW"></span>
+  </a>
+  <a class="dot ch7" href="#ch6" title="速查与建议" data-page-node-id="loYhEeg8BK3NV0fRWBXDSe">
+    <span class="label" data-page-node-id="7T5uhauqdt7LPGQzPq7huP">七·速查建议</span>
+    <span class="circle" data-page-node-id="HqDxdzeYwFjfrUwCVL02vX"></span>
+  </a>
+</nav>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="backToTop" title="回到顶部" aria-label="回到顶部" data-page-node-id="Ed49IZLeYz3JLGGgGJfLgd">↑</button>
+
+<!-- HERO -->
+<div class="hero" data-page-node-id="aiKjPEOTeqEFKcR8C1orUz">
+  <div class="badge" data-page-node-id="vjuMccGUkr0ol1VAPUphsL">Claude Code 白皮书</div>
+  <h1 data-page-node-id="9H4Dr5uWE1kbQ8OYCqTfkN"><span class="accent" data-page-node-id="F8g3MVWyXIGT2lLi44Mll7">Claude Code</span> 快速使用白皮书</h1>
+  <p class="subtitle" data-page-node-id="TBzvaVA37T9OXYf1vJ6UqF">从零搭建 Harness，掌握四条黄金法则，选对工作流，解锁官方插件 —— 让 AI 编程效率翻倍的完整指南</p>
+  <div class="meta" data-page-node-id="sPfJUZ3uTDDNMScEJLSgGa">
+    <span data-page-node-id="XMXTEzes6pDYiig71HXOfu"><span class="icon" data-page-node-id="ivXrWltYwaEk6mFNBf5NND">📄</span> 编译整理版</span>
+    <span data-page-node-id="Yb7BtYdw697WlJmRalxcli"><span class="icon" data-page-node-id="577GG7vUlkFtATBkxDq6FC">📅</span> 2026年6月</span>
+    <span data-page-node-id="mrYN47Iywl94tchdKlEoBB"><span class="icon" data-page-node-id="DPKE8tX7IDv5hF5EcLgrP0">📚</span> 共7篇核心文章精华汇总</span>
+  </div>
+</div>
+
+<!-- TOC NAV -->
+<nav class="toc" id="toc" data-page-node-id="sxzpIc1NUWHCWcieGsPnqy">
+  <ul data-page-node-id="6WYsVAf88TZ9igadwU8Gow">
+    <li data-page-node-id="JirVbUIVW8vbNaZeqg0Cki"><a href="#ch0" data-page-node-id="semyU9QXkGJUb2vZBlTFsc">核心概念</a></li>
+    <li data-page-node-id="3pDD1ZALIHcxZtDs2zCSPp"><a href="#ch0-quickstart" data-page-node-id="rKhVLOezCUfeHregrmWYPn">开箱指南</a></li>
+    <li data-page-node-id="B29a23dIpv0e4RLKiqtHtK"><a href="#ch0-firstday" data-page-node-id="wgjdhyRCD5Zc48lCGc0sRi">首日5步</a></li>
+    <li data-page-node-id="LACeJRx0Y6WukiMDNaNz8S"><a href="#ch0-dir" data-page-node-id="zSH1IxD4njBIGAqDtdy3oE">一·目录结构</a></li>
+    <li data-page-node-id="V1sj2wBnO2ahG8xHN7MsW3"><a href="#ch1" data-page-node-id="sr2ZacgGExoH5RvI3tG3vg">二·四条黄金法则</a></li>
+    <li data-page-node-id="lB8FacDoKxjZFSpGDQMLFX"><a href="#ch2" data-page-node-id="sZy5VFT8IsXtgi7pbFxXhN">三·五步搭建Harness</a></li>
+    <li data-page-node-id="sFtzzldXA5a16GCWQGn3Rz"><a href="#ch3" data-page-node-id="1KVejSW1ofTham3AncRVm1">四·Harness工程原理</a></li>
+    <li data-page-node-id="Mi1Z0PHuif5pBR5y36zgaP"><a href="#ch4" data-page-node-id="OErEzvSijA1GVW5WB8BCEK">五·工作流选型(10套)</a></li>
+    <li data-page-node-id="wDUuzESxZgcE1Qmzhsv5pX"><a href="#ch5" data-page-node-id="GgKIbEw2n0AynYPzhF728n">六·官方插件生态</a></li>
+    <li data-page-node-id="37NMBoLos50CnF0QMtNajv"><a href="#ch6" data-page-node-id="VLRH75CbX9B83YbeVlMbN4">七·速查与建议</a></li>
+  </ul>
+</nav>
+
+<div class="container" data-page-node-id="XAryUDfpGgrXTSU6FGUn5S">
+
+<!-- ============ CH0: 核心概念 ============ -->
+<section id="ch0" data-page-node-id="8VJAy9AQVcEE55ASAfjoQA">
+  <h2 data-page-node-id="7fead0Z0b38RLM3YR0aj4q"><span class="num" style="background:var(--accent)" data-page-node-id="qMIG6wjg7C9882JfYcMjOD">总</span> 核心概念：什么是 Claude Code 和 Harness？</h2>
+
+  <p data-page-node-id="6AHoHK1QkmZsqeNhFa4fai">Claude Code 是 Anthropic 推出的终端原生 AI 编程助手。它不仅能生成、解释、优化代码，还能直接操作文件、运行 Shell 命令、管理 Git 版本——它是一个可以<strong data-page-node-id="R6d3KzmOYM7AnznqZ6lXDq">真正动手干活</strong>的 AI 智能体。</p>
+
+  <div class="highlight-box" data-page-node-id="k7hapwblHstRWpJTH7aty2">
+    <p data-page-node-id="k1ldSFXW65SxyR28mPG152"><strong data-page-node-id="WXXgHY9qhUbV56bAiZJVdz">Harness = 工具 + 知识 + 上下文管理 + 权限边界</strong></p>
+    <p style="margin-top:8px" data-page-node-id="ZLs3zYFZaGU23QneSH31pK">模型是发动机，Harness 是底盘、变速箱和导航。发动机再好，装在没有方向盘的车上也跑不起来。模型决定上限，Harness 决定你实际能拿到多少。</p>
+  </div>
+
+  <div class="cards" data-page-node-id="X4KJjT9NuHg1DxT8nBldAB">
+    <div class="card" data-page-node-id="jfHRg7uuKrnAUAst1AVnBQ">
+      <h4 data-page-node-id="Ob0zWnBqypN2DYdb7gUbBd">CLAUDE.md</h4>
+      <p data-page-node-id="XFvdcZWVIFesq4mRjHuQ9S">项目全局约定文件。Claude Code 启动时自动加载，每个对话回合都在上下文里。只放"AI 需要在你开口之前就知道的事"。</p>
+      <span class="tag blue" data-page-node-id="16HByk75IPdxXKakZTA6z1">规则</span><span class="tag green" data-page-node-id="vuHj5bOx4d32OyEsFMsDyC">自动加载</span>
+    </div>
+    <div class="card" data-page-node-id="kFniwLpBWtfEdT5Jj6oPCq">
+      <h4 data-page-node-id="1cbL5mtWSPqFdUCoTvgfDV">Hooks</h4>
+      <p data-page-node-id="HUOMPiZlyRCnCBxwAchocm">生命周期自动触发器。SessionStart 时注入 git 状态，Stop 后自动审查。让 Harness 在正确时机做正确的事。</p>
+      <span class="tag purple" data-page-node-id="9PS9IHZJpzuNAUShmhBTUm">自动化</span><span class="tag orange" data-page-node-id="7qWCj8u7aSQFX5yw2OJyQe">生命周期</span>
+    </div>
+    <div class="card" data-page-node-id="xaKrz20PtBKGajN4QQ9FCa">
+      <h4 data-page-node-id="nTf5e0Mxm7RXHiIs1hGHNy">Skills</h4>
+      <p data-page-node-id="6HG2BUtZXne3J3RwlsCZK7">可复用的工作流知识包。描述 + 指令 + 工具三层结构，延迟加载，按需激活。就像手机上的 App。</p>
+      <span class="tag blue" data-page-node-id="7TP0lRDBAxwcsGShtKsDo8">可复用</span><span class="tag green" data-page-node-id="pJG82rmnBkHlbs99NR2lMB">延迟加载</span>
+    </div>
+    <div class="card" data-page-node-id="L3gZdI1cqIYKpp4Oqc1MGE">
+      <h4 data-page-node-id="Frjrd7MICGtvTbFhCJGOXW">Sub-agents</h4>
+      <p data-page-node-id="qtxWoicNW0u2eyqA848Cj4">拥有独立上下文的隔离 Claude 实例。派去探索代码库、执行子任务，只返回结果摘要。保护主会话上下文不被撑爆。</p>
+      <span class="tag purple" data-page-node-id="icImgWc1C9CY5nKXEXaVgf">隔离</span><span class="tag orange" data-page-node-id="gzIZBX5xE7QWfS6NFuoXQ3">上下文管理</span>
+    </div>
+    <div class="card" data-page-node-id="7yZlZaCzEF1926XIu8Op13">
+      <h4 data-page-node-id="a6MmyjE26aNyDKcS9aeZF3">LSP</h4>
+      <p data-page-node-id="MufoZJmBSBwnjpegJI3Exh">语言服务器协议。符号级搜索，不是字符串匹配。同一个变量名只给你一处定义和两处引用，而不是几百个字符串匹配。</p>
+      <span class="tag blue" data-page-node-id="3D2HSWNhhkiTG7L0ptATCR">精准</span><span class="tag green" data-page-node-id="Ia88f7bbbBsX7rkT2fdDgh">代码理解</span>
+    </div>
+    <div class="card" data-page-node-id="JbCmvN6s7h4Of0c2yEXBKx">
+      <h4 data-page-node-id="DRsu3TKUOBisTeklObmxah">Plugins</h4>
+      <p data-page-node-id="iHPxIceEyzrGCRYZVYzm1m">官方/社区打包的组件集合。CLAUDE.md + Hooks + Skills + Sub-agents 打包成一个可安装单元，团队一键部署。</p>
+      <span class="tag purple" data-page-node-id="ONHd99nxEp9gUV6d5OsBNJ">打包</span><span class="tag orange" data-page-node-id="QchL7jQFABWYSSzYBCIEkX">分发</span>
+    </div>
+  </div>
+
+  <!-- ============ 开箱指南 ============ -->
+  <h3 id="ch0-quickstart" style="margin-top: 48px" data-page-node-id="AnSSbNtzHHCmU9HlDjsJKl">🛠️ Claude Code 开箱指南：从安装到首次使用</h3>
+  <p style="color:var(--text-secondary)" data-page-node-id="oAlEGWA2nhECcXfhuxZgrY">来源：<em data-page-node-id="7Hl9f7b5DBEcmG0NjZjN6T">Claude Code 快速上手指南</em> (HiddenState) + Anthropic 官方文档 + 菜鸟教程 · <a href="https://mp.weixin.qq.com/s/5Vag3njhcqZ31XsgeBHKLw" target="_blank" style="color:var(--accent)" data-page-node-id="FnFyYjrQNJ4hkmmvGomFV9">原文链接 ↗</a></p>
+
+  <p data-page-node-id="Z0GNmMqrnj5vFLJFJlV7jC">以下是 Claude Code 从<strong data-page-node-id="SpfwhVHKhBNdURILISKgC7">零安装到首次上手</strong>的完整指南。无论你是 macOS、Linux 还是 Windows 用户，一条命令即可完成安装。</p>
+
+  <!-- 环境准备 -->
+  <h4 data-page-node-id="dS9iJKyyylSJO8AboT6X1Y">1. 环境准备</h4>
+  <table data-page-node-id="WfUCZkLSdRITB56OwZD90v">
+    <tr data-page-node-id="ekzj8vsF5AOcr554Zzz7FU"><th data-page-node-id="RAJsJRaE9B107gPNfHg204">平台</th><th data-page-node-id="02r3rcVIfTfVvrklCkbhIk">要求</th><th data-page-node-id="xsQrI2RiE3mxWyq7dDW7eG">说明</th></tr>
+    <tr data-page-node-id="H5FoNqTK7giayizzXjXYrm"><td data-page-node-id="0J5RBXAaB03w1FQi5t4Uad">macOS</td><td data-page-node-id="aaSBJHx6sYn1ES2rGbqHyK">10.15+</td><td data-page-node-id="PkZFbHMVHrFT47BXK0NbvO">自带 Terminal，可直接安装</td></tr>
+    <tr data-page-node-id="sDj5kSMk5nVgItSYOKBcao"><td data-page-node-id="XAXuGl8iH0ORcMoYJX5nQO">Windows</td><td data-page-node-id="NBZOp1vIdhAOeOAkNQpZjO">10+ 或 WSL</td><td data-page-node-id="gr5Jj5TCPlGuFOWG74q0cj">PowerShell 执行安装脚本，自动检测 Git Bash</td></tr>
+    <tr data-page-node-id="bisAYfENmou008XSxlptcY"><td data-page-node-id="PPwLRUVD7s2E8jBNjpeYzJ">Linux</td><td data-page-node-id="f40GzNuSzXINnC2w0cky15">主流发行版</td><td data-page-node-id="EU7UvwDADI9N4bBHFDc7zp">使用 curl + bash 安装</td></tr>
+    <tr data-page-node-id="NZ9TXY4pkUn5OqAPmQir7w"><td data-page-node-id="Dj2GeW15PH83fSnD2lySw9">Node.js</td><td data-page-node-id="F4rBJfTacioelaylFCsgB6">可选</td><td data-page-node-id="q1bEx0CAb32CPkOBS5Q1yV">npm 方式安装时需要；官方脚本<strong data-page-node-id="FJpYzIQvCJXkY37bCCPDj8">不依赖</strong> Node.js</td></tr>
+  </table>
+
+  <!-- 安装方式 -->
+  <h4 data-page-node-id="gU5pswZGIXqeuXNFMqLtE2">2. 安装方式</h4>
+
+  <div class="highlight-box success" data-page-node-id="TR9A3ShFGYrUPmEI10oYd4">
+    <p data-page-node-id="aqnAHdw1HHHP4HNYcbJjaV"><strong data-page-node-id="iUYwsbdWTZvIHKngpBFd2J">推荐：官方脚本一行安装</strong> —— 无需前置依赖，自动处理所有环境问题。</p>
+  </div>
+
+  <table data-page-node-id="ZodIDsERc50OD5AHgZ3YHE">
+    <tr data-page-node-id="10BK5roNDHjj5GGE8YUYiS"><th data-page-node-id="DzTX6L4HRoHZ4GPkO7NEQw">平台</th><th data-page-node-id="d7a4gjzqQjIHJv7W3eLOoP">安装命令</th></tr>
+    <tr data-page-node-id="Dpea7f8po3yUwIpJbTkoDY">
+      <td data-page-node-id="NgTMOm0i44WroOFmMFurlM">macOS / Linux / WSL</td>
+      <td data-page-node-id="3sufZBWoyHZntsDGVsEbSP"><code data-page-node-id="JVci8HoffYN92pDsSdlnaH">curl -fsSL https://claude.ai/install.sh | bash</code></td>
+    </tr>
+    <tr data-page-node-id="dkyfVXyE0AvOllupZC65Ye">
+      <td data-page-node-id="j0s2KbYTJ2FSZ3jVrXjqge">Windows PowerShell</td>
+      <td data-page-node-id="N3biDLKmDfITqtZ1svXOPX"><code data-page-node-id="fx8JOMdaiKiAa0wik8R8Mp">irm https://claude.ai/install.ps1 | iex</code></td>
+    </tr>
+    <tr data-page-node-id="m41S0P0xtPTVoTb1ZpmdQ9">
+      <td data-page-node-id="BIiA929bdD5FF8zEB4pl7t">Homebrew (macOS)</td>
+      <td data-page-node-id="3pWfCNd11Ks3OUrfqJz8rr"><code data-page-node-id="dF6gD2c50x8g9f7szSnXs8">brew install --cask claude-code</code></td>
+    </tr>
+    <tr data-page-node-id="QU51TuvaXMM7LFeeYQsh9a">
+      <td data-page-node-id="kIXbjGKrZohGqsw9rq4FCC">WinGet (Windows)</td>
+      <td data-page-node-id="pwASiYi47vRgKMKaAs6L2i"><code data-page-node-id="6CMdbAusZ3HYdWdgo9PjcJ">winget install Anthropic.ClaudeCode</code></td>
+    </tr>
+  </table>
+
+  <p data-page-node-id="6sU63rC29BDR9RgMPS7Cc2"><strong data-page-node-id="yOHG2OIxpk6CC8ypCtCf3v">验证安装：</strong></p>
+  <pre data-page-node-id="0T1CzgeGzFCODbwloIk63M"><code data-page-node-id="sC4PCFSDlYyy8VpOohLakG">claude --version
+# 输出示例: 2.1.81 (Claude Code)</code></pre>
+
+  <!-- npm 安装 -->
+  <div class="highlight-box warn" data-page-node-id="JHk8RSmNVm3tXIEsWOqPND">
+    <p data-page-node-id="kb1E5CBYvQuhaA7Y1amXej"><strong data-page-node-id="51JNCQpSdQpn1kJWfmbW4E">npm 安装（不推荐）</strong>：<code data-page-node-id="carxV8jIqepv7fibSszUYu">npm install -g @anthropic-ai/claude-code</code> —— 官方已不再推荐此方式，仅在特殊场景使用。国内网络慢时可临时切换镜像：<code data-page-node-id="l4FNW28OqvMWbwYBHk6jiI">--registry=https://registry.npmmirror.com</code></p>
+  </div>
+
+  <!-- 更新 -->
+  <h4 data-page-node-id="y3CIJVKGICR9XUE0JMthmu">3. 更新与版本管理</h4>
+  <pre data-page-node-id="kk0uB8YYtHcjIlNGBctcm7"><code data-page-node-id="Q5nsQrxhtbCWfLDTZKxcws">claude update   # 手动更新（启动时也会自动检查更新）</code></pre>
+  <p data-page-node-id="HqJ80MRFg8Nx7UO4DvemUN">可通过 <code data-page-node-id="UDtWBwJ1ohEGqrMJ9UHfIK">settings.json</code> 禁用自动更新：</p>
+  <pre data-page-node-id="It3ZL7NlhqGRyhulXtHV0e"><code data-page-node-id="KQxO2etGIoKKbdNkUf5SGh">{
+  "env": { "DISABLE_AUTOUPDATER": "1" }
+}</code></pre>
+
+  <!-- API 配置 -->
+  <h4 data-page-node-id="J8PpUmSwqZdhAFla6YC4pj">4. API 配置</h4>
+  <p data-page-node-id="xObAUMInpfQ7iGyQeib4hs">Claude Code 支持多种 API 接入方式：</p>
+  <table data-page-node-id="uKypgahiNYkavVDTdzSQQp">
+    <tr data-page-node-id="iy74JSyTyBZL7oydBbM5Ba"><th data-page-node-id="7hgESBKAeW3xDMtXwWuIPy">方式</th><th data-page-node-id="mJFcTnGq5MV1bf9iHDDhF2">配置</th><th data-page-node-id="bCgOVDQM6c4dA7yoDr59V2">适用场景</th></tr>
+    <tr data-page-node-id="nDUIggfOv6M6qkpGUc8E17">
+      <td data-page-node-id="tvkkBFseOgAKRxa7V5JSmP">Anthropic 官方 API</td>
+      <td data-page-node-id="kYYzptXCpbDi8LUdvXOspw">设置环境变量 <code data-page-node-id="PV2S0ygEfXlzKaKhocRD1r">ANTHROPIC_API_KEY=sk-ant-xxx</code></td>
+      <td data-page-node-id="IvFjxws1hCZNCD5dbpplYH">海外用户、稳定访问</td>
+    </tr>
+    <tr data-page-node-id="HGe45Bj4452NxXtlaVONX3">
+      <td data-page-node-id="UDFM6bQXLFkM0GHr3Ju34f">OpenRouter / 兼容 Provider</td>
+      <td data-page-node-id="tBWQEH6F8mBKGN50PszRtz">设置 <code data-page-node-id="3Ft77L8pUXkgZtejOS1sta">ANTHROPIC_BASE_URL</code> + <code data-page-node-id="qGvAWduYtwMq76DjWVOJsC">ANTHROPIC_AUTH_TOKEN</code></td>
+      <td data-page-node-id="YFt8taBaXHoBHRbXqDPfL1">需要中转、国内网络</td>
+    </tr>
+    <tr data-page-node-id="L9XzrrqjhLUI37JF4wnhgE">
+      <td data-page-node-id="Pau8s4C80oqdejKxemFU3f">Claude 账号登录</td>
+      <td data-page-node-id="MslNHrCnyJxEYJV2IDOx0v">启动后输入 <code data-page-node-id="yvDOOjyb5GCsZotFKPqsUQ">/login</code> 进行 OAuth 认证</td>
+      <td data-page-node-id="6dYF4mvZvjLl5jOIQicguu">Pro / Max / Teams / Enterprise 订阅用户</td>
+    </tr>
+  </table>
+
+  <p data-page-node-id="4srSZm5XezNbNSnACxiSu7"><strong data-page-node-id="DjjiAGqi6J5r2xZblNUhC9">macOS / Linux 配置示例：</strong></p>
+  <pre data-page-node-id="oJahDqb9pEtdpY0fFXnb4D"><code data-page-node-id="almBfetRuF4uPFjA2uCC8G"># 在 ~/.bashrc 或 ~/.zshrc 中添加
+export ANTHROPIC_API_KEY="sk-ant-xxxxxxx"</code></pre>
+
+  <p data-page-node-id="diw15EvNU4vSgQe1yQqpnN"><strong data-page-node-id="bCQQWBwGDKpftZ33ckooDo">Windows PowerShell 配置示例：</strong></p>
+  <pre data-page-node-id="Pfs3mApCXGhVtW1kcOvCHz"><code data-page-node-id="Tw1Hsi3HzlC7eCvEa0oXKT">[Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", "sk-ant-xxxxxxx", "User")</code></pre>
+
+  <!-- 首次登录与启动 -->
+  <h4 data-page-node-id="3Vq2ZIAroASuShTxWDpHGm">5. 首次登录与启动</h4>
+  <div class="step-list" data-page-node-id="Vb7LNRlOPFUvQCotAhrJCv">
+    <li data-page-node-id="Koh8x07c0OO9nKs0mt2Qkx">
+      <strong data-page-node-id="TdbNxmZwFMGAc5S8HWrqZ1">进入项目目录</strong>
+      <code data-page-node-id="JBQ3xZFatdFcbSjqE7f7QV">cd /path/to/your/project</code>
+    </li>
+    <li data-page-node-id="7IM0cYjJXQKAvZBbEfYrO2">
+      <strong data-page-node-id="kQ4bdPxHTD3Vc5fdh195YS">启动 Claude Code</strong>
+      <code data-page-node-id="GsjFphMXkD3nBHNF649Obn">claude</code> —— 首次启动自动引导登录流程
+    </li>
+    <li data-page-node-id="6twWPwr3XYUV9S8uJNUyKI">
+      <strong data-page-node-id="2GOLopzrQ5cDDmco7iSW3f">验证登录状态</strong>
+      输入 <code data-page-node-id="7jQOiwEQ43VDPFf5bcNgFt">/login</code> 可查看或切换账号
+    </li>
+    <li data-page-node-id="NCZa0C0sv8Tc7Vrh0tXZTI">
+      <strong data-page-node-id="LiQNCxNAzw9bEXi71fEIgp">开始第一次对话</strong>
+      直接用自然语言提问，Claude 自动读取项目上下文
+    </li>
+  </div>
+
+  <!-- 第一次对话示例 -->
+  <h4 data-page-node-id="m5qbAcgfOQ6lV0mQRu4ByX">6. 第一次对话推荐</h4>
+  <p data-page-node-id="fJp3mGDhgYhTgJBeW4UioF">启动后试试这些入门提示词：</p>
+  <pre data-page-node-id="ARJmEjp76YkzRBWrBobqMB"><code data-page-node-id="RvdC0GFpAOSpurCbm0QJCF">这个项目是做什么的？
+这个项目用了哪些技术栈？
+主入口文件在哪里？
+帮我解释一下目录结构
+你能做什么？</code></pre>
+
+  <div class="highlight-box" data-page-node-id="jsBp6cyzhAqkGQtRNqEloO">
+    <p data-page-node-id="arpIQytPSTrqBhGoNhzM1o"><strong data-page-node-id="Wu150saWqfi60iwYLz4OB6">核心体验</strong>：Claude Code 像一位有经验的同事——用自然语言描述需求，它会自动找到最佳实现方式。无需手动复制粘贴文件内容，它会<strong data-page-node-id="nBWCIiaQPiBXKC3PwgHU6e">自动读取所需上下文</strong>。</p>
+  </div>
+
+  <!-- 常用命令速查 -->
+  <h4 data-page-node-id="hIAcgGNJ5odOy84ZffIUz1">7. 常用命令速查</h4>
+  <table data-page-node-id="R3RagwDRZEBGgLi9iNG9lG">
+    <tr data-page-node-id="pDDK9EWtkkpA2psEJeDXh2"><th style="width:28%" data-page-node-id="FwMIJFEihoBHkLfHIa1mEx">命令</th><th data-page-node-id="ylBCPgW8glQWgqCSAkJ01S">功能</th><th data-page-node-id="Z6j5Gy8LnKZvKBSVXazucF">示例</th></tr>
+    <tr data-page-node-id="22X50VgqwGTk1EI5csnzSC"><td data-page-node-id="0sPnVOLTRe4Vy85yDCtv48"><code data-page-node-id="5T3sLmcvEE1K4w1jW8L9Zk">claude</code></td><td data-page-node-id="mhQw8MnU6eZQwHAIb6ypvq">启动交互模式</td><td data-page-node-id="p1Guf2ryYDihiWk0axJDxa">直接输入进入对话</td></tr>
+    <tr data-page-node-id="RoE9zFXVeC5XWltV9BpshG"><td data-page-node-id="mfSx82BFTaFLTmtQKVCrvl"><code data-page-node-id="8O4fP0Gfua1yqkjHDWPM9T">claude "任务描述"</code></td><td data-page-node-id="J4BmHQ92g5Gx0ilh7hBBTg">执行一次性任务</td><td data-page-node-id="VrYd97hHjUR9d6sCWTgKc6"><code data-page-node-id="DYONxE6LcZeIQkJNgbH1zH">claude "fix the build error"</code></td></tr>
+    <tr data-page-node-id="DAFBFzBRtMK6aHuEG9znMD"><td data-page-node-id="N6dC7zB9qrfl2ygEFJA6Ww"><code data-page-node-id="mHKZDCgGIfXVyuVJIVDznl">claude -p "查询"</code></td><td data-page-node-id="b47Rc6KYgVkxuiwnEJORqm">单次查询后退出（适合脚本）</td><td data-page-node-id="zDPdfaEfgz8VpvQ7a7dgAI"><code data-page-node-id="pk2vlg5QtMJJcrDYsEX9xo">claude -p "what does git status do?"</code></td></tr>
+    <tr data-page-node-id="9gioZa6qmkvQj7xwL3e2PH"><td data-page-node-id="sCIHYGyPWdDjRE2De5MRr7"><code data-page-node-id="hwlTAx1rzXQdgsQKORYZd1">claude -c</code></td><td data-page-node-id="NCpgwiVPB2z6jGErpMFBHc">继续最近一次对话</td><td data-page-node-id="3UVB3cU04nEPfjYCcmBaW1">快速恢复上次会话</td></tr>
+    <tr data-page-node-id="x1ReNVXFXu4Y8SIaTC6srG"><td data-page-node-id="0LOd9xxGkCEGLjdHjHEdCa"><code data-page-node-id="TZmcghAzl6rzdxzP1Oem5b">claude -r</code></td><td data-page-node-id="QDgSs8yi50VXayPbkQWpXx">从历史恢复对话</td><td data-page-node-id="WWVGHaB7dtMz5E437kv8OL">选择要恢复的会话</td></tr>
+    <tr data-page-node-id="BI5Be6r7dDvsROcdTdqwcM"><td data-page-node-id="8jw3ihvi72mUAVFuZNZF8K"><code data-page-node-id="h1ZdZQbjJfb6AuZ6cmOmDn">claude commit</code></td><td data-page-node-id="mBoiQZwAxyAbn9qP7hTKy0">自动生成 Git commit 并提交</td><td data-page-node-id="8XezQAwUT7Sq53OAYiBwB3">分析变更 → 生成 message → 提交</td></tr>
+    <tr data-page-node-id="qFURL2RtobHlGL3KLYAanl"><td data-page-node-id="eT8eVKiK8nH7Gwn2iHRY7L"><code data-page-node-id="f72A99XqdbRiX4r4YHM65z">/help</code></td><td data-page-node-id="bIGiF825cjAtDCVSPCkcMu">查看所有可用命令</td><td data-page-node-id="KBFubNnxvBBxNzyQ6VpAiA">交互模式内使用</td></tr>
+    <tr data-page-node-id="Gvzt46EMELqnvpybQECzDW"><td data-page-node-id="Ijh61Avhqp8Z8vsGD9oTgn"><code data-page-node-id="nnA21hQyJX1I3d0cT4J0oC">/clear</code></td><td data-page-node-id="qlXsVG4wNTEs09dnwXRova">清除对话历史</td><td data-page-node-id="iOf361tpBbn5QYnxGNd8KI">开始新话题</td></tr>
+    <tr data-page-node-id="l9dDm52MdCWPhJhAY8vC58"><td data-page-node-id="kqXLFMAb4tvFouBCWq2mTa"><code data-page-node-id="gueFOlsdztXurnDFfbCktj">/resume</code></td><td data-page-node-id="NUoL9Uyd61d5aerdAPmFhs">恢复之前中断的对话</td><td data-page-node-id="pfOLRvlaZRFcWBJ3ePmE2G">意外退出后恢复</td></tr>
+    <tr data-page-node-id="qo6buQ1g0VU39ZhBhu5aqr"><td data-page-node-id="nfRM7PbHYVJMOoZeDFIFos"><code data-page-node-id="vQQvbkuYmWovZ9GkUGSubN">/config</code></td><td data-page-node-id="iHdBziEYubzjxoSTZLiQK7">查看和修改配置</td><td data-page-node-id="uLf1MdNVYFHG58hvzUZHuL">交互模式内调整设置</td></tr>
+  </table>
+
+  <!-- Git 操作 -->
+  <h4 data-page-node-id="99yzz0yDA2Vm6tp0jcHUIm">8. 用自然语言操作 Git</h4>
+  <p data-page-node-id="LcXKjRxww2h5aUau8uV4xQ">Claude Code 内置 Git 感知能力，你可以用自然语言管理版本：</p>
+  <pre data-page-node-id="9315fYVoxLbhXXptFoHAlE"><code data-page-node-id="bAb0vMkTncYeNV1EBW1Vo8">我改了哪些文件？                            # → git status
+提交我的修改，写上清晰的提交信息               # → git add + git commit
+建一个叫 feature/xxx 的分支                   # → git checkout -b
+帮我解决合并冲突                              # → merge conflict resolution
+显示最近 5 次提交                             # → git log</code></pre>
+
+  <!-- 卸载 -->
+  <h4 data-page-node-id="id72KakBCIv4bzEHCYLG5b">9. 卸载与清理</h4>
+  <table data-page-node-id="bigF2oqDqAfDPI2Bepc7IO">
+    <tr data-page-node-id="PQR7tLqMv6sUXsW6t4sgs8"><th data-page-node-id="NajCdue2VUoFlIQL7g9Lag">安装方式</th><th data-page-node-id="2MYyyqX6InDiMeXFnBeB1V">卸载命令</th></tr>
+    <tr data-page-node-id="wIkZmSprZfehsq1Dc4vSCa"><td data-page-node-id="KlqFppfIIcirCIEKv0hLbN">官方脚本 (macOS/Linux)</td><td data-page-node-id="fXCA35ZiPxKSEQBNuw1E7B"><code data-page-node-id="6sYhDcsUULqnvHbHQGgsb7">rm -f ~/.local/bin/claude && rm -rf ~/.local/share/claude</code></td></tr>
+    <tr data-page-node-id="gqsoE80gduHiDEi8M9Onoo"><td data-page-node-id="wKqoKdW0hAyV0W5Pl9XAYa">Homebrew</td><td data-page-node-id="UExOCKIqW7dNug384K1hbn"><code data-page-node-id="w7Wrr9YkAUo7DJ45DY37BQ">brew uninstall --cask claude-code</code></td></tr>
+    <tr data-page-node-id="VN5R89c2h75YEOrmi661fT"><td data-page-node-id="5K2GDiOdkwE5bXJhnCDjn3">WinGet</td><td data-page-node-id="OpetHfIKCQDcUJQDUT62DK"><code data-page-node-id="CYiX5fTAuzT7cR2z2r50dg">winget uninstall Anthropic.ClaudeCode</code></td></tr>
+    <tr data-page-node-id="DusajhI5QIB9pIfjDh9gX3"><td data-page-node-id="eayk98QjDB6coWVJFmCP87">npm</td><td data-page-node-id="OsQ2nFUDKyb2E3EhILVCPp"><code data-page-node-id="KHsxDaDuusAYb4mj5aGoOG">npm uninstall -g @anthropic-ai/claude-code</code></td></tr>
+  </table>
+  <div class="highlight-box warn" data-page-node-id="zulR0EkuOs4xZKcGCfusrs">
+    <p data-page-node-id="7knVAKnNYyAhMxJngwvMYN"><strong data-page-node-id="bkg30N5fGfA9jvtm4Nokb0">⚠️ 完全清除配置（不可恢复）</strong>：<code data-page-node-id="MY4KdAHnVxFTHrOdFCjBa8">rm -rf ~/.claude && rm ~/.claude.json</code>（全局配置）+ <code data-page-node-id="tc7AbGICy8QL8jOrJUJE1t">rm -rf .claude && rm -f .mcp.json</code>（项目配置）</p>
+  </div>
+
+  <!-- ============ 新人首日 5 步 ============ -->
+  <h3 style="margin-top: 48px" id="ch0-firstday" data-page-node-id="K6VnWSAUmkoIxtvImTMuEi">🚨 新人首日必做 5 步（装完就用的正确姿势）</h3>
+  <p style="color:var(--text-secondary)" data-page-node-id="IrpIjnI8r27e13FGlF2dMS">来源：<em data-page-node-id="ANGFj5CGroMCWY3XVmQIw9">装完 Claude Code 就用？这 5 步没做等于白装</em> (HiddenState) · <a href="https://mp.weixin.qq.com/s/5Vag3njhcqZ31XsgeBHKLw" target="_blank" style="color:var(--accent)" data-page-node-id="PEFYLl5Bz3ZGuJqXI1qCrT">原文链接 ↗</a></p>
+
+  <div class="highlight-box warn" data-page-node-id="mXH0hJUgtXx4xM8fxqMggJ">
+    <p data-page-node-id="sIG9V3cALtbCKDYrwYS84Z"><strong data-page-node-id="EEEGUBzxjpeu6PfCqglBSf">⚠️ 别上来就折腾 MCP、Hooks、子代理。</strong>新人第一天最重要的不是那些高级玩法，而是先把最基础的 5 步走对。顺序对了，它会越来越像同事——顺序错了，它就只是一个很贵的聊天框。</p>
+  </div>
+
+  <p data-page-node-id="cp1dBIZMWkIKAYGyeJ58cT">新人装完最常见的问题：不知道干嘛，发个 <code data-page-node-id="OMLTvL3WkYivq4R9BTL6a4">hi</code>，把它用成更贵的聊天框。然后提问题、等回复——看起来很顺，但真让它碰项目时就开始翻车：不懂项目背景，改代码跑偏，对话越聊越乱。</p>
+
+  <ol class="step-list" data-page-node-id="EH0vCXCt1BVvGX6EhwmkVR">
+    <li data-page-node-id="GS26DhWiWsart8OX1kVPvR">
+      <strong data-page-node-id="Xk1TpcN4g4ZD5hTpaaVbXZ">先跑一次 <code data-page-node-id="H4C22yLQcD7HB7C25VRXen">/init</code>，把 CLAUDE.md 建起来</strong>
+      把技术栈、代码规范、目录结构、禁止操作写进去。比如「这是 React + TypeScript 项目」「不要随便改 package.json」「先给方案再动手」。<br data-page-node-id="GgoHWZI5P6BmmP7EvVpjHQ">
+      <em data-page-node-id="DP51IHI3ms2QxFbG2fd0iu">核心理念：</em>Claude Code 不是猜你心思的——它更像新同事，先交接，再干活。你写得越清楚，后面返工越少。
+    </li>
+    <li data-page-node-id="lA0UA58zCmZzRYiFK9q1Vg">
+      <strong data-page-node-id="yoHZ5OGwGZERMRNi2yqaZr">先在真实项目目录里启动，别在空白终端里瞎聊</strong>
+      Claude Code 最强的地方不是陪你聊天，而是能读你的项目、理解文件之间的关系。<br data-page-node-id="A6YIjbbzYcp4Dw244uuN9c">
+      <em data-page-node-id="vtRVpo1I6DNQtnE9YkEy3P">实操：</em>第一步不是问它「你能干什么」，而是先进到你正在做的项目目录，用 <code data-page-node-id="lxGli7SvyDyXwrBBwguGUr">cd /path/to/project && claude</code> 启动它。哪怕只是一个小 demo，也比在空目录里空聊强得多。
+    </li>
+    <li data-page-node-id="1CZB8r6TiEWuPLBSYHoCq4">
+      <strong data-page-node-id="d7RHtUfi1EBRUVXH2uUUiM">第一天先用 Plan Mode，别一上来就让它直接改</strong>
+      新手最容易踩的坑就是刚装好就想看它一把梭。建议正好相反：先让它分析问题、先说计划，再决定要不要动手。<br data-page-node-id="0195wP675pAodXQJZh4kiF">
+      <em data-page-node-id="R1O4RNIP11OqgYsY17njUv">好处：</em>你很快就能判断它有没有理解对你的需求，也能避免它热情很高、方向却跑偏。
+    </li>
+    <li data-page-node-id="MBKVemcUKu0tGo9i2mKPw3">
+      <strong data-page-node-id="0MxdDZCwTYm1CvyE5tcW4O">第一件事，先给它一个小任务</strong>
+      别上来就说「帮我重构整个项目」「把这个产品从零做出来」。第一天最适合的是这种小任务：<br data-page-node-id="zpIRhLlSPcDFjZGWSWw9GJ">
+      <pre data-page-node-id="KhTKJaXoJmZLZlaayqq40y"><code data-page-node-id="refi0cBWjz9KyLtPvsevkR">帮我读一下这个项目结构
+解释这个报错是怎么来的
+告诉我这个函数为什么这么写</code></pre>
+      <em data-page-node-id="jtKE2pjGBHcIUxlmdyNk0e">用这种小任务磨合，</em>你会更快知道它适不适合你的工作方式，也更容易建立信任感。
+    </li>
+    <li data-page-node-id="3vNe8hFbSNn3g6LmBwEyLy">
+      <strong data-page-node-id="PYvsvb5ArjjNWBkQlobnYV">聊乱了就 <code data-page-node-id="osYKQl0YDV2MAQitkNmATy">/compact</code>，任务结束就 <code data-page-node-id="IsMzN8Ym9Xm1FX7xdNbA44">/clear</code></strong>
+      用了好几轮之后觉得 Claude Code "不稳定"，问题往往不是模型突然变笨了，而是上下文已经聊脏了。<br data-page-node-id="IKhyKHYQIrJKrQ0HCFF7mO">
+      <em data-page-node-id="OrtBnoadOLw9SptLynlacP">一个好习惯：</em>一个任务聊太久，信息会越来越杂 → 用 <code data-page-node-id="1dq88Hbik0isrvSDISkVcW">/compact</code> 把前面内容压成重点；一个任务做完 → 用 <code data-page-node-id="kiTpaNHrO7kTkN9Fnmvi8Z">/clear</code>，别带着上一轮的上下文去做下一件事。
+    </li>
+  </ol>
+
+  <div class="highlight-box success" data-page-node-id="Jy0Co6qf6QNDaMuSvzztlz">
+    <p data-page-node-id="LxxAu3ilMYpLFyVe2v11SQ"><strong data-page-node-id="weQCvKCdmkBf2UG7vhtVoX">把上面这 5 步走完，你会明显感觉到</strong>：它不是一个更会写代码的聊天框，而是一个可以慢慢合作起来的搭档。</p>
+  </div>
+</section>
+
+<!-- ============ CH0-DIR: 目录结构全景 ============ -->
+<section id="ch0-dir" data-page-node-id="nO4UI9lL4Hpd0ezEB26C2B">
+  <h2 data-page-node-id="5EgK3PR5bFqlhljUh0QjVn"><span class="num" style="background:var(--accent2)" data-page-node-id="G9k605XF8dZzczyNPPtnwr">一</span> 目录结构全景</h2>
+  <p style="color:var(--text-secondary)" data-page-node-id="hzFwNSVZp5AFUstf1gwZWS">来源：<em data-page-node-id="0HEqVy3q3Ahtm1cG6J4d2a">Claude Code 目录结构解析</em> + Anthropic 官方文档 · <a href="https://mp.weixin.qq.com/s/KfcIuIWFDiY4FMMIXs2o_w" target="_blank" style="color:var(--accent)" data-page-node-id="RnrJN1n0cUWMrPzGTJi99G">原文链接 ↗</a></p>
+
+  <p data-page-node-id="1RMLsFY9dQ7G6yu5vyNPeO">Claude Code 的配置体系分为<strong data-page-node-id="Aal3uUBrnfNrpyNDq9j9k0">项目级</strong>（<code data-page-node-id="Wp0OyKLvOYB2YKVABx0Lzx">&lt;project&gt;/.claude/</code>）和<strong data-page-node-id="2b3zodNi9u94CBgUgBp5F8">用户级</strong>（<code data-page-node-id="rcoDjAvG4pK4Hanf2KBMrY">~/.claude/</code>）两个层级。理解这个目录结构是搭建 Harness 的基础。</p>
+
+  <!-- 项目级目录树 -->
+  <h3 data-page-node-id="ZuEslkUbDkVkJQiu3IuJvd">项目级目录树</h3>
+  <div class="highlight-box success" data-page-node-id="XRvNjJ3jA1LSpiFa1C2rWN">
+    <p data-page-node-id="X6XOrob32f0JutvJz4rQyo">项目级配置可提交 Git 共享给团队，本地文件（<code data-page-node-id="1CMupZ1ljpu0VlICzCqiIV">.local.*</code>）自动 gitignored。</p>
+  </div>
+  <pre data-page-node-id="QtdooJ46aSTVSxGWpI1Bq5"><code data-page-node-id="v8MEywbQCHbkW2OramTIt5">&lt;project&gt;/
+├── CLAUDE.md                          # 🔵 项目记忆（共享给团队）
+├── CLAUDE.local.md                    # 🟢 项目记忆（本地，不提交 Git）
+├── .mcp.json                          # 🔵 项目级 MCP 服务器配置（共享）
+└── .claude/
+    ├── settings.json                  # 🔵 项目共享设置
+    ├── settings.local.json            # 🟢 项目本地设置（gitignored）
+    ├── commands/                      # 自定义斜杠命令
+    │   └── *.md                       #   每个文件 → /project:xxx
+    ├── rules/                         # 模块化规则（按需加载）
+    │   ├── *.md                       #   通用规则（始终加载）
+    │   └── path-spec/*.md             #   路径限定规则
+    ├── hooks/                         # Hook 脚本存放
+    │   └── *.sh / *.py / *.js
+    ├── skills/                        # 项目级 Skills
+    └── agents/                        # 项目级自定义 Agent</code></pre>
+
+  <!-- 用户级目录树 -->
+  <h3 data-page-node-id="0DxXHiCjcN5hX8B8PLexGC">用户级目录树（<code data-page-node-id="c5ChYQiCE2lPm07mXfyjYM">~/.claude/</code>）</h3>
+  <pre data-page-node-id="NwhRzB3ilA3Rjk9iAwWFcP"><code data-page-node-id="PSxiYPPfsbqUHEnxW27tgj">~/.claude/
+├── settings.json                      # 全局设置（权限、hooks、MCP）
+├── settings.local.json                # 全局本地覆盖设置（优先级最高）
+├── credentials.json                   # 认证凭据（自动生成，勿手动编辑）
+├── .claudesignature                   # 内部签名（自动管理）
+├── commands/                          # 全局自定义命令 → /user:xxx
+│   └── *.md
+├── rules/                             # 全局规则
+│   └── *.md
+├── skills/                            # 全局 Skills
+├── agents/                            # 全局自定义 Agent
+├── projects/                          # 项目级个人记忆存储
+│   └── &lt;path-hash&gt;/
+│       └── CLAUDE.md                  # 对特定项目的个人私有记忆
+├── cache/                             # 缓存（可安全删除，自动重建）
+├── ide/                               # IDE 集成数据
+├── statsig/                           # 功能标志/实验配置
+└── tempo/                             # 会话临时数据</code></pre>
+
+  <p style="color:var(--text-secondary); font-size:0.88em;" data-page-node-id="iOdChYVHEJEGZj8hWtSLFT">补充：<code data-page-node-id="yoRFHCqhMuqVMSkkiIk1QG">~/.claude.json</code>（用户主目录下）存储 local/user scope 的 MCP 服务器配置。</p>
+
+  <!-- 核心文件详解 -->
+  <h3 data-page-node-id="Eae68o2jM99T448rQwZdGz">核心文件/目录逐项详解</h3>
+  <table data-page-node-id="bVLmhulqbCyKWej4sI3HyH">
+    <tr data-page-node-id="ks41Rd7ZONhDTeXJHS2Vzz"><th style="width:18%" data-page-node-id="3DIyiwPkuJGq7ru7tkYtZH">文件/目录</th><th style="width:8%" data-page-node-id="cJg4HiXaCJKZD7eqLx2ONK">级别</th><th style="width:8%" data-page-node-id="HcCApDOcFYxwB3PeFASLoJ">共享</th><th data-page-node-id="B5Lmbmk8bJ5vtLGuca6hjz">用途与说明</th></tr>
+    <tr data-page-node-id="I9JKbsC3YJo6cUsp2y4Hvc">
+      <td data-page-node-id="XJpiNxqIAPjoMKplMJi6d4"><strong data-page-node-id="PGsFRjxgYqYI9B0KBtl8GU">CLAUDE.md</strong></td>
+      <td data-page-node-id="qQduPx2tRqzDmNLbDCtoMN">项目</td><td data-page-node-id="IWZHQscBbt3jBsA4Nq0m9T">✅ Git</td>
+      <td data-page-node-id="DO2C0y3RSS4cGNq2D0WghO"><strong data-page-node-id="g2LPS6L6uVyy0FxEgd2MZR">项目"大脑"</strong>。存放项目约定、架构说明、编码规范、技术栈信息。每次会话自动加载到 system prompt，贯穿整个对话。回报率最高的文件，砍到 20 行效果最好。</td>
+    </tr>
+    <tr data-page-node-id="bVmp0Kmd1R0n4NNTeK2ho4">
+      <td data-page-node-id="RXyUie6B4DVlWM9n8juLQ2"><strong data-page-node-id="prBARVfFaLgGKeaGTXihp4">CLAUDE.local.md</strong></td>
+      <td data-page-node-id="0OSlGD64Rn0JCQfHHybEI9">项目</td><td data-page-node-id="AhlMmNDfPz0hUfVQaJdZuT">❌ 本地</td>
+      <td data-page-node-id="e6Tx7DdzBHLh3whMjm9ERE">个人项目偏好。本地数据库地址、个人调试习惯等，不影响团队其他人。与 CLAUDE.md 叠加生效。</td>
+    </tr>
+    <tr data-page-node-id="yraSyPVS33vUApGDLTShS1">
+      <td data-page-node-id="BLyAfhjhShmagO14CWKCKp"><strong data-page-node-id="t783wwcyZfJg7U0oFeM7UR">settings.json</strong></td>
+      <td data-page-node-id="0rk45N2O1HRg45nl5obZ1o">项目</td><td data-page-node-id="KXkFABCNQao0PvUnbsQhBd">✅ Git</td>
+      <td data-page-node-id="I2s00Q3TnIA3kbGjC47Kqp">项目级配置：权限规则（allow/deny）、hooks 声明、MCP 服务器等。团队统一配置。</td>
+    </tr>
+    <tr data-page-node-id="OApC0Kkv4ODf2I9ZczZCiH">
+      <td data-page-node-id="tljkZZC24s1hvIlB2y1dww"><strong data-page-node-id="fR7h5vkF0D9CQxViJdqHRl">settings.local.json</strong></td>
+      <td data-page-node-id="31ygJCf0HobvOYUdegqIZr">项目</td><td data-page-node-id="DjvGiEjd6sPlQ3CT2NwjOm">❌ 本地</td>
+      <td data-page-node-id="njwOKGWw49CyW0XJlkuUAr">个人覆盖设置，可覆盖 settings.json，只影响自己。</td>
+    </tr>
+    <tr data-page-node-id="k50900OUuoV86EKCVXUtsU">
+      <td data-page-node-id="XDTa4qPVKBxAYHjcxc1jAj"><strong data-page-node-id="j4G6oOQ1mLBEEMXFD3ie0h">commands/*.md</strong></td>
+      <td data-page-node-id="PwAQgmnviGvbFSVgin0pCp">项目/用户</td><td data-page-node-id="yK7bHbkhDz5uJ15uu0hzVR">可选</td>
+      <td data-page-node-id="JMp23wMCQpFg4yWxfNGZ7w"><strong data-page-node-id="77b4f88FeHOLUvEsrVEzOA">自定义斜杠命令</strong>。文件名即命令名。项目级触发 <code data-page-node-id="EgehuN44XeagYn8ITcSqVd">/project:xxx</code>，用户级 <code data-page-node-id="gRhIPS4aLl9QNI0nGFSb1l">/user:xxx</code>。支持 <code data-page-node-id="ZuZq1P56e3Ari9Ma75iFlF">$ARGUMENTS</code> 变量传参。</td>
+    </tr>
+    <tr data-page-node-id="KWpYeCCkHa35f6X8hm4PDq">
+      <td data-page-node-id="SuzwehJv6z0NT5rvDrWGyU"><strong data-page-node-id="KCfftFmOEFDWWqFjdc6do5">rules/*.md</strong></td>
+      <td data-page-node-id="JtgAHZGSzQEZ5DzWJkEOU4">项目/用户</td><td data-page-node-id="h5smNeAhoNtUthJbtBs72r">可选</td>
+      <td data-page-node-id="vfcTNWbWDLXQlDMZtB1VK4"><strong data-page-node-id="CLKSrJecCTih8oqYdSKBHj">模块化规则</strong>，按需加载。支持路径限定匹配——文件名即匹配规则（如 <code data-page-node-id="w4KbOWjmn1E5iQzU7DwBP0">frontend/**.tsx.md</code> 仅在 frontend 下的 tsx 文件激活）。无路径限定符的文件始终加载。</td>
+    </tr>
+    <tr data-page-node-id="6pL3SAYodJEX5AJT2rvBJh">
+      <td data-page-node-id="yhztENOIKLzQICwPnnNsBE"><strong data-page-node-id="ONaDrNPOiRURq81LopDRXa">hooks/</strong></td>
+      <td data-page-node-id="ZzpBGvyqTS9fOGp5AqYpl0">项目</td><td data-page-node-id="0x5mTRFybAGoeaa18UjYqv">可选</td>
+      <td data-page-node-id="Gn6D6Yk2Ma6SQqJTfChlbF">Hook 脚本存放目录。Hook 在 settings.json 中声明，脚本放这里。支持 25 种事件（SessionStart、PreToolUse、PostToolUse、Stop 等），4 种 Hook 类型（command/http/prompt/agent）。</td>
+    </tr>
+    <tr data-page-node-id="r48kODuo6pauVyPuCEqSQy">
+      <td data-page-node-id="nMnJTCHs44y2EPCifADERi"><strong data-page-node-id="o9uAYTUIIjt7mJd5yPusbx">skills/</strong></td>
+      <td data-page-node-id="6Fg1ARYO2PxQakMifXNYMM">项目/用户</td><td data-page-node-id="YA0ztiArK5tHXdqBgMApbs">可选</td>
+      <td data-page-node-id="i202Bx1noSnDT5DS3SMtGx"><strong data-page-node-id="CI3PvkzidS6rb6UAuVejL8">可复用技能模块</strong>。每个 Skill 是独立目录，包含 SKILL.md（指令 + 元数据）和可选的 scripts/、references/、assets/。延迟加载，按需激活。</td>
+    </tr>
+    <tr data-page-node-id="uuiykbFODizbKPy5nwbAB3">
+      <td data-page-node-id="j12gjWAy3mAKKwl1DoFRbc"><strong data-page-node-id="0cUBVfVskRqtPcFFfzPAdL">agents/</strong></td>
+      <td data-page-node-id="6e0WOnz1HaBvoykISPmaNz">项目/用户</td><td data-page-node-id="vcJECzesaMo4vHdxu9uSGG">可选</td>
+      <td data-page-node-id="WtXBDLCWVWd8klKhl2VuEi"><strong data-page-node-id="jw213RqVf4m4bvS6nkjfIQ">自定义 Agent 配置</strong>。可指定特定系统提示词、模型、工具权限，用于特定场景的子智能体。</td>
+    </tr>
+    <tr data-page-node-id="0txoVFAx3o5ayoTixUZBfh">
+      <td data-page-node-id="Nh4VvpAoSLmTqhfADFtn5A"><strong data-page-node-id="5JzkxK6s5JR7ht09PskyVH">.mcp.json</strong></td>
+      <td data-page-node-id="yeEgrCS2BoHdmnfnSI35VU">项目</td><td data-page-node-id="LUiL89hzuL3NWT7ANd37BE">✅ Git</td>
+      <td data-page-node-id="Oc0y4JaQGDC0NkCVjYP320">项目级 MCP 服务器配置。定义外部工具集成（数据库、API、GitHub 等）。</td>
+    </tr>
+    <tr data-page-node-id="QvoKkIaHuJyq0LB7UJOKv9">
+      <td data-page-node-id="SCnrv2gq4HVLzfkMKUVPtj"><strong data-page-node-id="AT4YbfX7VHj8jaHmfqoxet">credentials.json</strong></td>
+      <td data-page-node-id="Cu8dBrujcBcZ8deo7ZcISD">用户</td><td data-page-node-id="7jZMJi0yw9iaLVMcx1yd7E">❌</td>
+      <td data-page-node-id="TvvCpHWF6PZVsiVJQ4FQww">认证凭据。⚠️ 自动生成，<strong data-page-node-id="FacjbWuXwHS4ZcULld7mRZ">不要手动编辑，不要提交到版本控制</strong>。</td>
+    </tr>
+  </table>
+
+  <!-- 设置优先级 -->
+  <h3 data-page-node-id="tCcavMmrNA4AomnADilKai">设置文件优先级（从高到低）</h3>
+  <table data-page-node-id="q5BdHPiso62gqiiGZmGglG">
+    <tr data-page-node-id="FBYRc9C1WExPLCKv5eDeBx"><th data-page-node-id="rQW8LRc1wjynrqO9dmHPdk">优先级</th><th data-page-node-id="JP6ANn7bWP9hMoBdU331Ac">设置来源</th><th data-page-node-id="s5DYvnVKOyB3S9FYAmj7c1">说明</th></tr>
+    <tr data-page-node-id="n83fRzVGlycSF0KC0Oowk8"><td data-page-node-id="dElR6GidvpCZI3Mugug4eE">1（最高）</td><td data-page-node-id="BoivcMgLDWCtW0N9kE1jqF"><strong data-page-node-id="FPCJ1f6qa6iAaWhgYDpjDV">Managed Policy Settings</strong></td><td data-page-node-id="x8BHLKalccocNNPBcyCA5a">企业管理员配置</td></tr>
+    <tr data-page-node-id="TvvFDnxH4I5DRiC87Vr5n8"><td data-page-node-id="DkJrhIxg8nmgGUcOfYKhNR">2</td><td data-page-node-id="cNoy5nYexz2j2NHBsvJDkK"><code data-page-node-id="gGHVSJmJSykkW93uSZM5Mc">~/.claude/settings.local.json</code></td><td data-page-node-id="wAvIpkRAFiaMzZqUvt2eiZ">全局本地覆盖</td></tr>
+    <tr data-page-node-id="ZZwa3AxuPWGnDKBnpmwjqv"><td data-page-node-id="fZPto00FOAWb4FNO1KKIkQ">3</td><td data-page-node-id="HH3eooHtccVDTj8MNiwJfC"><code data-page-node-id="o7GOfOBdyk4mwtvN0HMJcN">~/.claude/settings.json</code></td><td data-page-node-id="kjS1ZlLK0QWwfl5wkDQP77">全局设置</td></tr>
+    <tr data-page-node-id="E6Dshi9NSRLNxP19OEJH2U"><td data-page-node-id="PKRNZ4fdRGt9XHNXOhCX4m">4</td><td data-page-node-id="BLAZ4uOEfqgEGf6cM4UNX4"><code data-page-node-id="jYAJTlEy7x4fGmwhOECLco">.claude/settings.local.json</code></td><td data-page-node-id="bywZepKgR4lztNAYalZoO5">项目本地覆盖</td></tr>
+    <tr data-page-node-id="8fg8KJYA4l3DUdsvzoFBTP"><td data-page-node-id="D3ntRJkle0RyVzYEi6pPSm">5（最低）</td><td data-page-node-id="DuWyFSNYzDVCUlGLucdUFL"><code data-page-node-id="0LA7CGLRttmKtp8kBYHnf7">.claude/settings.json</code></td><td data-page-node-id="kF87uMUjk0yB3DqDxsr0FO">项目共享设置</td></tr>
+  </table>
+
+  <!-- 25 种 Hook 事件 -->
+  <h3 data-page-node-id="k2fWu2yhWH6DiSKuDDBANH">Hook 支持的全部 25 种事件</h3>
+  <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));" data-page-node-id="vgrX1QaD3CIhmHz8HDPXKZ">
+    <div class="card" data-page-node-id="7dxQbsKQqmcwNlQHZiaT6L"><h4 data-page-node-id="MMMsC0uDBXuNs3cCfzk39q">🟢 会话生命周期</h4><p data-page-node-id="sS1nme9NkovsYFSuzGpyNa">SessionStart, SessionEnd, Stop, StopFailure, InstructionsLoaded, ConfigChange, PreCompact, PostCompact</p></div>
+    <div class="card" data-page-node-id="urJYDJXqsmQMUZlkZJQA0U"><h4 data-page-node-id="KMIJBKrdyQAr9Mm8yTAoBb">🟡 用户交互</h4><p data-page-node-id="VWgrbaWNgi5dIGa0Xwzk0N">UserPromptSubmit, PermissionRequest, PermissionDenied, Notification, Elicitation, ElicitationResult</p></div>
+    <div class="card" data-page-node-id="094pgHpcmTkMZcvdENPr5I"><h4 data-page-node-id="G6eWd3KrlYzA5J8S8pz1ju">🔵 工具调用</h4><p data-page-node-id="wJ18Q2vOwCG51uRrNDI7t9">PreToolUse, PostToolUse, PostToolUseFailure</p></div>
+    <div class="card" data-page-node-id="luRe9OzPhQoF3rpPnEtcD3"><h4 data-page-node-id="TGygpD52tfNnsSl0jSuOWw">🟣 Agent / 团队</h4><p data-page-node-id="pkOYHbVuQahAozgpX0pbOT">SubagentStart, SubagentStop, TeammateIdle, TaskCreated, TaskCompleted</p></div>
+    <div class="card" data-page-node-id="oCUeLatXwS2u0YtfzBSECK"><h4 data-page-node-id="ct6SakB73oSr6tMGt3YHmD">🟠 文件 / 目录</h4><p data-page-node-id="ymkvL7cnJkr3wzcdP7OAjn">FileChanged, CwdChanged, WorktreeCreate, WorktreeRemove</p></div>
+  </div>
+
+  <!-- Skills vs MCP -->
+  <h3 data-page-node-id="AdT6FEhoJbM60jX8USfQsj">⚡ Skills vs MCP：核心区别</h3>
+  <p data-page-node-id="kPct7h5t8jCURHmOeKpADW">Skill 解决"<strong data-page-node-id="FJ1QEGj1jiASxYOFWQbY0y">方法论</strong>"问题（教 AI 怎么做某类任务），MCP 解决"<strong data-page-node-id="QChYVPBOLp1O8961lFUUxD">连接</strong>"问题（让 AI 能访问外部世界）。两者是<strong data-page-node-id="2IoEwqpUohFIdyNrCTSWXl">互补关系</strong>，不是替代关系。</p>
+  <div class="highlight-box" style="margin:12px 0 20px;" data-page-node-id="b1W3K9Pd5XbWEkgIvhKL2R">
+    <p style="font-size:0.92em;" data-page-node-id="pH9Xywb0EOFu0gnnmM13C0"><strong data-page-node-id="USGMET3Ub9S3GYPLgEwACq">架构层级：</strong>Skill（提示/知识层）→ LLM 推理层 → MCP（集成层）→ 外部世界</p>
+  </div>
+  <table style="margin:8px 0 20px;" data-page-node-id="snGTm1dmDQqtQTI7YoBa36">
+    <tr data-page-node-id="RkOYHzYUW0IuZ3sfCce2xV"><th data-page-node-id="I5zX5m4zyGU5DnHl09sMrR">维度</th><th data-page-node-id="ywlwJ59TE7jDD15BiFDgvD">MCP</th><th data-page-node-id="4Nkyr8YJaZqZIn0RXAyjIW">Skill</th></tr>
+    <tr data-page-node-id="dfE5DvFd7EVuPuhiNRsVFg"><td data-page-node-id="eLda9zEJcWw3MIxH2ZD6dr"><strong data-page-node-id="bjMXJGnFXnz1GtZMNn8jsO">核心作用</strong></td><td data-page-node-id="hX9IkQ9QG4E96PJo22vYuU">连接外部系统</td><td data-page-node-id="6NuebI1XD5W5KhtSCIyGai">编码专业知识和方法论</td></tr>
+    <tr data-page-node-id="ftBjvcbEx70EFBg7P8A1F7"><td data-page-node-id="j6yeF9pLOFZmLSeNw0rpjW"><strong data-page-node-id="xcBBdnl2MDWoCsGhB3lMY2">协议基础</strong></td><td data-page-node-id="3dcTyr2I2nRLT5W33RXTe1">JSON-RPC 2.0（开放协议）</td><td data-page-node-id="FCEiLC7nvp5GzZqNQBc6t8">文件系统 + Markdown</td></tr>
+    <tr data-page-node-id="XRDZQcCH0w3qCTjmIBoLFi"><td data-page-node-id="hcH8mdFaHI6zqEHBkbNJxF"><strong data-page-node-id="poEvbyD07pefSNYm7Nxean">Token 消耗</strong></td><td data-page-node-id="DCFva6gcT5ltAS4H7EM13m">高（工具定义持久占用上下文）</td><td data-page-node-id="CRktecPatayDYLuUCFGg5f">低（渐进式加载）</td></tr>
+    <tr data-page-node-id="0LffQiXCj53YlnGebCUQqt"><td data-page-node-id="VSuzJPFF7xRIhOBkPQLhnU"><strong data-page-node-id="c4qcjL37i5wVH5NxGS8HGi">触发方式</strong></td><td data-page-node-id="JnHlQpqyUVoHna4O82eIsI">持久连接，随时可用</td><td data-page-node-id="SUiOiAiA35GGAY08H9PAvm">语义匹配，自动触发</td></tr>
+    <tr data-page-node-id="hvCpiuUqGe5iOL0V8jmB6e"><td data-page-node-id="KRYhxV1Ytlb2Q6NDFhhiM1"><strong data-page-node-id="2fk9LDD5QaYwF81rSU9ehp">开发难度</strong></td><td data-page-node-id="YLit2n776oF4Lk63ytUDKU">中高（需写 Server）</td><td data-page-node-id="PzKZkrzIESyzTRVM5iTeoE">极低（写 Markdown）</td></tr>
+    <tr data-page-node-id="jGU9VpQzBG223KoqO6Tejf"><td data-page-node-id="ZCRHXmvJEva8qSjh2KMFEZ"><strong data-page-node-id="Emvv7l2wWUGcKYzySL8LjW">跨平台</strong></td><td data-page-node-id="GmV9mC4gRrqaKWHgK4TjN4">✅ 多平台支持</td><td data-page-node-id="fPwxcA9XUW2B1yYZRmpw9f">❌ 目前 Anthropic 生态专属</td></tr>
+  </table>
+  <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin:12px 0 20px;" data-page-node-id="ylDAeqzU6HnkO1tjfcBASR">
+    <div class="card" style="border-left-color:var(--accent2);" data-page-node-id="MhbtLDyH1mrRwwQPDjEkLY">
+      <h4 data-page-node-id="1ikAPnfFV3Ab5kAFUui2m1">用 MCP 当：</h4>
+      <p data-page-node-id="JYBScH395jDEMzhxqHxQvr">访问数据库/API、文件系统、实时信息、跨平台复用工具。<br data-page-node-id="lLfCH0BOle96IKm6fR4kmM"><span style="font-size:0.85em;color:var(--accent2);" data-page-node-id="Du8fUE7JOID643E4jNud2L">MCP = AI 的"手"</span></p>
+    </div>
+    <div class="card" style="border-left-color:var(--accent3);" data-page-node-id="cabZtZa1ZBzBqYZg03z2D4">
+      <h4 data-page-node-id="C6ngXBjOJnFtrYB3kKFGIH">用 Skill 当：</h4>
+      <p data-page-node-id="AI8mzv13ErrwJFdJS9Gx3c">重复工作流、公司内部规范、多步骤复杂任务、Token 敏感场景。<br data-page-node-id="J0DCUGY1o0De59YRXF5jXk"><span style="font-size:0.85em;color:var(--accent3);" data-page-node-id="8xEGsjDUkjMhOmsgxQXGYK">Skill = AI 的"技能书"</span></p>
+    </div>
+    <div class="card" style="border-left-color:var(--accent4);" data-page-node-id="Ha5jDPcCUcE3AjxDhpTKmC">
+      <h4 data-page-node-id="TMqBEVcPkBdz6BTPBpL6n3">结合使用：</h4>
+      <p data-page-node-id="n9JdU7zQGhAZDnxn1rW7re">MCP 获取数据 → Skill 提供方法论 → AI 分析 → MCP 提交结果。两者协作，各司其职。</p>
+    </div>
+  </div>
+  <div class="highlight-box warning" style="margin:12px 0 20px;" data-page-node-id="UGhtHL9mZ7klX6yfn1Vmom">
+    <p data-page-node-id="Sh9nZAPTelqkCEigifCLuS"><strong data-page-node-id="mcxjzI6bcF2BCD1Gh0OV07">⚠️ 安全提示：</strong>MCP 第三方 Server 有 prompt injection 风险；Skill 恶意 Skill 文件可隐藏注入指令。用 <code data-page-node-id="08DT232LWt3LQEC3K9CkYm">allowed-tools</code> 限制能力范围。</p>
+  </div>
+  <p style="font-size:0.88em;color:var(--text-secondary);margin-bottom:20px;" data-page-node-id="ZjiFfs4LlmFUkcWg8zZNRC">来源：Skills vs MCP 核心对比 · <a href="https://mp.weixin.qq.com/s/AxsLEvdv53K0_SVNDJlpwQ" target="_blank" style="color:var(--accent)" data-page-node-id="C4hKrZcGQScQDPqU3edwUa">原文链接 ↗</a></p>
+
+  <!-- 社区惯例 vs 官方 -->
+  <h3 data-page-node-id="DXprWZi6uxe4kEVtUU2Zgc">⚠️ 社区惯例 vs 官方支持</h3>
+  <p data-page-node-id="s79bAvkykUCjFlRPWzHITe">以下文件名在社区中常见，但 Claude Code <strong data-page-node-id="8HuD0Uhhf28aU54Js8r2Z2">不会自动识别和加载</strong>——如需使用必须在 <code data-page-node-id="zIlZFYbom58mMsD8fthvZK">CLAUDE.md</code> 中显式引用：</p>
+  <table data-page-node-id="tvCFxasEftSm489T1ryxKY">
+    <tr data-page-node-id="Z5IU32FmuJtrh2mvx82lnF"><th data-page-node-id="oak2ibg8pOo6FoCaVD4OhE">社区惯例文件</th><th data-page-node-id="5XFx8RMV6RN4SCSqtA3fqW">社区用途</th><th data-page-node-id="1GTu4uVFuDRUfEKGpFdEey">官方替代方案</th></tr>
+    <tr data-page-node-id="ZDz9ocY0PBv0ZP0AWQbqX3"><td data-page-node-id="pApUva7lUrmRGiffNucS5O"><code data-page-node-id="NwAqTxbdcxYXeJsinYfFoB">.claude/context.md</code></td><td data-page-node-id="y0IK2W6ZMEijU2f0y63dQs">额外上下文</td><td data-page-node-id="mWl55sMrwYfvsH7yuyty2A">在 CLAUDE.md 中手动引用</td></tr>
+    <tr data-page-node-id="p08KDlupqTsxYqTfWacQvL"><td data-page-node-id="ZkuXjr6sPxmtvV6xBKUKkO"><code data-page-node-id="5KhDBuyRO7E07odb8asXjA">.claude/instructions.md</code></td><td data-page-node-id="4oqsObe7kCdtChTjN7wwtH">额外指令</td><td data-page-node-id="vGwL97ArCKQQXE0ST0FN7c">在 CLAUDE.md 中手动引用</td></tr>
+    <tr data-page-node-id="FF4Movqe8ZB3C82JwWnIFm"><td data-page-node-id="yvtlSRF34dN4HnTxZNY6aW"><code data-page-node-id="Btqfa5Fqk2J3CHoPxpCfMu">.claude/conventions.md</code></td><td data-page-node-id="2qSubV6gEmKUhSRUApvCfc">编码约定</td><td data-page-node-id="U1EDXUDHDUpDPJImE5VNWI">在 CLAUDE.md 中手动引用</td></tr>
+    <tr data-page-node-id="GpxKsOlRFC7HMnjWLkKmMv"><td data-page-node-id="7ik7xKwbgqbXGvpeWleERK"><code data-page-node-id="Rm0BjvY88I9Y3lXgR4di28">.claude/memory.md</code></td><td data-page-node-id="PBliHllsA1jCrVOMSlAKaI">记忆文件</td><td data-page-node-id="bU2xfjcBP3KFmM4gn0o1KK">官方已用 <code data-page-node-id="JOkSNOEebeuALDV402HtIn">CLAUDE.md</code> + <code data-page-node-id="k1vs9LaTXDggMdRrhbZa8Z">CLAUDE.local.md</code> 替代</td></tr>
+    <tr data-page-node-id="lKC2mL2ZwabyJR2cSKaufr"><td data-page-node-id="qq2mGY4V71yuIBzYShmTDJ"><code data-page-node-id="dyox7OlwBuOGhAWlxA0z6m">.claude/permissions.json</code></td><td data-page-node-id="Zt3VMsWjDu5M5tJOAgyBJ3">权限配置</td><td data-page-node-id="pEY7fHR6TIFI7CeTT09sA6">官方已合并到 <code data-page-node-id="VHKZS4iH1WfXkMKbtRgctO">settings.json</code></td></tr>
+    <tr data-page-node-id="3aB1CtDdh4B0nrehbSLmSs"><td data-page-node-id="kRMmBHON3IzZ8AVRU1FGmn"><code data-page-node-id="IZ6P1sWjGIFhNb0HI1lAff">.claude/prompts/</code></td><td data-page-node-id="EgGcbqUR6nnVXmrTPwrfWc">提示词模板</td><td data-page-node-id="1k97CjAjiwzawu3bjSARnz">官方用 <code data-page-node-id="vBzsIOJeifb9qpNaCq3xjz">commands/</code> 替代</td></tr>
+    <tr data-page-node-id="1KBtbLLIbdLJi213BWbSEP"><td data-page-node-id="pKDuq0FPAsyL3jAdaDP1aU"><code data-page-node-id="Px7Bt0TsLuwd8NAdqHgfkF">.claude/workflows/</code></td><td data-page-node-id="Ee7CZxDA3UpadSDtYkbDwG">工作流</td><td data-page-node-id="SDCjpvhCjRgFYcbZUij9mi">官方用 <code data-page-node-id="xONPRaZQJXontTcDAT4day">hooks</code> + <code data-page-node-id="j9b2EOZg15n4zPrPk0HYdn">commands</code> 替代</td></tr>
+  </table>
+</section>
+
+<!-- ============ CH1: 四条黄金法则 ============ -->
+<section id="ch1" data-page-node-id="8q7I185p5vsaL5C5G49vpf">
+  <h2 data-page-node-id="beIvpC1sUSMDcda5wGlE8t"><span class="num" style="background:var(--accent3)" data-page-node-id="Zl6pArjYjYimtJmMPzsJoA">二</span> Anthropic 工程师的四条黄金法则</h2>
+  <p style="color:var(--text-secondary)" data-page-node-id="MOMhE9TZ8BoJIhdYaIk58t">来源：<em data-page-node-id="3pHMzqkeexC3XcyGkS8C3Q">Anthropic 工程师用 Claude Code 的四条黄金法则</em> · <a href="https://mp.weixin.qq.com/s/BebeNM8D8wKeW2YNjyNsFw" target="_blank" style="color:var(--accent)" data-page-node-id="pfDECRDRik7Y0qULFZP7SN">原文链接 ↗</a></p>
+
+  <h3 data-page-node-id="ZaEGAmQ04rRTDDDIcLjJ72">法则一：Prompt Skills，不是 Prompt Claude</h3>
+  <p data-page-node-id="kDsg5LbNrxwRzDVgA3XFP1">不要每次都写新 prompt。把重复性工作封装成 <strong data-page-node-id="WDiv0RBkQWLN2rIK9WeaFC">Skill</strong>。以后不再写 custom prompts，而是调用已有的 skills。就像你不会每次发微信都重写程序，而是直接打开微信 App 一样。</p>
+  <div class="highlight-box success" data-page-node-id="EsSlIBbjl9mPnxuFIi083H">
+    <p data-page-node-id="FoAMPa5L5uDPL6l9iZ91dP"><strong data-page-node-id="OoWZ7JFeDk87Pybs9bIHFJ">实操：</strong>让 Claude 分析你过去一周的工作内容，找出有哪些重复性事务可以封装成 Skill。</p>
+  </div>
+
+  <h3 data-page-node-id="5UnOIIgxFJZ3XGiYAGPFJV">法则二：Skills 不只是 Prompt——三层结构</h3>
+  <table data-page-node-id="ZqjXSpHwvlaheN1MnFXol8">
+    <tr data-page-node-id="hgGy4xN0Mm4MynjK8TXNvV"><th data-page-node-id="r4ya9xfh6Xpy5eGCaq27kI">层级</th><th data-page-node-id="MT7awBmIL1exWoZ8q3EOzP">名称</th><th data-page-node-id="APDYSHq0toJyMCeZDnW0JJ">作用</th><th data-page-node-id="twoiZ2vdxsYOFFn3J3FlKj">关键细节</th></tr>
+    <tr data-page-node-id="nQQ9AqlQxomkMMx3Sl8CO8"><td data-page-node-id="VVfGrvBHU0exZLemujaiVQ">Layer 1</td><td data-page-node-id="UrSNOJjMmS2lHRyXWbqAnx">描述</td><td data-page-node-id="jwBu3PuAAL5SrtF1Egwk0z">Claude 判断是否启用此 skill 的依据</td><td data-page-node-id="FDYtcKCNz3bjZwlCfJjmCf">不需要显式调用，Claude 自动判断</td></tr>
+    <tr data-page-node-id="CgAFmST01C3wD0ARBRjAsR"><td data-page-node-id="KVP81VzZKrWsqYvgT9eAAz">Layer 2</td><td data-page-node-id="oQerLdQdrvyleCK5omysxn">指令</td><td data-page-node-id="u8SFELS0ttPBUr8YwOj9SU">操作手册</td><td data-page-node-id="MbrkyGBmXE8YqAeOaa2mep">一步步指导：先做什么、后做什么</td></tr>
+    <tr data-page-node-id="fdbXQpD9XJimeoBrcdyF4E"><td data-page-node-id="GGrPQn92qfA8wsKeItREr6">Layer 3</td><td data-page-node-id="k2ycMRVu8Sl5jNOVsdyEBF">工具</td><td data-page-node-id="KBDPI9iy0TuHdqyuX4H4pg"><strong data-page-node-id="NGZlPzfDoJorf4CRwmKSCB">真正的杠杆所在</strong></td><td data-page-node-id="RrDtHwbBXSzzzb8K5fm0Pu">脚本、API、参考文件等</td></tr>
+  </table>
+  <div class="highlight-box" data-page-node-id="ZVtvMFzZB4xgw3CAvKgzyr">
+    <p data-page-node-id="kjcWEVVOQ6zK1LbszoS2EU"><strong data-page-node-id="R4QAFCtCRptPCBlIHJhJ6F">核心洞察：</strong>大多数人停在 Layer 2（写很精美的 prompt），但 Anthropic 工程师把精力放在 Layer 3（工具层）。如果能用代码，就别用 AI——让 AI 帮你写一次，然后无限复用。</p>
+  </div>
+
+  <h3 data-page-node-id="p8IC65zRrDGuGmZ1voyu6F">法则三：构建可组合的 Skills，而不是定制的 Skills</h3>
+  <p data-page-node-id="etz7qyH6qDoIOQfrZY4Gyu">多个<strong data-page-node-id="210kKXmNwALPNsGvQHzTQK">小型、专注、可复用</strong>的 skill，而不是一个巨大的"万能" skill。拆分的三个理由：</p>
+  <ul style="margin-left:20px; margin-bottom:16px;" data-page-node-id="o8eZVISX3E4hYi5qphUq2A">
+    <li data-page-node-id="H4zCnpjw0qQ2JBBi5ykvHH"><strong data-page-node-id="lXMtWFpwQ4JvkTIcRTnBfq">问题容易定位</strong>——小 skill 出错一眼看到，巨无霸找 bug 找到崩溃</li>
+    <li data-page-node-id="CbA1W7lK9s8b4DeKlHHyuJ"><strong data-page-node-id="gx08Jo5HDhE37lVPxUEMDD">改进可以积累</strong>——更新专注的 skill，所有用到它的 workflow 自动升级</li>
+    <li data-page-node-id="ShsA8tBzCmvJ7lL9SIoMMx"><strong data-page-node-id="lp4J7VtvkHdFZ7AjHFPENJ">复用代替重建</strong>——写了「检查域名」的 skill，插到任何 workflow 里直接用</li>
+  </ul>
+
+  <p data-page-node-id="KjH56IgB5RaW3Easztoa2A"><strong data-page-node-id="hDtwKljULF5aVGP5adzZfi">两个关键技术模式：</strong></p>
+  <table data-page-node-id="ZMguPsxLTJoSAmG9r5kW7G">
+    <tr data-page-node-id="OMCzAG3Aafy9pp2NRCOG8Z"><th data-page-node-id="mhPEI2o7sgE2P1LQ5akGi8">模式</th><th data-page-node-id="FpVAMlYKcxwSKGNqccxAfn">核心思路</th><th data-page-node-id="6YTTc7IjJCjIsQKXR1ozTI">原理</th></tr>
+    <tr data-page-node-id="UyB9brkN6GV6eCjObYAnER"><td data-page-node-id="E91rABzUrXilAID1FQ1aC2">把脚本保存到 Skill</td><td data-page-node-id="Dq19drGMKT3mTx0G6hmv2O">AI 帮我写一次代码，以后直接运行脚本</td><td data-page-node-id="wtEDVRmoMhJMQS2vh7sFYi">代码是确定性，AI 是概率性。用代码替代 token → 更便宜、更快、更可重复</td></tr>
+    <tr data-page-node-id="cCGxBTjEqCjwRGLo0hPMRX"><td data-page-node-id="RWcElfbMDQazxpm7RNMnXy">控制 Skill 调用权限</td><td data-page-node-id="lezbKeF7IX8Sx7LOca4DhK"><code data-page-node-id="wgFtTWkaEtzsyl4fXlOGZF">user_invocable=false</code> 隐藏；<code data-page-node-id="vJ1wvzkZ4Jau7WuEXDEbXD">disable_model_invocation=true</code> 需手动</td><td data-page-node-id="80EG9KBxQzCp1Of9oqSMTk">高风险操作（部署、发消息）设为手动触发，AI 不能自动调用</td></tr>
+  </table>
+
+  <h3 data-page-node-id="DZsYkgaNuEEn8v5Xn0KY2Q">法则四：Skills 每次使用都在变聪明</h3>
+  <div class="highlight-box success" data-page-node-id="onf4z7zgJNMTwDJYsD3lSH">
+    <p data-page-node-id="Y8SXDDGrc4O1DrLGwAgBAo"><strong data-page-node-id="wmiKVCh2kZmrTxCDAp2j3h">进化闭环：</strong>运行 skill → 评估输出发现不足 → 更新 skill → 循环。每次运行后问自己：这是一次性修复，还是应该永久写进 Skill？如果是永久的 → 更新 skill（加规则、加例子、加边界处理）。</p>
+  </div>
+  <div class="flow" data-page-node-id="5x6F7G01FdF20YxhSBBAVV">
+    <div class="node" data-page-node-id="yjrG7Og20bGKNEPD5SAM2B">运行 Skill</div>
+    <div class="arrow" data-page-node-id="wExbQD2wYK1C0P9ZTG9fr2">→</div>
+    <div class="node" data-page-node-id="Fv5vij8x1GrPBC5o76vYqO">评估发现不足</div>
+    <div class="arrow" data-page-node-id="IHhH1TL7x1sbgn59hdFQZW">→</div>
+    <div class="node" data-page-node-id="wk81FWNfv5cd4pmqFfmjVD">永久更新 Skill</div>
+    <div class="arrow" data-page-node-id="UR0vB0Dk33miJHbG9k9jeS">→</div>
+    <div class="node" data-page-node-id="iM6gq8FWeWLme4KfMWBCFi">下次更好用</div>
+    <div class="arrow" data-page-node-id="oUrJ9Et6FDjmqALKselwXj">↻</div>
+  </div>
+</section>
+
+<!-- ============ CH2: 五步搭建 Harness ============ -->
+<section id="ch2" data-page-node-id="bemtXpPLjoP8jz35U8bH0f">
+  <h2 data-page-node-id="CuMtr46Ayx6ARBwatd90ab"><span class="num" style="background:var(--accent4)" data-page-node-id="0XRAfFFiSvX4jXJe7af6mb">三</span> 五步搭建 Claude Code Harness</h2>
+  <p style="color:var(--text-secondary)" data-page-node-id="QEjqNWZIDdTLwTyS6DoGNX">来源：<em data-page-node-id="8LHxIvcJYP5JwjE9GgYHya">花一小时搭好 Claude Code Harness，AI 写代码质量立竿见影</em> · <a href="https://mp.weixin.qq.com/s/OqvMlDdk5Q-tdJH0sN3RbQ" target="_blank" style="color:var(--accent)" data-page-node-id="cJz3c5Yn8ciRAaSvGt0cAI">原文链接 ↗</a></p>
+  <p data-page-node-id="L5cKzAFsUmujUVlwv7iZFG">约15分钟，5步实操，每步3分钟，不要跳步按顺序来。<strong data-page-node-id="QGlt4hwV7FbOI0j7wAND7l">使用真实项目目录，不要新建 demo 项目。</strong></p>
+
+  <ol class="step-list" data-page-node-id="pw8TKGq0IVs2RqWmrlV9nh">
+    <li data-page-node-id="dFJSrlHEiIFmrsM4ctikEN">
+      <strong data-page-node-id="XTLeLHQEBGPCRvxCv5AKzF">第一步：把 CLAUDE.md 写对（回报率最高的 5 分钟）</strong>
+      规则放 CLAUDE.md，工作流放 Skills。只写"AI 需要在你开口之前就知道的事"。<br data-page-node-id="LsVaufi0YktiuZOGsRXDaE">
+      <em data-page-node-id="Fua5fwrRyNnlQ85MyHrIyL">踩坑提醒：</em>别当项目文档写。砍到 20 行，效果比 300 行好得多。
+      <pre data-page-node-id="NVuKLc2wcJiGzKNrAeyPdl"><code data-page-node-id="EBP6vdxoiKI8oGwIH7BhQg"># 项目概要
+技术栈：Next.js 15 + tRPC + PostgreSQL
+跑测试：pnpm test
+
+# 全局约定
+- 金额相关计算一律用"分"，禁止浮点数
+- 组件文件用 named export，不用 default export</code></pre>
+    </li>
+    <li data-page-node-id="y0FGKH9sj2ZLHgMO6thmGw">
+      <strong data-page-node-id="0UaR3fsVFBxZvy299D4WLy">第二步：配一个 Hook，别每次都从头自我介绍</strong>
+      SessionStart Hook 自动注入 git 状态、当前分支、最近提交日志。让 Claude 一上来就知道项目长什么样、你正在做什么。
+      <pre data-page-node-id="EOVF4Kn0WhdsmtqnKXnvH8"><code data-page-node-id="Z7mbCLMFmNgTZ6bMvVTvBa">{
+  "hooks": {
+    "SessionStart": [{
+      "type": "command",
+      "command": "node .claude/hooks/session-context.mjs"
+    }]
+  }
+}</code></pre>
+    </li>
+    <li data-page-node-id="Vpoc1U6aBTBk7F3pTEjver">
+      <strong data-page-node-id="HWJHPaBDZnu7M1XILsX1Es">第三步：把重复工作流写成 Skill，用到的时候自己跳出来</strong>
+      Skill 的精妙之处在<strong data-page-node-id="iFYudrf13C8Lng5fPPTJvH">延迟加载</strong>——可以写 50 个 Skill，但每次对话只为一个 Skill 的描述付 token 费。正文只在匹配时加载。
+      <pre data-page-node-id="jCtL0GpRAJkfEGnihhm86Z"><code data-page-node-id="Fxshks06j3F1sleffb6jrz">---
+name: api-add-route
+description: 新建 tRPC 路由，含 zod 校验和测试
+paths: packages/api/**
+---
+
+# 新建 API 路由
+1. 检查 src/routes/ 下已有路由，避免重复
+2. 用 zod 写输入 schema
+3. 写路由 handler
+4. 补测试，用项目统一的 test helper
+5. 跑 `pnpm --filter api test` 确认通过</code></pre>
+      <strong data-page-node-id="0xQWG37FUL2fpc5udVQP6I">paths 作用域（被低估的功能）：</strong><code data-page-node-id="QplDOHJ5nX3DWCxoCJFwU7">paths: packages/api/**</code> 让 Skill 只在 api 包目录下工作时激活。几百人的 monorepo 里每个人只看到跟自己相关的 Skill。
+    </li>
+    <li data-page-node-id="hWfIWmzoLyHAMKS6a9IzJY">
+      <strong data-page-node-id="dE4o1dKxOOcmtltUEQeyJU">第四步：装上 LSP，别让 grep 在大代码库中大海捞针</strong>
+      Claude Code 不用向量数据库、不预建索引。它像人一样导航——读文件、grep 搜索。10 万行以上，一个 <code data-page-node-id="yvfGlSYp5kiluDWfQiH0LN">grep handlePayment</code> 炸出几百条。LSP 做的是<strong data-page-node-id="g2k77iqSxEiHEuXejvGj2g">符号级搜索</strong>，同一个变量名只给一处定义和两处引用。
+      <table data-page-node-id="HBf6XG1j7OZz1mLrg0EG29">
+        <tr data-page-node-id="Bo9TiKCBuagndB4Uo0BxeO"><th data-page-node-id="LdPygblUizi0GFqy53VNrU">语言</th><th data-page-node-id="43xRob5mIYl4oJx9m36dY8">安装的 Language Server</th></tr>
+        <tr data-page-node-id="eaRwMVXWfGQZXvqaQMzvKB"><td data-page-node-id="ykQTHD0UDWGrHuzMIAIdzW">TypeScript</td><td data-page-node-id="EUK76cDECF4m8N83FJbRAg"><code data-page-node-id="BVRzpbNFUk1RXRViv1f9ww">typescript-language-server</code></td></tr>
+        <tr data-page-node-id="4lQnazI6h0PPvK1dZ2So24"><td data-page-node-id="avrgy6Gz7Ccq9ETCKI6OBI">Python</td><td data-page-node-id="KzFxF1U3ltzcCcNZOT70xt"><code data-page-node-id="ibwGyR2St6yjmJWooy3A1L">pyright</code></td></tr>
+      </table>
+    </li>
+    <li data-page-node-id="afsyxBLSBIpFhk3MZBfixV">
+      <strong data-page-node-id="51LzXwuGN7LXgaA51Vth7w">第五步：拆个 Sub-agent 去探路，主线别被上下文撑爆</strong>
+      派一个只读 sub-agent 去探索目录结构、入口点和数据流。它在独立上下文中执行，主会话只收结果摘要。代码库越大，这个模式越值钱。
+    </li>
+  </ol>
+
+  <div class="highlight-box warn" data-page-node-id="nXDS8FUAM99MM60jTNRwoR">
+    <p data-page-node-id="WTDuHdZ7Wakt1HtB6AoRse"><strong data-page-node-id="K0nEvm5NFaEvb2Fr30w89G">维护规律：</strong>Harness 不是一次性工程——每 3 个月检查一次，每次模型大版本发布后再看一眼。<br data-page-node-id="JFRxHscEG0nAfkfK2ROjq7">
+    <strong data-page-node-id="D6gygH7wlsxcMF74gVEPc5">下一步：</strong>把 CLAUDE.md、Hooks、Skills 打包成 Plugin，团队一键安装。</p>
+  </div>
+</section>
+
+<!-- ============ CH3: Harness 工程原理 ============ -->
+<section id="ch3" data-page-node-id="FDMTc9ghfWgcv7C9BWUMDp">
+  <h2 data-page-node-id="q0LmYeepwKxeHujBS6sF8s"><span class="num" style="background:var(--accent)" data-page-node-id="N1oMHUVfSvwlX3TjqMA19C">四</span> Harness 工程原理：12 课构建智能体系统</h2>
+  <p style="color:var(--text-secondary)" data-page-node-id="NGqYnO7A9nJZ19UfdlyFqw">来源：<em data-page-node-id="CA33fqzAElgXHqKkxw1QPZ">2小时速通 Harness 工程：如何从零搭一套 Claude Code 智能体系统</em>（GitHub: <a href="https://github.com/shareAI-lab/learn-claude-code" target="_blank" style="color:var(--accent)" data-page-node-id="YmrqAdb9fVakm8xgC44x8q">shareAI-lab/learn-claude-code</a> ⭐ 6.6k）· <a href="https://mp.weixin.qq.com/s/-g-JDq6PmcrcUTpGU-U1LA" target="_blank" style="color:var(--accent)" data-page-node-id="KAf5mT9ZPuEDdKQpQvfDya">原文链接 ↗</a></p>
+
+  <div class="highlight-box" data-page-node-id="zGvyYLoARhGCqmkDWIsShL">
+    <p data-page-node-id="Qh0xYVHoHFUBzXNZr8HdWA"><strong data-page-node-id="Vsr54FOjLbKVnyeauOCdje">核心思想：</strong>别去"开发"智能体，去给它造一个好用的工作环境。Agent = Model + Harness。模型是大脑（由 Anthropic 训练），Harness 是身体——Agent 能看到什么、能操作什么、怎么记忆、怎么协作。</p>
+    <p style="margin-top:8px" data-page-node-id="bGXIb9cJMMkMCQJqIh6FTL"><strong data-page-node-id="5QUMIskugBacggfazzU3GX">关键设计：</strong>S01 写定的 Agent Loop（while True + stop_reason）之后 11 课<strong data-page-node-id="qcdNzmtMxF7CsM9ekHImD0">一行不改</strong>——只在循环之外叠加 Harness 机制。起点 20 行代码的循环，终点是一个有工具、有记忆、有团队、能自治的完整系统。</p>
+  </div>
+
+  <!-- 四阶段总览 -->
+  <div class="flow" style="margin: 32px 0 16px;" data-page-node-id="E8U86h9TyvmtfqMEmYF0Ra">
+    <div class="node" style="border-color:var(--accent);background:#1f6feb15;" data-page-node-id="r6xEEAvGImEMbl1Bvf5lgu">Phase 1<br data-page-node-id="YiliL7Pu8CJ0vMukFuLrNc"><strong data-page-node-id="CVRFTG7PWesItX8G0FVSpj">让它跑起来</strong><br data-page-node-id="O7h3avEUdzSjA2C5gH2uJL">S01~S02</div>
+    <div class="arrow" data-page-node-id="15nW9PjtZSataDALf8T1PA">→</div>
+    <div class="node" style="border-color:var(--accent2);background:#2ea04315;" data-page-node-id="4htRJdgeUxVniPnEp4L30R">Phase 2<br data-page-node-id="FgXxfaKsdze7hmWcGj7f4h"><strong data-page-node-id="J6bXKHqhqidhJnjeFFJlcG">让它干得好</strong><br data-page-node-id="jUr8NL7BFoyocFY3kHZQqR">S03~S06</div>
+    <div class="arrow" data-page-node-id="olyhzE2CSdKHIHlpQJDQ2P">→</div>
+    <div class="node" style="border-color:var(--accent3);background:#a371f715;" data-page-node-id="BogUAKcsSuzdl1bzW9juXP">Phase 3<br data-page-node-id="zqnWbBcbmBnGxvgZfkrGfG"><strong data-page-node-id="Tvy84543UmhMKeFGAUY26N">让它记得住</strong><br data-page-node-id="pVAnCPWDGHA3DahUwiz2Nj">S07~S08</div>
+    <div class="arrow" data-page-node-id="BYNU2DRH6NhFLtt2Ln2muT">→</div>
+    <div class="node" style="border-color:var(--accent4);background:#d2992215;" data-page-node-id="T0QWoV8Md1fZhvNlgzXUFG">Phase 4<br data-page-node-id="hFTh5nKfuEfDBS19b6ZvM5"><strong data-page-node-id="IXZktRLQIq8aKGFseh8tER">让它带团队</strong><br data-page-node-id="jfQb4H9wdaBrnjpLyqsoFO">S09~S12</div>
+  </div>
+  <p style="text-align:center;color:var(--text-secondary);font-size:0.9em;" data-page-node-id="Ui0KjwRYCplDxwqjNTnGE2">12 课递进式构建，从 20 行 Python 循环到多 Agent 自治系统</p>
+
+  <!-- ===== PHASE 1: THE LOOP ===== -->
+  <h3 data-page-node-id="ekS1UlFI9qIStdsjNvY7Em">Phase 1 · 让它跑起来</h3>
+
+  <h4 data-page-node-id="o50Htd3L9wYROgHJoa6lVX">S01 — Agent Loop：用 20 行 Python 造出你的第一个 AI Agent</h4>
+  <div class="highlight-box" data-page-node-id="oJGEOda1sIfG8wF64NT3Dr">
+    <p data-page-node-id="KDELE2ZkiqfFsEPXiKMbAd"><strong data-page-node-id="FbaHCdGt1rm50bJiN84JlX">核心概念：</strong>One loop &amp; Bash is all you need — 一个 <code data-page-node-id="rn2AEfwEV4DI5lv1ZkYY9d">while True</code> 循环 + 一个 Bash 工具 = 一个能操作真实世界的 Agent。</p>
+  </div>
+  <table data-page-node-id="rNxSDBK8vok1X1Hyq7qRhX">
+    <tr data-page-node-id="UXI5mpCL4wh0ek6Jznh4Iv"><th style="width:16%" data-page-node-id="NmlgC360QstwBtze5ITH0L">维度</th><th data-page-node-id="x7uZe4BqtR14n8TIsT7fmN">内容</th></tr>
+    <tr data-page-node-id="HFPEf84rPRuDEhtDre78EU"><td data-page-node-id="zTZ97sWHLzIY6Z1EGs8Yx9">解决的问题</td><td data-page-node-id="2yvIAA6VsrAPxOrMioJxBM">一切 Agent 的最小骨架——让智能体能运转起来</td></tr>
+    <tr data-page-node-id="JRjY3OlvgjHY2QTvxPnGZr"><td data-page-node-id="6XQLXSyqXBrACPYyRQRx8K">实现方式</td><td data-page-node-id="6aJQGWAakq3bUfomKVqVg6"><code data-page-node-id="yc0b9ot1g4UIeBWpwDWSR7">while True</code> → 调模型 → 检查 <code data-page-node-id="CLYcQimaHTUqX75wiTl2b8">stop_reason</code> → 如果是 <code data-page-node-id="wB9J974Escb12iZHXEZdPG">tool_use</code> 则执行工具并将结果喂回，否则停止</td></tr>
+    <tr data-page-node-id="fS7y7fz79NpEaq8Fap5g89"><td data-page-node-id="uOepdELFcpUWR1Ulx9MST6">关键代码</td><td data-page-node-id="HweNGlfwbS3CT3Ww3srneC"><pre style="margin:4px 0" data-page-node-id="kAybIBZp2wbMlzLQEyFzQE"><code data-page-node-id="wvaJVhQ2xKJiBZmoRYUaMG">while True:
+    response = client.messages.create(model=MODEL, messages=messages, tools=TOOLS)
+    if response.stop_reason != "tool_use": return
+    # 执行工具，追加结果到 messages，继续循环</code></pre></td></tr>
+    <tr data-page-node-id="wnZCWZsLA0N6gBHXa3Hp4y"><td data-page-node-id="0kMcmFH4uLG1OkSCiGVJhZ">设计决策</td><td data-page-node-id="yyzc0mKQjn6ecF37RPp2JY">模型自己决定何时停止——不需要你写任何判断逻辑。实测中模型能自主纠错（Linux 命令失败后自动换 Windows 命令）</td></tr>
+    <tr data-page-node-id="QvkE8by0I86E67TaYB4mBo"><td data-page-node-id="X0Gj1cyIKOMQyauJuAtb7U">标签</td><td data-page-node-id="nsbiyoIU8kmiMKVrKf0N1T"><span class="tag blue" data-page-node-id="GArvudotEwCWX7SKxUUfAR">20行代码</span><span class="tag green" data-page-node-id="0wttnhqMLn5gOJiNAB7ibD">ReAct Loop</span><span class="tag purple" data-page-node-id="u024FHGdXQFGHj9BJ1fg31">自主决策</span></td></tr>
+  </table>
+
+  <h4 data-page-node-id="wnuFEnqrFYk1SubQCcaeWG">S02 — Tool Use：给 Agent 加工具——Dispatch Map 模式详解</h4>
+  <div class="highlight-box" data-page-node-id="6Rbe19jBBFsqRQxwLspwYE">
+    <p data-page-node-id="8RVDXzseLqzFt90dzCjrPb"><strong data-page-node-id="zX5G9zFVhxdcRwnmnPCc5X">核心概念：</strong>加一个工具，只加一个 handler。通过 dispatch map（分发映射）将工具名映射到处理函数，实现工具扩展与循环逻辑的<strong data-page-node-id="W4b8llSqRQGeOIhkZazs1R">完全解耦</strong>。</p>
+  </div>
+  <table data-page-node-id="luXd0tNKy0cd5KB7R0Koms">
+    <tr data-page-node-id="cNmr4H9VOFdSHVcLrRdmqn"><th style="width:16%" data-page-node-id="iIvNOi2iCUUixUx3pDgFwk">维度</th><th data-page-node-id="o7k0O5y8Mu3YpDTl6NnUnS">内容</th></tr>
+    <tr data-page-node-id="kmARcIJtayVWKeMCdDVBwJ"><td data-page-node-id="tWSOoDFpqz3AaZJMjsaYIS">解决的问题</td><td data-page-node-id="AlN1ax2u6aCjmW9jRAMzF6">只有 Bash 什么都能干太危险——需要"能用什么、不能碰什么"的围栏</td></tr>
+    <tr data-page-node-id="jQb4ge0IGEaz7VJxn9oALF"><td data-page-node-id="Et7rj30AQ97axEi0QP1lnl">实现方式</td><td data-page-node-id="bneJgqRhGgQ0QAaEqGz1vq">定义工具描述（给模型看）+ 对应的 handler 函数（执行时用），通过 dispatch map 桥接两者</td></tr>
+    <tr data-page-node-id="oiv32SOAcufGegKaSE9clq"><td data-page-node-id="buxeFRxqBSVPM5Ml9b7483">设计决策</td><td data-page-node-id="6T2YiuiFDyGT5cDp4jCKv0">新增工具只需注册到 dispatch map，循环代码碰都不用碰。O(1) 查找、显式声明、不碰主循环</td></tr>
+    <tr data-page-node-id="YEMyl2LbbZvxF9qe4li65i"><td data-page-node-id="4FWJ9FvY9yyewpNyZfk105">标签</td><td data-page-node-id="Ae49P4bio0fDufxvXYGwFd"><span class="tag green" data-page-node-id="z7Mj5gxpLGI1aiwhiK4yFL">dispatch map</span><span class="tag orange" data-page-node-id="7klBvUA7nDIMYhRVXPa0lk">工具围栏</span><span class="tag blue" data-page-node-id="zFAV3PrindPFGi9HCVTP28">解耦</span></td></tr>
+  </table>
+
+  <!-- ===== PHASE 2: PLANNING & KNOWLEDGE ===== -->
+  <h3 data-page-node-id="3VHVxnuEK7S5cdgkh0qhrb">Phase 2 · 让它干得好</h3>
+
+  <h4 data-page-node-id="iroxJmWPH8YJE2W8YpizRN">S03 — TodoWrite：让 Agent 先想后做——规划系统</h4>
+  <div class="highlight-box" data-page-node-id="aKendnqNUr48E67XHNPjdz">
+    <p data-page-node-id="SXSvcbTBOp8mxFSycXZaAe"><strong data-page-node-id="8PzuKXYTMI4T7xGXSeNEm5">核心概念：</strong>没有计划的 Agent 走哪算哪——给它一个 TodoManager，先列步骤再动手。</p>
+  </div>
+  <table data-page-node-id="8xmCqh0tHtBepQLBDyxkVI">
+    <tr data-page-node-id="RhdO96DTZM7QvrTMlv9e6z"><th style="width:16%" data-page-node-id="HxwdhLwKOLndmh2pSALbed">维度</th><th data-page-node-id="S8hNctEBXXQ7cro8IFPFOS">内容</th></tr>
+    <tr data-page-node-id="U5AzS3KqEiGStJ7AviKGl6"><td data-page-node-id="THgDOrT7WJZOx0ateeNKZO">解决的问题</td><td data-page-node-id="Kf83BQSKnCRBn5Tn5Ozh2P">Agent 缺乏规划能力，执行混乱、容易跑偏</td></tr>
+    <tr data-page-node-id="tSq1h6iotQZdLQXtVkjWgm"><td data-page-node-id="anI23QLCAhVfokbGpJZF64">实现方式</td><td data-page-node-id="kxBj0q7FBxAoXkTg7qqb3r">在循环里加入 <strong data-page-node-id="Q2OYAy9tuLeQAMyQP603ko">Nag Reminder</strong>（催促提醒）机制——连续 3 轮没更新 Todo 列表就自动生成提醒文本注入下轮 prompt</td></tr>
+    <tr data-page-node-id="CDg0PoAQJUC8xqWpzYCkXy"><td data-page-node-id="FUAqnEr83K814HMnetc2rO">设计决策</td><td data-page-node-id="vS9e4HtA91idHh1CUMuQhm">通过 nag reminder 而非修改 system prompt 来强制 Agent 遵循计划——完成率直接翻倍</td></tr>
+    <tr data-page-node-id="JZRTERm5HqhMutBnfoCBXk"><td data-page-node-id="9HlTqKHEiFSDlnp7AKGRsg">标签</td><td data-page-node-id="o4CRD3to2D2CX0SAQsarRE"><span class="tag purple" data-page-node-id="EJFYFhBChTtth4oaIVpXpG">规划先行</span><span class="tag orange" data-page-node-id="RmrlFBaXsAdmi1EdROr3ZP">Nag Reminder</span><span class="tag green" data-page-node-id="MqHNaEWUB34uemr2Sgcyxu">不跑偏</span></td></tr>
+  </table>
+
+  <h4 data-page-node-id="5j3uRY8wEUXivw2JCOUWmH">S04 — Subagent：拆解大任务——上下文隔离</h4>
+  <div class="highlight-box" data-page-node-id="ruMcS6FKXWvYJqBuLP0EBb">
+    <p data-page-node-id="zYwL9XE6BsCVcs3o3bCrBS"><strong data-page-node-id="I2xVQioNYxY0okyySjKqbt">核心概念：</strong>大任务拆小，每个小任务用干净的 <code data-page-node-id="JSMAR6nttPxrLB1vo21fAY">messages[]</code>——子 Agent 的对话历史与主 Agent 完全隔离，只返回结果摘要。</p>
+  </div>
+  <table data-page-node-id="Cp5BkUfrGWmhCmNDJMQTXF">
+    <tr data-page-node-id="2Z1p1wBAryMHvAwA7AXy06"><th style="width:16%" data-page-node-id="0ASeFvNo3SFcqV8E0Oskui">维度</th><th data-page-node-id="EpwQZLvCYfAmQRnhbNMgB6">内容</th></tr>
+    <tr data-page-node-id="RbSB6iVm6Cb3IQ5xKfzCcj"><td data-page-node-id="5qsAKTuk86uAnn6NAcHUX2">解决的问题</td><td data-page-node-id="9ZjcDh3N39WuzfrMATJrS8">大任务执行时上下文污染——子任务的结果、中间推理、工具输出混杂在一条对话里越来越乱</td></tr>
+    <tr data-page-node-id="NopnawNgfMEPZVKpIDezIK"><td data-page-node-id="YuQflPWTzg1oakyxGJTTTO">实现方式</td><td data-page-node-id="EswtavG6Jx5hJ9PJKTKOA4">主 Agent 把大任务拆分，每个子任务创建独立的 <code data-page-node-id="uL487AuCP96lTTWgBxfsAV">messages[]</code> 数组，在干净上下文中执行完毕后只汇报结果摘要给主 Agent</td></tr>
+    <tr data-page-node-id="YBaqxsivD2oqXQ3Wc5HVR5"><td data-page-node-id="MQH2wn8BWI1uS1Y02abpkg">设计决策</td><td data-page-node-id="AIFjDgj8OGE9coI248U6P5">完全隔离——子 Agent 看不到主 Agent 的对话历史，主 Agent 也看不到子 Agent 的中间过程。这对保护主会话上下文窗口至关重要</td></tr>
+    <tr data-page-node-id="QA4Qs2Bipe4rWCKXP21jyC"><td data-page-node-id="FCoTQleUsGWq9Z6Deg3DgL">标签</td><td data-page-node-id="27jqgPEhSopLlm7SxCXLVT"><span class="tag blue" data-page-node-id="298tVXDSrChCikRM1fKtB5">上下文隔离</span><span class="tag purple" data-page-node-id="nLDJp07ex1nQkjsrbwaANU">子Agent</span><span class="tag orange" data-page-node-id="MhtUjrKNLO20S5uGZKQwtV">只收摘要</span></td></tr>
+  </table>
+
+  <h4 data-page-node-id="FypyVMEceOWNQnRIbMrVAC">S05 — Skills：按需加载领域知识——Skill 机制</h4>
+  <div class="highlight-box" data-page-node-id="tfv179eTwQDOIyfOpsNhgH">
+    <p data-page-node-id="A88uYdVItt7078ubQkEpb3"><strong data-page-node-id="WJvJ6QpMlBk1jFegNOFZ1m">核心概念：</strong>用到什么知识，临时加载什么知识——通过 <code data-page-node-id="Z2d5BuGp4Jn9EmAubxrDFN">tool_result</code> 按需注入领域知识，而非预先塞进 system prompt。</p>
+  </div>
+  <table data-page-node-id="wgixaoh1BNEy2oPak6MrrI">
+    <tr data-page-node-id="t6UVAiYDCT3IEViSeLZbpF"><th style="width:16%" data-page-node-id="DRiprCoXC4msZE6sPL0DCA">维度</th><th data-page-node-id="AOBbq1mQuDp6s36ycvF9Ve">内容</th></tr>
+    <tr data-page-node-id="QsQghGpH7kw9NGNBkaXy1Z"><td data-page-node-id="oVVkm7pWlOtKqFJLL4Nkyq">解决的问题</td><td data-page-node-id="hl2IirZhDAmcnHMenNEhPR">system prompt 塞太多知识 → token 浪费 + 注意力稀释 + 模型抓不住重点</td></tr>
+    <tr data-page-node-id="T7HeQBjo89ifs5U2O5Y1H6"><td data-page-node-id="GFxONCKCdBBfqDiDXERa9R">实现方式</td><td data-page-node-id="ag4iPxbKdEbnRuHZEVb68E">领域知识以 Markdown 文件（如 <code data-page-node-id="sjMt53Df2IDlwzF9bFojbs">SKILL.md</code>）形式存储。启动时只给"菜单"（skill 的描述列表），模型判断需要哪个 skill 时通过 <code data-page-node-id="9KXcGH7PujBRDLIpjNQgVZ">tool_result</code> 加载完整"食谱"</td></tr>
+    <tr data-page-node-id="BPKOT5CmcF2s4GyK1NGysz"><td data-page-node-id="XFsFYv1KVfmUnIqVoIshz3">设计决策</td><td data-page-node-id="4yhYuYOnEBbql7zdzt4ckC">这就是 Claude Code 的 Skill 加载机制的底层原理——懒加载而非预加载，按需注入。可以写 50 个 Skill，但只为一个 Skill 的正文付费</td></tr>
+    <tr data-page-node-id="uy2VoKEXxYNIPfa6SmREKW"><td data-page-node-id="hNbAj1cDgAgNu0vjjY2EDh">标签</td><td data-page-node-id="gR42mg0eba9BAoFuEAGATC"><span class="tag green" data-page-node-id="1CEJvxYKbNC0FaXsou6Ze1">懒加载</span><span class="tag blue" data-page-node-id="z5MMCqeb5yng5ZvC66NWVw">SKILL.md</span><span class="tag purple" data-page-node-id="kYKqAkVQLiFa6b7AfQb9Js">按需注入</span></td></tr>
+  </table>
+
+  <h4 data-page-node-id="Bd4FtPMxV16FGkxAJ8dXoF">S06 — Context Compact：无限对话——上下文压缩三层策略</h4>
+  <div class="highlight-box" data-page-node-id="NGIicK1zgIEFs1jkGWRKRf">
+    <p data-page-node-id="xoLNsr9pM43iEmRftITEeN"><strong data-page-node-id="hMggbgLkKUOhAVESCHDk5Y">核心概念：</strong>上下文总会满，要有办法腾地方——从最便宜到最贵分层处理。</p>
+  </div>
+  <table data-page-node-id="5bKcDoHtzXnSNtW20TOHwe">
+    <tr data-page-node-id="tv7p9yAAHTvoh7GO0kCOR5"><th style="width:16%" data-page-node-id="dzbHlP2tSc6wepEosdRdDz">维度</th><th data-page-node-id="CxxSnBAE4hBZznqZPvAyQM">内容</th></tr>
+    <tr data-page-node-id="5Aov0gsPOCvYWjS9zhuHCd"><td data-page-node-id="CK1IuB7RjejNfr87b7DrNd">解决的问题</td><td data-page-node-id="KDzewkx7rx25t95ZXTwZP2">长对话中上下文窗口被撑满，Agent 无法继续工作</td></tr>
+    <tr data-page-node-id="nCRvAOHI5lxZ5IjQro3d2r"><td data-page-node-id="2DMMFnhDd4BwHsttKfHwp0">实现方式</td><td data-page-node-id="EfvDAGasHICw4CX3AEtAje"><strong data-page-node-id="VUotX1AX9zgvMXjuKnNvr7">三层漏斗式压缩：</strong>Layer 1（最便宜）— 丢弃冗余的工具输出结果；Layer 2（中间）— 超出阈值时自动摘要历史对话；Layer 3（最贵但最后手段）— Agent 可主动发起 compact 压缩整个上下文</td></tr>
+    <tr data-page-node-id="M3lmfL3kzkGfidEUexCtph"><td data-page-node-id="LOSzEf9Lz5rYYVxydG0sHB">设计决策</td><td data-page-node-id="rYYkiFMyNoJdHsD53eqZTZ">从便宜到昂贵分层处理，而非简单截断。生产环境踩出的教训：<code data-page-node-id="p8jX6PdK5SKh3k7fOq85c6">MAX_CONSECUTIVE_AUTOCOMPACT_FAILURES = 3</code> 次连续压缩失败后熔断</td></tr>
+    <tr data-page-node-id="fmEyB7BIpkKBoFcKXJCzCe"><td data-page-node-id="ApV7XLyY81aIFrH2HRDeMY">标签</td><td data-page-node-id="wkuTMkGbV1VNBiYKtheNdy"><span class="tag orange" data-page-node-id="bXgPP2RxkdTs8ftG58IGM5">三层压缩</span><span class="tag purple" data-page-node-id="ZcwlqganYEDdieVeQmfdHh">无限对话</span><span class="tag blue" data-page-node-id="OrCUD5Jzjr3jRQ4cnT7FAn">漏斗策略</span></td></tr>
+  </table>
+
+  <!-- ===== PHASE 3: PERSISTENCE ===== -->
+  <h3 data-page-node-id="wc3RGY458gnCz9GVaEIcVx">Phase 3 · 让它记得住</h3>
+
+  <h4 data-page-node-id="TydOPxlDlLGcrXkSFLho2q">S07 — Task System：任务持久化——文件级 DAG 任务图</h4>
+  <div class="highlight-box" data-page-node-id="EleTUDC8c9hzI7KOnhjRMS">
+    <p data-page-node-id="63BCTFd8UFDkRnGn2XM4tY"><strong data-page-node-id="959BsAGLNBpJB1U8aIK9MR">核心概念：</strong>大目标拆成小任务，排好序，记在磁盘上——从内存清单升级为持久化到磁盘的任务图（DAG），关机了任务还在。</p>
+  </div>
+  <table data-page-node-id="bGGDfwcFuVFuxhWqREGmMS">
+    <tr data-page-node-id="sqp1Iq0iQ6LAj5HXyGsoWo"><th style="width:16%" data-page-node-id="IDG3pJjkV8V4nmsvdpPq2S">维度</th><th data-page-node-id="A7pfzGpzbNlYEhUJnuqiCt">内容</th></tr>
+    <tr data-page-node-id="2OGmHzlu1X42tuSLEWxwWe"><td data-page-node-id="0qPB0vwP0eMxb5mj4ikj2K">解决的问题</td><td data-page-node-id="e1GkVzCD9AmKkXOT4GTFft">任务只在内存 → 进程退出即丢失；任务间依赖无法管理</td></tr>
+    <tr data-page-node-id="bunnyjEBEF7rlBNoebPcWO"><td data-page-node-id="Ea06pTBdde2v6ywVHzYb5P">实现方式</td><td data-page-node-id="WFRWGdIw3ePDhoZOek5ehS">每个任务一个 JSON 文件，含状态（pending/in_progress/completed）和依赖关系（blocks/blockedBy）。DAG 回答三个问题：什么可以做？什么被卡住？什么做完了？</td></tr>
+    <tr data-page-node-id="Nmf7Fzh0TN8WHOT1IzF8sQ"><td data-page-node-id="N6qVVYxi1W1Blzn0TyDlsL">设计决策</td><td data-page-node-id="nCLXG6rxNsw08K3rTAdN70">选择<strong data-page-node-id="lu57ezneDl8hLi7pnxJtrF">文件级</strong>持久化而非数据库——简单可靠，天然适合版本控制。这个任务图是后续 S08-S12 全部机制的<strong data-page-node-id="mGB9bq2vI3PqzgQFxswPJd">协调骨架</strong></td></tr>
+    <tr data-page-node-id="9XrtsT6xEQWjoRu7LqDO5a"><td data-page-node-id="6BGWFMv79LoB5GHwuR6Cmu">标签</td><td data-page-node-id="xNS8Zxr1MQK7P6PQPW2Sre"><span class="tag green" data-page-node-id="tr8fkEy4uAapdQHRqYHihp">文件持久化</span><span class="tag purple" data-page-node-id="xrGYRqqCJCHJKPiLRh4wyQ">DAG</span><span class="tag orange" data-page-node-id="mxedySHlhXG9odortKQTsn">依赖管理</span></td></tr>
+  </table>
+
+  <h4 data-page-node-id="eluvNTkJpPLhxuxSUosSWB">S08 — Background Tasks：后台执行——异步任务与通知队列</h4>
+  <div class="highlight-box" data-page-node-id="8UEICGWVSIrFBMXa8QHXXu">
+    <p data-page-node-id="Fi390rXkNZaOtZhF7EeEn0"><strong data-page-node-id="jyHp2g8WvTQq3VYDmeGUPb">核心概念：</strong>慢操作丢后台，Agent 继续想下一步——Fire-and-Forget 模式。</p>
+  </div>
+  <table data-page-node-id="Aac7iTY8gvDlYDMxVxnbQw">
+    <tr data-page-node-id="W9UgJosB9vVFjPst14XgIJ"><th style="width:16%" data-page-node-id="QRENHivIz4WswBf3fEcRoD">维度</th><th data-page-node-id="DXHlsuYE1UFUpAjhFyQiwU">内容</th></tr>
+    <tr data-page-node-id="dcHE7acYYFKAAqHcIDScV5"><td data-page-node-id="eDt8cPASBbGRwVCJMze2JC">解决的问题</td><td data-page-node-id="GqzdgtjLTyIPsajoHbJUoH">Agent 执行耗时操作（构建、测试）时被阻塞，无法继续思考和规划</td></tr>
+    <tr data-page-node-id="Bwe6naTKkQC09rA9ad90HB"><td data-page-node-id="yujfhHDhmyisAXyAXCXEGw">实现方式</td><td data-page-node-id="l5PiYnXLAgtkYrY5YdAr3L">后台 daemon threads（守护线程）跑耗时命令，完成后通过 notify queue（通知队列）将结果自动注入回 Agent 的上下文</td></tr>
+    <tr data-page-node-id="MBNWqONK2ffaYlF1DO139N"><td data-page-node-id="bA2syoRLmWv1Bti1fimii5">设计决策</td><td data-page-node-id="nd2blF89OTZdI1QHjzctOC">Agent 不用干等结果——等待期间可继续规划和执行其他任务。通知队列作为后台与前台 Agent 的解耦通信桥梁</td></tr>
+    <tr data-page-node-id="WZ6g1LVouugHCvscorNxFe"><td data-page-node-id="J9IPZkiHqrDQ7RjNMb94KZ">标签</td><td data-page-node-id="LvIttCrPBooVGiH3U5dNjP"><span class="tag blue" data-page-node-id="G885ygMFhDz4oP6hczVXFr">Fire-and-Forget</span><span class="tag green" data-page-node-id="FDDIEb38ZVfjFNqUVe2HKy">守护线程</span><span class="tag purple" data-page-node-id="LDeN61ZUlD0BozGx3fcLPm">异步通知</span></td></tr>
+  </table>
+
+  <!-- ===== PHASE 4: TEAMS ===== -->
+  <h3 data-page-node-id="NJCiU3YsTjt5AslHr5S7AG">Phase 4 · 让它带团队</h3>
+
+  <h4 data-page-node-id="5JftExfcdWEsjMBJryGIxw">S09 — Agent Teams：多 Agent 协作——团队与邮箱系统</h4>
+  <div class="highlight-box" data-page-node-id="Iey1rCOvIcb1Ev0RpBYljU">
+    <p data-page-node-id="YABAhtNS45LeUWXLqAGo2c"><strong data-page-node-id="eD8MMq6h70ECRDT5a7aRna">核心概念：</strong>任务太大一个人干不完，要能分给队友——持久化的队友 + 异步 JSONL 邮箱。</p>
+  </div>
+  <table data-page-node-id="8brTf8RfuKOA9YstIa8Smh">
+    <tr data-page-node-id="jnhtzqIWGrXoTsb0QIsMym"><th style="width:16%" data-page-node-id="zBlvkDTIHvW9lUMA5GwWqO">维度</th><th data-page-node-id="sndCKAVPwWUt0hHptNMTUp">内容</th></tr>
+    <tr data-page-node-id="WSiqhBZMy9UgvNwbkLKeEA"><td data-page-node-id="glYl4R95A18Gqm9gCXqys6">解决的问题</td><td data-page-node-id="zqOdev4JlSe35FCvUhcDDu">单 Agent 能力上限——一个人忙不过来，需要多 Agent 分工协作</td></tr>
+    <tr data-page-node-id="AXzYPT1JzGUgdlwHA5CGEk"><td data-page-node-id="7Os2q42GXdledY3rtVJqdr">实现方式</td><td data-page-node-id="R838Wb8T5u5ontbznQCH06">领导 Agent 创建队友 → 队友信息持久化存储 → 通过 JSONL 邮箱异步通信。每条消息追加写入 JSONL 文件，天然适合异步消息队列</td></tr>
+    <tr data-page-node-id="fMNuis16IuyetggUNPee0r"><td data-page-node-id="VMak93wR14Rs5ZXaqcIlZB">设计决策</td><td data-page-node-id="BTLhmB59trxzu57tMg4Odu">选择 JSONL 格式作为邮箱消息格式（追加写入，不需要解析完整文件）。邮箱机制实现了解耦的异步协作——Agent 不需要同时在线</td></tr>
+    <tr data-page-node-id="KM03YG12MKhAw1m1y82a5g"><td data-page-node-id="eqZhJMUbItTRCn0b5jgc6s">标签</td><td data-page-node-id="iZP9PkpNSvW2ScBeH5KhPu"><span class="tag purple" data-page-node-id="JbQ42IKv5KtJykicyUX5yB">多Agent</span><span class="tag blue" data-page-node-id="RakVeMdaUYHzMgcGP51biB">JSONL邮箱</span><span class="tag green" data-page-node-id="1OwfwbQwsgNTBAPMC68rvq">异步通信</span></td></tr>
+  </table>
+
+  <h4 data-page-node-id="sSHpaAztpvcvMs2Ph6POJy">S10 — Team Protocols：团队协议——状态机驱动的协商</h4>
+  <div class="highlight-box" data-page-node-id="lk58XNBoKTGIpJ3A05AcMY">
+    <p data-page-node-id="FeMDu4d8bt66qjh8vzgnsA"><strong data-page-node-id="pujN4AIvwuVlKCom7BRe3l">核心概念：</strong>队友之间要有统一的沟通规矩——request-response 模式驱动所有协商。</p>
+  </div>
+  <table data-page-node-id="90DOWkXzmQw7WAocnZBnOh">
+    <tr data-page-node-id="wN3rZMSQ9Mf37wEC8TGyYO"><th style="width:16%" data-page-node-id="jFLoEv4eVTuVgZAWgPCyVT">维度</th><th data-page-node-id="FNCWIccjcao5sk6PffveIZ">内容</th></tr>
+    <tr data-page-node-id="1HM6JfdzWCvNcHqByhuNex"><td data-page-node-id="I5RQZ6nMkEw4TNlw0c7igk">解决的问题</td><td data-page-node-id="eXmiapR3yZUwjRLUEOQUZU">多 Agent 之间缺乏统一沟通规范 → 协作混乱、消息丢失、状态不一致</td></tr>
+    <tr data-page-node-id="aZWkLZHxAsI8M7YDeSWxBr"><td data-page-node-id="cXD5sOcrdrUxKI3xBp1MdD">实现方式</td><td data-page-node-id="EJVPDvtOEFRHi4d9SU4IEG">定义三类协议：<strong data-page-node-id="Xfc8igcHC8BEm3wsQObVwi">关机协议</strong>（Agent 安全关闭的握手流程）、<strong data-page-node-id="YSkQ2DKitgFCtOZbDL5xWu">计划审批 FSM</strong>（有限状态机管理计划审批）、<strong data-page-node-id="AuzHQCulCYA4KF1KapinPD">request-response 统一模式</strong>（所有协商都带唯一 ID）</td></tr>
+    <tr data-page-node-id="8uWx3k1W5FgUoyELOLfgsy"><td data-page-node-id="aXxC6fdffNDbTN5K0nloGS">设计决策</td><td data-page-node-id="Ngp6duoUuTMXEOCIjnXQr2">用状态机而非自由文本协商——确保协作行为的可预测性和可靠性。统一"请求-响应 + 唯一 ID"模式避免消息乱序</td></tr>
+    <tr data-page-node-id="DKIPqjvQKEngPc11trBEpu"><td data-page-node-id="Emk3fvDA4d8ZyxvNIc3UHY">标签</td><td data-page-node-id="en3CbC1GsFwxklwK3xhGLZ"><span class="tag orange" data-page-node-id="ZdUgVAk7QZaudTvSNBju0h">FSM状态机</span><span class="tag green" data-page-node-id="lLaM5MBTawg3E0mjiREIZ1">关机协议</span><span class="tag blue" data-page-node-id="31mEPAZyIfbsnBq1IOHCKO">request-response</span></td></tr>
+  </table>
+
+  <h4 data-page-node-id="UjnfFPH4uHIBu2MT6xhKau">S11 — Autonomous Agents：自治 Agent——自组织任务认领</h4>
+  <div class="highlight-box" data-page-node-id="q2f4lwzjNkGz85UfHeGvMw">
+    <p data-page-node-id="X0YAOTvGxMuJKXG86U3XW7"><strong data-page-node-id="VKpTedJB8F28LhUnSiL528">核心概念：</strong>队友自己看看板，有活就认领——从"被动接受指令"到"主动认领任务"的范式转变。</p>
+  </div>
+  <table data-page-node-id="QXWCQrNLbzlY3MA3JkI1X8">
+    <tr data-page-node-id="xkDaoicABFye37QrOUC646"><th style="width:16%" data-page-node-id="UIXvy3uuvCYwJmI3ctXTWM">维度</th><th data-page-node-id="XDXvVrzYwpuvtWGKed1Bjy">内容</th></tr>
+    <tr data-page-node-id="Fzp8W1EjXdmVpF3B1JBlgS"><td data-page-node-id="chPB1mS9B59mqRuSTUsYrb">解决的问题</td><td data-page-node-id="HU31iwiqRJ1n6bKLUGn5jb">S09-S10 仍需主 Agent 逐个分配任务——存在单点瓶颈，领导 Agent 成为调度瓶颈</td></tr>
+    <tr data-page-node-id="xcnjYkFZqesBvzClfrJSEw"><td data-page-node-id="mqgtZkwkXhVXqeWk9zFl9y">实现方式</td><td data-page-node-id="mLexsLQFBmAttatJdJFfCn">Agent 在 idle cycle（空闲周期）中自动扫描任务板（基于 S07 的 DAG 任务图），找到可做任务（依赖已满足 + 无人认领）就自动认领执行</td></tr>
+    <tr data-page-node-id="GthO26hywff8zqVI11NArK"><td data-page-node-id="T2f8eCf5Od2HhZ5VJo3anu">设计决策</td><td data-page-node-id="79ccHJtXOMlBW1YcjY50EF">每 5 秒轮询看板 → 找活干 → 60 秒无任务自动关机。实现了真正的<strong data-page-node-id="AJMZ2kmVPWQfJfTMoouQ5W">自组织</strong>，去中心化调度</td></tr>
+    <tr data-page-node-id="RJux6nWcVeD5Oto8jov2jH"><td data-page-node-id="cZwDblRESPYeZ1xYQPHb4n">标签</td><td data-page-node-id="vjyGvJrdo3I2Ihz2PQhAPk"><span class="tag purple" data-page-node-id="7VNwcWuZZgmwLI5d6DETkd">自组织</span><span class="tag orange" data-page-node-id="zucQbsiklE68sOyvJDrdvF">自动认领</span><span class="tag green" data-page-node-id="huzi8XeW4A8nh6BAP6noJk">去中心化</span></td></tr>
+  </table>
+
+  <h4 data-page-node-id="X5CwFTm8gAxRQGNZzT5r0X">S12 — Worktree Isolation：终极隔离——Worktree 并行执行</h4>
+  <div class="highlight-box" data-page-node-id="uTaiH0xVMUuZznwoMi7eIe">
+    <p data-page-node-id="RBuooIsmr4gxGJAPxD085W"><strong data-page-node-id="Up0fmk7XS5H0noUtvMzWnd">核心概念：</strong>各干各的目录，互不干扰——每个任务绑定一个独立的 git worktree 目录。任务管目标，worktree 管目录，按 ID 绑定。控制面与执行面彻底分离。</p>
+  </div>
+  <table data-page-node-id="Zr0ddG5GF4pE6EQWfhuZHS">
+    <tr data-page-node-id="4mjNMeq5nDXDLsAgoRYqCF"><th style="width:16%" data-page-node-id="5sqbnGQRimqUeabEbVJsZu">维度</th><th data-page-node-id="tHXAeosFk3AbkntMWbolZ0">内容</th></tr>
+    <tr data-page-node-id="xPEY9wYmysbgpNEPvH6UtV"><td data-page-node-id="ffNw7Zjs1AEUGBrHYiRonq">解决的问题</td><td data-page-node-id="tXKiIOVfU3CrNEFZP4pCDp">到 S11 为止所有任务共享一个目录——两个 Agent 同时改同一个文件就互相污染，并行执行名存实亡</td></tr>
+    <tr data-page-node-id="BGVsmQT9VLDNyUR4YcXiNE"><td data-page-node-id="zisxlG2PLyVtf2wVwiz3bX">实现方式</td><td data-page-node-id="seHzqsSg5DKFxj67XDQ39v">每个任务 → 独立 <code data-page-node-id="65vAJeOJh6BjrZTvTG6QME">git worktree</code> 目录 → 独立分支开发 → 完成后 merge 回主干。利用 git 原生机制而非自己造轮子</td></tr>
+    <tr data-page-node-id="8KgPe7FijhR0Cqtnlod2HZ"><td data-page-node-id="QBOIx7Ge3xADOfNFkYD95m">设计决策</td><td data-page-node-id="VsD6J3jL6yriGsiL3GJaiJ">通过任务 ID 与 worktree 路径的绑定关系，实现并行执行时的文件系统级隔离。这是 12 课的终极形态——多个自治 Agent，各自持有独立 worktree，通过任务图和邮箱协作</td></tr>
+    <tr data-page-node-id="XnePneDSN8k52P2kkHNveP"><td data-page-node-id="D3cA1bNiBeESlJCUmhqDT1">标签</td><td data-page-node-id="LzX1EGIFraJsPy0MIfMPTk"><span class="tag orange" data-page-node-id="BhcSCm2RDWZjIBfV1DK9BQ">Worktree隔离</span><span class="tag blue" data-page-node-id="VFExL4H0CZFJgzNf8I6LV3">文件级隔离</span><span class="tag green" data-page-node-id="Mv6H6guB6CDtC0kUZR1EGf">并行执行</span></td></tr>
+  </table>
+
+  <!-- 12课依赖全景 -->
+  <h3 data-page-node-id="B7cEE37ALtjuoBr2QJ6q9E">12 课依赖关系全景图</h3>
+  <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));" data-page-node-id="ObztMUrEqJUoPf3Le1QciE">
+    <div class="card" data-page-node-id="HJArCXw3XADIq4K7OZcJFQ">
+      <h4 data-page-node-id="dgkxuS42J41djHQClaaGSC">Phase 1 · The Loop</h4>
+      <p data-page-node-id="6cieGeUO5sc3bDhEn9hugP"><strong data-page-node-id="Zi18nOkZSy4M8qBIXzZPHR">S01</strong> Agent Loop<br data-page-node-id="IXsA2u8OP67sA1b2W8JE8A"><code data-page-node-id="TVZWjV1HZjtvlkROoMYpgd">while + stop_reason</code><br data-page-node-id="2YJdEomke1WwTpwCvAr6CA">↳ <strong data-page-node-id="sNwQr0mVHk4penw0O4eBLk">S02</strong> Tool Use<br data-page-node-id="Ee6lL2E0mKg6MVMuEskjaO"><code data-page-node-id="ngZbUZ4CcBLxg5QVhLELjv">dispatch map 解耦</code></p>
+    </div>
+    <div class="card" data-page-node-id="9vrsH1tD6NDDhXcYpTp8Ox">
+      <h4 data-page-node-id="QdXvx81mGTrPwOVc2C2hRm">Phase 2 · Planning &amp; Knowledge</h4>
+      <p data-page-node-id="aVKLdxEOe9aclP78Pr1480"><strong data-page-node-id="5VkG8SRzAEWkBnDPRkoFY2">S03</strong> TodoWrite<br data-page-node-id="44p18CqH5ASdxadS3LPs6g"><code data-page-node-id="3SMuJnVGYYqiMAhdQnhXci">Nag Reminder</code><br data-page-node-id="MQD5v21BhaPFc9sirOIi2A">↳ <strong data-page-node-id="XFqBpyFk4A7YkIcAOHLhIH">S04</strong> Subagents<br data-page-node-id="PC6hUYFCGZticfwV6u9SKK"><code data-page-node-id="4ME7RNi8yZuNg5fFIXPVkm">独立 messages[]</code><br data-page-node-id="kZ6CPQCWny4bHZ2hGqM3zf">↳ <strong data-page-node-id="a8QMTNLitp6O1B66xMpRqE">S05</strong> Skills<br data-page-node-id="kn6ytL8xFFndYK6V6TdWoM"><code data-page-node-id="pF5yaBEhg4yKHIKTLlwkHO">懒加载按需注入</code><br data-page-node-id="OdYPsFGDWgKjzgvqvhUoJv">↳ <strong data-page-node-id="mXoNRDZO2Y5IM70EqsSs0J">S06</strong> Compact<br data-page-node-id="jzUYSCpWJLBjifLc18AjyE"><code data-page-node-id="IkQyDJo6hkatsn4SvSlFc7">三层压缩漏斗</code></p>
+    </div>
+    <div class="card" data-page-node-id="WaqMN2gPMH7BNkmfJIxyg8">
+      <h4 data-page-node-id="eXFTB5ppJecmGjeGv126RD">Phase 3 · Persistence</h4>
+      <p data-page-node-id="1TvXe61yDPRLRSBUWkfZva"><strong data-page-node-id="imRH9UPFPw4PhwqEXFRvYh">S07</strong> Tasks<br data-page-node-id="4DfWDONDCtng2EUMunuFgi"><code data-page-node-id="nQgew8JA7jAcwEda3bBx5F">文件级 DAG 任务图</code><br data-page-node-id="rMv21jMPBVwAIBDQH19IFI">↳ <strong data-page-node-id="kdgnxEcZwHFIG4CpByyFY7">S08</strong> Background<br data-page-node-id="91iFclUKUyfGz8XMCVfNCb"><code data-page-node-id="mNZWESuVjOgnmONwf5svtr">守护线程 + notify queue</code></p>
+    </div>
+    <div class="card" data-page-node-id="wluq22Bx1YBRUqo86GCiQ0">
+      <h4 data-page-node-id="3DWItKr7GSKD63F47da1Rn">Phase 4 · Teams</h4>
+      <p data-page-node-id="HXDNRBQVkQdyOlvQBMc3J7"><strong data-page-node-id="YvQ9Rb5DC9A1HIStrV7mKW">S09</strong> Teams<br data-page-node-id="v4mrxjTJhQjvjKjdN83C3O"><code data-page-node-id="HBL3LiXdj8qFOOFHprha4d">JSONL 邮箱</code><br data-page-node-id="FUK6eGoqG7qwg9OdqSBaed">↳ <strong data-page-node-id="5bCjxC76iZoTTzG9C5nkXr">S10</strong> Protocols<br data-page-node-id="GAvS8aRQuYFJaLAvFKWfSD"><code data-page-node-id="EaUKrsUJyHAEWiVnurZ8Ur">FSM 状态机</code><br data-page-node-id="WqNqK2UZi5f2SMi93NpWOh">↳ <strong data-page-node-id="Zu19h5IHL9eI8XnFa75c9J">S11</strong> Autonomous<br data-page-node-id="yTZEoyNcNvRPMtN1aACGQF"><code data-page-node-id="bd4FCd98mIlt277d3IMsAj">自动认领</code><br data-page-node-id="mkADQzOpWnhlhFBHHUPDNp">↳ <strong data-page-node-id="XUZcVhA6PGftHt5K6C5pBc">S12</strong> Worktree<br data-page-node-id="AGfCz1pOa2PaU7HARhHDub"><code data-page-node-id="PbF5D869jFTdxsLxN1A3jK">文件级隔离</code></p>
+    </div>
+  </div>
+
+  <!-- 速查总表 -->
+  <h3 data-page-node-id="GBtqkJgNxeouIMuVeTkdHd">12 课速查总表</h3>
+  <table data-page-node-id="KptQoyRFI8nBnyD2h31TFn">
+    <tr data-page-node-id="F6ToFJmw2jgxZhrDUz1QoZ"><th data-page-node-id="0x8qHxtWJ3UskUF3CYyIdn">阶段</th><th data-page-node-id="njvVHDTewAhrGfhtEQHORD">课节</th><th style="width:28%" data-page-node-id="0fFbluG04UpCbU7xOED3z0">标题</th><th data-page-node-id="hWLMBv5YLGXpyM7cVT38A6">核心机制</th><th data-page-node-id="XjOJv3sadLTb5bfc8B37Ac">解决了什么问题</th></tr>
+    <tr data-page-node-id="QQD66MxTu35lLAXK1uvCDL">
+      <td rowspan="2" data-page-node-id="fFUWSk9cHxsgruUBvGZeBI"><strong data-page-node-id="WqulYOtdLPfkR2zFmHuCiG">跑起来</strong></td>
+      <td data-page-node-id="7YGHmFntD4LNxUJXAWjMLE">S01</td><td data-page-node-id="fFMqFc2g15FFTmzOU5evdW">Agent Loop</td><td data-page-node-id="M1rbEZzqot0hhPfeix4rYa"><code data-page-node-id="tCtKoxCpExEYegE32PNcet">while True + stop_reason</code></td><td data-page-node-id="VSHAQt4BZkh0hWKO4HVRrn">智能体能运转了</td>
+    </tr>
+    <tr data-page-node-id="l4gcfs1rgJuyFok9UqvcYF">
+      <td data-page-node-id="tLxomPzMFHwC3N9FvBQHsa">S02</td><td data-page-node-id="AgJyy31OQsH8StlIqJPsFZ">Tool Use</td><td data-page-node-id="E6FQNzSMiorvbXIf2oA7tz">dispatch map</td><td data-page-node-id="R53zaaH82HdEylA3ytoLwZ">能干活，也有边界了</td>
+    </tr>
+    <tr data-page-node-id="mcVwpNFm6dzdhDEHGbDYSD">
+      <td rowspan="4" data-page-node-id="Hxi0IacyQoegGwTI69gMnd"><strong data-page-node-id="muSdp2cDGbFIjR8jiS56s9">干得好</strong></td>
+      <td data-page-node-id="PHjlG1RIugkusoAUopF62e">S03</td><td data-page-node-id="pLiXUOoExVFMmHkFziAdMh">TodoWrite</td><td data-page-node-id="K6I8WQoDCEyISF6hjVQZPM">Nag Reminder（连续3轮提醒）</td><td data-page-node-id="Nyq3GAxTLdIR4wONgdg3q4">不跑偏了</td>
+    </tr>
+    <tr data-page-node-id="sr2stEPQVeuKCY58DAC9Z3">
+      <td data-page-node-id="sQqTM8Tf1OZ5AWjchJZIfJ">S04</td><td data-page-node-id="QOPkRtZ0HCepMN73eJGlVi">Subagent</td><td data-page-node-id="m3AvYx6aLfGO2XCfSNQjd9">独立 messages[] + 摘要汇报</td><td data-page-node-id="ouixjKKCeK1YlANYC8i5ft">上下文不臃肿了</td>
+    </tr>
+    <tr data-page-node-id="FcxyURWr88tzuKknGadSah">
+      <td data-page-node-id="Ix3F4RYZNGDrfSVVOGfMDZ">S05</td><td data-page-node-id="NxdRacd3lxxgUZfPr3EUEZ">Skills</td><td data-page-node-id="CFNtgs9yhCFuitVd5dUk3X">SKILL.md 懒加载</td><td data-page-node-id="RfeCcmNVZYCh1U5Is3Qv2C">有知识储备，按需取用</td>
+    </tr>
+    <tr data-page-node-id="eDTnQegeDxbL3lDc2HSorS">
+      <td data-page-node-id="g2fDu5bUqDFMGFRdDeXBls">S06</td><td data-page-node-id="jN1urq2ZZl8ryD2V1AHeJ0">Context Compact</td><td data-page-node-id="OJ8DWlqu77HkRlAowDcDKp">三层漏斗压缩</td><td data-page-node-id="wC4dqXqkhs9cC56aPNz2LF">聊多久都不爆</td>
+    </tr>
+    <tr data-page-node-id="ZRHwzy2A0bu5PG0oeBNX4e">
+      <td rowspan="2" data-page-node-id="cwo8AwFBSN98v96IxGOz7Y"><strong data-page-node-id="dQIbrPVS9BYR7LaNLUqvBX">记得住</strong></td>
+      <td data-page-node-id="XDHSNclrO9G53GCiDvPIy2">S07</td><td data-page-node-id="jQd9fOoDu9cL2emA1NiE7D">Task System</td><td data-page-node-id="FdQ4WFKZ7822VT2qUn2xWP">文件级 DAG 任务图</td><td data-page-node-id="5M2p83sghK9NejbcODut0Z">关机了任务还在</td>
+    </tr>
+    <tr data-page-node-id="hjWClERkZtoC6HLBSDU6sB">
+      <td data-page-node-id="bDzNynLY6fxwvyi5Ox9Gxx">S08</td><td data-page-node-id="sK0SwdarFuhk00hQ1X5sOG">Background Tasks</td><td data-page-node-id="yBhSd5tSDNsBpYZyOElsOi">Fire-and-Forget + notify queue</td><td data-page-node-id="p8glfwxdJozeCRAwQTCg35">不傻等了</td>
+    </tr>
+    <tr data-page-node-id="q0tzJZf5fGolHZBgBKIf0A">
+      <td rowspan="4" data-page-node-id="4BnPkezxP3Iej4qZc8vYGe"><strong data-page-node-id="5KbC33DsD52Htvp79BQVnF">带团队</strong></td>
+      <td data-page-node-id="gYqdmr6A1e9DqBtsMQgnBX">S09</td><td data-page-node-id="ESe3Seb9nN8UKVcmcJpZrp">Agent Teams</td><td data-page-node-id="jHYhsZWfXVsIqZKETrnurj">JSONL 邮箱异步通信</td><td data-page-node-id="xdp5IwJGxq1lpT6aPxvVpL">一个人忙不过来</td>
+    </tr>
+    <tr data-page-node-id="wVAJFvZ6LB8SjwAVyXNAmL">
+      <td data-page-node-id="y60AgzlGuugT5airdgm5Q1">S10</td><td data-page-node-id="76fVpuoyrpWtnlzqWsH7lr">Team Protocols</td><td data-page-node-id="x59tKuh8kk0XeKgCyIi5KV">FSM 状态机 + 关机协议</td><td data-page-node-id="5AIFXwOBVmYbIktlVeEqs9">沟通有规矩了</td>
+    </tr>
+    <tr data-page-node-id="ZCVvGDWezxLW0qsfdqO11f">
+      <td data-page-node-id="bmA3ZKdnAu17RISVI7N1g1">S11</td><td data-page-node-id="nb9FZsiBOxlseXS3R0ZgMZ">Autonomous Agents</td><td data-page-node-id="bYMLDjWzBx9f0b7Ywn7Rag">idle cycle 自动认领</td><td data-page-node-id="RZle3mJ46X7xjeCotEIs7v">不用老板盯着</td>
+    </tr>
+    <tr data-page-node-id="nodwSexq4tOMrd4SrGsSVZ">
+      <td data-page-node-id="0twWgpKQhrXSN0JUGQhp4F">S12</td><td data-page-node-id="hsstePeAgKDPgoY9RehFL8">Worktree Isolation</td><td data-page-node-id="ABN5FKnDoYAr9Gtlidg1ri">git worktree + 任务ID绑定</td><td data-page-node-id="em3enGfHHrJbVzRK4tAIsg">各写各的，别打架</td>
+    </tr>
+  </table>
+
+  <div class="highlight-box success" data-page-node-id="T3J6lmFFjt7XJyoKmupB75">
+    <p data-page-node-id="fObI1VUZT9o1aUoBAtJqjz"><strong data-page-node-id="wP5vkFzVzHpT4xVYHLhyIq">关键总结：</strong>你不是在编写智能。你是在构建智能运转的世界。模型够聪明，你把环境搭好，剩下的它自己会搞定。S01 的 20 行循环到 S12 一行没改——变的全是 Harness。</p>
+  </div>
+</section>
+
+<!-- ============ CH4: 工作流选型 ============ -->
+<section id="ch4" data-page-node-id="St27mDrY5HIrOuDGiocDUE">
+  <h2 data-page-node-id="Fet9CkHU6MZMTiSmycGfwN"><span class="num" style="background:var(--accent2)" data-page-node-id="gDnwahnEnSbffR1CTf4gJ5">五</span> 工作流选型：10 套主流方案对比</h2>
+  <p style="color:var(--text-secondary)" data-page-node-id="n0nKyUCFXWPaBr5rc0EDaV">来源：<em data-page-node-id="8mjxZGAlTRdgGzTOgXzQHE">Claude Code 工作流选型指南</em> · <a href="https://mp.weixin.qq.com/s/UV5r7lPf6Q7HHbwpUTH17g" target="_blank" style="color:var(--accent)" data-page-node-id="dG5H2uKotOPVSC5k0V9nxE">原文链接 ↗</a> + <em data-page-node-id="Cqfd8ZtkWJr2lsz3aFIfYO">全自动写代码，真的建议早点接触</em> · <a href="https://mp.weixin.qq.com/s/-gqiwKWhjKZQX5Ab1LvdDA" target="_blank" style="color:var(--accent)" data-page-node-id="3QhgH5H8NTovQIQ6HHjKs9">原文链接 ↗</a></p>
+
+  <div class="highlight-box warn" data-page-node-id="gHy8HDA8WP0g16NTgNayEh">
+    <p data-page-node-id="CfBxhVaiYLrPMZpfici6Xn"><strong data-page-node-id="anrNA8mE2x4bORmfghVLxY">⚠️ 不要贪多，选 1-2 个深度用，比装一堆不用强。</strong>阿东目前用 gstack + superpowers + get-shit-done。连 Anthropic 团队内部每个人用 Claude Code 的方式都完全不一样——工作流只是起点，好用的版本都是自己改出来的。</p>
+  </div>
+
+  <!-- ===== 10 套方案卡片（按 Stars 排序）===== -->
+  <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));" data-page-node-id="J790eapZvpDYEamyWJrXqZ">
+
+    <div class="card" style="border-left: 4px solid var(--accent2);" data-page-node-id="y8aTfeflLfeEdt0DIdk7qB">
+      <h4 data-page-node-id="H8SGq7FV415iHXYoisBiNL">1. Superpowers ⭐ 22.7k</h4>
+      <p data-page-node-id="gUAqvXj64MEQx5BfFa6nHJ"><strong data-page-node-id="bBIUCTYFAYgV9T7bnoe9tg">TDD-first + Iron Laws</strong>——测试不写完，代码一行都不准动。调试、协作模式全套方法论，有完善的插件开发文档。<strong data-page-node-id="PcQ62sEBBDNB2N5jpD8P2z">想自己扩展的最好起点</strong>。</p>
+      <p style="margin-top:6px" data-page-node-id="EZWxnnzb3eUy5zdL1HizEd"><span class="tag green" data-page-node-id="MmajzpiY6GH0yntdgVjTBt">TDD-first</span><span class="tag blue" data-page-node-id="YIvjqGqNsGMybWEzg1ffSA">质量流程</span><span class="tag purple" data-page-node-id="WNdz0xZMXMIE61WpNM6cAT">可扩展</span></p>
+      <p style="font-size:0.82em;margin-top:6px" data-page-node-id="1ZBsnBbZNqcXPXAjPqffSk">GitHub: <a href="https://github.com/obra/superpowers" target="_blank" style="color:var(--accent)" data-page-node-id="BQWIKqkfsd9i9308LeTDgA">obra/superpowers</a> · ⭐ 22.7k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent);" data-page-node-id="HzxkLWaSw4lDx9IM4kCT0T">
+      <h4 data-page-node-id="SJuDQqQVT5IftbzK0SNFKD">2. Everything (ECC) ⭐ 21.5k</h4>
+      <p data-page-node-id="TgJtof2g9W1T2UQ81GPa1b"><strong data-page-node-id="a9EdzgAtb5v24O1QYe3m0T">Anthropic 黑客马拉松获奖</strong>，性能优化最狠的一套。Claude Code = 微型开发团队，前端/后端/数据库/测试各有专人。50 agent + 80 cmd + 180 skill——大而全的终极工具箱。</p>
+      <p style="margin-top:6px" data-page-node-id="cDOyJ1XcU7JytFRCjo6EtC"><span class="tag orange" data-page-node-id="9k0hgGzEeSvHYSnT9gSbum">微型团队</span><span class="tag purple" data-page-node-id="DnK9Lqt69Wad31Id5lXETG">50 代理</span><span class="tag green" data-page-node-id="P9L33sZqAvVOgrCWDIH566">性能优化</span></p>
+      <p style="font-size:0.82em;margin-top:6px" data-page-node-id="6Hvwf2fDqrKN0bu8GMqgVJ">GitHub: <a href="https://github.com/affaan-m/everything-claude-code" target="_blank" style="color:var(--accent)" data-page-node-id="S38fmR5EDAtnrfapr0IhMe">affaan-m/ECC</a> · ⭐ 21.5k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid #5B8DEF;" data-page-node-id="E9wqUmS5ETxFRwISpRMdNy">
+      <h4 data-page-node-id="D9N3rxjsKMKjIInla13kod">3. Spec Kit ⭐ 11.2k</h4>
+      <p data-page-node-id="6eQLCEPGqyBa73eMI3IC1c"><strong data-page-node-id="BDWBcBl0eoWLOTq9g4Zsux">先写清楚你要什么，再让 AI 动手</strong>。强制规格文档 → 代码生成，适合大项目多模块协作。核心思路：把需求规格化，用结构化文档约束 AI 输出，保证多模块间的一致性。</p>
+      <p style="margin-top:6px" data-page-node-id="ICAcanl71BwSJ9tn8xfAVv"><span class="tag blue" data-page-node-id="eiUPHLjhFmPnslhR6nfu9t">规格驱动</span><span class="tag purple" data-page-node-id="4xqTVELdi8PLJYTl18qj2M">文档先行</span><span class="tag green" data-page-node-id="RH6HQr0rzb1ea3jgMwGiCU">一致性保障</span></p>
+      <p style="font-size:0.82em;margin-top:6px" data-page-node-id="CzYTWzaic7kTAliImGRQp8">GitHub: <a href="https://github.com/github/spec-kit" target="_blank" style="color:var(--accent)" data-page-node-id="tdsXflXDF2dCpuXA42s93I">github/spec-kit</a> · ⭐ 11.2k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent);" data-page-node-id="4VRY4hcco3W9rsJNGbSl89">
+      <h4 data-page-node-id="b7pnUlMsH2yYkiTEIKoE5S">4. gstack ⭐ 10.9k</h4>
+      <p data-page-node-id="WNlJs5xtUwoexD00NTYVI0"><strong data-page-node-id="t4clRo6Y3APFrcB8uKsdFS">Garry Tan（YC CEO）自己用的系统</strong>，把 Claude 变成 15 人虚拟工程团队。核心是 <code data-page-node-id="ZbUegCdWxLulSOPkycx43g">/plan-ceo-review</code>、<code data-page-node-id="B1TfNEufnWZTA9FVe32oX6">/qa</code>、<code data-page-node-id="2yet8RzNrmERofBd9gXdA4">/ship</code> 这些角色扮演式技能——同一 agent 在不同阶段换不同"脑子"。</p>
+      <p style="font-size:0.88em;color:var(--text-secondary);margin-top:8px" data-page-node-id="vXf05DEbqWsqCRAx8KoBxf">最大感受：这不是工具，是把 Garry 的脑子装进去了。</p>
+      <p style="margin-top:6px" data-page-node-id="xHPAewBRV5lR00PgE8GFHY"><span class="tag orange" data-page-node-id="6xakGSAniUxSvyhPyN7mCg">角色扮演</span><span class="tag purple" data-page-node-id="AYix4LxwZybd97stHLCG4g">并行冲刺</span><span class="tag blue" data-page-node-id="McGirDeH8TYxggRhlboleN">全栈思维链</span></p>
+      <p style="font-size:0.82em;margin-top:6px" data-page-node-id="Vpds5TtEd3NJDf6SJ2rkGX">GitHub: <a href="https://github.com/garrytan/gstack" target="_blank" style="color:var(--accent)" data-page-node-id="FuK8Q6Tmmv3EHeLy7TNriH">garrytan/gstack</a> · ⭐ 10.9k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent4);" data-page-node-id="oS3tZPFLzkNBtoMWU6u1FK">
+      <h4 data-page-node-id="WgJT4VEkLAY3WC7m8ZxYGa">5. get-shit-done ⭐ 6.4k</h4>
+      <p data-page-node-id="G4CEMtPiiBI7BYmhOvbcbR"><strong data-page-node-id="GfLcdCQrBVpiTh5nrhad2U">名字就直白</strong>——解决上下文腐烂，没有企业戏码。<strong data-page-node-id="D7BTQsLjFIR5zV7muDTFP5">适合 solo 开发者</strong>。极简主义：不做角色扮演、不搞仪式感，只解决最痛的问题——上下文越聊越乱、对话越来越蠢。</p>
+      <p style="margin-top:6px" data-page-node-id="j77ARurWBHaR90ncysOVb5"><span class="tag green" data-page-node-id="mzHLLCHfdcM094iZYjiv5j">solo 开发者</span><span class="tag orange" data-page-node-id="d32WJ506dkq3BacPQZv2oT">极简</span><span class="tag blue" data-page-node-id="kotduFjP2GunhzTZe1YSKo">抗腐烂</span></p>
+      <p style="font-size:0.82em;margin-top:6px" data-page-node-id="NQgltQkASxupELJ2AJa5CX">GitHub: <a href="https://github.com/gsd-build/get-shit-done" target="_blank" style="color:var(--accent)" data-page-node-id="GQ3vZ6laf8rc9mVKWl5ps6">gsd-build/get-shit-done</a> · ⭐ 6.4k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent3);" data-page-node-id="psbnFFyr5ItIkcXhvl2wBf">
+      <h4 data-page-node-id="Kdj9CSrLycfTnDXlKBlGBw">6. shanraisshan ⭐ 5.8k</h4>
+      <p data-page-node-id="jXMTQeyGHtw9wKGwlC4M3X"><strong data-page-node-id="qn1zXO9Ec8sCaRH7lYJH6M">84 条实战 tips</strong>，最大的价值是里面的"课程"——Boris Cherny（Claude Code 作者）亲授的 tips，防 dumb zone 技巧、反模式警告。适合想从原理层面理解 Claude Code 的开发者。</p>
+      <p style="margin-top:6px" data-page-node-id="qr7vNsGDsu0CARrgE8HQCE"><span class="tag purple" data-page-node-id="EWmtZNFXH4w7EYJwI1os0b">实战 tips</span><span class="tag blue" data-page-node-id="vRzdrcb33gNMHpM83vadxi">作者亲授</span><span class="tag green" data-page-node-id="L4WOxKTWs6NuF7HemDpyBv">反模式警告</span></p>
+      <p style="font-size:0.82em;margin-top:6px" data-page-node-id="fGp5sEmFtq6u1BUPZssfrt">GitHub: <a href="https://github.com/shanraisshan/claude-code-best-practice" target="_blank" style="color:var(--accent)" data-page-node-id="CHfUP2krOCAZwyZLXj3roW">shanraisshan/claude-code-best-practice</a> · ⭐ 5.8k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent2);" data-page-node-id="sxYmqlU7gH0CRCXwRpzgBk">
+      <h4 data-page-node-id="M8rP4rH4B0TK9GBniqJJsr">7. BMAD ⭐ 4.9k</h4>
+      <p data-page-node-id="yTRsQUbVjNjIOBvhb0ZAmS"><strong data-page-node-id="ydJU5vw44Gc0GpgH3c9ckH">把完整 Agile 方法论搬进 AI</strong>。PRD、架构、SM/Dev/QA 工作流，甚至有故事点、sprint 仪式。核心卖点是<strong data-page-node-id="nxb7G1wYncyLHXIzvhAK87">人类 in-the-loop</strong>——每个环节都有人确认，不会出现 AI 一路狂奔结果跑偏的情况。</p>
+      <p style="margin-top:6px" data-page-node-id="6dQS2mECO2JomQ0cYtGqKg"><span class="tag green" data-page-node-id="D9tx0yAjuAqQbaKcSkcVKX">Agile</span><span class="tag blue" data-page-node-id="2sniqtSnjWKF3gCEIwqOCb">in-the-loop</span><span class="tag orange" data-page-node-id="pgxX88RPPPPWsxJltoqaBU">sprint 仪式</span></p>
+      <p style="font-size:0.82em;margin-top:6px" data-page-node-id="FBumM5AyOzNt7Syha0lyAg">GitHub: <a href="https://github.com/bmad-code-org/BMAD-METHOD" target="_blank" style="color:var(--accent)" data-page-node-id="V8U9TdbzF6fDeCuAWXH1ai">bmad-code-org/BMAD-METHOD</a> · ⭐ 4.9k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid #E8547A;" data-page-node-id="5T8fmj6AIPpVcTXOUfApcX">
+      <h4 data-page-node-id="Rsgf0MxFu8OL2qzviDCfhA">8. oh-my-claudecode ⭐ 3.6k</h4>
+      <p data-page-node-id="K9Lba28N4lE9b82Tn18SjI"><strong data-page-node-id="yCAAFPpYTDHbRNk5apr5X9">19 个代理 + 28 个技能</strong>，支持 Claude + Gemini + Codex 并行。作者的原话："不是工具，是武器。"适合多模型协作、需要并行处理复杂任务的场景。</p>
+      <p style="margin-top:6px" data-page-node-id="FvsOWgWAGArxPo0LPtqsB5"><span class="tag purple" data-page-node-id="62h5q93r3zreuCvirHKzw6">多模型并行</span><span class="tag orange" data-page-node-id="XuvGCe3gsncV2uJH7iR9kW">19 代理</span><span class="tag blue" data-page-node-id="Y5OBoP9vWv9QhJivKz4h9o">28 技能</span></p>
+      <p style="font-size:0.82em;margin-top:6px" data-page-node-id="M6fkkmv9xaZzHsUEJaE0aO">GitHub: <a href="https://github.com/Yeachan-Heo/oh-my-claudecode" target="_blank" style="color:var(--accent)" data-page-node-id="GrOr7fuOvk2jl4LNTRCvrp">Yeachan-Heo/oh-my-claudecode</a> · ⭐ 3.6k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent4);" data-page-node-id="hjpKfZ3zV4mo5QvHjTYh2R">
+      <h4 data-page-node-id="xgk60ajdXdMZlVhLdN3oMo">9. davila7 ⭐ 2.8k</h4>
+      <p data-page-node-id="N7g7L0aJGFcqRhAJZTEOaX"><strong data-page-node-id="hz6WaPZDX1nHiBxGZx9cAu">不是固定模板，是 1000+ 组件的市场</strong>。当成 App Store 用，想挑什么挑什么。不需要整套装——按需取用，像逛超市一样选组件。</p>
+      <p style="margin-top:6px" data-page-node-id="8uBfOfexOd4ONPOaBZhDnh"><span class="tag orange" data-page-node-id="A57LKaUBFnSd3z5el55WGW">组件市场</span><span class="tag blue" data-page-node-id="v5i8BGa6iRwpTk63c0b2s2">1000+ 组件</span><span class="tag green" data-page-node-id="YQH7sIBlvyE9RLiEMesgGH">按需取用</span></p>
+      <p style="font-size:0.82em;margin-top:6px" data-page-node-id="ZksPt7BRXDPClgvqFAC7ds">GitHub: <a href="https://github.com/davila7/claude-code-templates" target="_blank" style="color:var(--accent)" data-page-node-id="uthCk3JEXviZ6RlMIIwN2D">davila7/claude-code-templates</a> · ⭐ 2.8k Stars</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid #999; background: linear-gradient(135deg, var(--card-bg) 96%, var(--bg-warm) 100%);" data-page-node-id="9FC6fApeFhc8HPVwYaPQoZ">
+      <h4 data-page-node-id="5hUanqnBg1NiprWufWcxIM">10. 原生轻量（零配置）</h4>
+      <p data-page-node-id="wvyfpSEBHYgwJqh13FalKm"><strong data-page-node-id="2pJYTIxeLne4TDy0VBNVB0">被低估得最厉害的选项</strong>。小任务直接扔，三分钟内搞定。不需要任何配置、任何模板、任何方法论——就是打开 Claude Code 直接说你要什么。<strong data-page-node-id="ZfGllNPZanpHWh0MUkPEUp">90% 的时间其实用它就够了</strong>。</p>
+      <p style="margin-top:6px" data-page-node-id="doj7HyBHzhjj3HkKBtbDKR"><span class="tag green" data-page-node-id="pjAmj8Up7EguKDCCemrB14">零配置</span><span class="tag orange" data-page-node-id="EP0qz1ph7lV5EJ3nRJi9Uo">小任务之王</span><span class="tag blue" data-page-node-id="0BymCe7DgDR5ic53GeXHg2">被低估</span></p>
+      <p style="font-size:0.82em;margin-top:6px" data-page-node-id="ZWoHrXhhUoFSsZr3a6Gv6T">无需安装 · 所有开发者 — 90% 时间用它</p>
+    </div>
+
+  </div>
+
+  <!-- ===== 对比总表（按 Stars 排序）===== -->
+  <h3 data-page-node-id="QLY05MbZHqSuPpIlbrmsBQ">10 套方案对比总表（按 Stars 排序）</h3>
+  <table data-page-node-id="29xKYNbYYbSFraAfOUU3yE">
+    <tr data-page-node-id="Jufx7jzK6yEO9dfLFOwGT6"><th data-page-node-id="Lw6Tt9N3tM8mqotNOXITTr">排名</th><th data-page-node-id="2Os7cHHDORdmhP8Qfh0S99">方案</th><th data-page-node-id="jesuhE3TIkgDz18TNsQ9MS">Stars</th><th data-page-node-id="PDAyBA9EZTHUgnBc5396EC">核心理念</th><th data-page-node-id="FhoI7E9Vz23UKujE8FWuLa">适合人群</th><th data-page-node-id="axc1oN8DMLUMtbYuZuj5V1">一句话</th></tr>
+    <tr data-page-node-id="bxCY3HIOp96pDlDl8sryVo">
+      <td data-page-node-id="XAPx7CnNyjN8INCysVloMY">🥇</td>
+      <td data-page-node-id="gQt2p1NcNsPAcyyyEo4p3w"><strong data-page-node-id="UbD1XADTPoIbIjJ4VA5EE4">Superpowers</strong></td>
+      <td data-page-node-id="bpbfxodjuA7itbHiFzpG6T">22.7k</td>
+      <td data-page-node-id="9uA2XnAjiAK1JzoD9ma4Lr">TDD-first + Iron Laws</td>
+      <td data-page-node-id="Js2T29L3BHDUmAMKrPluvg">质量流程要求高；想自己扩展</td>
+      <td data-page-node-id="P2pcEfSaD0qAfMKMDLOFcS">测试不写完，代码一行都不准动</td>
+    </tr>
+    <tr data-page-node-id="hNrlwOjXGE0IJWYmrDid62">
+      <td data-page-node-id="a4Ha5dSOYK7bqZTwPPOgmF">🥈</td>
+      <td data-page-node-id="S6E8vwrd7B8EV37BMjhORB"><strong data-page-node-id="B42GPrue9AlFf7d11W1tKZ">Everything (ECC)</strong></td>
+      <td data-page-node-id="Lr5xOUVOT1D88qYfyUjD2a">21.5k</td>
+      <td data-page-node-id="ADJTSnRBVgrCevMlrvTdXA">微型开发团队</td>
+      <td data-page-node-id="LstR8YXOrEec6FErW7B4A7">大团队统一工具链；定制爱好者</td>
+      <td data-page-node-id="GQimlC62j2lI3Mow7soLZe">大而全的终极工具箱</td>
+    </tr>
+    <tr data-page-node-id="1FQ4Xlr8u0ijNGbRol9QuZ">
+      <td data-page-node-id="CxgpZnEzucOzkldVmj3gy4">🥉</td>
+      <td data-page-node-id="z3n7j9jez9OuDFcTJoPMTA"><strong data-page-node-id="vjfDHA4h2v586Vbwdq2aFV">Spec Kit</strong></td>
+      <td data-page-node-id="9jqducFySi89w2tfpw6JOx">11.2k</td>
+      <td data-page-node-id="FnYxLohu86dAwTBubM99Ic">规格文档先行 → 代码生成</td>
+      <td data-page-node-id="GzpdrfSL68eXjGeSUhHYQH">大项目、多模块、一致性要求高</td>
+      <td data-page-node-id="n7BgZrlECezSJVL9BnUWO4">先说清楚你要什么</td>
+    </tr>
+    <tr data-page-node-id="BmfkkygWNsQ5G7CdtdNjGi">
+      <td data-page-node-id="f2LFbqzu58c4OnOIaht8P5">4</td>
+      <td data-page-node-id="J7qzCTyVZfwG1qPVTAvmGN"><strong data-page-node-id="aX4Q4qz2Cel0fQkINJxzTx">gstack</strong></td>
+      <td data-page-node-id="t0UPxXBJsAZo57vOTqU1pG">10.9k</td>
+      <td data-page-node-id="KbNxCOCPdgxVKo6IsaQsYv">角色扮演 + 并行冲刺</td>
+      <td data-page-node-id="VpvRd10gB5ZoUrUcGzKGA7">个人全栈，需要完整产品思维链</td>
+      <td data-page-node-id="q6QzyOuLXgpAU9IdNiLw5F">把 YC CEO 的脑子装进去</td>
+    </tr>
+    <tr data-page-node-id="bhUB3e0nHVejzoPwaush5d">
+      <td data-page-node-id="yGT2EGiQeRxV4hpDdXC7rJ">5</td>
+      <td data-page-node-id="J1kWZ6Cw9cbskZciZCjCMj"><strong data-page-node-id="CHDK1AeQ2zESIBbcUcVJKR">get-shit-done</strong></td>
+      <td data-page-node-id="qwvzstJfhZwHeRSYkicM2D">6.4k</td>
+      <td data-page-node-id="c8KRGWboy8XNKGyAJCnrLC">极简 + 抗上下文腐烂</td>
+      <td data-page-node-id="GSBlnJEqlSBTtRtKgGGCj1">Solo 开发者，不要企业戏码</td>
+      <td data-page-node-id="yBTytEnq77TcWGFQeUpALk">名字就是全部宣言</td>
+    </tr>
+    <tr data-page-node-id="6Etn23k7JhrImB98g5Bms0">
+      <td data-page-node-id="SMVL1TUK6SF0zx9DZitDhN">6</td>
+      <td data-page-node-id="O5jvb3XX8Dmnu8l8bZ2PH7"><strong data-page-node-id="2RTQxcSFeUaHFYnMaCxveK">shanraisshan</strong></td>
+      <td data-page-node-id="mnlpQHfXORk8IZIvGanpG4">5.8k</td>
+      <td data-page-node-id="GJSedpjGuhb7aH4utZcmb4">实战 tips + 作者亲授</td>
+      <td data-page-node-id="Ia9HPzs6mTNdeD4UI3wvHT">想从原理层面理解 Claude Code 的开发者</td>
+      <td data-page-node-id="gsNyJ4p5VQshhv271HCCQk">Claude Code 作者的私房课</td>
+    </tr>
+    <tr data-page-node-id="aNc6Lwd94iFxvCw5hlRxgZ">
+      <td data-page-node-id="LTjoQBhqP7RlvmLfWytBtg">7</td>
+      <td data-page-node-id="i76UlpiPk7VJnjH7rGR3iF"><strong data-page-node-id="hAvMv1mVTh9nbKZPU1LT7J">BMAD</strong></td>
+      <td data-page-node-id="JaOFeTQQmlufk47HEHEqJ0">4.9k</td>
+      <td data-page-node-id="aAHpwVJFonjPK6t1ejD3yT">Agile 方法论 + 人工确认</td>
+      <td data-page-node-id="ICNXZhiPTvLZ4D5pO2o23E">重视流程管控，要人工审批每一步</td>
+      <td data-page-node-id="DcHH6x0lFFkwIWxWCZpeZb">AI 世界的 Scrum Master</td>
+    </tr>
+    <tr data-page-node-id="euOH4O7GeIOBx2mlCNn7C3">
+      <td data-page-node-id="PsKOmvxFGwGXZcINmAHXPN">8</td>
+      <td data-page-node-id="ildq8D6N1AZ60O8zGovpvY"><strong data-page-node-id="O0troysU2fKorcalScZPhk">oh-my-claudecode</strong></td>
+      <td data-page-node-id="p5MNrDq2e8tdxCBBik9InV">3.6k</td>
+      <td data-page-node-id="VBq22HVv6O2DmRWJR8wUlz">多模型并行 + 武器级工具</td>
+      <td data-page-node-id="MJvKbxcTrnbPO3WzpvEAoz">多模型协作（Claude + Gemini + Codex）</td>
+      <td data-page-node-id="gdccNjfVcUJghavaX1UNDP">不是工具，是武器</td>
+    </tr>
+    <tr data-page-node-id="gwgU0B1BABrbDCgADDGXQk">
+      <td data-page-node-id="BUEJV3Y0KMwzzkblZcBwQM">9</td>
+      <td data-page-node-id="4BoNfkjQOHSTGIDPZmLHH7"><strong data-page-node-id="JjeUL9ETTmkvIgaFMmqGs0">davila7</strong></td>
+      <td data-page-node-id="OlRjrpguSOAELfnoCtB4ua">2.8k</td>
+      <td data-page-node-id="YGB2zFGXEEdocPksNqir3c">组件市场，按需取用</td>
+      <td data-page-node-id="zc4SeMMghSSYOGWLTkxPZg">不想整套安装，只要特定功能</td>
+      <td data-page-node-id="wqCFAk8iC414uzW6zId5mj">Claude Code 的 App Store</td>
+    </tr>
+    <tr style="background:var(--table-stripe);" data-page-node-id="8KTAN82oVKttkbiUUdHEkt">
+      <td data-page-node-id="MtL6IYGEBaZPfr5VTL00xX">—</td>
+      <td data-page-node-id="7mBaCCeFiVeBfKiONB8qDa"><strong data-page-node-id="c9BDq3GyZoJckD3fbZdOfc">原生轻量</strong></td>
+      <td data-page-node-id="BP8UtHs22c4mIE7I4JPrLt">N/A</td>
+      <td data-page-node-id="Z8Agu6RJ4A97AECwzNcp4O">零配置，直接说需求</td>
+      <td data-page-node-id="5x1959gFP6Pv3YApdtT7tP">所有开发者 — 90% 时间用它</td>
+      <td data-page-node-id="0DiFcQMmExjTNgGartDHyn">被低估得最厉害的选项</td>
+    </tr>
+  </table>
+
+  <!-- ===== 选型速查 ===== -->
+  <h3 data-page-node-id="0nbCRHRGNBx8urmisgD0Gt">选型速查表</h3>
+  <table data-page-node-id="2jQu5dyXxFCcWFWVTZY6fP">
+    <tr data-page-node-id="2v6Zl3hKK0FMSH6Xef9KL7"><th data-page-node-id="CvvnQMkXuaoutEbjuGKdfy">场景</th><th data-page-node-id="JQhEtDETvG0yOmoEXOwCfD">推荐方案</th></tr>
+    <tr data-page-node-id="dpgEtzE2JCZKoGLIr0vOEk"><td data-page-node-id="jDAzhEzuDb0mvU4dvw47Xp">小任务（5分钟以内）</td><td data-page-node-id="Fvfwf8HtyGWOJkk9u91aej"><span class="tag green" data-page-node-id="VLXQpryHYfWLzYx6vl6V3v">原生 Claude Code</span></td></tr>
+    <tr data-page-node-id="RzVEYBYDDeKfhB4yengybz"><td data-page-node-id="mHdwiSSuKYJSjsthVnhG5K">个人项目，日常开发</td><td data-page-node-id="nwFcuBLgAIuJkj8X8ATlRh"><span class="tag blue" data-page-node-id="bXKt86k4EyKVFv5XWaKVhO">Superpowers</span> 或 <span class="tag orange" data-page-node-id="1MkLBHeg9U9xmoUu17mCBZ">get-shit-done</span></td></tr>
+    <tr data-page-node-id="zljwvGzWlN6pUd7SOKcK57"><td data-page-node-id="tDiWXs3997XNjLEgsp469U">个人全栈开发</td><td data-page-node-id="KpeCpqExTahF5gmWaUnjji"><span class="tag orange" data-page-node-id="LVk0zS5eZHBlmgJHhQDUQ1">gstack</span>（设计阶段）+ <span class="tag blue" data-page-node-id="0JWNjKe126ADgxbo60Shc5">Superpowers</span>（执行阶段）</td></tr>
+    <tr data-page-node-id="STEX8nKPvaBaw7fAvO6vzW"><td data-page-node-id="10jWVlg69k345B4WkPEJio">多模块大项目</td><td data-page-node-id="AB5EUJfskiLoAaxX2XhsXq"><span class="tag purple" data-page-node-id="5LccQ1CcWTiHw2meK6UgPw">Spec Kit</span> + <span class="tag blue" data-page-node-id="LEm2KNwul8Qlz2vKcJCJ6R">Superpowers</span></td></tr>
+    <tr data-page-node-id="VHuL2rkxkUcD8GlGCdm3Io"><td data-page-node-id="i2jB5Mr9dXL5mofkI844AX">重视流程审批</td><td data-page-node-id="WX2IsqAlwwtNBAz1eYeOTF"><span class="tag green" data-page-node-id="gPnEfzBH1ZVGB5jj68OBiX">BMAD</span> — 每步有人确认</td></tr>
+    <tr data-page-node-id="3ASKlH3KxAnoHTc18FrTe5"><td data-page-node-id="r0kBoYu5YiF6C5k0vciDYn">想挑特定功能，不整套安装</td><td data-page-node-id="tvMiYzMOmByGtOjrzjnxOK"><span class="tag orange" data-page-node-id="6dJd0wY9EZtbtHzGKMGGAd">davila7</span> — 当 App Store 逛</td></tr>
+    <tr data-page-node-id="yY0PiVEA6AAiGossCvxme6"><td data-page-node-id="IijcutQfGkCU7R9rWpLTUN">多模型协作</td><td data-page-node-id="uV1Gh4zHXbyC2NpGC1lqmW"><span class="tag purple" data-page-node-id="v2oF8PeBhjuU694cphe7Dt">oh-my-claudecode</span> — Claude + Gemini + Codex</td></tr>
+    <tr data-page-node-id="ecyZo9lwKZQe4JhOG0uow8"><td data-page-node-id="EbpMdAHAKDPyn7aWVKFlUL">团队协作</td><td data-page-node-id="IS7LAcfY495VnAczGrMhfG"><span class="tag blue" data-page-node-id="tsVBf8PQEOBuJA1NGF7KRH">Everything</span>（按需组件）</td></tr>
+    <tr data-page-node-id="hhy3kwp4OoIdwP6Nifvta9"><td data-page-node-id="IZfPnwFNekxef4M0ScWrj1">想从原理理解 Claude Code</td><td data-page-node-id="GHp237YgA7iDPA3aAbhnWK"><span class="tag green" data-page-node-id="EhmCxsi1ExzJjtlctLE6jL">shanraisshan</span> — 作者亲授 tips</td></tr>
+    <tr data-page-node-id="uG9i8C9cz0Dc3HK8AgVyUq"><td data-page-node-id="f3vbEjvk6bqAJUMfFefEUX">最不确定该选哪个</td><td data-page-node-id="YlaFpFLl5cTV0lb6zwpKKG"><span class="tag purple" data-page-node-id="imPEoM4CDDM64qpzy3wwv3">Superpowers</span> → 好用留着，不好用换 <span class="tag orange" data-page-node-id="u25wzioaaRzoCK0PMgdmHE">get-shit-done</span></td></tr>
+  </table>
+
+  <div class="highlight-box" data-page-node-id="rAEQGTP3PaeINlDnRp8Aqj">
+    <p data-page-node-id="SkY82xf0s7lV0Imf4B1KBZ"><strong data-page-node-id="LplgI4zGiP2HgqAcV7aFhW">核心观点：</strong>选错工作流不算坑，选了之后不敢换才是真坑。作者的混合工作流：Plan 阶段用 Superpowers，执行阶段 90% 用原生，大模块规格用 Spec Kit，探索阶段偶尔用 gstack，solo 场景用 get-shit-done。<br data-page-node-id="6cgbbCBPQO4cRJCNmdxJPU">
+    <strong data-page-node-id="EqXKU2xz3QQWXekF1gYDB7">连 Anthropic 团队内部每个人用 Claude Code 的方式都完全不一样——工作流只是起点，好用的版本都是自己改出来的。</strong></p>
+  </div>
+</section>
+
+<!-- ============ CH5: 官方插件生态 ============ -->
+<section id="ch5" data-page-node-id="mZ2v5hmBvk0owk4sGjK4BE">
+  <h2 data-page-node-id="n5DAEvXber0IUqhGKPbhTt"><span class="num" style="background:var(--accent3)" data-page-node-id="60IZCU2KXwghCcsaDbyARc">六</span> 官方插件生态：claude-plugins-official</h2>
+  <p style="color:var(--text-secondary)" data-page-node-id="JZ4ynlMcjWZRHAtMchmxQV">来源：<em data-page-node-id="LK8nTLdUlZgXZStDoesgp3">让你的 Claude Code 满血复活，Anthropic 在 GitHub 上开源了个插件</em> · <a href="https://mp.weixin.qq.com/s/WTD0TEKn0h_vjgNR1WGSxQ" target="_blank" style="color:var(--accent)" data-page-node-id="bCoEnOHMoZxDnFKVAPehjn">原文链接 ↗</a></p>
+
+  <p data-page-node-id="DGIIX1LR6eU5smpZEAaDGJ">GitHub: <code data-page-node-id="IAmnaJ23EBFfHWcO3IKkqf">anthropics/claude-plugins-official</code>（⭐ 30.1k Stars）—— Anthropic 官方维护的 Claude Code 插件目录，40+ 个插件，覆盖 Code Review、功能开发、遗留代码迁移、Hook 管理、多语言 LSP 等场景。</p>
+
+  <div class="highlight-box success" data-page-node-id="kA0jxVJBIWukuCIdloFove">
+    <p data-page-node-id="PthkuNEmPHwJ0afUba21bO"><strong data-page-node-id="W7p2meGYurrh4Ci3MQbwiA">安装命令：</strong><code data-page-node-id="4QVm6SNOr5cnV8wKJuRJp5">/plugin install {插件名}@claude-plugins-official</code><br data-page-node-id="fuJd6pj1PxWlpaaR55rMCg">
+    <strong data-page-node-id="Eyf2tqDF5BJzR6vi9bYczJ">图形化安装：</strong>在 Claude Code 中输入 <code data-page-node-id="EjDYDOBgbBldpCogNo4av3">/plugin</code> 进入浏览界面</p>
+  </div>
+
+  <h3 data-page-node-id="E0BGJEH49qU6VALQKKOL0V">四个必装插件</h3>
+  <div class="cards" data-page-node-id="gDdonYy5aqN5yT8hqALay0">
+    <div class="card" data-page-node-id="NtNRxln0g0XE1dxt2tVGEW">
+      <h4 data-page-node-id="Ru5dtDTixqqCWXFEmv4lcd">claude-code-setup</h4>
+      <p data-page-node-id="1yF1gCv3rrf4B6Z94GsxA8">扫描代码库，智能推荐最适合项目的 MCP Servers、Skills、Hooks、Subagents、Slash Commands。<strong data-page-node-id="0BsHNWSMb87uqH8G385z8v">只读模式</strong>，仅分析不修改。<br data-page-node-id="s5jQGjKKrfjLXXrNRfkn9s">安装：<code data-page-node-id="SeticGrlONYUB6hfrSatSE">/plugin install claude-code-setup@claude-plugins-official</code></p>
+      <span class="tag blue" data-page-node-id="9GIB1hQi1Q4XgYV70FZLJQ">入门首选</span><span class="tag green" data-page-node-id="GKcaJjOVgLo0et2hxiVFXU">安全只读</span>
+    </div>
+    <div class="card" data-page-node-id="TcNqPhpYARghxc34P9ihmU">
+      <h4 data-page-node-id="ZKGWdmaIW6KySh20HXBiAY">feature-dev</h4>
+      <p data-page-node-id="uFlYXulEI5FyCj7hZp4ZtY">7 阶段结构化开发流程：发现需求 → 探索代码库 → 澄清问题 → 架构设计（并行启动 2-3 个架构师 Agent 从三个角度设计方案）→ 编码实现 → 质量审查（3 个独立审查 Agent 并行执行）→ 总结<br data-page-node-id="AYwi1CJGB95RH3CR90lPQc">使用：<code data-page-node-id="9yllyUPCnI0HoiPInBCqsG">/feature-dev 基于 OAuth 增加用户授权流程</code></p>
+      <span class="tag purple" data-page-node-id="ZSo7y5ipDVDL3TakFTidWb">结构化</span><span class="tag orange" data-page-node-id="V9aHPRyMncab9Hb7SOs3wi">多 Agent 并行</span>
+    </div>
+    <div class="card" data-page-node-id="wgwQu41IoxuSLdG400IQ36">
+      <h4 data-page-node-id="ocJq6S03kAbpERXn2tdqA5">hookify</h4>
+      <p data-page-node-id="0fX4uouKxze3PzCiBJb0BT">用自然语言描述 Hook，无需手动配置 <code data-page-node-id="b9vigzxP2wTHJVLQzbcIHK">hooks.json</code>。支持 bash/file/stop/prompt 四种触发。立即生效，无需重启。<br data-page-node-id="BXFBuuzK80USwCnHMRWBLq">示例：<code data-page-node-id="ul3L83S9EC0ddGs5wfroZE">/hookify 当我执行 rm -rf 命令的时候警告我</code></p>
+      <span class="tag green" data-page-node-id="SvLfCRLu1ypAawE5atK81a">自然语言</span><span class="tag blue" data-page-node-id="5tz4GDVHIhrJb526pj4wz9">即时生效</span>
+    </div>
+    <div class="card" data-page-node-id="TFSM5W5wCOTF0jWZzMUIAq">
+      <h4 data-page-node-id="BZBASa57hpSopQcwb2Fv4F">code-modernization</h4>
+      <p data-page-node-id="pbAuFd3NbwnDRtFeOiiluX">遗留代码现代化迁移。COBOL、旧 Java/C++、单体 Web 应用 → 现代技术栈。所有改动输出到 <code data-page-node-id="EEIGuzglVnqFo3jemwuGGh">modernized/</code> 目录，由用户决定何时采用。</p>
+      <span class="tag orange" data-page-node-id="mEoEnUEtoTH5MvF5pfHzAp">安全隔离</span><span class="tag purple" data-page-node-id="DBH9QaAbAdkbvGwpLJRbD3">渐进迁移</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CH6: 速查与建议 ============ -->
+<section id="ch6" data-page-node-id="DcKcXluTHtt7CHkC6H3KIU">
+  <h2 data-page-node-id="uKuQAF67O0lXbyaQntgAPf"><span class="num" style="background:var(--accent4)" data-page-node-id="zG9iAJ2kl1FmiRDau4QuF6">七</span> 快速速查表与最佳实践</h2>
+
+  <h3 data-page-node-id="i9quWeikzfH4GyYWf4ZIH4">Claude Code 配置清单</h3>
+  <table data-page-node-id="XTnAeEy3mFG1xQt0pUnz8L">
+    <tr data-page-node-id="VXEma2DXN6hTQ9lNlnLzIO"><th data-page-node-id="fNqaDobKMbAg16B4g3rf3L">优先级</th><th data-page-node-id="MQDWnAQ0HphvXFWDhZ4El9">配置项</th><th data-page-node-id="ETg560VVfqPRDvNAsmXHxo">花费时间</th><th data-page-node-id="qlbnMKkDvSRkRgK6YaDCG2">效果</th></tr>
+    <tr data-page-node-id="eqYs6IxFyyY7SMnR3gXXjG"><td data-page-node-id="I6rTU8Wd1GZ6ZJekdOzRxh">🔴 必做</td><td data-page-node-id="tDFWsrsAqn6iI7Fk7fkiR1">CLAUDE.md</td><td data-page-node-id="AtFpdzhKkoaWxMKAINQMpD">5分钟</td><td data-page-node-id="4VbStnwJk5ueZtvFGf06LE">每个回合都生效，ROI 最高</td></tr>
+    <tr data-page-node-id="7ZgREbh7HIff0sJug6GtAx"><td data-page-node-id="iriHqSetXqmLnGdOkKArRi">🔴 必做</td><td data-page-node-id="oCIA0qEAlmIP2S6H7izmPV">SessionStart Hook</td><td data-page-node-id="MYWlGCNJhRTKE6iq0JfMs6">3分钟</td><td data-page-node-id="fS3G7qGKsTMHLSmSsPcutT">节省每次开会话的自我介绍时间</td></tr>
+    <tr data-page-node-id="EW0YzS3BbvIdmzVyXyO8vN"><td data-page-node-id="svSfCRvb5Z6YVGmzknJNr5">🟡 推荐</td><td data-page-node-id="3pD6viqkA5fI0h2NWGdKN3">3-5 个核心 Skills</td><td data-page-node-id="cIaiJEFirtVi9Bm7O4arHE">15分钟</td><td data-page-node-id="N2qw0u5koojGIERCYpodUg">重复工作流自动化</td></tr>
+    <tr data-page-node-id="lsSHJ5ITXwyNtOWafUeGFr"><td data-page-node-id="8N1qmUa8Qkw1kyks60V7dA">🟡 推荐</td><td data-page-node-id="Zy1BShI8r1AY7tBUCR5EMP">LSP 安装</td><td data-page-node-id="nlYMBvk7SBkEj6AG13vhx3">5分钟</td><td data-page-node-id="dSSJCTnO3VLwqHugFke8Al">大代码库搜索精准一个量级</td></tr>
+    <tr data-page-node-id="wH0I9sVfIV1wmvNrVSGlRa"><td data-page-node-id="BmrxhQ4A4D1gX8bq1cB6Jv">🟢 进阶</td><td data-page-node-id="FNJaza67krYvtVaOaNU1Q7">Sub-agent 探索模式</td><td data-page-node-id="HJ0gKsIE5rYDI8dSxfNI2j">10分钟</td><td data-page-node-id="zpWwhJj6Xgs33Xh9Dca3F9">10万行+ monorepo 必备</td></tr>
+    <tr data-page-node-id="iqB5ADqO2973XCcaG53uZV"><td data-page-node-id="1S5ltybrfVMd7Ea04cdoAa">🟢 进阶</td><td data-page-node-id="GVMuBKnkKSS1V2KJrUq4kr">Stop Hook 审查</td><td data-page-node-id="0DCpAzFLiDQOlfRstHPJAX">10分钟</td><td data-page-node-id="t7XrUqH5YBJQQXTZKZaRcI">自动守门，质量持续提升</td></tr>
+    <tr data-page-node-id="rRnxz4iVnVhSyxhIrrEM2X"><td data-page-node-id="udcVnphbDkTP6Dr1pCDAXL">🔵 团队</td><td data-page-node-id="El8NJM95mNSeK2C0fJL22w">官方 Plugin 打包</td><td data-page-node-id="FWE6WdoqPhk0qYPY4mGd7o">30分钟</td><td data-page-node-id="mXdnDEgk57tHLWjEnM6tyY">团队一键安装，零反复配置</td></tr>
+  </table>
+
+  <h3 data-page-node-id="tmk2NLnZsPVjSstBAddDiz">最佳实践速记</h3>
+  <div class="cards" data-page-node-id="bdTiyuJNbxLe7IBoYxN264">
+    <div class="card" data-page-node-id="sXk8klQBHqxn4G4grnw8Ve">
+      <h4 data-page-node-id="vZlVApaScZYCebk9VZ8kyx">规则 vs 工作流</h4>
+      <p data-page-node-id="geoSs5abEFV4IKrQsvfWt0">规则放 CLAUDE.md（"金额单位永远是分"），<br data-page-node-id="gmlXM0NzDLHmCx4WRQvEuA">工作流放 Skills（"新建 API 路由要跑 8 个步骤"）。</p>
+    </div>
+    <div class="card" data-page-node-id="Z5OZC6gWlv9GlfqhyjBa4z">
+      <h4 data-page-node-id="TcwQ8cbKvBKqFP4St1WXWc">写得对比写得多重要</h4>
+      <p data-page-node-id="Tmq0gLmQYJSMd7BYO2nrs1">CLAUDE.md 砍到 20 行，效果比 300 行好得多。<br data-page-node-id="WIjs8jTORGbutABxaF1EMO">每个字都在消耗 token，精炼是美德。</p>
+    </div>
+    <div class="card" data-page-node-id="sOYlDWzk4DF2RNjNroj5Y2">
+      <h4 data-page-node-id="AX7k2gdqBoSQiUUr8CaREv">延迟加载是王道</h4>
+      <p data-page-node-id="7zzgQ3EcBGTYRlNCfytmnF">Skill 描述始终在上下文，正文按需加载。<br data-page-node-id="hsoZt5IYZYs1uVEGyRzntj">50 个 Skill = 只为一个 Skill 的描述付费。</p>
+    </div>
+    <div class="card" data-page-node-id="ulmE19eAD3VdDpMZvRsuXL">
+      <h4 data-page-node-id="NmyEGpxvHbKTGTL464SqEJ">先 Harness 四件套再 MCP</h4>
+      <p data-page-node-id="w2EDjj3NIfu2dyVimlq5xa">CLAUDE.md + Hooks + Skills + LSP 调顺了，<br data-page-node-id="Ouas5i2I0W7KO6UtnwxyKX">再考虑 MCP。过早搭复杂 MCP 是过度工程。</p>
+    </div>
+    <div class="card" data-page-node-id="GRdHHarCVqfwVC2vsHcqZU">
+      <h4 data-page-node-id="F6rLAGPC2sAkWip9aZ4KB7">维护规律</h4>
+      <p data-page-node-id="ItILwCnnwR18kRLKISzMHI">每 3 个月检查一次 Harness，<br data-page-node-id="MNJUKcjFB6SzpFa1gxV59a">每次模型大版本发布后再看一眼。</p>
+    </div>
+    <div class="card" data-page-node-id="iOghlizh1wVditFgBAj6c5">
+      <h4 data-page-node-id="ZHwDm71PaouLinpVd6JS2x">敢换工作流</h4>
+      <p data-page-node-id="baNtHEoMKnJO6lSXnhEgLJ">选错不算坑，不敢换才是真坑。<br data-page-node-id="BQyWrYO5qjn9nGrsP9UQOo">好用的版本都是自己改出来的。</p>
+    </div>
+  </div>
+
+  <h3 data-page-node-id="J76nDNNzMxsYBC1Cx6aDlB">最佳实践·进阶</h3>
+  <p style="color:var(--text-secondary)" data-page-node-id="pk0zA59ymyXXoeM51J0A8G">来源：<em data-page-node-id="3zhRedaIEA4PYkSV6GNhfh">Claude Code 最佳实践（要点总结）</em>（公众号：超级猛 · 2026.03.21） · <a href="https://mp.weixin.qq.com/s/HPUJJnv7WDD8_QbOv-xqKQ" target="_blank" style="color:var(--accent)" data-page-node-id="qa6MskyLDrtHMe5IvvoeEN">原文链接 ↗</a></p>
+
+  <div class="highlight-box" data-page-node-id="pguXFAwT2vH14OSruT1BGk">
+    <p data-page-node-id="AHXPB8huaKVi0ocKaDbGGu"><strong data-page-node-id="WWZbxprty3aKGkEk32jalh">核心观点：</strong>Claude Code 的关键不在"提示词技巧"本身，而在于你是否给了它足够明确的目标、上下文和验证方式。效果不好不是模型能力不够，而是<strong data-page-node-id="uO5KLNAMwzEkc4tYP4HVhP">协作方式</strong>出了问题——不是"怎么问"，而是"怎么协作"。</p>
+  </div>
+
+  <!-- 1 + 2: 左右分栏 -->
+  <div class="cards" style="grid-template-columns: 1fr 1fr;" data-page-node-id="kz5OKqR2l2a1byHlpXBDeo">
+    <div class="card" style="border-left:4px solid var(--accent);" data-page-node-id="jfb4tdbAbixJLt3gdHl1Z9">
+      <h4 data-page-node-id="RHNeCGxT50Www7cQED29nn">1. 先把验收标准说死</h4>
+      <p data-page-node-id="hdMlc4AaMsKB47hqFW5TL7"><strong data-page-node-id="SDYFN8yrEIv63jZBtRHWYn">一句话公式：</strong>任务目标 + 通过条件 + 自查动作</p>
+      <ul style="margin-left:20px; line-height:1.9; margin-top:6px;" data-page-node-id="f068z3Wd3l7lobJKcMYv13">
+        <li data-page-node-id="Gcc8NX9NfiN01FUebBJZ2g"><strong data-page-node-id="l8M6q4imEgkbMJjnBX1jnc">Test（要给用例）</strong>：哪些输入该通过、哪些边界必须失败，别只说"写个函数"。</li>
+        <li data-page-node-id="CbrUu12a55orxX2uXc0gTC"><strong data-page-node-id="kfoOB9Y9ofhYMyQZFO8Tu2">Shot（要给截图）</strong>：UI 修改最好贴设计稿或截图，让它比对差异再修一轮。</li>
+        <li data-page-node-id="pcAKFMwc33HKgvrpVej3hi"><strong data-page-node-id="8ktmhUeh7yVds91tbx7HbI">Out（要给结果）</strong>：报错任务直接贴完整错误，并要求修根因，不要临时遮掩。</li>
+      </ul>
+      <p style="margin-top:10px; color:var(--text-primary);" data-page-node-id="VrfOHQsvvvGLCtkaWt61Fm">✅ 没有验收标准时，最容易产出"看起来对，其实没跑通"的答案。<br data-page-node-id="FyH9bfUXueBe7uJWCOMWp5">
+         ✅ 最值钱的一句话不是"帮我做"，而是<strong data-page-node-id="UJlh9skmZcLPgY0oDkkOVs">"做完请这样验证"</strong>。</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent2);" data-page-node-id="8D3JExYsBER2VBx6ErHuqk">
+      <h4 data-page-node-id="uWyEwgDEqFeDSA15q9MRBg">2. 先摸清代码，再让它动手</h4>
+      <p data-page-node-id="GfHHzMDNiWBCGBufBu4gST"><strong data-page-node-id="NfhaYM7I4xYt7mcPfb2E0M">探索 → 规划 → 实现 → 提交</strong>，四步走稳：</p>
+      <ol style="margin-left:20px; line-height:1.9; margin-top:6px;" data-page-node-id="Var5VjOs74R7tXreECcfqI">
+        <li data-page-node-id="zH4Ckq1tnQxy1JQ1xtweyr"><strong data-page-node-id="8X8a42Q3ZiXQkNVUTrKx44">探索</strong>：先读目录和关键文件，只理解现状，不改任何东西。</li>
+        <li data-page-node-id="E6qCOFhek6btDGHqjKOXH7"><strong data-page-node-id="wJjM0u9q4rJzXwz80GvgGV">规划</strong>：列出改哪些文件、为什么改、风险在哪、怎么验证。</li>
+        <li data-page-node-id="sY8cL36weu5tbi7oyil8uS"><strong data-page-node-id="riBPkLnbuFQu6ZS13Nh4c0">实现</strong>：切回执行模式，按计划写代码、补测试、处理失败。</li>
+        <li data-page-node-id="cpNSiuqWWferCNPGrO69d2"><strong data-page-node-id="n4LA54ZF2kWmJRixFSqKh7">提交</strong>：整理提交信息、PR 描述和验证结果。</li>
+      </ol>
+      <p style="margin-top:10px; color:var(--text-primary);" data-page-node-id="XhrKkgH1tQ3xCeBSTPgPQK">⚠️ 拼写修正、文案改动、加一行日志、变量重命名这类小任务可以直接做；<strong data-page-node-id="LZOgiaczdkzueRkxmeY4aX">但凡你自己都不确定方案、要动多个文件、或对代码库不熟</strong>，就先让它探索和列计划。</p>
+    </div>
+  </div>
+
+  <!-- 3: 独占宽度，内部分栏列表（不嵌套卡片） -->
+  <div class="card" style="border-left:4px solid var(--accent3);" data-page-node-id="0j6IHsC2gcbGtGNycpkYpP">
+    <h4 data-page-node-id="Q4yvci6SS2hPSk8QIp0E2E">3. 提示词要像交接单</h4>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin:10px 0 12px 0;" data-page-node-id="dyjvktWPaGtD2AgiTxFiSk">
+      <div data-page-node-id="gytBXEyzi3tpLrOYrQTtc4">
+        <h4 style="color:#d77; margin-bottom:8px;" data-page-node-id="0nzNcpWNBnHAnMDCwJQ3Ly">❌ 低质量说法</h4>
+        <ul style="margin-left:16px; line-height:2; color:var(--text-secondary);" data-page-node-id="Po7brOW74gGAkkJLUloDUn">
+          <li data-page-node-id="MccLCwPoEe4cNGMerUHhvS">"帮我把 foo.py 加测试。"</li>
+          <li data-page-node-id="A8tQZYpV3ZKGYtbi3ib5J5">"修一下登录问题。"</li>
+          <li data-page-node-id="DSXLhVQa3eTvpFRBvdkgyZ">"做个日历组件。"</li>
+        </ul>
+        <p style="color:var(--text-secondary); margin-top:4px;" data-page-node-id="0RMs78VziX3ZKpW5gXLN90">→ Claude 只能靠猜，返工必然多。</p>
+      </div>
+      <div data-page-node-id="WK0iWTcDyDtyPfVBplQKB8">
+        <h4 style="color:#7c7; margin-bottom:8px;" data-page-node-id="h8G3NysNzPFdDZl4gMSqrM">✅ 高质量说法</h4>
+        <ul style="margin-left:16px; line-height:2; color:var(--text-secondary);" data-page-node-id="rPa4A9326nz4Ok90GAWbWj">
+          <li data-page-node-id="k3rRvjZhqirtT3dlI2VQoU">① 点名文件、目录、功能场景</li>
+          <li data-page-node-id="jq9uFLDuvm0O0AFfxiq9sX">② 说清边界条件、限制和不想要的方案</li>
+          <li data-page-node-id="6o3zFcLuNVxHRoJk9fWPLR">③ 指明参考实现或 git 历史来源</li>
+          <li data-page-node-id="8uijaSidHGc31dVe7iKEH6">④ 最后补一句"如何验证算通过"</li>
+        </ul>
+      </div>
+    </div>
+    <p data-page-node-id="N2Qspz9fPraegvlOool7YD"><strong data-page-node-id="Hj2S0N2NFog0E2RFWoLrH1">万能模板：</strong>在【文件/目录】里处理【问题/需求】，覆盖【场景/边界】，遵守【限制/风格】，参考【现有模式/历史】，完成后用【测试/截图/命令】验证。</p>
+  </div>
+
+  <!-- 4 + 5: 左右分栏，各自纵向列表（不嵌套卡片） -->
+  <div class="cards" style="grid-template-columns: 1fr 1fr;" data-page-node-id="tUUMUN8rv7FNHsprsgNbQ8">
+    <div class="card" style="border-left:4px solid var(--accent);" data-page-node-id="VoW51FYvwYeHtUwVU8Irdj">
+      <h4 data-page-node-id="TFxuWt7uEdm2iG9oyRsFWH">4. 把材料喂足，别让它猜</h4>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;" data-page-node-id="UkBLEa19omqj9wM0gA8OSt">
+        <div data-page-node-id="sylqrIAEwauW8g1V3AUCAi"><strong data-page-node-id="F72T1NhaEkRjqEmFyh7HOa">@ 文件</strong><br data-page-node-id="gaLalFtHhb6dj63WaDww08"><span style="color:var(--text-secondary);" data-page-node-id="WbpZwJw0qbkKHe4cxAZu5u">直接点名文件，比"在某个模块里找一下"省很多来回沟通。</span></div>
+        <div data-page-node-id="h2qsRwJvJMoC2FxzqWYivq"><strong data-page-node-id="yDWvacDL8GdTbFUBzffI9Z">贴截图</strong><br data-page-node-id="9ypKoJotgE39rNQZaBnORn"><span style="color:var(--text-secondary);" data-page-node-id="4zzEk5yMkI8PeeUOzNLpvt">UI 修改给设计稿、截图或现状图，差异会明显少很多。</span></div>
+        <div data-page-node-id="p5AMVLmOaxWju1lCqsXeEj"><strong data-page-node-id="TtTpA5GSQBHLwkczMqf9Vl">贴 URL / 文档</strong><br data-page-node-id="sduM9e5ukIXgPPABQBooTx"><span style="color:var(--text-secondary);" data-page-node-id="psjq4Y2nxZaDcJYnaWm4Q4">API、规范、官方文档都能直接引用，避免记忆误差。</span></div>
+        <div data-page-node-id="71lnn1ftUY8xkrlNKZPjYH"><strong data-page-node-id="bnW3NXMslG4O5pkH1xDTsB">管道日志</strong><br data-page-node-id="lGgWdFpi1h6HXDYcEzTCER"><span style="color:var(--text-secondary);" data-page-node-id="8gJN7KHqHoY9kjP4HVS2az"><code data-page-node-id="WtDfgVloJIyKVzFezFMj8q">cat error.log | claude</code> 这类方式，适合大段报错和运行输出。</span></div>
+      </div>
+      <p style="margin-top:12px; color:var(--text-primary);" data-page-node-id="woyfaiXKEFzqlRtOc25pIX">💡 你甚至可以直接让 Claude 自己去拿上下文：<strong data-page-node-id="CFaYexqm2vCFwEZA5Dc7V4">读文件、跑 Bash、调 MCP、查历史</strong>，重点是交代清楚它应该去哪找答案。</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent4);" data-page-node-id="LBZpN39wPSfon1l6YtDsBq">
+      <h4 data-page-node-id="NmJcoEk9CmbYJsGuNtDBV1">5. 大任务先访谈，小任务直接做</h4>
+      <div style="display:flex; flex-direction:column; gap:12px; margin:10px 0;" data-page-node-id="nVoz5lDX7SC8YFx6UbltPH">
+        <div data-page-node-id="c2s6ZDRYHbMV50QcUHOu3Y">
+          <strong style="color:#7c7;" data-page-node-id="L9RCHWXf6raWM0gL8yOkKO">🟢 适合先访谈的任务</strong><br data-page-node-id="B5IlEuzqBBBPE60eVk8vGu">
+          <span style="color:var(--text-secondary);" data-page-node-id="Ntmho2YzQBf2YEycBaPQMa">新功能、跨页面改造、需求还在摇摆。涉及 UI、技术方案、边界情况和取舍。你希望先把 spec 明确，再开始写代码。</span>
+        </div>
+        <div data-page-node-id="wnwmzTGugqW36p7MKsLPSA">
+          <strong style="color:#d77;" data-page-node-id="u8SABWnxmhsouQFcyCzOxu">🔴 适合直接做的任务</strong><br data-page-node-id="B8rI0b6nCWj9VcuoUM9k5R">
+          <span style="color:var(--text-secondary);" data-page-node-id="528vBCMiRcyecrc3s4eiBW">修一个明确 bug、补一条日志、改一个文案。只动 1~2 个文件，验证路径很清楚。目标明白，没必要先开一轮长讨论。</span>
+        </div>
+      </div>
+      <p data-page-node-id="Hs2oKdGzJTbR9FwENi0QOY"><strong data-page-node-id="wgsRBQ968tWmxNMAIF1CdV">两种高价值问法：</strong></p>
+      <ul style="margin-left:20px; line-height:1.9;" data-page-node-id="FBP1YA3ioWa44JLs3myvHe">
+        <li data-page-node-id="KGCDoGEWEL2AAxgTpYpyyb">把 Claude 当<strong data-page-node-id="XdbILKm5Xx4NqJRRJT01gl">资深工程师</strong>：日志怎么走、某行代码为什么这样写、某个 flow 处理了哪些边界。</li>
+        <li data-page-node-id="Qcrl4RYShO39gnzf5M0xsh">把 Claude 当<strong data-page-node-id="QYIzJqEzkdPSMId9F41PfT">产品和技术搭档</strong>：先采访我，把难点、权衡和遗漏场景问清，再整理成完整 spec。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6 + 7: 左右分栏 -->
+  <div class="cards" style="grid-template-columns: 1fr 1fr;" data-page-node-id="BV3HvzCUw6UBx5OvRxd1rp">
+    <div class="card" style="border-left:4px solid var(--accent2);" data-page-node-id="hNqh2QpskBxqEomLz4NIEp">
+      <h4 data-page-node-id="Q00QOK3v6KAzY2w9NzU8Az">6. 先把环境调顺手</h4>
+      <p data-page-node-id="f0MgAy28nfMoWLIU5zLVBO"><strong data-page-node-id="HwgNSPTYbTOPtyUe8mq9ts">CLAUDE.md 里最值得写的三类信息：</strong></p>
+      <ul style="margin-left:20px; line-height:1.9; margin-top:6px;" data-page-node-id="ZLG6H6DZ4yUC2GoB0zS1e7">
+        <li data-page-node-id="YaBdReqGBsGDuoETDJjr4j">常用 Bash 命令和测试入口</li>
+        <li data-page-node-id="nQLt5WXuOWVS8fJ2DKXnZP">团队不走默认值的代码风格</li>
+        <li data-page-node-id="gta4brJA5GlU4DGLtY89H3">项目陷阱、必备环境变量、提交流程</li>
+      </ul>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;" data-page-node-id="VAYpZrHYsAftLuKHeXev6F">
+        <div data-page-node-id="w5X2SXrUUMky7bA44lucYd"><strong data-page-node-id="Sv7Fh12Jq6kV4CfELrkhDQ">CLAUDE.md</strong><br data-page-node-id="PRLP70vWwryThQyCM5tC5W"><span style="color:var(--text-secondary);" data-page-node-id="4DVfbNIXl3xZnSBr3PTvpt">把命令、风格、流程、坑点固化下来，Claude 每次开局就能读到。</span></div>
+        <div data-page-node-id="Ipl9z5T66PXHm5iBDnWXgU"><strong data-page-node-id="04IHALUjLt1FQSJvr6tY7B">/permissions</strong><br data-page-node-id="mRkg4IgGeAvIlxVS8FQGGv"><span style="color:var(--text-secondary);" data-page-node-id="4WENGrcejGPFzxWArnNYRL">把安全命令加入允许列表，减少每次跑测试、lint、提交的打断。</span></div>
+        <div data-page-node-id="0zrvBy2BoSLxj278ASc7xK"><strong data-page-node-id="eNi3GUrbefew7Rj57WAuRM">CLI 工具</strong><br data-page-node-id="qgw2P9SuMmoHkspdDjWr2N"><span style="color:var(--text-secondary);" data-page-node-id="Ld6aiQtUa6XrSHYg8qYzKp">像 <code data-page-node-id="FBwQzQB24VWAxidAKO6stm">gh</code>、<code data-page-node-id="bSyb6u3sfAsWWPbSaNVjeT">aws</code>、<code data-page-node-id="RefvjqCJukUfrlHWH9HAjy">gcloud</code>、<code data-page-node-id="UwbiHqGr8Ix4KIjcNxLF8Z">sentry-cli</code>，比复制网页信息更省 context。</span></div>
+        <div data-page-node-id="zd48095okFZeK0Ur0Omaz8"><strong data-page-node-id="XGQLSaFZ2ek7fQs0OWE9Da">MCP / Hooks / Skills</strong><br data-page-node-id="toKZbOfRMiti0WatWHotxd"><span style="color:var(--text-secondary);" data-page-node-id="hNcuHDfgsnYHukBP7igaxh">让 Claude 直连外部系统、自动执行必须动作，并复用你的团队知识。</span></div>
+      </div>
+      <p style="margin-top:12px; color:var(--text-primary);" data-page-node-id="JeXMp9mg6hIMCrs3P2u3fr">⚠️ <strong data-page-node-id="PXnRRvYpMrQN7wiEBkFyQA">不要</strong>把详细 API 文档、常识性代码规范、经常变化的信息一股脑写进 CLAUDE.md——只写 Claude 靠读代码也很难猜出来的东西。</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent3);" data-page-node-id="DNmb7Gy2Oa4BCmc9G0hCqT">
+      <h4 data-page-node-id="4RKdJSmDXVJ9zpAdc2rDPn">7. 及时清 context，保持智商</h4>
+      <p data-page-node-id="RYqzjTTFK4C6GCLskroS7N">Context window 装着整段对话、读过的文件、命令输出和中间结论。它越满，Claude 越容易<strong data-page-node-id="wO6xD0J0AohnAzmGrA7pAF">跑偏、变慢、忽略关键约束</strong>——别把所有不相关任务都堆在同一条会话里。</p>
+      <table style="margin-top:10px; width:100%;" data-page-node-id="ZkFHAJCBgQXNlINAKp7oRq">
+        <tr data-page-node-id="YyDvIkjgCzvHttmMzivbar"><th data-page-node-id="INZ9lUqhR4FnuDgosRg3BD">命令</th><th data-page-node-id="TH6LXJ2oG84wXU9qHTbDlb">用途</th></tr>
+        <tr data-page-node-id="bvGe3PSqI0Gi0yaweDatBD"><td data-page-node-id="sbBu6glI69RZaJxzv2P4BZ"><code data-page-node-id="kH1yzha5YPtRXbCRfZ5R9H">/clear</code></td><td data-page-node-id="y638Xy3nrsV587NkExZbgS">任务切换就清；新问题不要背着旧上下文硬聊</td></tr>
+        <tr data-page-node-id="yGU4OgkUI2kfigfjhkcqtA"><td data-page-node-id="bdvJQ1VDRDwSW4AuJyM2AX"><code data-page-node-id="YlAH5LfMBjCq0S08jJ9T1B">Esc / rewind</code></td><td data-page-node-id="DRGmRtQhqfMsSh448PeNvf">一发现走偏立刻停；需要时回到之前的对话或代码检查点</td></tr>
+        <tr data-page-node-id="BQ3MUivxHZ7Ex7Sk3rtO5T"><td data-page-node-id="GRwSSafyV9sBzKMrq5ixIE"><code data-page-node-id="FWv7YSyCp8XtmZqxc66t2P">/compact</code></td><td data-page-node-id="oVqIEjniABnMyjnQ0K5QBA">长会话里主动压缩，只保留后面还需要的关键信息</td></tr>
+        <tr data-page-node-id="fmOUWl14gVVm2lLWc6qhNt"><td data-page-node-id="p2UfzEOolNJOJhi16jXDL3"><code data-page-node-id="TLzG5buURszJchd19VPAjh">--continue</code></td><td data-page-node-id="J9aJwbS1TyWJXGNHXDwv6b">上次做到一半，直接续上，不必重新交代全部背景</td></tr>
+        <tr data-page-node-id="w7uthF5rdXbVxjOqeVWDZu"><td data-page-node-id="kd0sqE4BHGiJM8luzqGBrC"><code data-page-node-id="s2laHJK5wSpkzrykszD9Oi">subagents</code></td><td data-page-node-id="QFE6z6gg7wb3ZhAclLVP5d">大范围调查可开 subagents，把研究放到独立 context 里</td></tr>
+      </table>
+      <p style="margin-top:10px; color:var(--text-primary);" data-page-node-id="fsEmjU9CwinABEzGaT26ER">💡 如果只是顺手问个小问题，不值得把它留在主会话里；如果要大范围调查，还可以开 <strong data-page-node-id="iPrYv5yXbugsXiyP99Ce3J">subagents</strong>，把研究放到独立 context 里，别把主线程塞满。</p>
+    </div>
+  </div>
+
+  <!-- 8: 保持现有样式 -->
+  <div class="card" style="border-left:4px solid var(--accent4);" data-page-node-id="EVVQl5ClKJ6dtumGonPi2S">
+    <h4 data-page-node-id="9nmS1BWG7GNbyNRRmVOiBi">8. 总结：四件套</h4>
+    <p data-page-node-id="uRqdXsxiUnc9ghh0F4u2Bk"><strong data-page-node-id="Cf8RpA6M5sQ0A8fJLr2U23">真正厉害的人，不是把 Claude 当回答机器，而是把它带进一套可验证、可推进、可回退的协作流程。</strong>先给目标，再给上下文，再给验收，再管理节奏。</p>
+    <div class="cards" style="grid-template-columns: repeat(4, 1fr); margin-top:10px;" data-page-node-id="hxz1TwEjCwiwISETSLDKyU">
+      <div class="card" style="border-left: 4px solid var(--accent); padding:18px;" data-page-node-id="SWGhcG7tSmpT94YnTrIAtd">
+        <h4 data-page-node-id="sVD7E197NtfTHfbkoyYh05">① 目标要清</h4>
+        <p data-page-node-id="DgI17IsP4MLikrMwWarcHr">会提需求，把目标、范围、限制和交付标准一次说清。</p>
+      </div>
+      <div class="card" style="border-left: 4px solid var(--accent2); padding:18px;" data-page-node-id="YXIUqHKf5oC0UAVhFE9N4n">
+        <h4 data-page-node-id="lZlfhLL04y3kXpPqEeDEtB">② 材料要足</h4>
+        <p data-page-node-id="gjnzG627R40hQ4aYhGCbOZ">会管 context，该探案就探案、该清理就清理。</p>
+      </div>
+      <div class="card" style="border-left: 4px solid var(--accent3); padding:18px;" data-page-node-id="A4eUW2o00NC9xPDdjsTjsl">
+        <h4 data-page-node-id="tWPMierDypwJMFqosUlFo0">③ 验证要硬</h4>
+        <p data-page-node-id="DCJkqOZ8bMluocLrvLMxxi">会给验证，测试/截图/预期输出要先给，不只是在碰运气。</p>
+      </div>
+      <div class="card" style="border-left: 4px solid var(--accent4); padding:18px;" data-page-node-id="gZMc4vCTIvcpwvHc6AXAqS">
+        <h4 data-page-node-id="BCOZGYvNrqI1CepbmEuOSm">④ context 要干净</h4>
+        <p data-page-node-id="ic9wETHGN2Yos5o8BwdUPP">及时清 context，别把所有不相关任务堆在同一条会话里。</p>
+      </div>
+    </div>
+    <p style="margin-top:12px;" data-page-node-id="NsQ5PQc9lF1pZbcSD4Vpy6">做到这四件事，Claude Code 才会从"<strong data-page-node-id="hTn7EJ8IGReBKHin5YLNEF">能用</strong>"变成"<strong data-page-node-id="ungTy3Cu9VXMDHlALTjsjK">真好用</strong>"。</p>
+  </div>
+
+  <h3 data-page-node-id="ddqCzZTDrP62nU79pqu4vK">核心金句</h3>
+  <div class="highlight-box success" data-page-node-id="oj5w2fyvBDMqC3j4yTYdDb">
+    <p data-page-node-id="nyE039horzW3qhXrDC7htK">"Claude 和你一起工作的第 30 天，会比第一天好很多。" —— Anthropic 团队</p>
+  </div>
+  <div class="highlight-box" data-page-node-id="bIsb2YbWzggpZc4UCHdl5A">
+    <p data-page-node-id="HGaxIhuC1GQ90Sza4KFkKq">"模型会一直变强，这不用你操心。但模型下面那层 Harness——那是你的，而且它会复利。"</p>
+  </div>
+  <div class="highlight-box warn" data-page-node-id="l03KKiociIs5Cwh3MA3fh6">
+    <p data-page-node-id="ATwDYBra8ZqFBBirXFIYCt">"别去'开发'智能体，去给它造一个好用的工作环境。模型够聪明，你把环境搭好，剩下的它自己会搞定。"</p>
+  </div>
+
+  <h3 data-page-node-id="GXSvrMpL9DuQ68nM85EdrK">参考资源</h3>
+  <ul style="margin-left:20px; line-height:2.2;" data-page-node-id="HBDmsu5KaMnTIs9RTa9bVE">
+    <li data-page-node-id="PFXXuOykivDfW4xcFeAB2Z">Claude Code 官方文档：<a href="https://code.claude.com/docs/zh-CN/quickstart" target="_blank" data-page-node-id="Cua1AQh2hmZQ5FxI1uG0kt">code.claude.com/docs</a></li>
+    <li data-page-node-id="DP71bXnq1FnisPgevyOqzG">官方插件仓库：<a href="https://github.com/anthropics/claude-plugins-official" target="_blank" data-page-node-id="67lrKl4FjMudUTBxvrZCwr">github.com/anthropics/claude-plugins-official</a></li>
+    <li data-page-node-id="hk741medPCE2pNoxTxJuWi">Claude Code 最佳实践：<a href="https://github.com/shanraisshan/claude-code-best-practice" target="_blank" data-page-node-id="f1fZ7iYm0MatiGNiS977zF">github.com/shanraisshan/claude-code-best-practice</a></li>
+    <li data-page-node-id="35pquqShiHkKvsDBRxC9y4">Harness 工程学习项目：<a href="https://github.com/shareAI-lab/learn-claude-code" target="_blank" data-page-node-id="d5fwlEDvITEvVuUBThRAV9">github.com/shareAI-lab/learn-claude-code</a>（⭐ 6.6k）</li>
+  </ul>
+</section>
+
+</div>
+
+<footer data-page-node-id="nfHKevnHe1bVDghIyySAHh">
+  <p data-page-node-id="1b6mznIrYsDUHNj8xFzU9F">本白皮书内容来源于微信公众号多篇 Claude Code 相关文章的整理汇编。<br data-page-node-id="dQ9tYwSHVNiYEFL0BZ19XI">包括「Yuna的AI修炼手册」「克劳德猎手」「龙井Agent」等作者的作品。<br data-page-node-id="gpmgZe0xAfol0or8TOmHTN">仅供学习参考，版权归原作者所有。</p>
+</footer>
+
+<script>
+// Sticky top nav + floating sidebar sync
+const sections = document.querySelectorAll('section[id], h3[id]');
+const topNavLinks = document.querySelectorAll('nav.toc a');
+const floatingDots = document.querySelectorAll('.floating-nav .dot');
+const backToTop = document.getElementById('backToTop');
+
+function updateActiveNav() {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+
+  // Update top nav
+  topNavLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+
+  // Update floating sidebar
+  floatingDots.forEach(dot => {
+    dot.classList.toggle('active', dot.getAttribute('href') === '#' + current);
+  });
+
+  // Back to top visibility
+  backToTop.classList.toggle('visible', window.scrollY > 400);
+}
+
+window.addEventListener('scroll', updateActiveNav, { passive: true });
+
+// Smooth scroll for floating nav dots (prevent hash jump)
+floatingDots.forEach(dot => {
+  dot.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Back to top
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Initial state
+updateActiveNav();
+</script>
+<script>
+/* Anthea Nav: auto-highlight current page */
+(function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
+</script>
+<script>
+/* ANT_NAV_DROPDOWN_JS */
+(function(){
+  var groups = document.querySelectorAll('.nav-group');
+  function closeAll(){ groups.forEach(function(g){ g.classList.remove('open'); }); }
+  document.querySelectorAll('.nav-toggle').forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var g = t.parentElement, was = g.classList.contains('open');
+      closeAll();
+      if (!was) g.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest || !e.target.closest('.nav-group')) closeAll();
+  });
+})();
+</script>
+
+</body>
+</html>

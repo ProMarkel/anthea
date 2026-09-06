@@ -1,0 +1,2674 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="ELUl1g82tv4gzDxjbqx4pt">
+<head data-page-node-id="yE4BapCGxwNfFBmjkCfx1G">
+<meta charset="UTF-8" data-page-node-id="oUujrXFeYYDIg6eC8mXg5G">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="b0aLBsKppV81LGVnFr09JH">
+<title>WorkBuddy 完整使用指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="DNx6a3xxi2GRpgqSB87ZPI">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin data-page-node-id="wAupB9AYR5XjNo78T73djX">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" data-page-node-id="GpDi21qREdaepZVMfX0FiA">
+<style>
+/* ========== CSS Variables ========== */
+:root {
+  /* ===== 亮色主题（默认）· WorkBuddy 绿 ===== */
+  --bg-primary: #f5faf7;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #ffffff;
+  --bg-sidebar-hover: #f1f5f3;
+  --bg-sidebar-active: rgba(14, 164, 122, 0.12);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #6b7a8d;
+  --text-sidebar: #4b5563;
+  --text-sidebar-active: #0b8f69;
+  --accent: #0ea47a;
+  --accent-light: #34d8a4;
+  --accent-bg: rgba(14, 164, 122, 0.10);
+  --accent-bg-strong: rgba(14, 164, 122, 0.18);
+  --green: #22c55e;
+  --green-bg: rgba(34, 197, 94, 0.10);
+  --red: #ef4444;
+  --red-bg: rgba(239, 68, 68, 0.08);
+  --yellow: #f59e0b;
+  --yellow-bg: rgba(245, 158, 11, 0.10);
+  --blue: #3b82f6;
+  --blue-bg: rgba(59, 130, 246, 0.08);
+  --border: #e4ebe7;
+  --border-light: #f1f5f9;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.1);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --sidebar-width: 280px;
+  --header-height: 64px;
+}
+
+/* ========== Reset & Base ========== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-height) + 24px);
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ========== Grain Overlay ========== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ========== Sidebar ========== */
+.sidebar {
+  position: fixed;
+  left: 0;
+  /* 让出全站导航栏高度，避免侧边栏盖住 navbar */
+  top: 56px;
+  width: var(--sidebar-width);
+  height: calc(100vh - 56px);
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  z-index: 90;
+  overflow-y: auto;
+  padding: 24px 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.18) transparent;
+}
+
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
+
+.sidebar-brand {
+  padding: 0 24px 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-brand h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.sidebar-brand p {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+
+.nav-section {
+  padding: 8px 12px;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 8px 12px;
+  margin-bottom: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text-sidebar);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+}
+
+.nav-item:hover {
+  background: var(--bg-sidebar-hover);
+  color: var(--accent);
+}
+
+.nav-item.active {
+  background: var(--bg-sidebar-active);
+  color: var(--text-sidebar-active);
+  font-weight: 500;
+}
+
+.nav-item .nav-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.nav-item .nav-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ========== Mobile Menu Toggle ========== */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 72px;
+  left: 16px;
+  z-index: 200;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--text-primary);
+  transition: all 0.15s ease;
+}
+
+.menu-toggle:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+  backdrop-filter: blur(4px);
+}
+
+/* ========== Main Content ========== */
+.main-content {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+}
+
+/* ========== Hero ========== */
+.hero {
+  position: relative;
+  padding: 80px 48px 64px;
+  /* WorkBuddy 品牌绿渐变 */
+  background: linear-gradient(135deg, #0b8f69 0%, #12b886 50%, #3bd9a6 100%);
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  filter: blur(80px);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: rgba(52, 216, 164, 0.35);
+  filter: blur(60px);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  color: rgba(255,255,255,0.9);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  backdrop-filter: blur(8px);
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  font-size: 18px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.6;
+  max-width: 560px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.hero-stat {
+  text-align: left;
+}
+
+.hero-stat .stat-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.hero-stat .stat-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin-top: 6px;
+}
+
+/* ========== Content Area ========== */
+.content-area {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 48px 120px;
+}
+
+/* ========== Section ========== */
+.doc-section {
+  margin-bottom: 64px;
+  scroll-margin-top: calc(var(--header-height) + 24px);
+}
+
+.doc-section.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.doc-section.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== Section Headers ========== */
+.section-header {
+  margin-bottom: 32px;
+}
+
+.part-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: var(--accent-bg);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 12px;
+  letter-spacing: 0.04em;
+}
+
+.section-header h2 {
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.section-header .section-desc {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+/* ========== Sub-section Headers ========== */
+h3.sub-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 40px 0 16px;
+  padding-left: 16px;
+  border-left: 3px solid var(--accent);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+h4.sub-sub-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 28px 0 12px;
+  line-height: 1.4;
+}
+
+/* ========== Paragraph ========== */
+p {
+  color: var(--text-secondary);
+  font-size: 15.5px;
+  line-height: 1.75;
+  margin-bottom: 16px;
+}
+
+/* ========== Cards ========== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card-grid {
+  display: grid;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.card-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.card-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.card .card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+.card .card-icon.accent { background: var(--accent-bg); }
+.card .card-icon.green { background: var(--green-bg); }
+.card .card-icon.red { background: var(--red-bg); }
+.card .card-icon.yellow { background: var(--yellow-bg); }
+.card .card-icon.blue { background: var(--blue-bg); }
+
+.card h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.card p, .card .card-desc {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ========== Tables ========== */
+.table-wrapper {
+  overflow-x: auto;
+  margin: 16px 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+thead {
+  background: var(--accent-bg);
+}
+
+th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 13px;
+  white-space: nowrap;
+  border-bottom: 2px solid var(--border);
+}
+
+td {
+  padding: 10px 16px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-light);
+  line-height: 1.5;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: var(--accent-bg);
+}
+
+/* Prompt reference tables: consistent column widths */
+.collapsible-content table th:first-child,
+.collapsible-content table td:first-child {
+  width: 120px;
+  min-width: 100px;
+  white-space: nowrap;
+}
+
+.collapsible-content table th:nth-child(2),
+.collapsible-content table td:nth-child(2) {
+  width: auto;
+}
+
+/* ========== Lists ========== */
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+}
+
+.feature-list li {
+  position: relative;
+  padding: 8px 0 8px 28px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.feature-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.feature-list.green li::before { background: var(--green); }
+.feature-list.red li::before { background: var(--red); }
+
+/* ========== Callouts ========== */
+.callout {
+  display: flex;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  margin: 20px 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.callout-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin-top: 1px;
+}
+
+.callout.info {
+  background: var(--blue-bg);
+  color: var(--text-secondary);
+  border-left: 3px solid var(--blue);
+}
+
+.callout.warning {
+  background: var(--yellow-bg);
+  color: var(--text-secondary);
+  border-left: 3px solid var(--yellow);
+}
+
+.callout.danger {
+  background: var(--red-bg);
+  color: var(--text-secondary);
+  border-left: 3px solid var(--red);
+}
+
+.callout.success {
+  background: var(--green-bg);
+  color: var(--text-secondary);
+  border-left: 3px solid var(--green);
+}
+
+.callout.tip {
+  background: var(--accent-bg);
+  color: var(--text-secondary);
+  border-left: 3px solid var(--accent);
+}
+
+/* ========== Code/Inline ========== */
+code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+/* ========== Comparison ========== */
+.comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin: 20px 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.comparison-col {
+  padding: 24px;
+}
+
+.comparison-col:first-child {
+  background: var(--red-bg);
+  border-right: 1px solid var(--border);
+}
+
+.comparison-col:last-child {
+  background: var(--green-bg);
+}
+
+.comparison-col h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.comparison-col:first-child h4 { color: var(--red); }
+.comparison-col:last-child h4 { color: var(--green); }
+
+.comparison-col li {
+  font-size: 14px;
+  color: var(--text-secondary);
+  padding: 4px 0;
+  list-style: none;
+  position: relative;
+  padding-left: 20px;
+}
+
+.comparison-col:first-child li::before {
+  content: '✕';
+  position: absolute;
+  left: 0;
+  color: var(--red);
+  font-weight: 600;
+}
+
+.comparison-col:last-child li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* ========== Step List ========== */
+.step-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  counter-reset: step-counter;
+}
+
+.step-list li {
+  counter-increment: step-counter;
+  position: relative;
+  padding: 14px 16px 14px 52px;
+  margin-bottom: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  transition: border-color 0.15s ease;
+}
+
+.step-list li:hover {
+  border-color: var(--accent);
+}
+
+.step-list li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========== Tag/Badge ========== */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tag.accent { background: var(--accent-bg); color: var(--accent); }
+.tag.green { background: var(--green-bg); color: var(--green); }
+.tag.red { background: var(--red-bg); color: var(--red); }
+.tag.yellow { background: var(--yellow-bg); color: var(--yellow); }
+.tag.blue { background: var(--blue-bg); color: var(--blue); }
+
+/* ========== Collapsible ========== */
+.collapsible {
+  margin: 12px 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-card);
+}
+
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  cursor: pointer;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: background 0.15s ease;
+  user-select: none;
+}
+
+.collapsible-header:hover {
+  background: var(--accent-bg);
+}
+
+.collapsible-header .chevron {
+  transition: transform 0.2s ease;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.collapsible.open .collapsible-header .chevron {
+  transform: rotate(90deg);
+}
+
+.collapsible-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.collapsible.open .collapsible-body {
+  max-height: 2000px;
+}
+
+.collapsible-content {
+  padding: 0 20px 20px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ========== Skill Card ========== */
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.skill-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all 0.15s ease;
+}
+
+.skill-item:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.skill-item .skill-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.skill-item .skill-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.skill-item .skill-desc {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+/* ========== Connector Grid ========== */
+.connector-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.connector-tag {
+  padding: 6px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: all 0.15s ease;
+}
+
+.connector-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ========== Footer ========== */
+.doc-footer {
+  margin-top: 80px;
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.doc-footer p {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+/* ========== Back to Top ========== */
+.back-to-top {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 50;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-2px);
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 1024px) {
+  .card-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    /* 移动端抽屉从顶部铺满，盖住换行后的导航栏 */
+    top: 0;
+    height: 100vh;
+    z-index: 200;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay.visible {
+    display: block;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .hero {
+    padding: 80px 24px 48px;
+  }
+
+  .content-area {
+    padding: 32px 20px 80px;
+  }
+
+  .card-grid-2,
+  .card-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-col:first-child {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+}
+
+/* ========== Print ========== */
+@media print {
+  .sidebar, .menu-toggle, .back-to-top {
+    display: none !important;
+  }
+  .main-content {
+    margin-left: 0;
+  }
+  .doc-section.reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ========== Animations ========== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-content > * {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+.hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+.hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+.hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+.hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+  .doc-section.reveal { opacity: 1; transform: none; }
+}
+  /* === NAVBAR === */
+  .navbar,
+  .navbar * {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    animation: none !important;
+    opacity: 1 !important;
+  }
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    height: 56px;
+    font-size: 16px;
+    line-height: 1.6;
+    box-sizing: border-box;
+  }
+  .navbar .container {
+    width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; height: 100%;
+    box-sizing: border-box;
+  }
+  .navbar .nav-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 16px; font-weight: 700;
+    color: #E8547A;
+    text-decoration: none;
+  }
+  .navbar .nav-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    object-fit: cover; flex-shrink: 0;
+  }
+  .navbar .nav-icon-fb {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    background: linear-gradient(135deg, #E8547A, #9B59B6);
+    color: white; font-size: 13px; font-weight: 700;
+    display: none; align-items: center; justify-content: center;
+  }
+  .navbar .nav-links {
+    display: flex; gap: 24px; list-style: none;
+    margin-left: auto; padding: 0;
+    align-items: center;
+  }
+  .navbar .nav-links li {
+    list-style: none; padding: 0; margin: 0;
+    border: none; background: none;
+    font-size: 13px;
+    display: block;
+    counter-increment: none;
+  }
+  .navbar .nav-links a {
+    text-decoration: none; font-size: 13px; font-weight: 500;
+    color: #888; padding: 6px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    display: inline-block;
+  }
+  .navbar .nav-links a:hover,
+  .navbar .nav-links a.active {
+    color: #E8547A;
+    border-bottom-color: #E8547A;
+  }
+/* === ANT NAV DROPDOWN === */
+  .navbar .nav-links { gap:20px; flex-wrap:nowrap; }
+  .navbar .nav-group { position:relative; }
+  .navbar .nav-toggle { cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px; }
+  .navbar .nav-toggle .caret { font-size:9px; line-height:1; opacity:.7; transition:transform .2s; }
+  .navbar .nav-group.open .nav-toggle { color:#E8547A; }
+  .navbar .nav-group.open .nav-toggle .caret { transform:rotate(180deg); }
+  .navbar .nav-sub {
+    display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    min-width:196px; background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.13); padding:6px; margin:0; list-style:none; z-index:300;
+  }
+  .navbar .nav-group:hover > .nav-sub,
+  .navbar .nav-group.open > .nav-sub { display:block; }
+  .navbar .nav-sub::before { content:''; position:absolute; top:-9px; left:0; right:0; height:9px; }
+  .navbar .nav-sub li { display:block; font-size:13px; }
+  .navbar .nav-sub a {
+    display:block; padding:7px 12px; border-bottom:none; border-radius:6px;
+    font-size:12.5px; color:#666; white-space:nowrap; transition:background .15s,color .15s;
+  }
+  .navbar .nav-sub a:hover { background:#FEF0F4; color:#E8547A; }
+  .navbar .nav-sub a.active { background:#FEF0F4; color:#E8547A; border-bottom:none; font-weight:600; }
+  @media (max-width:900px) {
+    .navbar { height:auto; }
+    .navbar .container { height:auto; flex-wrap:wrap; padding-top:8px; padding-bottom:8px; gap:8px; }
+    .navbar .nav-links { gap:16px; margin-left:0; flex-wrap:wrap; width:100%; }
+    .navbar .nav-sub { left:0; transform:none; }
+  }
+  </style>
+</head>
+<body data-page-node-id="3vb3fq5TPxAqQTQxGKHqSw">
+
+<!-- NAVBAR -->
+<nav class="navbar" data-page-node-id="a5tglYXf70NoweGnA3qTvD">
+  <div class="container" data-page-node-id="Xq8eZcXBErMFPP2oj6IDyH">
+    <a href="index.html" class="nav-brand" data-page-node-id="GsK1kGuikXFD9vUhPXnSwm">
+      <img src="icon.jpeg" class="nav-icon" alt="A" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'" data-page-node-id="JxAXum12cT8YWXZTAYdGzx">
+      <span class="nav-icon-fb" data-page-node-id="OhWmZ1xz3yGhLDMD8UxW0j">A</span>
+      Anthea
+    </a>
+    <ul class="nav-links" id="anthea-nav">
+      <li><a href="index.html">首页</a></li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="spec">流程规范文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="spec-of-project.html">① 项目流程规范</a></li>
+          <li><a href="spec-of-designer.html">② 策划工作规范</a></li>
+          <li><a href="spec-of-art.html">③ 美术工作规范</a></li>
+          <li><a href="spec-of-art-design.html">④ 美术设计规范</a></li>
+          <li><a href="spec-of-ue-ui.html">⑤ UI 设计制作规范</a></li>
+          <li><a href="spec-of-asset.html">⑥ 资源管理规范</a></li>
+        </ul>
+      </li>
+      <li class="nav-group">
+        <a href="#" class="nav-toggle" data-group="ai">AI Coding 文档 <span class="caret">▾</span></a>
+        <ul class="nav-sub">
+          <li><a href="guide-for-claude.html">ClaudeCode 白皮书</a></li>
+          <li><a href="guide-for-claude-md.html">CLAUDE.md 规则</a></li>
+          <li><a href="guide-for-sdd.html">AI Coding 清单</a></li>
+          <li><a href="guide-for-workbuddy.html">WorkBuddy 指南</a></li>
+          <li><a href="guide-for-openspec.html">OpenSpec 工作流</a></li>
+        </ul>
+      </li>
+      <li><a href="https://github.com/ProMarkel/anthea" target="_blank">GitHub ↑</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Sidebar Overlay (Mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" data-page-node-id="HISZ5mm1dCWFGOiTrUuzXj"></div>
+
+<!-- Mobile Menu Toggle -->
+<button class="menu-toggle" id="menuToggle" aria-label="打开导航" data-page-node-id="FYm6ptL8eJu780FqtuQRWy">☰</button>
+
+<!-- Sidebar Navigation -->
+<nav class="sidebar" id="sidebar" aria-label="文档导航" data-page-node-id="WIb2mpi15ZJWeUyFbRzIef">
+  <div class="sidebar-brand" data-page-node-id="6xJxDtqlqMiofqHulLaSAJ">
+    <h2 data-page-node-id="CD9DXuyjHmC63vS7ZblSmc">WorkBuddy</h2>
+    <p data-page-node-id="hUtgO33yVYcXaEfBDPTp0n">完整使用指南</p>
+  </div>
+
+  <div class="nav-section" data-page-node-id="gspFNaDZVQof73QQ5aJ9lk">
+    <div class="nav-section-title" data-page-node-id="LNY2I5tupRsN6S3arAZAHY">第一部分 · 基础</div>
+    <a class="nav-item" href="#what-is-workbuddy" data-page-node-id="0okaImEbis5fvDoCMTRMgc">
+      <span class="nav-icon" data-page-node-id="Gif5ioyLNO3bTdsrqAmTMu">💡</span>
+      <span class="nav-label" data-page-node-id="dbYR11schjCXFDH35fb3XL">WorkBuddy 是什么</span>
+    </a>
+    <a class="nav-item" href="#interface" data-page-node-id="I9Z2Dq8XBioMWnOZyf12b0">
+      <span class="nav-icon" data-page-node-id="pAnC4b0Rp0Twi2uDeKogzL">🖥️</span>
+      <span class="nav-label" data-page-node-id="CmDmxtZrCxX9BTHimntB9J">界面布局</span>
+    </a>
+    <a class="nav-item" href="#create-task" data-page-node-id="gQANHGT1vAzDRkfbual0Hc">
+      <span class="nav-icon" data-page-node-id="EuwoWXuqFgpiQ6CGEGWkyT">✍️</span>
+      <span class="nav-label" data-page-node-id="0HEhlJPanW9hrIYd0PNgPw">创建任务</span>
+    </a>
+    <a class="nav-item" href="#permissions" data-page-node-id="DH9DTwLPYoXw5v4JQNzhJL">
+      <span class="nav-icon" data-page-node-id="810Us4ZqPyBiSSBtmkmryl">🔒</span>
+      <span class="nav-label" data-page-node-id="63b0GZgMTj1VXBkV1H5JrB">权限模式</span>
+    </a>
+    <a class="nav-item" href="#task-mgmt" data-page-node-id="MyxZC3qrcek6ZAAC1bsNm3">
+      <span class="nav-icon" data-page-node-id="cR3CshLnZ5AVQmHCSccIOv">📋</span>
+      <span class="nav-label" data-page-node-id="3ag2F90Ffc4CRz4m6pHYxX">任务管理 & 结果</span>
+    </a>
+  </div>
+
+  <div class="nav-section" data-page-node-id="7GDHRXmbqSiQ9f7RT0K4h9">
+    <div class="nav-section-title" data-page-node-id="4RsB3fWMx5igCTDAa54iWd">第二部分 · 进阶</div>
+    <a class="nav-item" href="#tips" data-page-node-id="HTlM5iGjBkRGvYPomfKlZF">
+      <span class="nav-icon" data-page-node-id="j0IhZEbUHfyvi7T6CH2FUV">⚡</span>
+      <span class="nav-label" data-page-node-id="eFNeXgQF0jvL4R6tEeKZa0">十大高效技巧</span>
+    </a>
+    <a class="nav-item" href="#experts" data-page-node-id="fmeECC7tcx2hFZu8nT2X2C">
+      <span class="nav-icon" data-page-node-id="n5xqsQluIIxpHlJtM8m6jP">🧠</span>
+      <span class="nav-label" data-page-node-id="EergjGOQruIDRU2JoGr0kH">专家中心</span>
+    </a>
+    <a class="nav-item" href="#skills" data-page-node-id="P8mTCHE7oRJkUi9oy657n9">
+      <span class="nav-icon" data-page-node-id="7DCa2xkvESTobB9McxpUg0">🔧</span>
+      <span class="nav-label" data-page-node-id="Cpqv1efcxyLkLcgN2v3K34">技能系统</span>
+    </a>
+    <a class="nav-item" href="#connectors" data-page-node-id="0s9tNMOVdDAoBCBEIPCIxg">
+      <span class="nav-icon" data-page-node-id="tIYvaK1oDOy3ncTSCgJZ2k">🔗</span>
+      <span class="nav-label" data-page-node-id="I2AuuOVp1DvhZuHd4FypaK">连接器</span>
+    </a>
+    <a class="nav-item" href="#automation" data-page-node-id="mXMa0OY1Cr40NCfRV5GLwz">
+      <span class="nav-icon" data-page-node-id="pH6LtL9hVCEGhByr0WFtQG">⏰</span>
+      <span class="nav-label" data-page-node-id="VGPwjCErq0bRLPMAuMIXIz">自动化</span>
+    </a>
+    <a class="nav-item" href="#memory" data-page-node-id="EPXW1H08OjN7mlfdcZfE0x">
+      <span class="nav-icon" data-page-node-id="7DEfcPFDnpF1tfMbKrxca2">🧩</span>
+      <span class="nav-label" data-page-node-id="GBS37AQdaC2NWinBImuLDD">记忆功能</span>
+    </a>
+  </div>
+
+  <div class="nav-section" data-page-node-id="BWB0qzbl9FQsh6fufP9sDR">
+    <div class="nav-section-title" data-page-node-id="TwphfEGWQ3YOG4qSzCSKQC">第三部分 · 高级</div>
+    <a class="nav-item" href="#docs" data-page-node-id="y4nrRFsJrXtQLMsrze8gW7">
+      <span class="nav-icon" data-page-node-id="dnCQURt737Gk0L1NH5JlZn">📄</span>
+      <span class="nav-label" data-page-node-id="RlYKRpTg7WxfSqYEPCboHa">办公文档</span>
+    </a>
+    <a class="nav-item" href="#data" data-page-node-id="MaOacyBpzwd8UuLH9zGaAh">
+      <span class="nav-icon" data-page-node-id="5tQeIEhzr2YSDVFf6nyL7J">📊</span>
+      <span class="nav-label" data-page-node-id="zHDFpGtddN9HiNDBkHv5ls">数据分析</span>
+    </a>
+    <a class="nav-item" href="#code" data-page-node-id="mSeVmSEcpoeTWH2f4II5Nm">
+      <span class="nav-icon" data-page-node-id="6P1lSJZyVXeYUOvBwtuwC4">💻</span>
+      <span class="nav-label" data-page-node-id="CkXBUM6030IjMYMpfaJRMa">代码开发</span>
+    </a>
+    <a class="nav-item" href="#research" data-page-node-id="bJ54HQ9tQSLPEtFJFx3tHK">
+      <span class="nav-icon" data-page-node-id="Nf4XB6N5AcwLEExnll5CBD">🔍</span>
+      <span class="nav-label" data-page-node-id="O0m6BRvRln5pGCUc6sx2kr">深度研究</span>
+    </a>
+    <a class="nav-item" href="#browser" data-page-node-id="7O0TnwJ7AYQPkT2YqgPUGj">
+      <span class="nav-icon" data-page-node-id="ARTZLBre2MRbdf8xpFFXOm">🌐</span>
+      <span class="nav-label" data-page-node-id="YqMDbkqrGkEsvpTkOPOLGf">浏览器自动化</span>
+    </a>
+    <a class="nav-item" href="#media" data-page-node-id="y6MIgoeFwu5CJlgjufAn67">
+      <span class="nav-icon" data-page-node-id="vYycynsnSQfMTxpcHpdQqZ">📱</span>
+      <span class="nav-label" data-page-node-id="KqsSDTQwHTZkaQocuWLEHu">自媒体运营</span>
+    </a>
+    <a class="nav-item" href="#remote" data-page-node-id="NKdecLOlVQYjMcZ0zwAWZi">
+      <span class="nav-icon" data-page-node-id="X1zeMhWJbiZwaVZe35eFDW">📡</span>
+      <span class="nav-label" data-page-node-id="uzwQXbhvJSa2vW2QpAqac6">远程助理</span>
+    </a>
+    <a class="nav-item" href="#create-skill" data-page-node-id="N8VWX8y0jVFMfqMznFZqCz">
+      <span class="nav-icon" data-page-node-id="ySO2XUNwCGYUeTHc763tAf">🛠️</span>
+      <span class="nav-label" data-page-node-id="taVaYpkRG9VCkD7KKTgut1">创建自己的 Skill</span>
+    </a>
+  </div>
+
+  <div class="nav-section" data-page-node-id="WC3xfEQR0AIHNOCTv043kw">
+    <div class="nav-section-title" data-page-node-id="8iSDnlksHUmGzIg9sKLu4A">附录</div>
+    <a class="nav-item" href="#appendix" data-page-node-id="XzvgcFHnws2DsYJcDNRvxl">
+      <span class="nav-icon" data-page-node-id="O9PbeZ4zLsh9nwzHJInvrl">📖</span>
+      <span class="nav-label" data-page-node-id="QlSBCvM8HihJSxwywB5tCo">快速参考表</span>
+    </a>
+    <a class="nav-item" href="#prompt-ref" data-page-node-id="bPDkwFDNH2WTmpYQPoSCLu">
+      <span class="nav-icon" data-page-node-id="n9QX79uBjWESemzRGwHvpR">💬</span>
+      <span class="nav-label" data-page-node-id="DLmz60AgqEaCuxqrWuHrOA">提示词参考</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-content" data-page-node-id="WlC4AQ4uGNPWHE6sjdbuir">
+
+  <!-- Hero -->
+  <header class="hero" data-page-node-id="GFeaXHDJsj4MmFWZ5axk6U">
+    <div class="hero-content" data-page-node-id="m7ZGEAzZqDCApjPyeExuiG">
+      <div class="hero-badge" data-page-node-id="BSIxYH5pCnPmdrLWKGUINx">📘 从零到精通</div>
+      <h1 data-page-node-id="plGaJVgSTorLTyPl8ptKhY">WorkBuddy<br data-page-node-id="9QHlc5XwE7AXmN6wPJV3J5">完整使用指南</h1>
+      <p data-page-node-id="eOWvWjOsMTt7NywS2UMKxv">腾讯全场景职场 AI 智能体桌面工作台——一句话下达任务，像同事一样自主规划执行，交付可验收的结果。</p>
+      <div class="hero-stats" data-page-node-id="1tioVA2y6JJtGnV1mGCNNk">
+        <div class="hero-stat" data-page-node-id="UYw9J5RSC75mN45bJkO2Q0">
+          <div class="stat-value" data-page-node-id="4HBJ3DCJRWNgNE9beAL1oM">3</div>
+          <div class="stat-label" data-page-node-id="0HFXN40JSuRPPgnhF612kK">学习阶段</div>
+        </div>
+        <div class="hero-stat" data-page-node-id="vOWIZvF2KiBZ4KNiNA0t29">
+          <div class="stat-value" data-page-node-id="I0uFXaXeMn7wqubFVNxEAW">10+</div>
+          <div class="stat-label" data-page-node-id="6du0UTBKpn4itwMB8D8BkI">高效技巧</div>
+        </div>
+        <div class="hero-stat" data-page-node-id="qGYmKb6vwRxOFSgpGWoTy0">
+          <div class="stat-value" data-page-node-id="zwHm3jNj7jM9IoJHdUJYit">30+</div>
+          <div class="stat-label" data-page-node-id="JFodCGIDtw0YJJzJU6AqKj">连接器集成</div>
+        </div>
+        <div class="hero-stat" data-page-node-id="BHf6iFtDRflXviaJ6TkzZG">
+          <div class="stat-value" data-page-node-id="p0iGBHnQCITpD5iK1kBl0r">8</div>
+          <div class="stat-label" data-page-node-id="HsHbaYBKAVoDJnYjyVaJYO">领域专章</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <div class="content-area" data-page-node-id="r979YOMiohOE04BTDSZsAW">
+
+    <!-- ============================== -->
+    <!-- PART 1: Basics                 -->
+    <!-- ============================== -->
+    <div id="part1" data-page-node-id="zuOtE0TjxEbqpy4a23P6Ya"></div>
+
+    <section class="doc-section reveal" id="what-is-workbuddy" data-page-node-id="HIdgVH29tqSszl30sBCGRV">
+      <div class="section-header" data-page-node-id="0Oy0TisZIQDzsuQkVDSV6W">
+        <div class="part-label" data-page-node-id="SYF7D7GezffoUPqGcMrKgl">第一部分 · 功能介绍及基础操作</div>
+        <h2 data-page-node-id="zYEvGt5Pnlhrw4dErnqyKk">WorkBuddy 是什么</h2>
+        <p class="section-desc" data-page-node-id="YHDr9CKu7ZHYQiP0v3aemu">全场景职场 AI 智能体桌面工作台，一句话描述需求，自主规划执行任务并交付结果。</p>
+      </div>
+
+      <div class="comparison" data-page-node-id="mq5w9ctk6rdA3Z1EtGq6b4">
+        <div class="comparison-col" data-page-node-id="jlo4K1IrlEQGSMK9ZgzO3x">
+          <h4 data-page-node-id="boRXbK3TJKa0hWfQW3H9OO">❌ 传统 AI 对话</h4>
+          <ul data-page-node-id="7phZLsIkRQMPswhJPP5DFr">
+            <li data-page-node-id="5nKDuNiv9jHxxj4b5XpYbB">只能对话，提供建议</li>
+            <li data-page-node-id="GGd92GR6yuJnp3TulFkHPU">需要手动操作文件</li>
+            <li data-page-node-id="Pane3Dszj0bRTfI0QbKST0">单步骤简单任务</li>
+            <li data-page-node-id="kSzeGKmOGoJN0YOiPu8RvS">输出文字回复</li>
+          </ul>
+        </div>
+        <div class="comparison-col" data-page-node-id="bjjIjy5pAIemtUJVB73050">
+          <h4 data-page-node-id="8qV0EM0iEzhw7d2wN3LFjr">✓ WorkBuddy</h4>
+          <ul data-page-node-id="Wjxtg8U9Ji4km8rH61rKja">
+            <li data-page-node-id="Amlpy9WDp33jFEP1kPnDz5">能够实际执行任务</li>
+            <li data-page-node-id="glOo4w7liTE4VDmlHVULBK">自动操作本地文件</li>
+            <li data-page-node-id="5ZcAsVs6EdSgOdACMVBoUJ">多步骤复杂任务</li>
+            <li data-page-node-id="b0kZBNhp7gRIfsGU74qLdp">交付可验收的结果</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="UA7zOFNdCM9LWHHcZ9MudT">核心能力</h3>
+      <div class="card-grid card-grid-2" data-page-node-id="Rdb9fcfXpjT2ogpmzzMRN0">
+        <div class="card" data-page-node-id="OaAPVlWR5kuyOYCJnB2eJk">
+          <div class="card-icon accent" data-page-node-id="pGDY2AtsFFJyyTLfz5wK5B">💬</div>
+          <h4 data-page-node-id="S0PkjIq0OCq88gaLdFPNBf">理解自然语言</h4>
+          <p class="card-desc" data-page-node-id="dmxStYGiWKlAEH7tJKFlZe">一句话下达任务，无需复杂操作步骤</p>
+        </div>
+        <div class="card" data-page-node-id="LXZr9tn4aKyhneUivsqlmr">
+          <div class="card-icon green" data-page-node-id="O1um7JXFyj1RzO7IO3LGYv">🧭</div>
+          <h4 data-page-node-id="oxNylkyr0BqaEARF51Zl1s">自主规划执行</h4>
+          <p class="card-desc" data-page-node-id="mnLUFNnSddwsvXcMUGkh91">自动拆解任务、规划步骤、执行操作</p>
+        </div>
+        <div class="card" data-page-node-id="dWzu8FaBoD6aREmaksoVXm">
+          <div class="card-icon blue" data-page-node-id="M0oKOT0bQRxIWJHCKHqfHs">📊</div>
+          <h4 data-page-node-id="Wpx2uyAKtYZfbbciSw1rJd">多模态任务处理</h4>
+          <p class="card-desc" data-page-node-id="AfrjYIQazkJoZE1K4nBOde">支持文档、表格、PPT、数据分析等多种类型</p>
+        </div>
+        <div class="card" data-page-node-id="3DRzYtLst9RCrw7Un9WqCQ">
+          <div class="card-icon yellow" data-page-node-id="DAPZXEf32ybaASXppxL9vg">📁</div>
+          <h4 data-page-node-id="N8NH7hOlTmpFGA2e7uomzD">本地文件操作</h4>
+          <p class="card-desc" data-page-node-id="5x44nHGabHT1gROL0WS9uR">可读取授权的电脑文件夹，进行批量处理</p>
+        </div>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="C1NT7sBdrbUMT1cxIIiEBx">适用场景</h3>
+      <div class="card-grid card-grid-3" data-page-node-id="Hq1ezpsBl5xPl8pDNWxhNc">
+        <div class="card" data-page-node-id="pQ6EIe4m1XuA184Wanmw2j">
+          <div class="card-icon accent" data-page-node-id="G41yGVOlCFQqoVt2X76mxI">🏢</div>
+          <h4 data-page-node-id="QiQnBJkYpEiCdeHnc9zoMp">日常办公</h4>
+          <p class="card-desc" data-page-node-id="7aTENdqLDNadN0ifuLjgfC">文档生成、数据分析、PPT 制作、深度研究、邮件编辑、批量文件处理</p>
+          <span class="tag accent" style="margin-top:8px" data-page-node-id="JHSUm2yVHwgRmfMHH8XVkH">默认模式</span>
+        </div>
+        <div class="card" data-page-node-id="crtfwlYSQNlcFgxHVcljly">
+          <div class="card-icon green" data-page-node-id="H5BpFZg0z09DyAqIfq9vaf">💻</div>
+          <h4 data-page-node-id="MiCMHeernxjr2NkgrSWfJL">代码开发</h4>
+          <p class="card-desc" data-page-node-id="vHklA8jYJPyCGMFCoLiq7R">代码生成、代码审查、Bug 修复、项目理解、网站开发</p>
+        </div>
+        <div class="card" data-page-node-id="nftCd43G9EZ4fGRrylgTWv">
+          <div class="card-icon blue" data-page-node-id="zkuqcncu4XCDDgMD1nAkXh">🎨</div>
+          <h4 data-page-node-id="tGiQjQk08tEzgGveaEkewF">设计创意</h4>
+          <p class="card-desc" data-page-node-id="SrkGxVnpiknGEGkJz2uB8t">产品设计、PPT 设计、交互原型、品牌设计、海报设计</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="interface" data-page-node-id="0FE1U4xjTAVMyfAhAYE8iN">
+      <div class="section-header" data-page-node-id="5hUg1m52fKlkQvghuBHI5w">
+        <div class="part-label" data-page-node-id="52jBBqsOcqlAkxMVrgwPEv">第一部分</div>
+        <h2 data-page-node-id="7qsuXMyexoWN73KsaYzqB4">界面布局</h2>
+      </div>
+
+      <div class="card-grid card-grid-3" data-page-node-id="HAUZDyJ6DyOqwbuLim5bPz">
+        <div class="card" data-page-node-id="mj7gWoIYrgYdStCAkadTmR">
+          <div class="card-icon accent" data-page-node-id="zy0cKC2ylekpbOCcRLJrDw">📑</div>
+          <h4 data-page-node-id="Gp2NH0XibBNGKL8hgBtENo">左侧边栏</h4>
+          <p class="card-desc" data-page-node-id="FRNbHCS1KGWnzltFkIqUax">任务列表（按文件夹分组），支持搜索和管理。底部显示用户头像</p>
+        </div>
+        <div class="card" data-page-node-id="WEQrT3TudSt1AyqUkoXR8p">
+          <div class="card-icon green" data-page-node-id="BIqTeSWuwDgc4CLdcxZRG8">💬</div>
+          <h4 data-page-node-id="GBV9waa4qJSCJHhyhFkX9v">中间对话区</h4>
+          <p class="card-desc" data-page-node-id="tRQD1dHRbdpfH50OXZzw5P">核心交互区域，包含任务标题栏、消息列表和输入框</p>
+        </div>
+        <div class="card" data-page-node-id="5HboOESA93X5IYpwuqYrhH">
+          <div class="card-icon blue" data-page-node-id="kOWzcfgQjLPh1owBaoyXKN">📦</div>
+          <h4 data-page-node-id="lq5iqgOBPV0zk2NeIAOFHg">右侧结果区</h4>
+          <p class="card-desc" data-page-node-id="UTdGTkS5rEMgSgwZceeWu7">展示产物、全部文件、变更、预览等视图，可展开或收起</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="create-task" data-page-node-id="PUyDRjN1Z2bnWpphFJv7pY">
+      <div class="section-header" data-page-node-id="Lzk8XKrbnkMUA96s3r1mUJ">
+        <div class="part-label" data-page-node-id="z6BQzdwr6JtA0F6FjEp3zJ">第一部分</div>
+        <h2 data-page-node-id="fFEYm0KQaDZ7dMJJMEXaVa">创建任务</h2>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="soQTOkEBNlXjsSlMMHo4dc">三要素公式</h3>
+      <div class="callout tip" data-page-node-id="HE3AchugYSjknGI6GuwaJr">
+        <span class="callout-icon" data-page-node-id="NyOYl9KXNEuGaqlOuiT7xM">🎯</span>
+        <div data-page-node-id="eN5CAbl7GPqAfVmqfhTdne"><strong data-page-node-id="BBdFUDs4L2GmQhiHYyfMSC">做什么 + 有什么 + 怎么样</strong>——别让 AI 猜你的意图</div>
+      </div>
+
+      <div class="comparison" data-page-node-id="yXmgToI2FnnhGFXdHub1BA">
+        <div class="comparison-col" data-page-node-id="QdcxQ44hMHeH8yNWgrTk2p">
+          <h4 data-page-node-id="32EH76HZfl4QacqP66vkxA">❌ 反面</h4>
+          <ul data-page-node-id="RJtxcmlLuGOWDVH18tEA1C">
+            <li data-page-node-id="EEcjAp54x0fDFonVhp73X5">帮我把上次的会议纪要整理一下</li>
+          </ul>
+        </div>
+        <div class="comparison-col" data-page-node-id="heEMeNduQHB9XmXbjKYDbC">
+          <h4 data-page-node-id="MJ7VaFHoM9znaAOaH8jGOw">✓ 正面</h4>
+          <ul data-page-node-id="i5MnGD068isYKEs6Ok3V2S">
+            <li data-page-node-id="ygLPVhkq8b4VYIJhDtL84d">把 <code data-page-node-id="YBqeDqrygHTlBt4kPoR8SM">D:/会议纪要/0320产品评审.docx</code> 里的会议纪要整理成清单，包含：1）每个议题的结论；2）对应责任人和截止日期；3）标记未决事项。用表格输出，不需要开场白</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="IceEIJS8ZkrNqO4MpFydWj">添加上下文</h3>
+      <div class="table-wrapper" data-page-node-id="KVt5Z7iyiK9o7lkmaEH2V7">
+        <table data-page-node-id="UTD7kTtSiFdWr5beO5XGcx">
+          <thead data-page-node-id="e4DyktUkS8JqQbJuWaZEG4">
+            <tr data-page-node-id="jGJRQ4XyK1Z7NSC3irT5dV"><th data-page-node-id="KDD7fqHfFYskSy0s1VNje7">方式</th><th data-page-node-id="XHFT0BSHpRxH0ROVPSI1AA">说明</th></tr>
+          </thead>
+          <tbody data-page-node-id="pcFpNMXbk85iEEDFhBav5Y">
+            <tr data-page-node-id="JCKHsAz7WxXpO1nQ1LfdQ1"><td data-page-node-id="IUVsll1scI2PxIxMY3GwDv"><strong data-page-node-id="1ozFGtyYumxnDC1TuEEqJ9">引用上下文</strong></td><td data-page-node-id="QBfMFBbPLYd0Qv38GDMC6Q">通过 <code data-page-node-id="D1R38nWDEQ7gqzag2ar4XF">@</code> 引用文件、文档、规则等信息</td></tr>
+            <tr data-page-node-id="tusGOqeggKIYqgk3dTXP0v"><td data-page-node-id="KMfY8JkVCtkbxUfADtTI7B"><strong data-page-node-id="HGEZcIEGmy5PS4dfQv57GU">粘贴截图</strong></td><td data-page-node-id="EiuxGCSD33gdDAjDdZv1sQ">使用 <code data-page-node-id="gHbuOAB5zgopanaweTHDld">Ctrl/Cmd + V</code> 直接粘贴剪贴板中的图片</td></tr>
+            <tr data-page-node-id="pwRMRKzlf2a0mTIS36X02Y"><td data-page-node-id="1aP37jhgUCvJB4eniLFT6A"><strong data-page-node-id="QFw6XDgxeATOhLGM8NDXgQ">上传文件</strong></td><td data-page-node-id="dFSTySPFLfg22GnZVyhXUl">点击上传按钮或拖拽文件到输入框</td></tr>
+            <tr data-page-node-id="Pn97tTiMeegQHTljkGChNp"><td data-page-node-id="ny0MgyVnDgRf66ER7AyghY"><strong data-page-node-id="ztUm2xSbED1LptJzRxGOaq">补充说明</strong></td><td data-page-node-id="VYh0kWw3HRmOFmyYDMNx4S">在任务描述中明确目标、范围、约束和预期输出</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout info" data-page-node-id="fKgBuekr7BhbtpxQU7ko7K">
+        <span class="callout-icon" data-page-node-id="qWnZEXap5vte0yWhMwek9I">💡</span>
+        <div data-page-node-id="ZDlYcypE4GYlKBqtFtQ9Vt">建议优先补充：<strong data-page-node-id="EMCAPMM2X1cvNtVilSAWmi">目标</strong>（生成什么）→ <strong data-page-node-id="8kltF7zyufhxu1M961uslC">输入</strong>（分析什么数据）→ <strong data-page-node-id="x8EuGSNekh1WxJJmVaprF3">输出格式</strong>（Word/Excel/PPT）→ <strong data-page-node-id="jOHEUjLiYlRnUT9puvvafE">约束</strong>（风格、字数、截止时间）</div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="permissions" data-page-node-id="OgIzoDtavB18iBy1qXneDK">
+      <div class="section-header" data-page-node-id="yEaS6r9ufNdMuFpHJb2f76">
+        <div class="part-label" data-page-node-id="WKlmoK7cj5Adn2BY6Yn9bd">第一部分</div>
+        <h2 data-page-node-id="OfiuCOtdS5z3WlBGSpdg33">权限模式</h2>
+      </div>
+
+      <div class="card-grid card-grid-2" data-page-node-id="7UeWr6mFx8krV2GOXXkKD4">
+        <div class="card" data-page-node-id="J21xknBDJaVcctgczaq4Pe">
+          <div class="card-icon green" data-page-node-id="IOPs4GPt3xoqEPB2ZPCPkB">🛡️</div>
+          <h4 data-page-node-id="R9YzXEcvglbANb7UWNBkLO">默认权限 <span class="tag green" data-page-node-id="7SFlyqJCJYb9lGxg26BX0m">推荐</span></h4>
+          <p class="card-desc" style="margin-top:8px" data-page-node-id="aNYV5mBa9ZVSH4QorboTJr">AI 在工作空间内高效执行，遇到高风险操作时先停下来向你确认</p>
+          <ul class="feature-list green" style="margin-top:12px;font-size:13px" data-page-node-id="xqGCwOsBHZpHs1oc2VZVv0">
+            <li data-page-node-id="rhjf5IcUyfEACtrnr1rxZE">写入工作空间外的文件</li>
+            <li data-page-node-id="3ZFcbPFDS3BUkKDqeRraYU">删除文件或目录</li>
+            <li data-page-node-id="FOAHwvk3wzmpEz2fTnLNeH">执行脚本或外部程序</li>
+            <li data-page-node-id="DGHtFHimAs7eF6nElAfBSE">调用敏感能力</li>
+          </ul>
+        </div>
+        <div class="card" data-page-node-id="jRo8mEVIO2HB61G2GcIyws">
+          <div class="card-icon yellow" data-page-node-id="LodejojhS29FQfDkko0HVP">⚡</div>
+          <h4 data-page-node-id="HOJSFuzpoIK2L9fR9Heq73">完全访问权限</h4>
+          <p class="card-desc" style="margin-top:8px" data-page-node-id="AAaCPaVAPayTcGvgetLTPo">关闭二次确认，AI 执行高风险操作时不再逐步请求确认</p>
+          <div class="callout warning" style="margin-top:12px" data-page-node-id="trCG8LgEvEiS6ypn2aSLMq">
+            <span class="callout-icon" data-page-node-id="WlrJUDQAFbgBeXdlAEQKHF">⚠️</span>
+            <div data-page-node-id="rHc7cBUNdkUTv8rwYvHt61">建议只在隔离环境或可信任务中短时间使用</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="fAPlQF9rGrF1iszP5FWRV9">推荐使用方式</h3>
+      <ol class="step-list" data-page-node-id="7Xt7atTmyE8EIHTgYxzA04">
+        <li data-page-node-id="CrLWukn9UrKWIO5Lsk84Ke">为每个任务准备独立文件夹</li>
+        <li data-page-node-id="adcj8eHlyFAOjFG5rxigwj">重要文件先备份</li>
+        <li data-page-node-id="aKMCOVFPZ95ApL80aYyQlv">默认使用默认权限</li>
+        <li data-page-node-id="cRKiDkqTaeHiuBIzSXgQmE">看懂确认弹窗再继续</li>
+        <li data-page-node-id="8w46OuaALKAiFZDksXYfrG">不确定就取消，让 AI 先解释或预览</li>
+        <li data-page-node-id="LgIK6nosufICMCNHfloBLw">完全放开用完即关</li>
+      </ol>
+    </section>
+
+    <section class="doc-section reveal" id="task-mgmt" data-page-node-id="SzxVKvjwgoW9gWLktnYhkW">
+      <div class="section-header" data-page-node-id="8ZI6Jg8XQE1jTNqDVBV9Za">
+        <div class="part-label" data-page-node-id="SqQ85UBE6wuk3TuH7h4Eq1">第一部分</div>
+        <h2 data-page-node-id="dDFEqHzCBZ7Gqfw1u8zq2l">任务管理 & 结果查看</h2>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="REbY1SAvAy8MMnptcIQpuW">任务管理</h3>
+      <ul class="feature-list" data-page-node-id="zEvnSFBcUU1F2yM3fkqz0J">
+        <li data-page-node-id="XrfCMCvNGovrtyKW5JCZgx"><strong data-page-node-id="hYxdNGfukiJTQv2RxOBeAn">任务列表</strong>：左侧边栏显示所有任务，按文件夹分组</li>
+        <li data-page-node-id="EOypRujfmehuMe7sStmiQ0"><strong data-page-node-id="bR4SF4iveKzJAW8KalqB7T">按状态筛选</strong>：查看进行中、已完成等不同状态的任务</li>
+        <li data-page-node-id="ijMxkH2Rei1NOt63YkuQax"><strong data-page-node-id="qxyoLlHT1btMaTfRCSWqSF">继续处理</strong>：点击已有任务即可回到对话继续推进</li>
+        <li data-page-node-id="43SZSAFkigFJiFPZuI15vs"><strong data-page-node-id="ZCSTNR08Mbcfip40R3CRNH">并行推进</strong>：可以同时创建多个任务并行处理</li>
+      </ul>
+
+      <h3 class="sub-title" data-page-node-id="kGf4Mes40puBoD2fs2ooGr">结果查看</h3>
+      <div class="card-grid card-grid-2" data-page-node-id="MtS3C0Ng62eAOgQzEKY0xO">
+        <div class="card" data-page-node-id="G6j95cbyFUEfvKJ5zrl58A">
+          <div class="card-icon accent" data-page-node-id="YgdDty0yOHWLPISeOOEE58">🎁</div>
+          <h4 data-page-node-id="fm8WgBJXzfBU276GIGwwib">产物视图</h4>
+          <p class="card-desc" data-page-node-id="ywFlYcNWcWEOq7NH9qJ7PV">展示任务生成的主要交付物</p>
+        </div>
+        <div class="card" data-page-node-id="a2ARAFixPjONgXOuPZlbv6">
+          <div class="card-icon blue" data-page-node-id="T9r4DvD1opjAToCV6zQhvX">📂</div>
+          <h4 data-page-node-id="eWUTxYE9NvjeGzLddrNGOx">全部文件</h4>
+          <p class="card-desc" data-page-node-id="h8D9KhUFxAJ96fziz2mRHc">查看所有生成的文件</p>
+        </div>
+        <div class="card" data-page-node-id="dXcgvVIyX9pSYCnbfmc9Fd">
+          <div class="card-icon green" data-page-node-id="AeNjBuH21dvnMNsXrfRjIp">📝</div>
+          <h4 data-page-node-id="p5AQAiZfFMSDijmsfK51tW">变更视图</h4>
+          <p class="card-desc" data-page-node-id="JQF7lMuWrHFWbGfuhl3gSZ">查看文件修改记录</p>
+        </div>
+        <div class="card" data-page-node-id="l069B3yOEDmO0AHvTITqvz">
+          <div class="card-icon yellow" data-page-node-id="aOBhcQfvzBV4nc6MyAB45Q">👁️</div>
+          <h4 data-page-node-id="zRA2mSw04cpUmw4Mf7jX1y">预览视图</h4>
+          <p class="card-desc" data-page-node-id="o7EFFKl3cjBpxuY3Rge4hS">直接在 WorkBuddy 中预览文档、图片等</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== -->
+    <!-- PART 2: Advanced               -->
+    <!-- ============================== -->
+
+    <section class="doc-section reveal" id="tips" data-page-node-id="5bEUnJl2TdhaOnUZXVGn10">
+      <div class="section-header" data-page-node-id="V74wAgLEZc8lNocNwksyDo">
+        <div class="part-label" data-page-node-id="cuqgYSPtCyCVSKn4gVKl1Q">第二部分 · 进阶技巧和实用案例</div>
+        <h2 data-page-node-id="NKHLD88SaqBrC2c2MvyXuj">十大高效使用技巧</h2>
+        <p class="section-desc" data-page-node-id="PGXuY2eA9YjBORK4AyQ25p">从入门到高手，这十条法则让你的 WorkBuddy 使用效率翻倍。</p>
+      </div>
+
+      <div class="collapsible open" data-page-node-id="m2fpb9KlJ3Iif4E2jAV7Bp">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="RkDyYqYQXHnRi9GkUDTalS">
+          <span data-page-node-id="gWjhefUUd31QI0lTsOC0yP">🎯 技巧 1：清晰表达，给 WorkBuddy 下达明确任务</span>
+          <span class="chevron" data-page-node-id="ns1EXNicrS1U3hdJkJHAbM">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="R8n0yjun2Dfpgy5yiIBEVU">
+          <div class="collapsible-content" data-page-node-id="bITJHbGq5IhhBAWvsMQwQI">
+            <p data-page-node-id="5ffMNGrpKPMU0PgB4kJMZn"><strong data-page-node-id="kepd0IBSmfZ8HEFQ0xhIBW">做什么 + 有什么 + 怎么样，别让 AI 猜你的意图。</strong></p>
+            <p data-page-node-id="3KtF7o4kHBe8A0jUcaHk5s">如果不确定从哪里开始，可以先问 WorkBuddy：<strong data-page-node-id="kCFHhef0cyevVJ5i0HgB0U">"我想做 XX，你需要我提供哪些信息？"</strong> 让它先帮你梳理输入项，再进入正式执行。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible" data-page-node-id="R9mWdHLoTZA1CkQvQjRMrJ">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="Qb1vgPAfjDLcwToUPiN4rA">
+          <span data-page-node-id="u76uZs84Iv7YpKWJDjYRy3">🏃 技巧 2：小步快跑，一次搞定一件事</span>
+          <span class="chevron" data-page-node-id="JH4KFd25nXQ6JMKCsgvBvF">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="J0OlccrsH3BfbHzmfrqs2b">
+          <div class="collapsible-content" data-page-node-id="WRhv82MdQNduWx7N2eL7bi">
+            <p data-page-node-id="fNYe52lo0MpBABKKa5SiZK"><strong data-page-node-id="ZjRyNtitATwsqLxkhBGBqO">把大任务拆成小步骤，稳稳地推进。</strong></p>
+            <p data-page-node-id="S5x1eY0RoV5zb6fKMkE86g">❌ 帮我把这份 50 页的行业报告读一遍，写一份内部汇报 PPT 发给领导</p>
+            <p data-page-node-id="PcZEMi2EyS4MGREGoMInXg">✅ 拆成三轮：</p>
+            <ul class="feature-list green" data-page-node-id="UoV61OmHqgjNqcgL9gd8GB">
+              <li data-page-node-id="dBSfjRczbPLpQfuYpR7pTP">第 1 轮：读取报告，提炼 5 个最核心的结论</li>
+              <li data-page-node-id="oEmXOrrigVVIrrcLCt1C5B">第 2 轮：基于结论写内部汇报大纲</li>
+              <li data-page-node-id="aMeefLIsH7NsEQNrDPrsW7">第 3 轮：把大纲扩展成完整 PPT 页面内容</li>
+            </ul>
+            <p data-page-node-id="ZZVtLF8KVQrFlxksfQaDoD">分步的好处：每一步你都能先确认方向对不对，发现偏了及时拉回来。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible" data-page-node-id="RZmh9WjfR6Lspd32QPNDS6">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="CKhPQwOma56MzV251xK3nL">
+          <span data-page-node-id="LNVTjL1QCr0ZIre4FpW7do">🔄 技巧 3：不满意就调整，别一轮定生死</span>
+          <span class="chevron" data-page-node-id="zGtIleKEWqGMm0qjbsHnhC">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="TeT0EtvXqpUj2VV08fbfop">
+          <div class="collapsible-content" data-page-node-id="5OSRpc4FqxSbMf8zoISSJX">
+            <p data-page-node-id="TctG7t7RA5P8nv38nBKkEZ"><strong data-page-node-id="lQBLk3xf9I5JHcKELQpY0b">对话是多轮的，第一个回答只是起点。</strong></p>
+            <ul class="feature-list" data-page-node-id="eXS0sn6e5OsXDZAzHqHA7V">
+              <li data-page-node-id="jfNrJKcqJkMk0pim1d70fU"><strong data-page-node-id="F0cfSCcgP2r7bkeomhRakD">直接指出问题</strong>："太长""语气太正式""第三段逻辑不通，重写"</li>
+              <li data-page-node-id="wNYrXOVIQpIGJ2sKFZYFWT"><strong data-page-node-id="nbjouj8rEKtw0sw34Ua6kk">换个角度重述需求</strong>：把抽象要求换成具体业务场景</li>
+              <li data-page-node-id="2mD2l3BQNSHBv9JtzpiWpT"><strong data-page-node-id="fOJNwSYbnTbOfoCrtQWKAk">补充限制条件</strong>：加入受众、场景、格式、篇幅等要求</li>
+              <li data-page-node-id="rJAnMZRi9Rv6mT0viaJxde"><strong data-page-node-id="oR5C1UvVN0C61SbQGma6kg">切换角色视角</strong>：让 WorkBuddy 站在老板、客户、产品经理等身份思考</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible" data-page-node-id="MxHoDHEp6bcClWi8KKmCfx">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="GcCudi3OLKwMJzWKhUavr2">
+          <span data-page-node-id="GkZKS8MAXDzGX6kDFv7dxT">🏠 技巧 4：先本地后远程，稳扎稳打不踩坑</span>
+          <span class="chevron" data-page-node-id="n50QExRPhZ7afWuYzyfUCz">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="yjjRNitbeBzyZ98rsvjxb0">
+          <div class="collapsible-content" data-page-node-id="EYzuC74NJkOpdyHmh77cFl">
+            <p data-page-node-id="0EilnUa4Q5klCRoncQIm1X"><strong data-page-node-id="JeQTM7AfPEThZ6i8IJ2MRu">从桌面端开始，别一上来就远程遥控。</strong></p>
+            <p data-page-node-id="poa010DO3FYhNoyunuTftF">先在桌面端边看边用，摸清 AI 的执行方式和风险边界，再逐步放手给它远程跑。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible" data-page-node-id="1xqkCbd1cPFpaY8mXkzAns">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="cwmBFgfxLDF1pspWKrcZBe">
+          <span data-page-node-id="EESpeLe7kBFP5eZVbOvlw1">🧑‍⚕️ 技巧 5：给 WorkBuddy 一个身份，它就更专业</span>
+          <span class="chevron" data-page-node-id="AGPc78EYOe8xwQsAQvOY7D">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="yOGkwDBMICipCiDx6lhDvC">
+          <div class="collapsible-content" data-page-node-id="WenocCDJb9VK06HNbOixlV">
+            <p data-page-node-id="KXnlcAggHMOe8t4FfBu6pO"><strong data-page-node-id="g60qGwALOcplviVYBM4rHq">"专家"功能，是最简单的提质手段之一。</strong></p>
+            <p data-page-node-id="6MQwzncCk61fjpYDyhVMRB">选择合适的专家后，WorkBuddy 会优先沿着该角色的思路来组织回答。详见专家中心介绍。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible" data-page-node-id="30xo6fXJUUeJecr26hor3e">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="GxRFsgGGaOaHEgWThDHbwU">
+          <span data-page-node-id="WSCIcL7Er7KjycY7Mu7qP7">📋 技巧 6：给 WorkBuddy 看例子，比说一堆要求更管用</span>
+          <span class="chevron" data-page-node-id="jhxqjm4ya8EZuL5DxLhWKN">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="ylVqw1cD21H49RxV8QZ1JD">
+          <div class="collapsible-content" data-page-node-id="nMiztEB51GVWVY0BWPaFN3">
+            <p data-page-node-id="W2ZZiIrTXVb0HFGHuVgV5C"><strong data-page-node-id="fz8xrVq9FmSwBlyQATsKep">一个好的参考样本，胜过写十行抽象要求。</strong></p>
+            <p data-page-node-id="r4XdYccTABvFKHfAbEEkuW">直接把满意的样本给 WorkBuddy："照这个来。" 语气、结构、格式、风格，参照物越清晰，结果越稳定。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible" data-page-node-id="EXJ9588VG1Z2Prva3LjUXF">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="hj9MkYB0slg4LaZl0R8alb">
+          <span data-page-node-id="Lz2cBDNuzUsJgjsbWNTaJ4">🔀 技巧 7：善用多任务，别在烂上下文里死磕</span>
+          <span class="chevron" data-page-node-id="iRL6tTqmK4buatu71lFgwE">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="HpCcd43JAaIlZQgYsCtGYX">
+          <div class="collapsible-content" data-page-node-id="riVdm8peiQspMFwMudsfRF">
+            <p data-page-node-id="iIkd0jDgKDREG1nPVMIeG2"><strong data-page-node-id="0SMEEsOcIYIT8Fho4ACla3">不同的任务，开不同的会话。</strong></p>
+            <p data-page-node-id="DGBuCeiyZTrFkf7ju2O5V0">每个会话是独立工作台，彼此互不干扰。如果一个会话过长开始"前说后忘"，直接开新任务比反复修补更有效。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible" data-page-node-id="B5VT8TXdxK3enaVmBHkdKG">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="4ws9URLMksw5MqgCpw6Jg2">
+          <span data-page-node-id="0IjZwVvPjwU6nxlQdXQKoC">💾 技巧 8：记得频繁备份和做版本管理</span>
+          <span class="chevron" data-page-node-id="Dr0LokpqgdSUG4SkcqHdas">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="ExLWRSi6hBgencSrOTHHll">
+          <div class="collapsible-content" data-page-node-id="och1r72D65YRfcQC8rxBHd">
+            <p data-page-node-id="7PQzQAHWfoIQ7XeuQgx9lB"><strong data-page-node-id="C0XL6qoVYJomiqQZSoZn12">WorkBuddy 可能"瞎改"，改崩了就得有路可退。</strong></p>
+            <p data-page-node-id="786VBlMUDpjZ0vCd9bPjwX">让 AI 帮你修改文档之前，先把原文件复制一份备份。成熟的使用方式不是期待它永远不出错，而是提前准备好回退方案。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible" data-page-node-id="iH9eCO234AwrbYBPhmIBHI">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="HW63KFZts3XbsbJJgOMbZv">
+          <span data-page-node-id="DMXkuDyihYuL0WM0UIgJjN">⏰ 技巧 9：用好自动化，让 WorkBuddy 自己持续干活</span>
+          <span class="chevron" data-page-node-id="HqowxyhlrOKNkYNray5EjR">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="dZ4dYMXdn35eTjQJGcBqiH">
+          <div class="collapsible-content" data-page-node-id="p1OoRblECxrOptzjBEMfDC">
+            <p data-page-node-id="Tz5XhU61RwbSRfNE5BbdDK"><strong data-page-node-id="euDY5Gv2aMwKZ8ppIOAWwo">善用定时任务和自动化工作流，让 WorkBuddy 24 小时运转。</strong></p>
+            <p data-page-node-id="knvKbKrKm1cgjYFluj6s3v">详见自动化功能介绍。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible" data-page-node-id="ALIn005Xx36HX3NJhUeYT0">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="yGsXBeEuDhQuIXCxs7vpzg">
+          <span data-page-node-id="UiU68IBcsBAaOUABubGRRM">🦥 技巧 10：学会"偷懒" + 合理激发 WorkBuddy 的输出</span>
+          <span class="chevron" data-page-node-id="uummMJV9ZWKMg4k3abcRfg">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="lgzrc1yLnrt2GWwtmu8y6W">
+          <div class="collapsible-content" data-page-node-id="OPQCauBnEpldBD1tutQZxb">
+            <p data-page-node-id="7ryRh0djdJAktsRC6wNHKS"><strong data-page-node-id="OH4IeoKarEqKSFc0EKknpj">善用参考、角色和激励，把重复劳动统统外包。</strong></p>
+            <p data-page-node-id="LMgprk64BBxoTRWetgi3Yz"><strong data-page-node-id="fZRdJmBXiLWgTocLlC869q">偷懒版</strong>（外包机械劳动）：帮我把 Excel 里 2000 行数据中的电话号码统一格式</p>
+            <p data-page-node-id="msDsqUaDt7cdRtEAyzp6m1"><strong data-page-node-id="8XKezdZCAKF7NRwReSGJdZ">激励版</strong>（用角色和质量标准提升结果）：你是一位在投行工作 10 年的财务分析师，以最优秀的研究报告为标准，帮我分析这家公司的财报</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="experts" data-page-node-id="XqkUCC1Aq48WfYe32Ls8Q0">
+      <div class="section-header" data-page-node-id="uP7U5mDBEQqPGHZJW0xSoO">
+        <div class="part-label" data-page-node-id="f1s1WlVz28f7ElIldORExn">第二部分</div>
+        <h2 data-page-node-id="HAVmZZwhGYAT8KgkF0d9GE">专家中心</h2>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="Mb0LVWNwJFGUvycFh6RcSf">概念区分</h3>
+      <div class="card-grid card-grid-3" data-page-node-id="7Ca3VtmtHCEL0I1uB1juUq">
+        <div class="card" data-page-node-id="GR8DswCEc2pZGWjUS5q1oN">
+          <div class="card-icon accent" data-page-node-id="jvH4nxNCgnPj9IyaVdh76m">🔧</div>
+          <h4 data-page-node-id="Wx9tzjD0Oo8f3PHC9a3FB9">Skill（技能）</h4>
+          <p class="card-desc" data-page-node-id="bL9GEXH8p322zhIDNaXT6H">工具能力：让 AI 能做某件事</p>
+          <span class="tag accent" style="margin-top:8px" data-page-node-id="2ZxPiHRQIczKG3txJVDXFf">需要某种工具能力</span>
+        </div>
+        <div class="card" data-page-node-id="cvkMGEu1Y6SRmfoZSiCweW">
+          <div class="card-icon green" data-page-node-id="FVDDtyVkXU1WtfiklHi0Vm">🧠</div>
+          <h4 data-page-node-id="VsYmkFFRrQlDvSP9il6vux">专家（Agent 型）</h4>
+          <p class="card-desc" data-page-node-id="EJr8CzO705E4tODP3vBCDv">能力 + 经验：懂某个领域的 AI 角色</p>
+          <span class="tag green" style="margin-top:8px" data-page-node-id="B8zkOGPV5bI8yPJQlAFU2F">有明确的单点问题</span>
+        </div>
+        <div class="card" data-page-node-id="wNDLM8WCeKuw5LW2umvzA0">
+          <div class="card-icon blue" data-page-node-id="eq7GyfZZeLZXB7dD5hDZK6">👥</div>
+          <h4 data-page-node-id="DQ3csBvVkZJVNnpB9plvXK">专家团（Team 型）</h4>
+          <p class="card-desc" data-page-node-id="dQtu8qWa39yqEIo9YNB0p8">多专家 + 协作流程：自动拆解、并行执行、完整交付</p>
+          <span class="tag blue" style="margin-top:8px" data-page-node-id="slFEhXJeh97vAtJqKDg9OS">复杂多角色任务</span>
+        </div>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="znU3feEffzHBHDMDBzF8AE">使用方式</h3>
+      <ol class="step-list" data-page-node-id="xYNpjnYPiqNecxF3eNBHBs">
+        <li data-page-node-id="w7MkIaHdCUphTpv8XmeLOW"><strong data-page-node-id="FFUWYHBfzIPJcbAWkKF02L">打开专家中心</strong>：左侧边栏点击"专家"</li>
+        <li data-page-node-id="5WdlbPxkBHOFCDH02urQBm"><strong data-page-node-id="HG4lLXHNMCAVC7Xja1kkep">浏览专家/专家团</strong>：按行业分类浏览，查看能力介绍、擅长领域和任务示例</li>
+        <li data-page-node-id="JID4cIHMhLx6URXFJO8kJ3"><strong data-page-node-id="aG0oPy72WbKZ4yS5dAMs6j">召唤专家/专家团</strong>：点击召唤，进入对话界面</li>
+        <li data-page-node-id="tSJgsvK9s0BnzeaGjez9jl"><strong data-page-node-id="2h9C2NfpfUk72m9caCiRQu">描述任务</strong>：用自然语言描述，专家会按角色视角执行，专家团团长会自动拆解分配</li>
+      </ol>
+
+      <div class="callout warning" data-page-node-id="ZoG3V6bPqooGGGRrymDYPj">
+        <span class="callout-icon" data-page-node-id="BFEq8CwpnsYo0EKJ0ab7OC">⚠️</span>
+        <div data-page-node-id="0xbx5MbfFabvGaosX7oQmd">专家团积分消耗通常为单专家的 <strong data-page-node-id="8NLPEIw50giJYqfVvQDD7e">3-5 倍</strong>。AI 角色化辅助 ≠ 具备法定资质的专业服务，重要场景请结合专业意见。</div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="skills" data-page-node-id="iJgIg76ZIsVtcfbO0snmeI">
+      <div class="section-header" data-page-node-id="Zr0Yxq0qngSMmo6aLVjBYr">
+        <div class="part-label" data-page-node-id="8Uq9Av9hv4MoDZU8YIoPwy">第二部分</div>
+        <h2 data-page-node-id="Ny4FNH1CxfjLsUGmAlAxuL">技能（Skill）系统</h2>
+      </div>
+
+      <p data-page-node-id="oki47FnWWZoUhI9M4HjItI">技能为 WorkBuddy 增加"特定工具能力"——封装一组可执行的脚本与工作流，使 AI 在用户授权下完成具体动作。</p>
+
+      <h3 class="sub-title" data-page-node-id="9CYcbgDFe7OV7WrfcsMDv8">技能安装方式</h3>
+      <div class="table-wrapper" data-page-node-id="9205gb3DEb5EHhtmzpd994">
+        <table data-page-node-id="pSZsKYubvwWKt5ctBFLdRC">
+          <thead data-page-node-id="vTnFy9mGijHvoQy4nlZMCb"><tr data-page-node-id="r4SKD60W4EQMOohxhkXE36"><th data-page-node-id="iAkpTaesZPEdsrUofGKkTC">方式</th><th data-page-node-id="qLCsC0Xqe3L9WtdZfUTjZn">说明</th></tr></thead>
+          <tbody data-page-node-id="rVOTqjEnxORCk28nGuxzfb">
+            <tr data-page-node-id="lEgbksFuQMfrF19QGx45Yf"><td data-page-node-id="pvsy6mZRwvHnGuQASbfIqS"><strong data-page-node-id="6GbEgcRtGAveC55VFxX4LS">上传技能</strong></td><td data-page-node-id="bkMAdzxM77WpAiZcNGpxMN">选择本地技能包拖拽导入，自动完成配置</td></tr>
+            <tr data-page-node-id="uk6ZLCH8GFdDqv5g7jZGap"><td data-page-node-id="j0FG4lMqiaJKQ7uvvFurEI"><strong data-page-node-id="N8AGf2KXKoVq85dpXwGWRG">查找技能</strong></td><td data-page-node-id="1yuDCQE3kI79ZfWbZHTaly">输入任务描述，WorkBuddy 自动查找相关技能</td></tr>
+            <tr data-page-node-id="ryyvALMh65s8A9hMqJBHmU"><td data-page-node-id="Ufiy31Lak0uVyBaZvNUNYF"><strong data-page-node-id="OWoUsG7WQfj3P8tzTsN97K">创建技能</strong></td><td data-page-node-id="PrLAV7uFoWByfv9b1qIsCR">输入任务描述，WorkBuddy 自动创建技能</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="8F4g9OcI0UT31osC1cBf9P">零成本 Skill 精选 10 个</h3>
+      <div class="skill-grid" data-page-node-id="EskHUDLtwiv4sC5PK2JoQO">
+        <div class="skill-item" data-page-node-id="S8YIrMx7CAYH0hQ5Zi84NQ">
+          <div class="skill-icon" data-page-node-id="now9XHDHX0rlP4KHewH5Hu">🌐</div>
+          <div data-page-node-id="OqpecfNWYOaBpAv3p1Fs8B"><div class="skill-name" data-page-node-id="xNMV9dVBKlIfQ9HPkDVthm">Agent Browser</div><div class="skill-desc" data-page-node-id="VwQdggGWCKQCU9hG8Oh2uL">浏览器自动化：截图、提取、点击</div></div>
+        </div>
+        <div class="skill-item" data-page-node-id="dg3fUU3KBV7bGPiZOi4266">
+          <div class="skill-icon" data-page-node-id="TwEEsI7IA9qhaAOH6wlDpX">📄</div>
+          <div data-page-node-id="UhDBGZ1aKAVW1RhwFzTQYt"><div class="skill-name" data-page-node-id="J5dII8pgZeIiC8agUkF4LC">办公文档四件套</div><div class="skill-desc" data-page-node-id="LPTuXRtVwAhIVZTCGfQEDB">Word / Excel / PPT / PDF 读写编辑</div></div>
+        </div>
+        <div class="skill-item" data-page-node-id="1QYxF57Dcps9v43QQt8f7u">
+          <div class="skill-icon" data-page-node-id="nwUyl05S5RtVrrwHJtNSsz">🎙️</div>
+          <div data-page-node-id="RhFQ82I4adgfEepYI32S5P"><div class="skill-name" data-page-node-id="lXsngzTzbWpqPJNtHjeUd4">Local Whisper</div><div class="skill-desc" data-page-node-id="lpGXyfVlyrM0HAHqHfmaTx">本地语音转文字，完全离线</div></div>
+        </div>
+        <div class="skill-item" data-page-node-id="BOsg4m2GOHZOOVLGxAydcM">
+          <div class="skill-icon" data-page-node-id="U87fC5EReS4aceEN7Wy7Hm">⬇️</div>
+          <div data-page-node-id="hIaIiPcAVAur7W3WfRtgGH"><div class="skill-name" data-page-node-id="nRbTnPH1xilrhZUX5UNZSH">yt-dlp-downloader</div><div class="skill-desc" data-page-node-id="HiwC79YG2OXp2dchAvTQP1">视频下载工具</div></div>
+        </div>
+        <div class="skill-item" data-page-node-id="1xUE3sVlOm07awjlQZcCPw">
+          <div class="skill-icon" data-page-node-id="djeAxUf0MD5jHzB0Ho6aD3">🔍</div>
+          <div data-page-node-id="ki6ma81IGtkCwKU0j6QD4n"><div class="skill-name" data-page-node-id="mhJVWMgXwccq0vKCr4Zq0G">Web Search</div><div class="skill-desc" data-page-node-id="0oB1GkbL8Go4j5FJ9SPw7S">网络搜索能力</div></div>
+        </div>
+        <div class="skill-item" data-page-node-id="Qa3KENUvGagqUFIpWG6d0V">
+          <div class="skill-icon" data-page-node-id="0G0lpNln40nqnbUFXklhAW">💎</div>
+          <div data-page-node-id="ivjJm6CS70VQByTrWJk6bL"><div class="skill-name" data-page-node-id="16cqy6BpROPOMlrWuUX65y">Obsidian</div><div class="skill-desc" data-page-node-id="8HEgRBBuITA5W4tz371PwW">Obsidian 笔记库操作</div></div>
+        </div>
+        <div class="skill-item" data-page-node-id="9xEVQq370s2wQ3aLEkCSTT">
+          <div class="skill-icon" data-page-node-id="9ewl4T72PeQPF47ShNa6Iq">🛡️</div>
+          <div data-page-node-id="jNWPjhEcaIMWaqYM9U7cXQ"><div class="skill-name" data-page-node-id="QuG5eSKHwG3CSKbPwkE6K4">Skill Scanner</div><div class="skill-desc" data-page-node-id="bfIqCwTI4OixIVqQbkHRzi">腾讯朱雀实验室，安全风险扫描</div></div>
+        </div>
+        <div class="skill-item" data-page-node-id="fiJJqJ6Czq6VoZoQ6dRIAc">
+          <div class="skill-icon" data-page-node-id="HhabtrCIm78rr71d5VOFXA">🧠</div>
+          <div data-page-node-id="5Pyz5ZI5vBe3Qz5Ua0LGVq"><div class="skill-name" data-page-node-id="UccD6j5YFblA5HUYTGU6Jf">Self-Improvement</div><div class="skill-desc" data-page-node-id="JywkpBpXX1xtjCn22omtBZ">自我学习与持续改进</div></div>
+        </div>
+        <div class="skill-item" data-page-node-id="JXObymY1YM2tP5M8ChKeHF">
+          <div class="skill-icon" data-page-node-id="NfMeAhUKu8YHRNYtfMnMW2">🔎</div>
+          <div data-page-node-id="CvpotLh3LQZCR31Jp0I3wz"><div class="skill-name" data-page-node-id="y8IsbB5aqFFz1AgYBqqLwv">Find Skills</div><div class="skill-desc" data-page-node-id="cT0QlOBMgZBRDRRWWUP2eF">搜索和发现可安装的技能</div></div>
+        </div>
+        <div class="skill-item" data-page-node-id="QDfEr1BiAALF128XY0dHf4">
+          <div class="skill-icon" data-page-node-id="EtDnDyKABRo8Kt1nA39pIS">🖥️</div>
+          <div data-page-node-id="DnJcWtMkxDlVhP56ECptBx"><div class="skill-name" data-page-node-id="Y1K3kAyYombt9ZkhPQr2e5">Frontend Design</div><div class="skill-desc" data-page-node-id="TQb3i2m7JUJPYt3Jnaw6fM">React + Next.js + Tailwind CSS</div></div>
+        </div>
+      </div>
+
+      <div class="callout danger" data-page-node-id="6QWRrELb3LrYDUeKfFIFXC">
+        <span class="callout-icon" data-page-node-id="oYsQYzDUFzTn05cS098Id9">🚨</span>
+        <div data-page-node-id="h6sfXKrUrlngD4et6tDWVy">优先使用官方推荐 Skill。安装第三方 Skill 前用 Skill Scanner 做安全扫描。涉及文件删除、批量写入、系统配置变更或资金类操作时，先小范围验证。</div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="connectors" data-page-node-id="dyquRRutQ7B5q0r9h7txx8">
+      <div class="section-header" data-page-node-id="ocC0dBxqnYuds2Ae32oCwt">
+        <div class="part-label" data-page-node-id="OCl4aWIq14J3QSgmykw8XS">第二部分</div>
+        <h2 data-page-node-id="rVBzgkmoFSc66gwog7GPEN">连接器</h2>
+      </div>
+
+      <p data-page-node-id="bY3MAIBy8PSRmxnvURjAwj">连接器是 WorkBuddy 与外部服务之间的桥梁，将外部能力引入 AI 工作流。</p>
+
+      <h3 class="sub-title" data-page-node-id="wiMPpYUaKudgKWe15ai9OG">应用场景</h3>
+      <div class="table-wrapper" data-page-node-id="qM9oQpOHHeArnq1A8g4TFF">
+        <table data-page-node-id="dCUewG74Fo2en7x8OVshZ1">
+          <thead data-page-node-id="aGUnxRLKQunQ31CDqhX5lH"><tr data-page-node-id="uFGeG1ld7YJ0L9Ee1XXhOJ"><th data-page-node-id="PDZPeP7mCvF9wEgoK3z1H1">场景</th><th data-page-node-id="Ttbx8L1Un5JR9skcioYZCF">说明</th><th data-page-node-id="dZNjl4cZWIbDSwhzKlOxmj">示例</th></tr></thead>
+          <tbody data-page-node-id="t8oGnEYGbZvcxzWFG37HE4">
+            <tr data-page-node-id="SCnyRvu8y6aKWm0okKzUQw"><td data-page-node-id="Tl436UUbLX6diIxKTdACBs"><strong data-page-node-id="cYvFRLCJT1cziKDop9smaJ">数据查询</strong></td><td data-page-node-id="KH1VXjqvGOKEvyyn31jZNp">从外部数据源获取信息</td><td data-page-node-id="6TyHtnCUklYx06IDp3GTh1">查询数据库、检索文档</td></tr>
+            <tr data-page-node-id="3qjsd9O5U1yyIGUjlGXFJO"><td data-page-node-id="WUZ5BvRnAnJnYEU6yFCb5N"><strong data-page-node-id="6zEfwl26yLbvEWzsOyGRID">服务调用</strong></td><td data-page-node-id="drl0Xdu16Y5ozYW7NEQ7dC">调用第三方 API 完成操作</td><td data-page-node-id="CwGAier3pN2FQbhr087jeI">发送邮件、创建日程</td></tr>
+            <tr data-page-node-id="pc6jJiZDCNO4HmmKqr8BBq"><td data-page-node-id="TFurjK71FGGfYUqm2XXtgE"><strong data-page-node-id="KEb2S8mFAeaYWQ9EFHXWC3">文件管理</strong></td><td data-page-node-id="kmrD0dicY5oGWjS462lDeV">访问云端存储与文件系统</td><td data-page-node-id="zxfYpld3kGsoowSq4AQYGG">读取网盘文件、上传附件</td></tr>
+            <tr data-page-node-id="yo6nySPf4c5GAcGJBh7Ps4"><td data-page-node-id="gkd5HQXcBxEaVVHwf4RwyU"><strong data-page-node-id="XpAGHlHVlaCp5aloSXoqt7">消息通知</strong></td><td data-page-node-id="SChRIRJhavzBD8z1IJyLu0">与即时通讯工具集成</td><td data-page-node-id="8zUKENYQ5uLNT8S6iTcWCO">发送企微/飞书消息</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="yvynm2W8EQaUmM7mDZobk6">已支持的连接器</h3>
+      <div class="connector-grid" data-page-node-id="Fx8oAlFA5gfeaJQgJQFqXR">
+        <span class="connector-tag" data-page-node-id="p1BeCbCp5BGQlUdx1Ez6lL">QQ 邮箱</span>
+        <span class="connector-tag" data-page-node-id="oq1wkK1G3dtu6b3ovGLqYd">腾讯文档</span>
+        <span class="connector-tag" data-page-node-id="CHuuNrn7eG2LJ3d4OXLe3E">腾讯乐享</span>
+        <span class="connector-tag" data-page-node-id="G90RDUdZLezGIwKzpQUWvP">腾讯会议</span>
+        <span class="connector-tag" data-page-node-id="Ps4ZtFBBBs748RPu4E1D1b">TAPD</span>
+        <span class="connector-tag" data-page-node-id="LBOlo0UFkoUwAqW0f8wPT4">百度网盘</span>
+        <span class="connector-tag" data-page-node-id="hfktUNE4fvBsq9UmAwoMaa">飞书</span>
+        <span class="connector-tag" data-page-node-id="UAgnhdxgjjkPEqeSYLFOJC">钉钉</span>
+        <span class="connector-tag" data-page-node-id="1zE2oggdQJLqe0zzucXPoV">GitHub</span>
+        <span class="connector-tag" data-page-node-id="NHK7RLMeBB902OyEECSqId">Notion</span>
+        <span class="connector-tag" data-page-node-id="jktEGFbA2IKWXAGhNjcDBc">…30+</span>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="GxZWqwgmPzoGNGDAFB1MYJ">使用流程</h3>
+      <ol class="step-list" data-page-node-id="OFk4FhTcPztOPw02Ypa7XA">
+        <li data-page-node-id="V2uQz7HhKvZ2D8CCe2tSQU">在左侧导航栏点击"连接器"进入管理页面</li>
+        <li data-page-node-id="IFZMgxfEgskQ3FgkHENMbK">找到目标连接器，点击 <strong data-page-node-id="K2etw6ADT7dkZ0lyaUdAPc">+</strong> 按钮</li>
+        <li data-page-node-id="wVATU9qk7M4tIzjAyaMNSp">按引导完成授权（扫码/登录/确认权限）</li>
+        <li data-page-node-id="PBWBKO0cSyYijStoU3EvUO">连接成功后卡片名称旁出现绿色圆点</li>
+        <li data-page-node-id="snTMO3UIV9Um96V3ApsZdZ">在对话中即可通过自然语言调用该服务</li>
+      </ol>
+    </section>
+
+    <section class="doc-section reveal" id="automation" data-page-node-id="FYdmhqf0fn9BDdAvInMDsP">
+      <div class="section-header" data-page-node-id="QFFfSiRdDk7qCtusf2hnsB">
+        <div class="part-label" data-page-node-id="VNOQHqDJuDw7use1bbhsaa">第二部分</div>
+        <h2 data-page-node-id="4INkK4Sp4H4cN8CVBHQaRA">自动化</h2>
+      </div>
+
+      <p data-page-node-id="vae7EAbFSQpMfcJKvnLN8T">配置自动化后，WorkBuddy 按设定时间自动执行周期性、重复性任务，并将结果保存到指定目录。</p>
+
+      <h3 class="sub-title" data-page-node-id="8E47PMjpwKFysI6FxMhJCV">配置项</h3>
+      <div class="table-wrapper" data-page-node-id="kdQZmI2E0tXCNswfvVQ49e">
+        <table data-page-node-id="bNurmmjUIQ6Pu6iwNiZJtB">
+          <thead data-page-node-id="NKDcJYAxzrXFw0EGUvp1V9"><tr data-page-node-id="WWRJ2pmGXcpZKvDm72iPEi"><th data-page-node-id="JmliNivVG857GNkKTfZ6ox">配置项</th><th data-page-node-id="09zkD4zBMN8FGpcNDUUHJG">说明</th></tr></thead>
+          <tbody data-page-node-id="SHMWwhZrZGKjAacvklPDQn">
+            <tr data-page-node-id="rCvGEuMOi3EmeuE3gBM3VR"><td data-page-node-id="7Ij4q4O3dneuxqGujvIk6q"><strong data-page-node-id="IO7Gi8WeD8FIFuJnJP91yG">名称</strong></td><td data-page-node-id="bGlbSITAkeRgMU6xOEUOow">区分不同自动化任务</td></tr>
+            <tr data-page-node-id="o86B12TITvCziqsAwfoyqC"><td data-page-node-id="m0kk775bcC1CAANdVg7tSi"><strong data-page-node-id="e8r9Godxl6eDpffWRcmNrN">工作空间</strong></td><td data-page-node-id="RDjded0gBMXZbKEzHeFioB">指定执行目录及文件保存位置</td></tr>
+            <tr data-page-node-id="iVQjqON4gZ7IDeDk5M8bor"><td data-page-node-id="Zxk9WNIIEZHDMB4E1LTw06"><strong data-page-node-id="T0HvFZ8TSHfcZNrsiYtBVA">提示词</strong></td><td data-page-node-id="3fOZXPpbHEgGHAfAyERw3R">描述任务目标和输出要求</td></tr>
+            <tr data-page-node-id="tJZeCyyghzHCr8XdsqDO8L"><td data-page-node-id="Nzc5wxq03mi957VRcN8HG5"><strong data-page-node-id="qYZ9i2BEqyBi0hnMxrctI5">选择模型和技能</strong></td><td data-page-node-id="gEX73R1bvWvJ7WXrESGDzz">指定执行任务的模型和技能</td></tr>
+            <tr data-page-node-id="dmMHeu0ifXTFz2sFJ6rWaK"><td data-page-node-id="ENHmdvo7B6YdnGcLJyzIPQ"><strong data-page-node-id="QG3qiyusxylabOyh13heos">定时规则</strong></td><td data-page-node-id="lk5G2sVlGlhVG57Vug42CH">设置执行频率和生效日期区间</td></tr>
+            <tr data-page-node-id="ldO2fyVqMBapwQmSdhdLo5"><td data-page-node-id="wnMzcwEyLMoLFM8FvC4zsk"><strong data-page-node-id="w56URuzSL12LsRai5GxPJd">推送到小程序</strong></td><td data-page-node-id="Du9WNZBkn7Cp9WWPG6rq9l">开启后结果同步到 WorkBuddy 小程序</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="5FlHjfHHUouCBJzGbfAcX7">典型场景</h3>
+      <ul class="feature-list" data-page-node-id="V7P1ugEXTQqjKd4z5rqzS2">
+        <li data-page-node-id="zVuIKp4nW7C2zpqEbu13Gt">每天 9:00 自动生成工作日报</li>
+        <li data-page-node-id="EwIBWAODzn7VYHmb4jL8DX">每周五 17:00 汇总本周代码提交记录生成周报</li>
+        <li data-page-node-id="iH8VQGG8OkKZhEIByzJ41Z">定期抓取并整理行业资讯</li>
+        <li data-page-node-id="FIhA0kAfMFb7kdvyArvnlT">代码提交后自动跑测试</li>
+      </ul>
+
+      <div class="callout warning" data-page-node-id="iXJGM3io3apMhSDFVe11qV">
+        <span class="callout-icon" data-page-node-id="EH5cNlaEhbj81wycMxdUk4">⚠️</span>
+        <div data-page-node-id="hzUws50vw8mDnPECvMyxPD">新建任务后先以低频率试运行，确认结果符合预期再放大频率。无人值守下自动执行，<strong data-page-node-id="7B18QM8ErQqcCuEyXr10Mx">请审慎设置涉及文件写入/删除/资金操作的 prompt</strong>。</div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="memory" data-page-node-id="5HMyn9uEEUQjPgCM2h2ndU">
+      <div class="section-header" data-page-node-id="J1BOhhCovYExAOviE515Qj">
+        <div class="part-label" data-page-node-id="voKtHbGbDeETrcH1q43wFg">第二部分</div>
+        <h2 data-page-node-id="xnYyB7aSwr8uBs6auLKepx">记忆功能</h2>
+      </div>
+
+      <p data-page-node-id="TuniQOXMUXUosfFKcezkzG">让 WorkBuddy 记住你的偏好和习惯，从会话历史中提取有价值的信息，形成记忆数据并定期更新，使 AI 越懂你。</p>
+
+      <div class="card-grid card-grid-3" data-page-node-id="GaqCe0ir6FNkjoHGi6iNvC">
+        <div class="card" data-page-node-id="MPG3hp4tpfjoB5PKZLwqAi">
+          <div class="card-icon green" data-page-node-id="ENWHBWDCVCnYovsEqBIBkY">🔄</div>
+          <h4 data-page-node-id="QV9NexWehwVYREmIt7f9Oe">自动生成</h4>
+          <p class="card-desc" data-page-node-id="DVfDa6mAhHtHVI02UkfSOu">功能默认开启，每晚整理当天会话记录生成记忆</p>
+        </div>
+        <div class="card" data-page-node-id="8z40crEYgrC57WJwCNEhuh">
+          <div class="card-icon accent" data-page-node-id="qVk1d9WoNcLnvOmkz9bRav">✏️</div>
+          <h4 data-page-node-id="kmG49siGPirMivDTe8K9qa">管理记忆</h4>
+          <p class="card-desc" data-page-node-id="BPrTnobztGwr8vXAegFAqa">在"设置 → 记忆"查看、编辑、删除，或直接对话告诉 AI 要"记住"或"忘记"</p>
+        </div>
+        <div class="card" data-page-node-id="dH1XeokhdNCORBDltwcMNd">
+          <div class="card-icon blue" data-page-node-id="YSHntHBZMKdKJKpoDTgDvU">📥</div>
+          <h4 data-page-node-id="ifxVXAPODUBt7aLea1j2A2">导入记忆</h4>
+          <p class="card-desc" data-page-node-id="014vzznEE1CuWGo9uXDEa6">支持同步其他 AI 产品的使用习惯</p>
+        </div>
+      </div>
+
+      <div class="callout info" data-page-node-id="hCe89jZiCyElR2chtPlq1O">
+        <span class="callout-icon" data-page-node-id="pslKiYFPDcnJyofGNA9dxh">ℹ️</span>
+        <div data-page-node-id="xvmab7yp9eo8De4Au0YpE8">记忆数据仅用户本人可见，不涉及第三方共享。记忆提取过程免费，不额外消耗积分。记忆基于模型自动抽取，建议重要判断前人工核验。</div>
+      </div>
+    </section>
+
+    <!-- ============================== -->
+    <!-- PART 3: Domain-specific        -->
+    <!-- ============================== -->
+
+    <section class="doc-section reveal" id="docs" data-page-node-id="XYb6kl3xB3boIVgFF1i1EM">
+      <div class="section-header" data-page-node-id="RMNZbpE2PYT4hdCRNvKU2g">
+        <div class="part-label" data-page-node-id="6UDhPDHIg5fz1hd5uCeM9L">第三部分 · 特定领域的高级使用技巧</div>
+        <h2 data-page-node-id="3NqroKIxV948mOJh3KpD8w">办公文档高效生成</h2>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="Sk02WQHUqXTy0vDhjsJXOB">文档生成最佳实践</h3>
+      <ol class="step-list" data-page-node-id="oGYBYRMtSaPqll7vPiULwN">
+        <li data-page-node-id="OmB1sni4uLJQqIKpOc0zKE"><strong data-page-node-id="RLF8yOPEBToAAYI92WI5Eo">明确格式和结构</strong>：不要说"帮我写个报告"，而要给出大纲或参考模板</li>
+        <li data-page-node-id="DzHjTrEuk7j3X9fBoJUYBq"><strong data-page-node-id="2zhoBo7rmRas5IjLqj4A4M">提供样例</strong>：把以前写过的满意文档作为参考，"照这个风格来"</li>
+        <li data-page-node-id="vmumMvOIC7EeQtEc7yNrNp"><strong data-page-node-id="qc8Cnx1tFM9MLD9Xb5eNos">分步推进</strong>：先出大纲 → 确认方向 → 扩展正文 → 润色格式</li>
+        <li data-page-node-id="qRD35S0zdNxUJsbiRq5zjG"><strong data-page-node-id="mFW0Oyq43nfAX7fgIo2iEB">指定输出格式</strong>：Word / Excel / PPT / PDF，提前说明</li>
+      </ol>
+
+      <h3 class="sub-title" data-page-node-id="pBPJytCCsYB04pVdWPOdEX">实用案例</h3>
+      <div class="card-grid card-grid-2" data-page-node-id="UTUXDNNGtkRtZCXS0aWHph">
+        <div class="card" data-page-node-id="AL99o6TPBA3WDOn1QWquwm">
+          <div class="card-icon green" data-page-node-id="tabmquTmPffyTLEGwGScdH">📋</div>
+          <h4 data-page-node-id="sDH7pmKngan9ipEifPL5HM">周报自动生成</h4>
+          <p class="card-desc" data-page-node-id="qb70a5WPsnCwRDmqQK4Jws">第 1 轮：读取项目下本周代码提交记录和会议纪要，按模块分类统计 → 第 2 轮：基于统计生成周报大纲 → 第 3 轮：扩展成完整 Word 文档</p>
+        </div>
+        <div class="card" data-page-node-id="jzj827XKLm8lGqVXpA289L">
+          <div class="card-icon blue" data-page-node-id="ONwhtYiuKxwSENUXapH68i">📽️</div>
+          <h4 data-page-node-id="OCCbFF68bffzgD7J9MGDa2">会议纪要转 PPT</h4>
+          <p class="card-desc" data-page-node-id="xooDAIZEbfsTrx0UCHZ4pP">第 1 轮：读取会议纪要文件，提取核心议题和结论 → 第 2 轮：基于内容生成 PPT 大纲 → 第 3 轮：按大纲生成完整 PPT</p>
+        </div>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="AH7XAEtjZmfVhfunOvFxxk">文档四件套技能</h3>
+      <div class="card-grid card-grid-2" data-page-node-id="rplfZG7dCGlVWSfCvCe7r2">
+        <div class="skill-item" data-page-node-id="wPG3BkN8DVisXJEhK2Z4EW"><div class="skill-icon" data-page-node-id="CrYsiWCAeASgDJlugksDAF">📝</div><div data-page-node-id="JjcH8I1pcnUwbed9GD0wFC"><div class="skill-name" data-page-node-id="KNBtQh5xk3DFIKSAHACfQt">Word</div><div class="skill-desc" data-page-node-id="2tJQZ0cf5cwwu5Mk2B8sTQ">创建、编辑、格式化 .docx 文件</div></div></div>
+        <div class="skill-item" data-page-node-id="E1Ncf6tvPn1LCywNY1vCxZ"><div class="skill-icon" data-page-node-id="3XEiYGR5sMZ8oFK89fMEfK">📊</div><div data-page-node-id="eTK1MEAtEUhltbHXCAR8bj"><div class="skill-name" data-page-node-id="Q4ccMJQXm3v0WZqrkdY7El">Excel</div><div class="skill-desc" data-page-node-id="BmYYPwqYwNQEq8ry7zf4gy">生成表格、数据计算、图表制作</div></div></div>
+        <div class="skill-item" data-page-node-id="PI0i5QBmMEIHAHh23MiGPz"><div class="skill-icon" data-page-node-id="otfcOVaE0uaIHCNf4eJmbx">📽️</div><div data-page-node-id="OqoB2NrgawP0qswXk6HGDd"><div class="skill-name" data-page-node-id="MTPqTPETFm2aCg9zuhFXWZ">PPT</div><div class="skill-desc" data-page-node-id="o6sMsP4qqZkioxktK64qqC">从需求到完整演示文稿</div></div></div>
+        <div class="skill-item" data-page-node-id="x84pak5k4sccrOE7h78798"><div class="skill-icon" data-page-node-id="H4Lsb0oOh7HM9NWYEuiOQk">📄</div><div data-page-node-id="ax65p88LQUkshBxJ7spKKC"><div class="skill-name" data-page-node-id="J9Igi0RPoIPGrshjisB6fw">PDF</div><div class="skill-desc" data-page-node-id="AbHdFQxVmmKMrjbmFm7de0">读取、合并、拆分、转换 PDF 文件</div></div></div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="data" data-page-node-id="BS0zJ4FkhWxpGYjFaed8Nr">
+      <div class="section-header" data-page-node-id="1ewTzbfHwxuFT6jNGOXTKO">
+        <div class="part-label" data-page-node-id="KS9zYUuWWDnsApxsNFbHWp">第三部分</div>
+        <h2 data-page-node-id="Bz7QcChKgpjYyt7YMCuGK6">数据分析与可视化</h2>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="V1TLQ9FZ4am2b6QTN7AN0e">最佳实践</h3>
+      <ol class="step-list" data-page-node-id="PvgbktbFc5ttWvjGgHYYR4">
+        <li data-page-node-id="z1rhMEFwBekaK2dxZ8rp5p"><strong data-page-node-id="1FVJ2RofWy5C9uWn5n37Tr">提供干净的数据源</strong>：上传 CSV / Excel 时，说明数据结构和字段含义</li>
+        <li data-page-node-id="g9xHXZdTNsQH4MmveIKVya"><strong data-page-node-id="26J6ZwXD4kB6YAWZroH6zr">明确分析目标</strong>：不要说"分析一下数据"，而要说出你关心的维度和问题</li>
+        <li data-page-node-id="8TdtG11DH65yMCUwcQeTbL"><strong data-page-node-id="g3Xw1W3801ACvywQde4HE4">指定可视化类型</strong>：柱状图、折线图、饼图、散点图等</li>
+        <li data-page-node-id="dWr7487tgDIhgQ3pMChz35"><strong data-page-node-id="SUpyTldt2C4I16trhJNH4n">要求解释</strong>：让 AI 不仅生成图表，还解释数据背后的洞察</li>
+      </ol>
+
+      <h3 class="sub-title" data-page-node-id="SZuLIr5eHuYuuuiTzFNBmx">实用案例</h3>
+      <div class="card-grid card-grid-2" data-page-node-id="MMqpRscQHX5C8i2QF7CP7h">
+        <div class="card" data-page-node-id="in4GaoEK4lvOAdkq6gtH4S">
+          <div class="card-icon green" data-page-node-id="MUrrmjSI84nr60u6iqlGb0">📈</div>
+          <h4 data-page-node-id="IApaGEfmTXVBU5REvVShPo">销售数据分析</h4>
+          <p class="card-desc" data-page-node-id="q8DE0TOEg8Kb2BchHyl5M7">分析 Q1 销售 Excel，按区域汇总销售额和增长率，用柱状图展示 Top 5 区域，输出分析报告到 Word</p>
+        </div>
+        <div class="card" data-page-node-id="rLvluGUZtqVJun0koLAgZK">
+          <div class="card-icon blue" data-page-node-id="8geGdhKoEAf55kFQUNFuJc">💰</div>
+          <h4 data-page-node-id="IRflKNyaDTycWp8OqqDBMf">财务报表对比</h4>
+          <p class="card-desc" data-page-node-id="E6HTjdHZt2OQ2NLib2u8kj">对比两年财报三大报表，重点分析收入结构变化和现金流趋势，生成可视化图表</p>
+        </div>
+      </div>
+
+      <div class="callout info" data-page-node-id="uMZ2gZ9ZbI5snb1oG2DnF5">
+        <span class="callout-icon" data-page-node-id="JlDOkDEkHReTGaXK0sTZmK">🇨🇳</span>
+        <div data-page-node-id="E4AE7JljpQsm28t7RZtGg9">中国股票市场惯例：<strong data-page-node-id="OGpwayjqTfaxOYu4rJl1o5">涨 → 红色，跌 → 绿色</strong>（与欧美相反）。货币格式默认使用 ¥（人民币）。</div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="code" data-page-node-id="p4dSbvYedvQFk3YwOF9LRs">
+      <div class="section-header" data-page-node-id="5NFKwiF5L3lYYxRoQekHia">
+        <div class="part-label" data-page-node-id="nLZT5LM9ZhOTuJn7ICD044">第三部分</div>
+        <h2 data-page-node-id="J0Nr4cV3Uu6jOwqYdLT1qW">代码开发</h2>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="99ghG1CycuLpkafkaojF7Z">最佳实践</h3>
+      <ol class="step-list" data-page-node-id="SSBw25gV56GnWJOTvlGRjO">
+        <li data-page-node-id="biXUxADokj3LtQ3MahQFv9"><strong data-page-node-id="IU7ozcfrgg7421o0MnSsQR">选择正确的工作模式</strong>：在代码开发场景下切换到"代码开发"模式</li>
+        <li data-page-node-id="28e7MFbhlw1llVhAicESM0"><strong data-page-node-id="fvFzbJdCrUGOo9A9HGtD5O">提供项目上下文</strong>：指定工作目录为项目根目录，让 AI 读取项目结构和配置</li>
+        <li data-page-node-id="Svt80b8u65JRPAKySqdJgr"><strong data-page-node-id="mxZENHF7UlpMTOaxoK19Qk">明确技术栈</strong>：说明使用的框架、语言版本、依赖库</li>
+        <li data-page-node-id="qNWJ0oVpUcfG1ELBWdeHZe"><strong data-page-node-id="Ox3o3bNFjYLNg7S06qJ8tx">增量式开发</strong>：一次只让 AI 完成一个功能模块，确认后再推进</li>
+        <li data-page-node-id="9HUeXEpZM69bxexF4l3uuk"><strong data-page-node-id="tE4rFkeVVV6uMVY6R4Sgca">要求写测试</strong>：让 AI 为生成的代码编写单元测试</li>
+      </ol>
+
+      <h3 class="sub-title" data-page-node-id="ry0UFY8fmu8PSEffBx7S5V">实用案例</h3>
+      <div class="card-grid card-grid-3" data-page-node-id="kZZampyzKJvypgp7MFsidZ">
+        <div class="card" data-page-node-id="pFlKvlevp4LS8R1UFkU4nZ">
+          <div class="card-icon accent" data-page-node-id="N25DyUTAJEqldnCCNCAik4">🔍</div>
+          <h4 data-page-node-id="lQxbW3fNxQaYH2Us5M7S45">理解代码库</h4>
+          <p class="card-desc" data-page-node-id="E4KTQmdt9YWicg28KLkcQr">分析项目结构，说明技术栈、主要模块和数据流</p>
+        </div>
+        <div class="card" data-page-node-id="E97gsuVvGY54yt9NxiqO8E">
+          <div class="card-icon red" data-page-node-id="XVGEgbQR4f4ZhhKTFjU8BH">🐛</div>
+          <h4 data-page-node-id="4t2sImiWHxRUR93PZHwETL">Bug 修复</h4>
+          <p class="card-desc" data-page-node-id="ZOcgFQuVYd7CPnaUPCtJo2">指定文件和行号，分析报错原因并修复</p>
+        </div>
+        <div class="card" data-page-node-id="DSkpXCHtED7AOKkdiNTdLq">
+          <div class="card-icon green" data-page-node-id="xaksMnFG7m74a3Ozf5Brzu">🌐</div>
+          <h4 data-page-node-id="zQSd6tC6voZU7xRNvXZZwR">网站开发</h4>
+          <p class="card-desc" data-page-node-id="zWYoojeCjO6JHO7DDGEuNI">使用 React + Next.js + Tailwind CSS 创建落地页</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="research" data-page-node-id="pDz78hl1CfOzJLJnZnIMXz">
+      <div class="section-header" data-page-node-id="gNZDJ88ELW8SfV2vqWbZA0">
+        <div class="part-label" data-page-node-id="9EytwucKklEDw9JGHTEKQ7">第三部分</div>
+        <h2 data-page-node-id="hWtE5vmFzmclAIaWsAg23S">深度研究与调研</h2>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="xjPTioFidaEtrD1MZzFh5O">最佳实践</h3>
+      <ol class="step-list" data-page-node-id="uAFPWqP94wNY7l8SgrFlpM">
+        <li data-page-node-id="TsWzget3Iwe9ZxHeNPftBS"><strong data-page-node-id="MwUUyyN5ofgKMMXpm3rsmz">界定研究范围</strong>：说明关注的行业、时间范围、地域</li>
+        <li data-page-node-id="ewv3NyIJGYKhcWtiJHkVzQ"><strong data-page-node-id="D42Tm7n2iBgVLyIB0ZaK35">要求来源标注</strong>：让 AI 标注信息来源和日期</li>
+        <li data-page-node-id="RCOuzUE0WABDPbEpDE1Fnt"><strong data-page-node-id="OBb4AWQZ9EIdJwY5m3bocj">多轮深入</strong>：先获取概览 → 针对重点领域深入 → 整合成报告</li>
+        <li data-page-node-id="yCCkBIIBuxO4acRB9UuaxY"><strong data-page-node-id="bpvgbSO3myqtH0eci9oQuc">交叉验证</strong>：对关键数据和结论要求 AI 从多个来源验证</li>
+      </ol>
+
+      <h3 class="sub-title" data-page-node-id="jEUrOc8S5qYkKCvOiyyeaJ">实用案例</h3>
+      <div class="card" data-page-node-id="H7J8Drf3fV2HQ3zfDas2C0">
+        <div class="card-icon blue" data-page-node-id="9px3vQBU0RZD8jCfYrFLS3">🔬</div>
+        <h4 data-page-node-id="u4Nsh3fP9sU0RUSTRcZrTM">行业趋势研究（三轮法）</h4>
+        <p class="card-desc" style="margin-top:8px" data-page-node-id="VYR666FaCe2Cl6TWG5KkzC">第 1 轮：搜索最新动态，整理核心趋势 → 第 2 轮：针对重点领域深入调研 → 第 3 轮：整合所有调研内容，生成 Word 报告</p>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="browser" data-page-node-id="nNTisraXDTj9ArjwCvB78A">
+      <div class="section-header" data-page-node-id="wFNHhGy6f90Altn0GsfHoY">
+        <div class="part-label" data-page-node-id="erwIyxOHDzktY2BOOVutSL">第三部分</div>
+        <h2 data-page-node-id="SNEio8gVYQyP8CKYaCa9e5">浏览器自动化</h2>
+      </div>
+
+      <p data-page-node-id="VZGNJUc1GmU6oEvKARrBLL">通过 Agent Browser 技能，WorkBuddy 可以打开网页并截图、提取页面内容、点击元素、填写表单、自动化网页操作流程。</p>
+
+      <div class="card-grid card-grid-2" data-page-node-id="Houprwxqg9n5vG5fgnfLkw">
+        <div class="card" data-page-node-id="lSd9Bby9d10CDi15f2eTwL">
+          <div class="card-icon accent" data-page-node-id="JVRDgzsSIinTQ7JCZbXvH8">🏭</div>
+          <h4 data-page-node-id="lGNLpTtpDSgKh1JxsgkmgS">竞品页面信息采集</h4>
+          <p class="card-desc" data-page-node-id="5RIG131CYJ6Ft8suapDM2d">打开多个竞品官网，截图首页，提取定价信息，生成对比表格</p>
+        </div>
+        <div class="card" data-page-node-id="1fq4IFaJNhLHgNJssgO7Qx">
+          <div class="card-icon green" data-page-node-id="Jf61c3DSH4Tr6J30IwH2UA">📝</div>
+          <h4 data-page-node-id="R5Omu2XHMBVaymopE2yP1v">自动化表单填写</h4>
+          <p class="card-desc" data-page-node-id="zS3jAdN0CheAYXrFuWzCHz">打开指定网址，自动填写表单并提交</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="media" data-page-node-id="MPZ6DaJiDjWA8jmEV3QNrH">
+      <div class="section-header" data-page-node-id="CuPbwYLGagXLjpCHZI5My4">
+        <div class="part-label" data-page-node-id="6rCmS6tBoP0WT1FY2HPJlE">第三部分</div>
+        <h2 data-page-node-id="hQBfRMiop63qNgJES8nzK1">自媒体运营</h2>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="xxRlbBQjUUA7kDphHjelCr">最佳实践</h3>
+      <ol class="step-list" data-page-node-id="NqY9eOqx3TvstoMXdG48Mg">
+        <li data-page-node-id="gBQN1bJKb4Ig7FnTFgJ4zw"><strong data-page-node-id="fCWJV5J2BXcMwwscMqVBaf">提供品牌调性</strong>：告诉 AI 你的账号风格、受众画像</li>
+        <li data-page-node-id="P3EpnBuik6MVVWdgyFPFBv"><strong data-page-node-id="l1ByoFVsKq5fFCpWZYUmre">给参考样例</strong>：把你满意的往期内容作为参考</li>
+        <li data-page-node-id="fr3ZVCVCdwhvWqDfFwq5wn"><strong data-page-node-id="jDCaHLvLjqv4XFGGqSBAlX">要求多版本</strong>：让 AI 生成多个标题/开头版本供选择</li>
+        <li data-page-node-id="0pHRlno593kEMdEFulDg3u"><strong data-page-node-id="nv9BfGXRsYoMU0C7prpQAW">保持一致性</strong>：利用记忆功能让 AI 记住你的品牌规范</li>
+      </ol>
+
+      <h3 class="sub-title" data-page-node-id="3EFSaP1cA3ImDyQN3RTcJU">实用案例</h3>
+      <div class="card-grid card-grid-2" data-page-node-id="r9LWHsrejX8smDTYibZLsW">
+        <div class="card" data-page-node-id="cPsCVA96FeSMKYq1ucojuY">
+          <div class="card-icon accent" data-page-node-id="QmPZDC8RClFPFwo52VrRzn">📢</div>
+          <h4 data-page-node-id="TANBCf5eSRzKPNv3v0RbtF">公众号文章创作</h4>
+          <p class="card-desc" data-page-node-id="a0QGmbkGYJUsbcVmXL6TYn">参考往期文章风格，写一篇 2000 字轻松专业的公众号文章</p>
+        </div>
+        <div class="card" data-page-node-id="puB7gZSkvoHwFfezbeYcyt">
+          <div class="card-icon green" data-page-node-id="4GJXifLDIOFnSsRe2Cg6ZU">🔀</div>
+          <h4 data-page-node-id="RHzasMXGgb62jTSFZTYZbR">多平台内容分发</h4>
+          <p class="card-desc" data-page-node-id="ZnPLNCB8eUfxW6SiBRAHMp">基于同一主题，生成微信公众号长文、小红书图文、微博短文三个版本</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section reveal" id="remote" data-page-node-id="VbOCiclTJ7FtVgFYvx9sdd">
+      <div class="section-header" data-page-node-id="08J25SWc4h9VvYljKW2jLv">
+        <div class="part-label" data-page-node-id="3Ep109RvjhZlslzyWlGsDE">第三部分</div>
+        <h2 data-page-node-id="zcGMGOBuDChOTvMDB8IpqO">远程助理</h2>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="LKoYZWbqtFuzOQcS4QU0A8">支持的接入方式</h3>
+      <div class="connector-grid" data-page-node-id="yLRKWCoMs1vQI3x6panLbI">
+        <span class="connector-tag" data-page-node-id="QQaXIXhGgT96T0XAtEcFGb">💬 微信助理 <span class="tag green" style="margin-left:4px" data-page-node-id="AgHBj4i6tZh9LBWZvR773S">推荐</span></span>
+        <span class="connector-tag" data-page-node-id="FjarinmgAxzT6WtmBtUqAS">🏢 企业微信</span>
+        <span class="connector-tag" data-page-node-id="FOu9i4VSjCTakgtFO5sIHX">🐧 QQ 机器人</span>
+        <span class="connector-tag" data-page-node-id="EO5CedYM0a8jG5GbIAwT0G">🐦 飞书</span>
+        <span class="connector-tag" data-page-node-id="6d0elZHGwP07Up2MscfOqj">📌 钉钉</span>
+        <span class="connector-tag" data-page-node-id="yStzZToSiNeZ17MRJYd4vc">🤖 元宝</span>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="mqx82zXFVfbNrNBMLKfVu3">远程使用建议</h3>
+      <ol class="step-list" data-page-node-id="i5ruI8M1GQuD0Bs7lp8buI">
+        <li data-page-node-id="CcfslX7FTkBelfUVI9JY2m"><strong data-page-node-id="roghdt6NcZeF2jXudxDJYc">先在桌面端验证</strong>：确认 AI 执行方式符合预期后再配置远程</li>
+        <li data-page-node-id="8pqxiuUYLMbyNE0J9sbn2G"><strong data-page-node-id="7yvMif8zkMo0PhUHibeRp1">从简单任务开始</strong>：先让远程助理执行查询类任务，再逐步扩展</li>
+        <li data-page-node-id="tSSiEo6oEfHNxjLHHBmNCK"><strong data-page-node-id="dazmyQarZgfQeVpdP8wENK">设置权限边界</strong>：远程场景下尤其注意默认权限模式的使用</li>
+        <li data-page-node-id="iQOzGMc6gzWqrfBNjCerzR"><strong data-page-node-id="oHTMcFKDVZPmJ0q4PSUSlL">定期检查</strong>：关注远程任务的执行结果和积分消耗</li>
+      </ol>
+    </section>
+
+    <section class="doc-section reveal" id="create-skill" data-page-node-id="OmpGxkgTrAkZ9nbkHjmc9N">
+      <div class="section-header" data-page-node-id="QoJ5fh3yyS8AUJWrCnEfHO">
+        <div class="part-label" data-page-node-id="ORuJRNwpaViwQIRufNjaxd">第三部分</div>
+        <h2 data-page-node-id="nDJdM4O7iNHySuk7XnK9GB">创建自己的 Skill</h2>
+      </div>
+
+      <div class="callout tip" data-page-node-id="jzYep0FnAc4Hzpk7fBHjzg">
+        <span class="callout-icon" data-page-node-id="flXoYESU5hbm0QzWnIDh8W">💡</span>
+        <div data-page-node-id="YUxT0CiGCCvKUV7IfNwgGq">当某个工作流反复执行（8+ 步骤），把它沉淀为 Skill 可以下次一键复用、保证流程一致性、还能分享给团队。</div>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="FR3bifGkRtAXSTOI4TUwzz">创建方式</h3>
+      <div class="card-grid card-grid-3" data-page-node-id="FakipWXdiMKOhDGDJSDXuY">
+        <div class="card" data-page-node-id="M0FsBnlWUdn3A8j1WUbW94">
+          <div class="card-icon accent" data-page-node-id="bJJCcXCgsFNOmB3lo2sAHC">🤖</div>
+          <h4 data-page-node-id="Qm30jZgzIwAIsNGt3EMYeI">通过 WorkBuddy 创建</h4>
+          <p class="card-desc" data-page-node-id="JrR81fzh6RfLZ9zu8YTLBO">在技能页面点击"创建技能"，输入任务描述，AI 自动生成</p>
+        </div>
+        <div class="card" data-page-node-id="0j4CEOHiPK9jUcNYBfjcQl">
+          <div class="card-icon green" data-page-node-id="WyGOTTLmdxM4GL0ArdA5Fc">✍️</div>
+          <h4 data-page-node-id="Jgjh4ejF5OXhEpHdyKrveN">手动编写 SKILL.md</h4>
+          <p class="card-desc" data-page-node-id="SedBprNhDtE6qr6k3Tnc5N">按照 Agent Skills 规范编写技能文件</p>
+        </div>
+        <div class="card" data-page-node-id="0btH0n3RIWAKXgGsMtfI1k">
+          <div class="card-icon blue" data-page-node-id="n6yIPp0YjOAUTsHH2FBaVr">📦</div>
+          <h4 data-page-node-id="0kjw4RxvhYwHiwqR86J3Hg">从开源项目导入</h4>
+          <p class="card-desc" data-page-node-id="UdmVIQWFQtXL0wsHsnKFCm">导入社区已有的技能包</p>
+        </div>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="rpXuSwhBCf3fCvMhD2c4DK">Skill 质量标准</h3>
+      <ul class="feature-list" data-page-node-id="QW9Z44UblHUANRTWh90PSC">
+        <li data-page-node-id="Qe4aVMGDmsyU4tPZC9Hsff">解决方案已测试并可用</li>
+        <li data-page-node-id="kYomKZs0CGkROGuFWK7Vlc">描述清晰，脱离原始上下文也能理解</li>
+        <li data-page-node-id="8LuCq3KFGVdHIs0mclkcjG">代码示例独立完整</li>
+        <li data-page-node-id="mRF6C4H1LbyGkub8KnOlND">无项目特定的硬编码值</li>
+        <li data-page-node-id="VutULhV8C739ZN1rkBkG3e">遵循技能命名规范（小写、连字符）</li>
+      </ul>
+    </section>
+
+    <!-- ============================== -->
+    <!-- Appendix                       -->
+    <!-- ============================== -->
+
+    <section class="doc-section reveal" id="appendix" data-page-node-id="ChPH8WuIFTTVWS7QstD9jQ">
+      <div class="section-header" data-page-node-id="qvsLO1EqZ0nzbhM0gb4jW3">
+        <div class="part-label" data-page-node-id="Cm5XEc148PnyY986QCjZfj">附录</div>
+        <h2 data-page-node-id="dcED1MtBCtcff37x9zsxkn">快速参考表</h2>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="v0Fe2OP3MMMXWgYBEPZ8bD">常用斜杠命令</h3>
+      <div class="table-wrapper" data-page-node-id="8YV5EfmtEmvIBy6cNOWXXH">
+        <table data-page-node-id="OxSwfbwN8Dja4ArFe3rVcv">
+          <thead data-page-node-id="v3vxtQAO09NMDZ3jDkBs2R"><tr data-page-node-id="hkScZINIFRZvyEFHj3cYAn"><th data-page-node-id="YRLVjvvjFhT3731l2zdz62">命令</th><th data-page-node-id="vG7IwEW6bAwg9kNi5WfFMb">功能</th></tr></thead>
+          <tbody data-page-node-id="miO9YA21acQfFaQmHAdIg5">
+            <tr data-page-node-id="ZnU0uthchje9HdFE7R1OYW"><td data-page-node-id="HsHIiMOrmJ40OUqaADO5rc"><code data-page-node-id="cqAAJ0Ews3AjBKq0anarhq">/help</code></td><td data-page-node-id="G1iHSUYGCKtDyxieIzA6MC">查看帮助和可用命令</td></tr>
+            <tr data-page-node-id="D0ZrsvL1KOMp9OcuSCqZvD"><td data-page-node-id="R1KJGvo606BCHju505ypTJ"><code data-page-node-id="wkzHD6O70ubJrFNL0MvuC0">/skills</code></td><td data-page-node-id="Tqn8LkuiYUwkkdAcIz0OgB">列出可用技能</td></tr>
+            <tr data-page-node-id="jMoV8rssSpmJTwW4sGtqNT"><td data-page-node-id="kWgnnjalrpOxRfwdLoG2Rp"><code data-page-node-id="CG9vhXPvBbBMtjJ4XKcxqd">/status</code></td><td data-page-node-id="B257pcUTFzroj8bUAWaGOw">查看 WorkBuddy 状态、版本、模型</td></tr>
+            <tr data-page-node-id="f6C26DE27iiEXPUhUmLx2V"><td data-page-node-id="TJVNU8yy0OMFFe9wgFPbEi"><code data-page-node-id="KjkaNeMjb0RCCBo3wroBYR">/model</code></td><td data-page-node-id="8X8AkCYbluoMDJEh1CQX8O">切换或列出 AI 模型</td></tr>
+            <tr data-page-node-id="CFvbXovEcYJRP5VWaFuIGb"><td data-page-node-id="XrruCFv3LrSXqrqzGdVjNa"><code data-page-node-id="nmqf4F3ErCig4pJ1Q8xhQ7">/config</code></td><td data-page-node-id="MfiFbu5xvXWKDmjSPnl11O">管理设置</td></tr>
+            <tr data-page-node-id="Bjw8pFYIzB2grgzpKxxg66"><td data-page-node-id="WEXjTSUiFpQwvidtxUh0J5"><code data-page-node-id="M5YPQcO0xni1tl4rOejJ1B">/plan</code></td><td data-page-node-id="MwT9Wj8dOwzr44plpgW5xz">预览当前计划</td></tr>
+            <tr data-page-node-id="JXlePrCDVjm2Td3FLvLa2p"><td data-page-node-id="iRNOQRH4MYDbgSFIJ4WpCY"><code data-page-node-id="Ylza7UF8JKuutTrv22I9Lr">/todos</code></td><td data-page-node-id="Fb6qCEi27uNmXUDM7U9jcz">显示当前会话待办列表</td></tr>
+            <tr data-page-node-id="E1wHIQl6O8ZWMy3nQxwQ85"><td data-page-node-id="NYvYpnF9YbTRDimSBnTfjd"><code data-page-node-id="eNB7Gxf77GIqFzxGKolI6z">/rename</code></td><td data-page-node-id="PuGZMWVpM9TT2QVHWyLMYI">重命名当前对话</td></tr>
+            <tr data-page-node-id="yqhbv619ZkIdkVbYP5VNEa"><td data-page-node-id="eSzq32ggK95BpUZspNArnz"><code data-page-node-id="BKhV6N4o2D2dhuKCQXHS4a">/resume</code></td><td data-page-node-id="hAmkEQpVv82RCktPqJpaWS">列出或恢复历史会话</td></tr>
+            <tr data-page-node-id="DIMr4gz3xO2hqxIHKyKdkW"><td data-page-node-id="xYCF9pie1ba87HAtcX7yBr"><code data-page-node-id="MNyt3dlG0gzcKzDOB2HRtT">/goal</code></td><td data-page-node-id="a9WZ1LVAxz142nCado2WKR">设置持续目标</td></tr>
+            <tr data-page-node-id="UNdEs2EK2qbhK2DYTtIOvF"><td data-page-node-id="iIffQBS7S8XOHs3NX0r12u"><code data-page-node-id="LLqlTSqWYj4GWcBxtET5hW">/clear</code></td><td data-page-node-id="Y0lJJ2hLCBzUROxTDDJKDQ">开始新对话</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub-title" data-page-node-id="3w5b73BSIcVmV029X4qG8Y">推荐上手顺序</h3>
+      <ol class="step-list" data-page-node-id="OS4JCGuSbAclbwr8xbvtNS">
+        <li data-page-node-id="EmXB3HimLkjyHqqLd6tp8G"><strong data-page-node-id="D2OqQjlUVrUerhH9lBV8n7">先学会清晰提需求</strong>：把任务说清楚，比什么技巧都重要</li>
+        <li data-page-node-id="zdyMluroy8tEFJcOvYwkuk"><strong data-page-node-id="zmCBOlYqwQYY0ikTeAHbOZ">再学会分步推进和多轮调整</strong>：不要指望第一轮就完美</li>
+        <li data-page-node-id="aeHSeFPjdE9LOeaGqCdTwH"><strong data-page-node-id="t3LtZZjDGBPQCK2JXDG5u3">随后熟悉专家、样例和多任务能力</strong>：逐步提升结果质量</li>
+        <li data-page-node-id="25L0hKLpO6cGEZajdsAbcn"><strong data-page-node-id="CkdgFMdqgz3glEqGbR65u4">涉及真实文件时先备份</strong>：再尝试远程和自动化</li>
+        <li data-page-node-id="FvEPFHAgIHRkFc6rWdIX4C"><strong data-page-node-id="MizFbnvDToP5ErBMUyaAz1">先稳，再快</strong></li>
+      </ol>
+
+      <h3 class="sub-title" id="prompt-ref" data-page-node-id="rTGgC4IUUYpR6EiVdMCa2z">提示词参考</h3>
+      <p data-page-node-id="ZepTF33fndwAQeakCVELhd">覆盖办公全场景的 100+ 通用提示词速查，按两级结构组织。点击展开查看详情，<code data-page-node-id="kfZXwPN51YcpXsnTSvmj8J">[占位符]</code> 替换为你的实际内容即可使用。</p>
+
+      <!-- ========== 一、基础操作 ========== -->
+      <div class="collapsible" data-page-node-id="n4z7gLO555VVxmUKWmD6Zw">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="3Bsoj52pmpJXHmyTlXwJy9">
+          <span data-page-node-id="7gD7Vs0Djx73G0XByTvkDV">🚀 基础操作提示词（任务管理 · 日程安排 · 文档处理）</span>
+          <span class="chevron" data-page-node-id="De25vSlVIvBbmfvkMrnFgD">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="fViaG5UuKhtKWSDGqt6W6F">
+          <div class="collapsible-content" data-page-node-id="HktqGf4W7BQwBZQ9I5JRXA">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)" data-page-node-id="Zs5JCDJend67pNq7UVZBde">任务管理</h4>
+            <div class="table-wrapper" data-page-node-id="qp4Rbfdb1W3suZ8Z28G7ZZ"><table data-page-node-id="WnQ1O6toyQpAsXrnPEMhlT"><thead data-page-node-id="WaYkOq8W2SsxyRokKaTHHo"><tr data-page-node-id="RkrNGeHnTUZRzfEzktdYHV"><th data-page-node-id="0VvPABeUDsJAyLt0dWXWRd">场景</th><th data-page-node-id="3sG5uDk5rGEe2AQCV03tjP">提示词</th></tr></thead><tbody data-page-node-id="EZeCyD3pTOmc92K0dQclcq">
+              <tr data-page-node-id="xtNRXlJkjSuiedozh9kSlw"><td data-page-node-id="pVKfoLONogR8ELc59UniEE">创建任务</td><td data-page-node-id="Ou5vsMjJQQNK71XZ3QBUgf">帮我创建一个<code data-page-node-id="Mabg3LZsGZcCDuRZcYxN9v">[任务名称]</code>任务，优先级<code data-page-node-id="mpxj8QH9IeEEdTDwm1uZjP">[高/中/低]</code>，截止日期<code data-page-node-id="MwNMXp0RRLPKWuEMWaxYdN">[日期]</code></td></tr>
+              <tr data-page-node-id="XWb1DiW4IJ63xyEj65WUNB"><td data-page-node-id="1TdsTmVWp6gfIDEpfWjmbB">任务分配</td><td data-page-node-id="nu046OmISudcEFx4M38Wr8">将<code data-page-node-id="9aGl3uTV3dhXaW3SY4CZhY">[任务名称]</code>分配给<code data-page-node-id="MSrME9ZYj5s2FNwPJ8O5u7">[团队成员]</code>，需要<code data-page-node-id="VnaffKYIvqZiadnfpxzNgA">[具体要求]</code></td></tr>
+              <tr data-page-node-id="ZYCKySI4MEQVGINR3XRnBV"><td data-page-node-id="9pv6h7higsKLqUvXWXXPA9">任务更新</td><td data-page-node-id="bAGH2f0fW1VvoxwPioRCwT">更新<code data-page-node-id="BMApUB7xo7PY5SquesRuzN">[任务名称]</code>的进度为<code data-page-node-id="LL8z5KdMI1Ap2eMObzZzLO">[百分比]</code>，当前状态<code data-page-node-id="O27EGYoW24e25M6t5fNCUy">[进行中/已完成]</code></td></tr>
+              <tr data-page-node-id="lP9egpl752h9FX1LZAHkLT"><td data-page-node-id="lsVXV0BSznQofZlTWke1FF">任务查询</td><td data-page-node-id="73tZiLpkEj4xLgdw7OXOB4">查看我今天/本周/本月的所有任务</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="RZaF8BJQ29Cmn4xSbCAgMA">日程安排</h4>
+            <div class="table-wrapper" data-page-node-id="FkE7ndvL0popt3sXmf99yE"><table data-page-node-id="1EdfyHNAz8jCkUVqH3rLEs"><thead data-page-node-id="TUvN2ZK1jOHGOlgfAorhxz"><tr data-page-node-id="OT61dragOo3qGBhyxOYitW"><th data-page-node-id="CCIzcc7XUkxFGOffuGCV39">场景</th><th data-page-node-id="wdmQiGp9AswChfH2zsAqOF">提示词</th></tr></thead><tbody data-page-node-id="IHVAWgBFaIx3GZlioQyxLy">
+              <tr data-page-node-id="PESeAWo16ZkCtC8YsISzsY"><td data-page-node-id="tPGTAIDIhZuyGPG3jgSEJ5">创建会议</td><td data-page-node-id="lxVobFlOuAgE9BLUwAbd2s">安排一个<code data-page-node-id="s4kBxWGBEfjedTQltEFBIH">[会议主题]</code>会议，时间<code data-page-node-id="kxg96ZZ6cQ2BPq7D0o4Cyj">[日期时间]</code>，参会人<code data-page-node-id="ed5bCPrxqbl1TgiBtsUWen">[名单]</code></td></tr>
+              <tr data-page-node-id="apsVcA0JYagppUZST17g2E"><td data-page-node-id="sffz73v3FfVrlupkhMT2Og">会议提醒</td><td data-page-node-id="er4CW0f0VS4RZMyss2TGEg">设置<code data-page-node-id="FBgmKBo7tCUrtvBNgzaGYX">[会议名称]</code>的提前<code data-page-node-id="eBijIdquyW8GnwrvAWhzD4">[分钟数]</code>提醒</td></tr>
+              <tr data-page-node-id="CodLmJk3d1HMFt5nroiAmF"><td data-page-node-id="K6o0rIwrabfjyHEKpQ9MLg">日程查询</td><td data-page-node-id="XbkyKwbEQH9bh2HIDg2wt3">查看我<code data-page-node-id="Wxj7NEmwjQb3r13Xg5mZ4j">[日期]</code>的日程安排</td></tr>
+              <tr data-page-node-id="hlNFSu0cqqucanM5Gr3MEp"><td data-page-node-id="on1PXoqWF3YsC9VHMp0wOn">冲突检查</td><td data-page-node-id="dICqYkuYT3coy4GFSBv7Ss">检查<code data-page-node-id="niKnkoCbazwLj6He4iX4sL">[时间段]</code>是否有时间冲突</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="CdeQJm7SdE9TaXybcVnYjE">文档处理</h4>
+            <div class="table-wrapper" data-page-node-id="vMI3gYCYdOgah7kMNXDUzJ"><table data-page-node-id="ddcY7zw9cCvHeCPwoVIStl"><thead data-page-node-id="zQtqbQXd3rnp1xqRSb2Cvv"><tr data-page-node-id="cjFMofYxjOFpLYvBdM3Bwv"><th data-page-node-id="EXe3JPoWo1Nzr3XdC8XPox">场景</th><th data-page-node-id="iqB9QaVt5xjxfNAXVr2FAd">提示词</th></tr></thead><tbody data-page-node-id="mBrfoD0KGBk456uVrMyBsX">
+              <tr data-page-node-id="2ACyYkxHukoJTvPBu138rA"><td data-page-node-id="CSI2bWvEZ6AxEVZA8i2fe2">创建文档</td><td data-page-node-id="yEznfvNmmRGE9yC8pEoECL">新建一个<code data-page-node-id="oZsZrNqojWQ2ADRDHP4ABH">[文档类型]</code>文档，标题为<code data-page-node-id="0Er47wdrOu02NTpUg2zzzR">[标题]</code></td></tr>
+              <tr data-page-node-id="5ESJtxR5Awk20RMKmu9Ngk"><td data-page-node-id="DXPfMqtb6WJ6TSB9UKIv8G">文档总结</td><td data-page-node-id="179De3Hp9cionaKPpCgmIt">总结<code data-page-node-id="xYDePrAymHIxOpo9cet2ZS">[文档名称]</code>的核心要点，不超过<code data-page-node-id="zVJ1b4WveSFcOjZGnieV1X">[字数]</code></td></tr>
+              <tr data-page-node-id="9UlVou1pwVC8EfT8k1Vj63"><td data-page-node-id="77skAgIYlo7q1p9gHRqvQ9">格式转换</td><td data-page-node-id="TZTdOGzlDV6lKX9uxUXeLQ">将<code data-page-node-id="zDzdRBq212yVNRPnTmcPHm">[文件]</code>转换为<code data-page-node-id="MeKKn5ExGkEbXvIkquPycd">[格式]</code></td></tr>
+              <tr data-page-node-id="agHRqA8ddEEobcBoyhjwfD"><td data-page-node-id="VwsS2I5JkjFux8uFadPf4h">文档搜索</td><td data-page-node-id="B6JjQMo0VEBNUt19yEa6RS">在<code data-page-node-id="x74ghZLAMhCkdlGUm3dKWU">[文件夹]</code>中搜索包含<code data-page-node-id="7E30tc1PvH603BgVLUDmpe">[关键词]</code>的文档</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 二、专业场景 ========== -->
+      <div class="collapsible" data-page-node-id="ZV21rpHAx05I6ExRigbXi8">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="3FfKu3fe0riEJd9dAXi2Br">
+          <span data-page-node-id="6FzTmL4VZ0NydO2Nsm061u">💼 专业场景提示词（项目管理 · 数据分析 · 市场营销 · 人力资源 · 财务管理）</span>
+          <span class="chevron" data-page-node-id="eNDqXEASRBLy8Xlfb0wBUC">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="aDj1F5TI1tRpiuylgDWrPI">
+          <div class="collapsible-content" data-page-node-id="bJHl0iLFD77EnxbIgbAAYn">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)" data-page-node-id="ed5WqgsVNQ2MBanUcwHEzl">项目管理</h4>
+            <div class="table-wrapper" data-page-node-id="NSV6EM540CCDfAcPj2Hyna"><table data-page-node-id="nIClfethsYoEgVpCkyWCvX"><thead data-page-node-id="bj8rZjjotVhHqjsEESzBDH"><tr data-page-node-id="myPOrp0Fn0Wjo2kCemvgDN"><th data-page-node-id="qcXuvQ8jJkwgPq3baanli4">场景</th><th data-page-node-id="ysor3AjAdHIAJyWAseApLO">提示词</th></tr></thead><tbody data-page-node-id="B1OBcA1r2hgwl4yGtYpr8P">
+              <tr data-page-node-id="LCfQZ5Wrc4VEu6eTpAAG8Z"><td data-page-node-id="7C2oFvbHAWl6SWFIcZkveA">项目计划</td><td data-page-node-id="FCKAVaQZD3YowARl7iCSHz">制定<code data-page-node-id="KZjqqkUdhrsMAA44YHh5ml">[项目名称]</code>的项目计划，包含里程碑和时间表</td></tr>
+              <tr data-page-node-id="qrsSqgv6KMraIb14HUN6N7"><td data-page-node-id="4HnZUTP7RAiMGjobxOAh4k">风险评估</td><td data-page-node-id="XgxHkjqSxKO2KW89bVG96r">分析<code data-page-node-id="L1jn7GKzoGQ0G8MU2lED4u">[项目名称]</code>的潜在风险，提出应对方案</td></tr>
+              <tr data-page-node-id="nVbYMUHOEGQcQloAugs1t4"><td data-page-node-id="kSgtbOWBB3LeDgo3nmhTSx">进度报告</td><td data-page-node-id="NVDKmMTlCNcXWH9KwKFlg3">生成<code data-page-node-id="K614SjSnFJrQ46SAxVn1BL">[项目名称]</code>的周/月进度报告</td></tr>
+              <tr data-page-node-id="CBEG6YHrYcBdqItw5jvyAR"><td data-page-node-id="8edrVniCN59LNxzyQjVDNg">资源分配</td><td data-page-node-id="Cp5BrjEutFCc5kIatBbe8E">为<code data-page-node-id="BmT5wAaHt5ppqOaDl1B3IB">[项目阶段]</code>分配合适的人员和资源</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="d0G0onGqUDXq2SQaAh2jmm">数据分析</h4>
+            <div class="table-wrapper" data-page-node-id="GzuNHIso8F4QYRq1DqdE7q"><table data-page-node-id="5JHdV9EK7Tf3uhQhT2iqq0"><thead data-page-node-id="k6wlmqTl0LDWAQtFpOA3Dm"><tr data-page-node-id="mdVxCtWlrqWvofwJUWJ6bC"><th data-page-node-id="sFzRBhE7G98RcohdgzHqNs">场景</th><th data-page-node-id="gagAJPRc6PZQShNBTmknBC">提示词</th></tr></thead><tbody data-page-node-id="mUh3HAIJ9AerHgDpYXBQsl">
+              <tr data-page-node-id="JmkBm8QqxebZcJncHsCCSr"><td data-page-node-id="u05hLSQBgc4rNyW7SjFZJR">数据整理</td><td data-page-node-id="csFWnDLufKOl5FMgelVVaF">整理<code data-page-node-id="jxWCbqTUyO5tnvIapOr62R">[数据文件]</code>，清洗异常值，标准化格式</td></tr>
+              <tr data-page-node-id="SGiBzNPHKgMrS5SedVUPFq"><td data-page-node-id="VdbM55HFaOGyyf4xyWn5l4">图表生成</td><td data-page-node-id="VpElaoMFpUb4fcBUgGzUPO">用<code data-page-node-id="SCHKH3fXHWkEOcnWNyC24T">[数据]</code>生成<code data-page-node-id="FmtPyxLHU8sywWjawK25Ah">[图表类型]</code>，突出显示<code data-page-node-id="fpTg2tsmAXYtlvhNeoEJw3">[关键指标]</code></td></tr>
+              <tr data-page-node-id="4ySkkGDKMIjfOvGI4K68Dc"><td data-page-node-id="C5F5P9VeTuRGiHTRdR6DxZ">趋势分析</td><td data-page-node-id="76uBmYTb2YO24h7ZItslzZ">分析<code data-page-node-id="GDuJMxyp3EagbFgLVsag0m">[数据集]</code>的趋势变化，预测未来<code data-page-node-id="pdUmASDrTHuiCwCWJuJms4">[时间段]</code></td></tr>
+              <tr data-page-node-id="sE5Tv8mMcVOXhD1Fus8neo"><td data-page-node-id="3LacYDSay2c4pd0bTSqM81">报告撰写</td><td data-page-node-id="zHzB2v6Txxz0ixGvMJJdyS">基于<code data-page-node-id="yjG8DEQfxfhHcQ3uTRaWkJ">[分析结果]</code>撰写数据分析报告</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="0mFVoCFOlckxZ3BFO1rKzM">市场营销</h4>
+            <div class="table-wrapper" data-page-node-id="3hDPozuApup67lhBjgiNYQ"><table data-page-node-id="rzilulGzIrTH8JNfDdmjWf"><thead data-page-node-id="FMXOueA5q8Ltn8C38ivElo"><tr data-page-node-id="BFC1yH48xi0fdfZk7vGG7h"><th data-page-node-id="KfsZif8QY5tyYK0XbEoJxW">场景</th><th data-page-node-id="40ZpLbUqkk5sCacChAYZi8">提示词</th></tr></thead><tbody data-page-node-id="t8fxpAJC7X1rNo3XyHBc1D">
+              <tr data-page-node-id="3BojEpGO6AEYgXgLTy5Cpj"><td data-page-node-id="KWs85d0eUEn07IBrdJeH9p">竞品分析</td><td data-page-node-id="d5nozHy2eGMe86zZcbtEMH">分析<code data-page-node-id="inGuXMwmXDVS5UuqpGiqFG">[竞品名称]</code>的产品特点和市场策略</td></tr>
+              <tr data-page-node-id="X0fqyLkzVQiIjhHUUeRew0"><td data-page-node-id="IOH02yF03Jc6U18KdlIWWE">营销方案</td><td data-page-node-id="BorMA5WhFqCyHv5nHoFAq4">制定<code data-page-node-id="E3Y9qkqSssOgUPSTBGrEIj">[产品名称]</code>的季度营销方案</td></tr>
+              <tr data-page-node-id="GxabcLmSNXlPe5lXk41MIu"><td data-page-node-id="o5Rah4bwnHDWdThOU721UL">内容策划</td><td data-page-node-id="zIb7YUzpt0IsuEIj9DbaRJ">策划<code data-page-node-id="cTiNvSjor3Hy4JAcs5lJ09">[主题]</code>的社交媒体内容日历</td></tr>
+              <tr data-page-node-id="ZpSKf2vKGK95MObB9GJDWt"><td data-page-node-id="V2Bu35BGdUMr0DOISYiAlo">效果评估</td><td data-page-node-id="DPSjjxHWoplY6qE5T9vBOI">评估<code data-page-node-id="xQDRVb12EV9uY7eQuCwJvx">[营销活动]</code>的ROI和转化率</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="5KcuuQfBSvHzd4uck8NnTA">人力资源</h4>
+            <div class="table-wrapper" data-page-node-id="HuUqqOpNVtL1mRIZb0dGhz"><table data-page-node-id="jWB4JkUqv0dH2ai7n6SuX8"><thead data-page-node-id="wMloa780kFITGCG5QdX6IR"><tr data-page-node-id="ZMeHUgylNiC15f4scg25v6"><th data-page-node-id="KUss8Mhu57NFK93E5ZpzoD">场景</th><th data-page-node-id="iBtJQrRSLC0e2UA18DIpB1">提示词</th></tr></thead><tbody data-page-node-id="aUByrU4kyT821RpGjx97To">
+              <tr data-page-node-id="PGAl5JdT0TqkBvx0hXPPdl"><td data-page-node-id="8oJdUiai7vCAEWrTY8BQdM">招聘需求</td><td data-page-node-id="2f2osuh6IAJ2R1gPSDa9d7">撰写<code data-page-node-id="RcuTErivzMePxjFx6A9FX5">[职位名称]</code>的招聘需求描述</td></tr>
+              <tr data-page-node-id="DZiyVIIKHsh57Qr39HuU38"><td data-page-node-id="8NDTqjSvb1qQfLHXR9sLXA">面试问卷</td><td data-page-node-id="10bB3PpHqwLEDLmg7G4XVy">生成<code data-page-node-id="S81FCFomWYAhg7NDLU6wTz">[职位名称]</code>的面试问题清单</td></tr>
+              <tr data-page-node-id="SyMhbm4nCrp78X6RnrqPDW"><td data-page-node-id="J7i0uiKkIXevOdGogvGNcH">绩效评估</td><td data-page-node-id="PARXFUY0FBwLodfTwsjQ66">制定<code data-page-node-id="O3Rj4HHmx7hKWRPFGwyPvd">[员工姓名]</code>的绩效评估标准</td></tr>
+              <tr data-page-node-id="vsjfktlShOXzAVA6OHKltQ"><td data-page-node-id="tR09BGYJW2xWO3V2Yc7mH1">培训计划</td><td data-page-node-id="q8Qc8C95kFaviyA1gJguzG">设计<code data-page-node-id="GKdCVPS8YNNuYQ58HHy2KC">[部门名称]</code>的季度培训计划</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="andh3JQn1PBb30EF821kmx">财务管理</h4>
+            <div class="table-wrapper" data-page-node-id="CTgKQQObMOdJCTuAw2wqiv"><table data-page-node-id="VeIFAltr1ENCHFADIvTSqW"><thead data-page-node-id="dL44yf6SpkD7BBQvjwSS7k"><tr data-page-node-id="RC5AVGh1lTo14m9FHOSUgG"><th data-page-node-id="LMuBBnrWPREORIhcq0PESo">场景</th><th data-page-node-id="MsJAaikWPEbVLK0Sysu3vD">提示词</th></tr></thead><tbody data-page-node-id="duEhAOFuszCkOTmc6kmTH0">
+              <tr data-page-node-id="pXeIaBBGehvzS19HH3hvjM"><td data-page-node-id="LidEW5bAZ9yMLdYXdlamXO">预算编制</td><td data-page-node-id="jNDKQFy1ujjpsSsTBBdDTr">编制<code data-page-node-id="5NrS0A4nrELiGUJi2p6VRe">[部门/项目]</code>的年度预算</td></tr>
+              <tr data-page-node-id="Vjmn25cAFMoh7FJgiT8gVU"><td data-page-node-id="ijSScHnhbwUf6PMswVk7fu">费用分析</td><td data-page-node-id="Fnl0ROSq1Ej7AcPjsavBud">分析<code data-page-node-id="gXh27KnChNGwm1gPkOywuJ">[时间段]</code>的费用支出情况</td></tr>
+              <tr data-page-node-id="aZymLoXCfIyErjDuHBzlbB"><td data-page-node-id="YY8vwVPEzSZWZi6cPUMJcG">财务报告</td><td data-page-node-id="oiMSE92ZwrIEHp6y9mUfh7">生成<code data-page-node-id="XXzeBU8YB6T5BUFnrLzVZC">[季度/年度]</code>财务报告</td></tr>
+              <tr data-page-node-id="kIJxWOgGgCZ6IEGEGywDkZ"><td data-page-node-id="DvovRz18kuwW7IA9BIOSp9">成本控制</td><td data-page-node-id="hiHPtfLMv7zg5nQozGmu8J">提出<code data-page-node-id="t2ByEkQVNNRUcNIYiV6FVH">[项目名称]</code>的成本控制建议</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 三、高级技巧 ========== -->
+      <div class="collapsible" data-page-node-id="GfVCGNhLNnldcbADFkxomM">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="RTS7zztjNsVlbXEBgYuIPo">
+          <span data-page-node-id="BfiFVRzN59BE6sZGXBQsCP">🎯 高级技巧提示词（组合指令 · 条件判断 · 模板生成）</span>
+          <span class="chevron" data-page-node-id="Wf6j1sT2wQrn6YGWyaxPUG">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="VkA4mLEq1v4LkguzLi5I4p">
+          <div class="collapsible-content" data-page-node-id="jIeUuVroudVqFKlRwfPphR">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)" data-page-node-id="u3PhGBdXaxq8FU4UDbLWoE">组合指令</h4>
+            <div class="table-wrapper" data-page-node-id="Hkxdv80HFHHLuwqF7Vimhu"><table data-page-node-id="alwiKByMlEW9nZ2GYAe8L1"><thead data-page-node-id="osO0jkH7shl0oaLq1cCAOJ"><tr data-page-node-id="evysbhMMLHeIRgp8Azl4dR"><th data-page-node-id="qG9BMGTgYATGiZND3yYbiv">场景</th><th data-page-node-id="HZY9rEI7drk7pVG1SYYu0p">提示词</th></tr></thead><tbody data-page-node-id="jXyEUfp5mfGlJDZgUI7ymy">
+              <tr data-page-node-id="5mrGrceXOZoFDSVFY8IGP1"><td data-page-node-id="KDSebmBWQW9LcOAYLDIBGX">复杂任务分解</td><td data-page-node-id="NV3vLzzJpvrqRFPCs3vLsg">将<code data-page-node-id="C99YpZ0lBcySkHhV8E9j4R">[复杂任务]</code>分解为可执行的子任务，分配责任人，设置时间节点</td></tr>
+              <tr data-page-node-id="kksbxLm07MypJiydTbdm2A"><td data-page-node-id="NzJfpPlWndzBihSY6YAn1C">多文档处理</td><td data-page-node-id="mSfLL4HjykX4sjG8gxsC6M">同时处理<code data-page-node-id="5Zy8eUxLk0j6CNH9Z3uIHe">[文档1]</code>、<code data-page-node-id="7q1o5GyV25KbJI6mG4krNd">[文档2]</code>、<code data-page-node-id="ukIXLAnbwEZCoweO2ZdtPH">[文档3]</code>，提取共同主题，生成综合报告</td></tr>
+              <tr data-page-node-id="jpcHWGzCPSvcamgikdelD3"><td data-page-node-id="m82E2XFPTBUXna5J7VQ3pL">跨部门协作</td><td data-page-node-id="38GMoiNUxDtzPKGihy43AZ">协调<code data-page-node-id="xoepfzmHStuagtpsVYfmDs">[部门A]</code>和<code data-page-node-id="krdxVEA5PodrOqXfJfIpNL">[部门B]</code>完成<code data-page-node-id="yteEFUsFXAD1BsNpOzWVY4">[协作项目]</code>，明确分工和交付物</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="ZUSXj2mWlzYGiwb2nNayQV">条件判断</h4>
+            <div class="table-wrapper" data-page-node-id="bkHXIC7HWndHXJGYcoFvDD"><table data-page-node-id="RPJxLEmEQbcTU4DTqsglkZ"><thead data-page-node-id="kS4qu0jtUUe1QXo9eAh9MM"><tr data-page-node-id="eOu03wL6rrmNV6UwhLy81j"><th data-page-node-id="CasAD75yYGb10l5MSRh9ER">场景</th><th data-page-node-id="ZfFFOprlyCg1ceWrh0S47f">提示词</th></tr></thead><tbody data-page-node-id="idR25QGSl7CmF0K5hCylzL">
+              <tr data-page-node-id="UCh05UthFe8wHu6FUrGD4s"><td data-page-node-id="2XRwIREJWQWa4LBUBD4qGU">智能提醒</td><td data-page-node-id="8pB5XqLbFko64U6DeKsPGN">如果<code data-page-node-id="plkR8HhIL1JZ4GnZn7Q9DP">[任务]</code>在<code data-page-node-id="Rsdq4wFBCpG9Bz5ICOAl34">[时间]</code>前未完成，自动发送提醒给<code data-page-node-id="Wclt6Al6yBnvVrcxn9dFoD">[负责人]</code></td></tr>
+              <tr data-page-node-id="qxYkjhRpPBpOwoeE7Tjkok"><td data-page-node-id="erUGtUmxaEV5SSUJ8EPIga">自动升级</td><td data-page-node-id="Ovj1g2ZukJEn7dbqsmlauw">当<code data-page-node-id="EIOAqqfmx36BGPz2SCGuCI">[问题]</code>超过<code data-page-node-id="ePHkbo8CukHMubQuEG5Kdu">[时间]</code>未解决，自动升级给<code data-page-node-id="EmctuG4ZW2AFrdADxfRCxT">[上级领导]</code></td></tr>
+              <tr data-page-node-id="0lQF4pCSfm8oAMwjzUWAC3"><td data-page-node-id="ebI3029MBMLMBSKjCk5LvP">条件执行</td><td data-page-node-id="I8y9HFyOycI48ll2okjMUb">如果<code data-page-node-id="6tW1bMrRLqZLhKzMkT5PHb">[条件成立]</code>，则执行<code data-page-node-id="GIJnkwVTC7zQSP58XZwf5T">[操作]</code>，否则执行<code data-page-node-id="PkDQIc0AfEhTEIwSC3pG4e">[备选方案]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="OJCyneVbuVOSEWvqPn7LTN">模板生成</h4>
+            <div class="table-wrapper" data-page-node-id="FuTmo6XMU4RbLhtRIAyFjd"><table data-page-node-id="KfAsARondJqNzZDsYS0dTq"><thead data-page-node-id="mARu57anS3ZlRMQBjmFTJ3"><tr data-page-node-id="SxF7TDJ7p3ZKk4WctEdA3T"><th data-page-node-id="LR0JUA0z1nMWSkqov5b082">场景</th><th data-page-node-id="c1Ugwdq4GjN1MY2Gbznx9Q">提示词</th></tr></thead><tbody data-page-node-id="CCiUT3VIm8LedaG8kyMfkT">
+              <tr data-page-node-id="0RYuIDZGvDDtX1cIIlKsRB"><td data-page-node-id="kCWxTssenqrvJ1J5itztgZ">会议纪要模板</td><td data-page-node-id="73hZtoHtzRuKMmrXnGf0Ya">生成标准会议纪要模板，包含议题、决议、行动项</td></tr>
+              <tr data-page-node-id="fhG7G4vjSJlw4hioqEsH3o"><td data-page-node-id="XLkcQ4It1NMZ9fS2jth75j">项目报告模板</td><td data-page-node-id="PiBwHFqaqsxMXBk0epxVCk">创建项目进度报告模板，有数据可视化区域</td></tr>
+              <tr data-page-node-id="E6pteFVnCsFHawAyA2sA5P"><td data-page-node-id="TMGLAbW4HjDNOuWSwSNxsI">工作总结模板</td><td data-page-node-id="F8CBEH9CXO2gMcI23Cj72d">设计周/月工作总结模板，便于快速填写</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 四、技术开发 ========== -->
+      <div class="collapsible" data-page-node-id="pRgbBYwr4cNhXgVVCC5iWd">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="8YeEINwG1zSr3XE1BtHpoc">
+          <span data-page-node-id="U6fb0TT3qkiORDWNFoHPbE">🔧 技术开发提示词（代码相关 · 系统运维 · 产品设计）</span>
+          <span class="chevron" data-page-node-id="EYSVSaKN8LHJnY31NwIQ8S">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="nVBYjyMlHj2zTmAn9Y0V3I">
+          <div class="collapsible-content" data-page-node-id="yzMqzm84gxrDiN0oQbXTXq">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)" data-page-node-id="vGtJ9zzZYhcvj6g9yH3wZU">代码相关</h4>
+            <div class="table-wrapper" data-page-node-id="AUDYE9eM6g4oWvD1EsK4Yc"><table data-page-node-id="v5H8eBSDGbgmLyNFUX2Z6N"><thead data-page-node-id="Jb5EFGHHaTiNGhbV5mNzrc"><tr data-page-node-id="asGFG5j7shZkgNOnK8WuHG"><th data-page-node-id="cLFzvHvBOkdq1E3Ws1BTZM">场景</th><th data-page-node-id="GVPfQ1Ghb5k3S0T3ukUTnN">提示词</th></tr></thead><tbody data-page-node-id="EPbJxMgRdtp74pySehj4BQ">
+              <tr data-page-node-id="wABMBdvgPqWdZpfKLIBCl2"><td data-page-node-id="IsgQupDyrm7I7xXWVgWIGP">代码审查</td><td data-page-node-id="Uh8Pa6lFyNzwDQ2DnUgGfv">审查<code data-page-node-id="JCYZO0OAVAfXpsGP11xz95">[代码文件]</code>，指出潜在问题和改进建议</td></tr>
+              <tr data-page-node-id="TuEC8BYHcQsMZvPkGn1UOg"><td data-page-node-id="VyX98EpWNtDAH6xtrfo1uG">API文档</td><td data-page-node-id="UDqxoVwYZLGv88qIqYmrGx">为<code data-page-node-id="slr5PyBjcZEIcAtxMeYZTN">[API接口]</code>生成详细的文档说明</td></tr>
+              <tr data-page-node-id="jKzlBo3TNif9H3gCZFL4sW"><td data-page-node-id="BDlGPEO7z8Rr9GGHG9DjA9">技术方案</td><td data-page-node-id="wrb6QJzasPbQcjGpi6aYIs">设计<code data-page-node-id="PBUQjprm7akYTm3WhG2nbW">[功能需求]</code>的技术实现方案</td></tr>
+              <tr data-page-node-id="79jxBgEvHedNKdNlSlA2Tg"><td data-page-node-id="3LO5K2LdHxUWiuaeY8B1N8">性能优化</td><td data-page-node-id="Y1aH5A1ZAO7Q36W0jDPGnz">分析<code data-page-node-id="yPQICUbl3kTSsi44oHze9K">[系统]</code>的性能瓶颈，提出优化方案</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="cikfycJLHFjedL0AFIDxF9">系统运维</h4>
+            <div class="table-wrapper" data-page-node-id="1fSEnKAwVMd7Jker4xhFgY"><table data-page-node-id="0EoaHg8wLIYrPP2iCFPhAc"><thead data-page-node-id="HvgpZHU4si7I4rPSGLA2hx"><tr data-page-node-id="EC4QmTGLadaSeyCCJGEseo"><th data-page-node-id="0IjSvTG9TYqQ8tQDsybNa3">场景</th><th data-page-node-id="YrPmecw65KBbjcVHUrHqiq">提示词</th></tr></thead><tbody data-page-node-id="U0fMWCLqPxkIlfyG6JtI3t">
+              <tr data-page-node-id="7TBwmuUePkmQlyiz6PDggI"><td data-page-node-id="B4FdDpGK7Bn4vNKMzoKhYu">故障排查</td><td data-page-node-id="a7ZlpPsoh4EPrqnGl0vDqj">排查<code data-page-node-id="s6v4AXFtkFDUnLlCVGcd5D">[系统故障]</code>的可能原因和解决方案</td></tr>
+              <tr data-page-node-id="n4AHnNLmsnV7lKxTBYAOdu"><td data-page-node-id="hmDQpEYv1zdRj4znk07TrL">监控设置</td><td data-page-node-id="EndBstoCfB67cWDaBuK9dR">设置<code data-page-node-id="T9kHcbODdWAiJAen8BixCk">[系统指标]</code>的监控告警规则</td></tr>
+              <tr data-page-node-id="WVJDkbHxw0ErowIS6oEsOh"><td data-page-node-id="LygQPpBMfOc5d3DGvw6wQR">备份策略</td><td data-page-node-id="gWWkHIJ4pVmYogwxB0ZAAJ">制定<code data-page-node-id="cCX2dZ62ebb2qBqMAzHlXe">[数据/系统]</code>的备份和恢复策略</td></tr>
+              <tr data-page-node-id="HySQpkleTAiCHsJYQZ4H3V"><td data-page-node-id="32RBqnVE1FaZEvBfCE98c2">安全加固</td><td data-page-node-id="lZeB3PSJeEBBwiOEorZtf1">提出<code data-page-node-id="weF7ChSKe9iMDvSUIciCoO">[系统/应用]</code>的安全加固建议</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="jBg2lLCjnPzFX81ROcmDcv">产品设计</h4>
+            <div class="table-wrapper" data-page-node-id="Dk62fCAQ5PAi7vQIwvJdOK"><table data-page-node-id="MBr6EBSJxDCk1aMdrWdc3m"><thead data-page-node-id="mlLZflNesWzc2VNMhyAloU"><tr data-page-node-id="HOeXxek14le3CEH1k5m7ED"><th data-page-node-id="I9q0Q0xPhK2sGn3IT1iGGF">场景</th><th data-page-node-id="MFHeSfUqBFFqs1vAXWCKJB">提示词</th></tr></thead><tbody data-page-node-id="DbCyB2AVznPzpdtyzcm0dc">
+              <tr data-page-node-id="ljkZSBDt5FXvMdMOM4bt8v"><td data-page-node-id="s6SufIm4XcKFp5DAEcvqTz">需求分析</td><td data-page-node-id="GAYd1Hk6uP1v01IXdNXWFe">分析<code data-page-node-id="npzfVSVNppnK6Ih39hkYdF">[用户需求]</code>，转化为产品功能点</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 五、数据分析 ========== -->
+      <div class="collapsible" data-page-node-id="wcYblObim8mK2eL8NIoUAE">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="svLRMZPyOl6JHv9jJg1TUQ">
+          <span data-page-node-id="NS8oKWU6eghix38wKFC35u">📊 数据分析提示词（Excel · SQL · Python）</span>
+          <span class="chevron" data-page-node-id="0FPYywA81pfQlA2SeHN2aX">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="CihdLCEPf0VCHJysTjgYWp">
+          <div class="collapsible-content" data-page-node-id="5zdKCybAHNz2NXJAnrC9ij">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)" data-page-node-id="YEFnMnyVdZIpx8zrNDxtsQ">Excel 处理</h4>
+            <div class="table-wrapper" data-page-node-id="ILaPSRMbGgqah2VnrAfp52"><table data-page-node-id="ofYgOgVSCaHXk2p9USw5qJ"><thead data-page-node-id="siGGMNaf4CxeU486r94yhr"><tr data-page-node-id="inB8XnZXVQumz1KzHmHEYn"><th data-page-node-id="Ty6QGDM4HXtNcCvwBVFHb7">场景</th><th data-page-node-id="RofpTrqUJGk8B0GYP4skok">提示词</th></tr></thead><tbody data-page-node-id="fEY3FvZk74l31ctwsYrxvS">
+              <tr data-page-node-id="3FOYXVTVJ6VagzBVZ2J8mX"><td data-page-node-id="p8giLNDEiEPhq9t46aHNiX">数据透视</td><td data-page-node-id="MTdeK7SziBwiRSvFGHkaAu">对<code data-page-node-id="b9YCbOv2S0rEDK17A4OCEG">[数据表]</code>创建数据透视表，分析<code data-page-node-id="ixmFTovyFcraLr2eh4ls4X">[维度]</code>和<code data-page-node-id="Vram2yP8GsOniuCqjyU5MY">[指标]</code></td></tr>
+              <tr data-page-node-id="6CXQzSZQptclMJZob2z8AO"><td data-page-node-id="VlkE2CbkAW0CSI0ErCM1RU">公式应用</td><td data-page-node-id="2QUzIHq5rnJ24OOJI4g82D">在<code data-page-node-id="EflTUFevGE5H86HgdwpCEj">[单元格范围]</code>应用<code data-page-node-id="SlFdoyPjQyQnWJZq7RJTZf">[公式类型]</code>计算</td></tr>
+              <tr data-page-node-id="UtKQ0HCxBKpAl2EKjFeq60"><td data-page-node-id="CwO90e5vn1WaucatmyxiLR">条件格式</td><td data-page-node-id="P8XQlmHaVpTg6UnxNTTYH0">为<code data-page-node-id="WxtaHHDEfpoB7z6lu6BBVg">[数据范围]</code>设置条件格式，突出显示<code data-page-node-id="xNt8Pj2HzRD749vJtuZR60">[条件]</code></td></tr>
+              <tr data-page-node-id="Hi6ICFIrMbZr4zk15gcXvO"><td data-page-node-id="BVB6hqTbagEqx4O2IpIMQL">图表制作</td><td data-page-node-id="IRd3yBS40Q9jBr15FUeBo5">用<code data-page-node-id="n11wO8HvfBeKaUUnp1qw4Y">[数据范围]</code>制作<code data-page-node-id="eD8cGUS1v8Gxsp4liW21Ny">[图表类型]</code>，添加<code data-page-node-id="nuAxyOnCTXu7twBloaYgEf">[标题]</code>和标签</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="vXxEV7uY5pT7ngaVkjlBXm">SQL 查询</h4>
+            <div class="table-wrapper" data-page-node-id="hR0TsqEEC5LS7a23EWeABG"><table data-page-node-id="W0plde04IUpp50grtKvatV"><thead data-page-node-id="yKwI4rQ6Jnk39SaQIdA9XA"><tr data-page-node-id="MCVBJs3dQ4WvFlSVwAIbiw"><th data-page-node-id="njr18Tj2oLRRjByagu7jIw">场景</th><th data-page-node-id="mQtsXkkeWI5eeRdevZ99VA">提示词</th></tr></thead><tbody data-page-node-id="VB1Ce6B8o9ke3o2IjU8XNb">
+              <tr data-page-node-id="0vv4eqYNKM6ITMFTqwBr2D"><td data-page-node-id="YfGcd0UTczwvHEBx9gIotn">数据查询</td><td data-page-node-id="oWGwOkXAa2pajmMLggJbY9">从<code data-page-node-id="sYIXnTq2XDJ3lCHFd5GBJG">[表名]</code>查询<code data-page-node-id="iKT5UVi7AqQ5dlVf8QQBC2">[字段]</code>，条件为<code data-page-node-id="dLYSOxQM65YGpIRPEFFzL1">[条件]</code>，排序按<code data-page-node-id="0PGkooNucMIEBx8KuAH474">[字段]</code></td></tr>
+              <tr data-page-node-id="ZHCr39B2GeGmNHnuzU1mGk"><td data-page-node-id="DWfgMoaTpArjTXOzoLG5Sl">数据统计</td><td data-page-node-id="gMkMOY3IY22zNWTOxCuJqm">统计<code data-page-node-id="dUsgUvpZdNb0cgzuzokKKA">[表名]</code>中<code data-page-node-id="o8AlAkCi6FfyKEYEtZm41y">[分组字段]</code>的<code data-page-node-id="C6ovUAJkhsvgrpDOoaeGAE">[聚合指标]</code></td></tr>
+              <tr data-page-node-id="rJYWhKd8uWLRojvReg5833"><td data-page-node-id="AUGgDIEqf81aqFZdkaWFp4">关联查询</td><td data-page-node-id="bMdrjXdylKJKy2RQyr9WHA">关联<code data-page-node-id="6ENfaUWe9C7D8uUd7Bz1PV">[表1]</code>和<code data-page-node-id="bP2rq31oj8gjOH1evxU9aH">[表2]</code>，查询<code data-page-node-id="Fte5CPxXTW73KEHVmEuGWe">[关联条件]</code>的数据</td></tr>
+              <tr data-page-node-id="kZZHHq2wKAwflWoqnAMdko"><td data-page-node-id="9cUChhRIeMVSniqK5T9tYT">数据更新</td><td data-page-node-id="nl5q323o3xmlLHKaWhHTuB">更新<code data-page-node-id="ETQb9BjjHN6DBIxB9mGRBw">[表名]</code>中<code data-page-node-id="sFaRhVobNIvBitTATnRQmj">[条件]</code>的数据，设置<code data-page-node-id="dHlJCtxV8GOuj64vwC9UGi">[新值]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="11A38hxAGLF5dLlI6ROY3h">Python 分析</h4>
+            <div class="table-wrapper" data-page-node-id="eqBDH1UJaxckjSzg2SuAIZ"><table data-page-node-id="TR2LivGszcnwAbmjcSsne9"><thead data-page-node-id="NppyABOYE3AQRm3Lcx0tuu"><tr data-page-node-id="9hN0XJgx3UxzshH5kdDpvf"><th data-page-node-id="FWSaH42RS9W1cF0FMRJ2c5">场景</th><th data-page-node-id="ERQcPM5L2fIi6acLcA2guA">提示词</th></tr></thead><tbody data-page-node-id="5sy1qRcLuhdIa55HCDDhsX">
+              <tr data-page-node-id="SRI5wuzHnsVnyAZLGe4t0G"><td data-page-node-id="a80FJ0S5JRYKPF7jLC5A2V">数据清洗</td><td data-page-node-id="rn5aUemOZqez2cdeo2BFjG">用 pandas 清洗<code data-page-node-id="pyQOD6j9eFU3qRxvlA75sF">[数据集]</code>，处理缺失值和异常值</td></tr>
+              <tr data-page-node-id="cOk0a6WOVYc4SGmMmc9Sh9"><td data-page-node-id="s4EZmlR9qqsSHjXZmztzvE">可视化</td><td data-page-node-id="MJCfBxHu1bF60Lu6kKO6r9">用 matplotlib/seaborn 可视化<code data-page-node-id="CLIYAb8ZrbMg475zxJ8GfE">[数据]</code>，展示<code data-page-node-id="keavDNTpgP9qEXcFaYdJ1d">[分析结果]</code></td></tr>
+              <tr data-page-node-id="tYbAADIW2AqrcCyT1kTnSA"><td data-page-node-id="dxjQAGGVJBqdYPHQ92K8gf">机器学习</td><td data-page-node-id="s7fPQsEX6YUOWmWVKx8LPm">用 scikit-learn 对<code data-page-node-id="AN5WKlSr8aZfnQGHDPPfa0">[数据]</code>进行<code data-page-node-id="aKEwliprGgHvwh4zbovtiJ">[算法]</code>分析</td></tr>
+              <tr data-page-node-id="EgYie5NmFwaVwG4W29rqEB"><td data-page-node-id="eIZ8EEO3lKkqANPw7FOVos">报告生成</td><td data-page-node-id="fx4rKnO1ZNmNCkCN7NsC0D">用 jupyter 生成数据分析报告，包含代码和解释</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 六、创意内容 ========== -->
+      <div class="collapsible" data-page-node-id="oB5ItbAdVHGKC8LEicTGw4">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="9DrejfGtrt6ZxYrFcbbHeO">
+          <span data-page-node-id="qwgy8pxdNrloEQMV4XoTHR">🎨 创意内容提示词（文案创作 · 设计辅助 · 视频脚本）</span>
+          <span class="chevron" data-page-node-id="LquyXGvdErguSRqZklT7kM">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="M6SSVwiUlWzGNx9nYBdbGg">
+          <div class="collapsible-content" data-page-node-id="TVNReLyhDnFfSZRiTPnkdW">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)" data-page-node-id="Zz4cbKkV67ABSXlgGXPEC8">文案创作</h4>
+            <div class="table-wrapper" data-page-node-id="HYZEvcw30ChGbCRg3sVCa6"><table data-page-node-id="vBLhK6Q885OTCGVF9tB4mG"><thead data-page-node-id="b9mDr1VRU01qW5rW1ZuEl0"><tr data-page-node-id="E4abRLZnipdI67DCXHdGti"><th data-page-node-id="QLXU0CPBDCpqmlqW2ITJm9">场景</th><th data-page-node-id="a20mKbAGl7kIU1GqASG6Ff">提示词</th></tr></thead><tbody data-page-node-id="M53vkdGnD6NfbMlwuScoVn">
+              <tr data-page-node-id="5I3Etn6q24WlKTPDcLF8f5"><td data-page-node-id="d80TTEjSjJ3rTgwETDx9Fk">广告文案</td><td data-page-node-id="ZHYKiifGaMJKF5neiTtk5t">为<code data-page-node-id="xhc6U7ihLV5miky6tnudDZ">[产品]</code>创作吸引人的广告文案，突出<code data-page-node-id="AIvUmc4N04HCPtD1EkM5Vi">[卖点]</code></td></tr>
+              <tr data-page-node-id="6eo2NhV43fbKZv0OG5MLiW"><td data-page-node-id="5AclCE7AIoy1Gl2CvZ4ljA">社交媒体</td><td data-page-node-id="bk0nZQm9m5bHzWPmbldnwf">撰写<code data-page-node-id="f6yha3AgVuaa3WE40ZGHSt">[平台]</code>的社交媒体文案，风格<code data-page-node-id="GQvNtozXTWrUUpWkIMWicX">[正式/轻松]</code></td></tr>
+              <tr data-page-node-id="yuHefyBuxpnP5688D1xFwb"><td data-page-node-id="dBm6zAgTcwM2YRHNxYhujW">产品描述</td><td data-page-node-id="W8LGN1KUqZ17lxe0ti77cW">编写<code data-page-node-id="tsvD16qbJbRGTZSG6FkWAc">[产品]</code>的详细描述，包含功能特点和优势</td></tr>
+              <tr data-page-node-id="naUDoCYqyOM8dRpzjCqPum"><td data-page-node-id="vil25aivXjy3LTL5bbcySu">新闻稿</td><td data-page-node-id="crfxeSB95htfEG7Fr6HuJJ">撰写<code data-page-node-id="b42BKGavefS9tCv40P1a3h">[事件]</code>的新闻稿，符合媒体发布要求</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="lj4YhflMSLLGKTzd46xpda">设计辅助</h4>
+            <div class="table-wrapper" data-page-node-id="LSCeWSvBwTCnHU1ARtTvwv"><table data-page-node-id="iLOd2KdSyQAN4aCpb3bCpm"><thead data-page-node-id="vDpf0TYhuVwTYE90u983sE"><tr data-page-node-id="Y7JMBkIwjlCuWvwxzMtPmt"><th data-page-node-id="S8mGmruWxEvKgdTh0JAay0">场景</th><th data-page-node-id="ewn3Sw1pCWUcUMyV6AdNBg">提示词</th></tr></thead><tbody data-page-node-id="k4rJPYx9Ask8cO0GNiGW0p">
+              <tr data-page-node-id="QqT448Fc2Rjw2iOgP0zFKC"><td data-page-node-id="MIB0Eta7B4ZGjJABYRkIEA">设计说明</td><td data-page-node-id="nYyd7AViH9LFCSNqMxCLHK">为<code data-page-node-id="PuBvZuZEcvtd1PpgPB4vHA">[设计需求]</code>编写详细的设计说明文档</td></tr>
+              <tr data-page-node-id="XDMTi6WlAFIxA3Ct9ApH9R"><td data-page-node-id="phbp0Cki9Y6wy2SCpbPi1u">配色方案</td><td data-page-node-id="WIvHwf9pFCbrJQw7DkIgac">为<code data-page-node-id="pfdNeXomFgDcc7kjMoIFGS">[品牌/项目]</code>推荐合适的配色方案</td></tr>
+              <tr data-page-node-id="4zCnNmVv4qj4NTChZ8ewIl"><td data-page-node-id="f3v8Gn7konJaHn9s9NHw68">字体选择</td><td data-page-node-id="EH3jKwpPMv16kYb6IuXamt">为<code data-page-node-id="FskloZceTZuFvVR8ynw3xm">[设计类型]</code>选择合适的字体组合</td></tr>
+              <tr data-page-node-id="WM3DfkaxC9kC0As0CekvFn"><td data-page-node-id="AdffCDl6RM3UPZNPHbePy7">布局建议</td><td data-page-node-id="SfzLyBLXmT1cGOZtvcPVz7">为<code data-page-node-id="EpOK22tOnZOaOov94BYwt6">[页面/界面]</code>提供布局设计建议</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="yoX5fBLPfYCOVQXDNpe7it">视频脚本</h4>
+            <div class="table-wrapper" data-page-node-id="dKivWB2AVMYRUXPKTeenDK"><table data-page-node-id="JyS4AZK8dNYJMH9ZSkoQit"><thead data-page-node-id="JkXFGCnv10o2zHXMCP8VcN"><tr data-page-node-id="68HjyfhAGwoJvlaBdZBvid"><th data-page-node-id="pCWpQtFjENRXduWWthPi5D">场景</th><th data-page-node-id="GIRoqkeKOAGgAS0gagy5ZE">提示词</th></tr></thead><tbody data-page-node-id="xBD8R9XY1HtoNdRYY0MBPa">
+              <tr data-page-node-id="TvJYveD45fUDskYrmeaZDY"><td data-page-node-id="zigbChIwGNe1FORSCc4cFE">产品演示</td><td data-page-node-id="wRNo6UDFkR1GjdJHTVCoZ3">编写<code data-page-node-id="10C2WBUEfnFnkvkToQt5pp">[产品]</code>的演示视频脚本，时长<code data-page-node-id="Gi6gfRs2X66DGYLbnk4ygW">[分钟]</code></td></tr>
+              <tr data-page-node-id="eZSGyXdoQAGmnTGLT2tzGR"><td data-page-node-id="dsCuQyBniB0ewSA80zODNm">培训视频</td><td data-page-node-id="5gAp1V4bo4jAVZiFvq5liF">创作<code data-page-node-id="dQc11AfS4wYg7NNplUzm8t">[主题]</code>的培训视频脚本，包含讲解和示例</td></tr>
+              <tr data-page-node-id="lyMnp1EWH37ts7UKqQhVDD"><td data-page-node-id="6aV1NgPTcJ4jtSNpCUsXyf">宣传片</td><td data-page-node-id="POV3PM20QwVJ4wizny0yUV">撰写<code data-page-node-id="ZKldSWYToj8DlGXhsQtM1H">[品牌/活动]</code>的宣传片脚本，有情感共鸣</td></tr>
+              <tr data-page-node-id="qPtt7BVfuClYCDN4wpKFdl"><td data-page-node-id="akiv24f16qzlQKAHuP3eBj">教程视频</td><td data-page-node-id="b2xv3DN4q2BEZvwxJaNYvZ">制作<code data-page-node-id="bKQSGhBO7CZDutJnoYAe7E">[技能/软件]</code>的教程视频脚本，步骤清晰</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 七、工作流优化 ========== -->
+      <div class="collapsible" data-page-node-id="Dx1pGqKz4AQ9SmgtFJoKdH">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="UstmjaNkV2xMAFGKcYFApR">
+          <span data-page-node-id="VqDcHepeyE2pk5huaEsTfU">⚙️ 工作流优化提示词（自动化流程 · 集成指令 · 团队协作）</span>
+          <span class="chevron" data-page-node-id="m8WZVGkm9iWhu6govFtpQv">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="gr0tEKG699o3p830s56qam">
+          <div class="collapsible-content" data-page-node-id="q5GvJXEzFpjWABMeQPCoz0">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)" data-page-node-id="u6j4rFFSc3oFEFr2rwnqBs">自动化流程</h4>
+            <div class="table-wrapper" data-page-node-id="zP5CdJ1yWIwcQw4VigK0MH"><table data-page-node-id="lj3Fx9asH9SRZE4Z21Mss1"><thead data-page-node-id="MePEIuyu4N2VP94dkMChOU"><tr data-page-node-id="RWMcUR74NxEtC6aDJNMhIG"><th data-page-node-id="6uIEkkFBja08YeLGFrGDJS">场景</th><th data-page-node-id="IvQzC3MYScFVevykNyXQOE">提示词</th></tr></thead><tbody data-page-node-id="PSRHg6kv6mJLYjpNy0q03M">
+              <tr data-page-node-id="a9S1jaPaxZdEpmNRnRjnEv"><td data-page-node-id="TQ4DhQILzyLDWe9t3eo6ON">邮件自动回复</td><td data-page-node-id="ESgUN8JGCgQFLAzCkVEipa">设置收到<code data-page-node-id="8jaRd9hINclqGodUddd5Ho">[关键词]</code>邮件时自动回复<code data-page-node-id="gcIvxWOnGezMFgH7Tk1kkp">[内容]</code></td></tr>
+              <tr data-page-node-id="nc8vALYCjABUTDngvgCcPf"><td data-page-node-id="EYpNhkbZ2VADLxJgAyAV2W">任务自动创建</td><td data-page-node-id="1eMLvWmjUj9kwGEj7qcxcp">当<code data-page-node-id="IR7bw8CCOPqZ7i3pSIByFj">[条件触发]</code>时自动创建<code data-page-node-id="ej4gOSDoxcWVEI9Zez1aQO">[任务]</code></td></tr>
+              <tr data-page-node-id="uzB9JEcmxLiyUpDcVeBNCV"><td data-page-node-id="p2Ar6rNRmOU7UM5FkNFH3h">报告自动生成</td><td data-page-node-id="vXNJApjsNQEDfmJAogeoln">每周一自动生成上周的工作报告</td></tr>
+              <tr data-page-node-id="96d5bc1AwlaAZpdMiu3Zfg"><td data-page-node-id="gOjOCoddhJQEcRfmJyAbf4">数据自动同步</td><td data-page-node-id="liOEUAPBfvAyYEIB1qAgjC">将<code data-page-node-id="ufbdjn3VgiLv4BC0cwR3CQ">[数据源]</code>的数据自动同步到<code data-page-node-id="zr8AHME83XqLUtOfeTVfCl">[目标系统]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="QyAdeAYrDBOhr7tYJFZRlJ">集成指令</h4>
+            <div class="table-wrapper" data-page-node-id="vU6pnLIkAUnznEAhAfEWHF"><table data-page-node-id="f2WxYuHdDCXEKQCmLdoJhc"><thead data-page-node-id="klBagpHqjUR81GVi1eq3gX"><tr data-page-node-id="ty4YFNhxuMGYSyoYmGcFEa"><th data-page-node-id="v0mlO9ykQEAb9o46HLg06X">场景</th><th data-page-node-id="86QPcb2AEEeFm8usDBL9nt">提示词</th></tr></thead><tbody data-page-node-id="PfhtFE0tm1K8E4OEMEGy7J">
+              <tr data-page-node-id="quGBDrjNyJC1I8HGAA9ZBi"><td data-page-node-id="sHlvFkiBDTf1UWDFbCwVSk">微信集成</td><td data-page-node-id="lAhxVODnkAIBIeJGrAfATj">将<code data-page-node-id="Vv1681DC3LkCGP921iDgDE">[任务/日程]</code>同步到微信提醒</td></tr>
+              <tr data-page-node-id="Zp1Hm2CCHkLmIm1KjOL4RL"><td data-page-node-id="xbycxM8NnU1Dk9T3IedIgK">邮件集成</td><td data-page-node-id="nED2roHlizbxzxZ45iEZS1">通过邮件发送<code data-page-node-id="tLecHXnEQXDsDpbg4PYgCd">[报告/通知]</code>给<code data-page-node-id="oFmeG0umdaftBy7sKvkrGy">[收件人]</code></td></tr>
+              <tr data-page-node-id="mN1g0orY4Kz9xdcij7zJxj"><td data-page-node-id="akicaPIUVuhiM7Ye69QvFS">日历集成</td><td data-page-node-id="krMlBsEEAyQXlobEggmIEY">将<code data-page-node-id="eAQaso3p4dP8pGFLF9NrCg">[会议/日程]</code>同步到<code data-page-node-id="9eqSqDABuAwwF3Hdg3J776">[日历应用]</code></td></tr>
+              <tr data-page-node-id="STPtw9rOKKyRFv4BRh2Kvl"><td data-page-node-id="hV5a3DpoS9xawu1C2UE1Mw">文档集成</td><td data-page-node-id="jC8rA3L1wiL6AgqVEQ53I7">将<code data-page-node-id="nlGZnVKIxtGsGRhdrqTJu2">[数据]</code>自动导入到<code data-page-node-id="YcHqVrEMUuxGmoMV8zlEwC">[文档模板]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="5nWyYhRJqImDgfOW98WXV5">团队协作</h4>
+            <div class="table-wrapper" data-page-node-id="ub3I9BrzBj7uNw4qCaAJLd"><table data-page-node-id="FxSfj3nWwWMicJrFNweW5S"><thead data-page-node-id="kOl6qYkCSoiipDAJhzjX4F"><tr data-page-node-id="dQAFJDq5PdeflIpXVBKX9N"><th data-page-node-id="hSFmYg7JvagAv2VQnaWD2G">场景</th><th data-page-node-id="EpAx5d0FZgKgFKMBKIiGFW">提示词</th></tr></thead><tbody data-page-node-id="zAsBmudHGdjLNk79PbixyT">
+              <tr data-page-node-id="6ZwJcjKcng2kHgfx3z54CP"><td data-page-node-id="ktRc8BDHcWglOwQR3y0PKy">分工协作</td><td data-page-node-id="4r0XKXUe7B8VBcstNTqPrG">为<code data-page-node-id="YVTjxpo63iMwDgj2KqrSqH">[项目]</code>分配团队成员角色和职责</td></tr>
+              <tr data-page-node-id="icfY2NYfHtJ67wkmdwTyLX"><td data-page-node-id="CrfuhDty2Byfhbul9TbRbC">进度同步</td><td data-page-node-id="a5G186oA8N3R27lDu1l23w">定期同步团队成员的<code data-page-node-id="D0rCOsR9DAlNueRlOaZPdm">[任务/项目]</code>进度</td></tr>
+              <tr data-page-node-id="b6yNbdYDQsFxMySxlNqdL6"><td data-page-node-id="EZrhenOlDRVykYCMy1Mxyt">问题协调</td><td data-page-node-id="3arnBOzbvBEOt6h41rNCIm">协调解决团队遇到的<code data-page-node-id="oBZbxUuzucbqMF35KYH1TB">[问题/障碍]</code></td></tr>
+              <tr data-page-node-id="PBL3YaJvm7FZdLWbervh2K"><td data-page-node-id="Lxpsiyo2FuqXFgoJwV5dki">成果分享</td><td data-page-node-id="hZ5k1irtfP7HM5zwx0t1JG">分享团队<code data-page-node-id="kr0BA9qcQSTWGhPk1S1Aah">[时间段]</code>的工作成果和经验</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 八、个性化定制 ========== -->
+      <div class="collapsible" data-page-node-id="Y5yTzgVvSWfw5lTqYwwgC6">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="n3Gt7wAKLuLXK2YF6pWxhI">
+          <span data-page-node-id="BgqDwLDWqgjdFFFHKifW6M">💡 个性化定制提示词（风格调整 · 角色扮演 · 知识库训练）</span>
+          <span class="chevron" data-page-node-id="XtN0cFtBFOSk22aFWg8u4y">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="D59BJTgIB0ar8rMnmfTKsa">
+          <div class="collapsible-content" data-page-node-id="RhQnuFakC6ePfvCpixH09G">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)" data-page-node-id="0aQhJPbRSjkiILF0zUF9Qf">风格调整</h4>
+            <div class="table-wrapper" data-page-node-id="tuPVdiGoAiIEBxVxVC3pBr"><table data-page-node-id="EEoElaePoD7EvFDwvSmyex"><thead data-page-node-id="sXHVHSh7WvXZZFUY6I9c2u"><tr data-page-node-id="tIxrYcyN8664Bk04yUckUu"><th data-page-node-id="9ywwvjqQMVuCyiuVCeLXM9">场景</th><th data-page-node-id="HPRSn1Nrf6JTZ7uVmwQYq3">提示词</th></tr></thead><tbody data-page-node-id="ti74w80jHRgHqoM9fhep4X">
+              <tr data-page-node-id="3QHeyhzLEuzNNSExJhFN5U"><td data-page-node-id="ZLFZEbtCLHYtsOMJ0LsCDC">正式风格</td><td data-page-node-id="4r8SlC5AajKSYum6p8ohZh">用正式专业的语言处理<code data-page-node-id="JLWlKeGY0zAa0xyCHYLEWU">[内容]</code></td></tr>
+              <tr data-page-node-id="nJFOjQCPKxpLrRVeWrkZ7M"><td data-page-node-id="O5De3CRoeOlJBuNG97vDeJ">轻松风格</td><td data-page-node-id="RmItSNFEVwbqsB56SWNb0o">用轻松友好的语气撰写<code data-page-node-id="COZ9B8fJ8YkhSfKKi9bOZo">[文案]</code></td></tr>
+              <tr data-page-node-id="ZA4MpGnpOrHDyXo33FmACG"><td data-page-node-id="xqw5PNQEqYxDtRVewhKLPl">简洁风格</td><td data-page-node-id="kA3gkNPCFWyZOtXYFYdQpB">用简洁明了的表达总结<code data-page-node-id="wKXNFTpRutuSsEAr5MeAL4">[信息]</code></td></tr>
+              <tr data-page-node-id="PH7mA5KeQWwMgp0oWjHKa2"><td data-page-node-id="aGwLoxSUN5dL5svx3dwBFv">详细风格</td><td data-page-node-id="Q0xVHTQjn2FBOelJIxZ8Ux">提供详细完整的<code data-page-node-id="ZEamKyrl7cWhNMyy3njG84">[说明/报告]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="R9bZ250EonRnFq6FIqB8XI">角色扮演</h4>
+            <div class="table-wrapper" data-page-node-id="lGA1ifJ60LHvrLVdiwcKOD"><table data-page-node-id="9JGZxb3NVGwwxaWRpBMiRO"><thead data-page-node-id="4woTqk8F0UCqdDlYk3pPA6"><tr data-page-node-id="VetKhHB2BRFoVMOPdJrPgX"><th data-page-node-id="SHQOLm3HKESwI3nhDlAWWh">场景</th><th data-page-node-id="ImQbKs1d4HaY5zNn8vWoEv">提示词</th></tr></thead><tbody data-page-node-id="xqb7WTCAMPzNjhgnFa1gF6">
+              <tr data-page-node-id="zXXGAV6zVWgsTqJhGEuAcP"><td data-page-node-id="efc28mSlQtxxEDKiDRWHUt">项目经理</td><td data-page-node-id="HsZY9SjR4zTMKWlNGoDTqa">以项目经理身份处理<code data-page-node-id="jAtsj9Ey4xNVUroghmECZS">[项目事务]</code></td></tr>
+              <tr data-page-node-id="PCFl8g8q55YgbGQ9SfYXxc"><td data-page-node-id="TUDNh71y7dsBHaCcAMrqAL">技术专家</td><td data-page-node-id="Yq4Et6WAbbkhda0hrpqxk8">以技术专家角度分析<code data-page-node-id="HZVO5mFRPPduBOcI7fLhzH">[技术问题]</code></td></tr>
+              <tr data-page-node-id="riqYwYCYEgn4zY75VNPbwE"><td data-page-node-id="P0928TU264pmd7S8oRWEbS">市场总监</td><td data-page-node-id="KbjugfTgvx0r4WMNVzmCvu">以市场总监视角制定<code data-page-node-id="jEb7tUynZfFJzze6JzuLuJ">[营销策略]</code></td></tr>
+              <tr data-page-node-id="Lg7Y5hma6g9xqKAwoCrNRt"><td data-page-node-id="TqjxAwPIgA4e3URiyA6Yfh">财务顾问</td><td data-page-node-id="gbz1OTfJJYSBVNGGIR7WIX">以财务顾问身份提供<code data-page-node-id="CHCpeCFDMo0B86FJaFakUF">[财务建议]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="PDMOwxrgCxcQ3fZQLLpglS">知识库训练</h4>
+            <div class="table-wrapper" data-page-node-id="IU6VEPkkafNQykXb7Qqbag"><table data-page-node-id="fWCL7kylhBhhaezAUzrsie"><thead data-page-node-id="eHGFoE3WuxDaGTfGlxNQUa"><tr data-page-node-id="K8lvcp2IlA7TRkOW80EJMa"><th data-page-node-id="qjOT1WeDMFVSXpvaIgBipa">场景</th><th data-page-node-id="ihEkvasO5FqX13IUYCeXW4">提示词</th></tr></thead><tbody data-page-node-id="BtcHG5R3AHeYC4yVnVZ61Y">
+              <tr data-page-node-id="bSWaOXcAV5x33CR63PiZmE"><td data-page-node-id="JhZLQlZhuVuuSgKuDTe5d7">学习文档</td><td data-page-node-id="H5mvA3vHnz5HGGbWO8giVN">学习<code data-page-node-id="WtDXpfPEROdLxlU6jLOXiq">[文档/资料]</code>的内容，掌握相关知识</td></tr>
+              <tr data-page-node-id="U0JlDXS6pc7sBiFjVYMJ7r"><td data-page-node-id="VBBTWU1tnq2eAO1tVJhHcb">记忆要点</td><td data-page-node-id="tdkga8T85FGWK4CvGIIvXd">记住<code data-page-node-id="TTOTdKOGfym1A3mYdPSCCF">[关键信息]</code>，在相关场景中应用</td></tr>
+              <tr data-page-node-id="pYdT0VQbNU0RVhpitGfIDv"><td data-page-node-id="LqT5CYy87dlwmY1mA9jixx">更新知识</td><td data-page-node-id="6WglSQY3c4K3wsTNsdn5BD">更新关于<code data-page-node-id="PUxqR8wU6m2FuXZVEICb1J">[主题]</code>的最新知识和信息</td></tr>
+              <tr data-page-node-id="IlU1NNlfyV4avwotEBOlKL"><td data-page-node-id="MUuCEDCVotKRQhdgnCwNN0">专业深化</td><td data-page-node-id="wBR8PaKe5JzpxecrclzXfc">深入学习<code data-page-node-id="SUHcGhUBb11uB9hiz7aGmi">[专业领域]</code>的深度知识</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 九、效率提升组合 ========== -->
+      <div class="collapsible" data-page-node-id="7BLhPEDlObOFiFZqZiY53I">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="J60fxKOTboRRXN9JmMyQjO">
+          <span data-page-node-id="TzWQm9x0ku2aQki5NA1bHO">🚀 效率提升组合（晨间工作流 · 项目启动 · 报告生成）</span>
+          <span class="chevron" data-page-node-id="ztNzaBmsJChJ8K1ria8r3R">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="Hij9FSuahGL4l2NkgtBoNB">
+          <div class="collapsible-content" data-page-node-id="b50GJqhKtEBx02DLQitquf">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)" data-page-node-id="6RMlwsmtuYJRM8W8ekLdV2">晨间工作流</h4>
+            <div class="table-wrapper" data-page-node-id="Z15pQf164xYUzctzrFKKaL"><table data-page-node-id="h17YtYltCvmmKWBU2iWQCg"><thead data-page-node-id="8gYMo2vpWg8zBli1uywFLd"><tr data-page-node-id="kDwO4BF5v0JyvAAgANMYd8"><th data-page-node-id="dV2ngHjAzvorAl5lkP4HmQ">步骤</th><th data-page-node-id="02m3HHQxbtFkLEx5OFJWwG">提示词</th></tr></thead><tbody data-page-node-id="eBW85MFkFt50rJKAglXsQB">
+              <tr data-page-node-id="avR8QGB18tHkgabCfkE5Zg"><td data-page-node-id="pquBEklanFWx1fGmOyfXVI">1</td><td data-page-node-id="kmxAUECv877axv5AmTFZmj">查看今日日程安排</td></tr>
+              <tr data-page-node-id="sxVfRixkeLxhJEwc3pHxJb"><td data-page-node-id="dEK8F9cnkhhmkZ8rHTB8YY">2</td><td data-page-node-id="QgxvvqFQzfpTFca0K3tgzg">规划今日重点工作任务</td></tr>
+              <tr data-page-node-id="IM1dYr3nsewlaWK3RP1CpO"><td data-page-node-id="lVkEO0Sv2jb3K8305R7suV">3</td><td data-page-node-id="OuGMON8b0xuyIw5lSrKqAD">快速处理重要邮件</td></tr>
+              <tr data-page-node-id="LRmniPB52JKETlnFaOnhzu"><td data-page-node-id="KnKm0LpBMm1RDcLvoEkill">4</td><td data-page-node-id="evaC6D7oAuRfArQjuM5TZq">准备今日会议材料和议程</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="efoM0jgYJWlHo9S7GFf94R">项目启动组合</h4>
+            <div class="table-wrapper" data-page-node-id="HjXKN4nFrPL3eKd4o6zeMK"><table data-page-node-id="BA3ZK5vt1tioojkZ09v9Xj"><thead data-page-node-id="THsefTs82eK2c3phthVRxO"><tr data-page-node-id="ypm4NpxKBQl2MlvtBFhDlF"><th data-page-node-id="nDqFKs5YV4pG8IG1hAzmqe">步骤</th><th data-page-node-id="8hUGB4cMl8k9JBk9uwt6td">提示词</th></tr></thead><tbody data-page-node-id="6WNfOOLKG9Scp3OHx4PNpR">
+              <tr data-page-node-id="7q0zf6BlGXHXYNTakv442Q"><td data-page-node-id="OBEgNJgRTEFIBspPSAN1Lr">1</td><td data-page-node-id="TqjWYEFhXiqpeE6JF1kN29">确认项目需求和目标</td></tr>
+              <tr data-page-node-id="kcjjzpLiKF1TXJeu0tO63S"><td data-page-node-id="vhqMvHIR7rS9lHBEhjPHMe">2</td><td data-page-node-id="pUmk7tDbJyj2DWz0tepnpv">组建项目团队和分工</td></tr>
+              <tr data-page-node-id="Otkke6C7qahB81Guo86UQj"><td data-page-node-id="hoZBkU0Ay3hY62HvMSrAHI">3</td><td data-page-node-id="EFt7j5VId6cMnwG08wd0sA">制定详细项目计划</td></tr>
+              <tr data-page-node-id="eC1Tn5PF0sEv0AeIEDGpMS"><td data-page-node-id="OwnSnfL38QZqD2Ba5d3VWa">4</td><td data-page-node-id="46MFCZBtiqqLTTshr6CgC4">准备项目所需资源</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="svinw7f21qhTaA5qN2wcQd">报告生成组合</h4>
+            <div class="table-wrapper" data-page-node-id="iu4lSbXXT5HL4giVAVmHdj"><table data-page-node-id="sk0Z7mnc9b5uEfnEh1vjJQ"><thead data-page-node-id="PkLPk4jEA3VXh3xV75GAgn"><tr data-page-node-id="Ec4h7iw1odUqGgEbbF1DMN"><th data-page-node-id="59fmV27dsDEhYKKdYwrMVG">步骤</th><th data-page-node-id="zdq6AbKPIPMSSHNgPKwEFu">提示词</th></tr></thead><tbody data-page-node-id="mLgpPFYLH91vY2qTYeyr6h">
+              <tr data-page-node-id="EqVpXoiAHCWVtsAKTIsTfh"><td data-page-node-id="yJpD1fUKNS9pZOathUt3Bc">1</td><td data-page-node-id="Sh0wT8xCP4IRnjJTj45bkR">收集报告所需数据</td></tr>
+              <tr data-page-node-id="8c0aQtOVulAjDCO5LSuCXZ"><td data-page-node-id="PEvNcx9J3Zg7EOUBQ15epU">2</td><td data-page-node-id="nulZ9QZSTXpc7YYAhC9TUB">分析处理收集的数据</td></tr>
+              <tr data-page-node-id="UyC33AWSgEkfo1xHNL1eI1"><td data-page-node-id="41dAgHEAv96kAPUHo7P9GX">3</td><td data-page-node-id="ErFY1drwAYPTxWLbG2a39T">撰写完整的分析报告</td></tr>
+              <tr data-page-node-id="ScIARACrHI2Ve8xzhGqZnB"><td data-page-node-id="0qeGQ9QVqSPsC5CHCc1hL4">4</td><td data-page-node-id="LSMDEGG1voP0A8Qa0LvQZ3">准备报告汇报材料</td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 十、移动办公 ========== -->
+      <div class="collapsible" data-page-node-id="AXsChz6U5tp5nBvFcxGCVY">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="ELxHTWFobiYnKOZDL3s6q6">
+          <span data-page-node-id="IDyzAHKu3zmFnEZAAifa0K">📱 移动办公提示词（语音指令 · 快捷操作 · 离线功能）</span>
+          <span class="chevron" data-page-node-id="mVkwQ63glwYnlgEfMxCebm">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="wQlbRByzzJfLQ9xtahAlvm">
+          <div class="collapsible-content" data-page-node-id="yxrrAP7J7rw1UOwlogoOIC">
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)" data-page-node-id="EDDXBRzC0E3kC4INLguRIO">语音指令</h4>
+            <div class="table-wrapper" data-page-node-id="aIwE1zGFCeFNEHXUNMbiEs"><table data-page-node-id="aCa3V2joda5BJN5AlP6Bk5"><thead data-page-node-id="WxLSmpgbhQPs3u0HHnrO5R"><tr data-page-node-id="sPg78vReOHZvsIg0SbB1Lq"><th data-page-node-id="IGfmgn2d52Qyka0Cbl3JR8">场景</th><th data-page-node-id="R4acg3HWjPCxiKYK7EGgCv">提示词</th></tr></thead><tbody data-page-node-id="JtHNxb84Ob4L9l9aj5V6IU">
+              <tr data-page-node-id="tH28Abh11hY5vX37HnjAyF"><td data-page-node-id="30tZTcA2uOa7X3E8eKPEPu">语音创建</td><td data-page-node-id="9URtZSWadeLLAHEFLkcOyK">用语音创建<code data-page-node-id="x9TvlxdGeoK7d9FZ4fxJph">[任务/日程/提醒]</code></td></tr>
+              <tr data-page-node-id="qcNqlEU6EiYklRshqhGV3e"><td data-page-node-id="Z65qirSMGgNKXELlkFauSL">语音查询</td><td data-page-node-id="AOg8mlJA2NBT6vHLN5xkaU">用语音查询<code data-page-node-id="eYErWzpEsxHKgVS1rYQT9C">[信息/状态/进度]</code></td></tr>
+              <tr data-page-node-id="mvBQZ7t6H6TfBAMDEmE7A8"><td data-page-node-id="LCFFa1C8xiwoV7UXH0zkmC">语音更新</td><td data-page-node-id="l8qdAd7Mhq61UrZT9omtfb">用语音更新<code data-page-node-id="jKzYfpOQgaX73t6UIgzhOF">[任务/项目]</code>状态</td></tr>
+              <tr data-page-node-id="PY91gnE02jPedgg1R66z1l"><td data-page-node-id="Q624WcHz4xXt80dUpZj5Kw">语音总结</td><td data-page-node-id="tUovpt7sVcWzyINheoZYvx">用语音总结<code data-page-node-id="AZMkmapgFtcolxLJIsrCHf">[会议/文档]</code>要点</td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="m1Yp8MMKLK94qTr2Gzh5LR">快捷操作</h4>
+            <div class="table-wrapper" data-page-node-id="MQgH59AGnp6LQFabmUDI6b"><table data-page-node-id="XE4EXDE4FX974DAVJsE4NM"><thead data-page-node-id="rGyGTQPRCHFdpPAHkrr05Q"><tr data-page-node-id="6g3mqFEXGhfVgbqcsrIvEf"><th data-page-node-id="66bPFkkAqXtOREwnlbd7Wh">场景</th><th data-page-node-id="266GAbxaMEHe6m58tbPfta">提示词</th></tr></thead><tbody data-page-node-id="lrbf2GCkASbYoDMCCMTQjE">
+              <tr data-page-node-id="2QlscZVPo9tTqEzohAImnp"><td data-page-node-id="ufjtpU0E4MZAowksEThHJ7">快速回复</td><td data-page-node-id="HHAbuO7SVpRwD5VDDCIIbK">快速回复<code data-page-node-id="A5wg3IcuYOjdcYL8lBWKyA">[消息/邮件]</code>的模板</td></tr>
+              <tr data-page-node-id="7ZCDx2w8NMGp4o2Wno98LC"><td data-page-node-id="MJyiknPxc5mS70VYbiG7UG">一键生成</td><td data-page-node-id="heGZFCyZMT2wX7yKAw5SbR">一键生成<code data-page-node-id="TcIKGsoV5LG9b0fH6SDXTw">[日报/周报/月报]</code></td></tr>
+              <tr data-page-node-id="fFQrbKMMHzyKi8MXamuXjp"><td data-page-node-id="7fKpxkP7NHy6IjisBf825U">智能提醒</td><td data-page-node-id="udNdZPAtizglCMdkl3ApXu">智能提醒<code data-page-node-id="H2vy2yI73RycRvguo95Q0R">[重要事项/截止时间]</code></td></tr>
+              <tr data-page-node-id="mr8o0sMqSEhp5dediNiuZj"><td data-page-node-id="kh2WMDyZDA6jkCDrbu8SMq">自动同步</td><td data-page-node-id="5E32u3lBofV5n96sjKkAKH">自动同步<code data-page-node-id="qORQieQj2Ue62ZjK4zAdB7">[数据/文件/日程]</code></td></tr>
+            </tbody></table></div>
+            <h4 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--accent)" data-page-node-id="6iRAu3VD3wk8fGmmvXFB46">离线功能</h4>
+            <div class="table-wrapper" data-page-node-id="UIIv7ogiSZBnzT10wKxala"><table data-page-node-id="3ZQwkQ58JfnVbFem9WNS5v"><thead data-page-node-id="w7hIlXmRYI13bKz1etKCit"><tr data-page-node-id="MW0Wn1s1Ft6Y4vVLnjCEsR"><th data-page-node-id="h874pq33CyIzajwKlbJ6mz">场景</th><th data-page-node-id="UqNCqYJr4OOHf1pzmZE44T">提示词</th></tr></thead><tbody data-page-node-id="kCAGjUoymxSKJ8nyZDnkvB">
+              <tr data-page-node-id="sTRa2FXmeQXrXlRrQFItkj"><td data-page-node-id="gHgw4sN7iQxN0YwiJZp1zX">离线创建</td><td data-page-node-id="vgqjGttxvyDwjtqCpZnpip">离线状态下创建<code data-page-node-id="OvhoSDxw93L09evk7GxiTE">[任务/文档]</code></td></tr>
+              <tr data-page-node-id="iKXlE9lAwB9VbBYvaBkto1"><td data-page-node-id="v5dmpg0EtiVJmi2Lhy62nJ">本地搜索</td><td data-page-node-id="acsnVtrLnYzVa3zh1UsHje">在本地文件中搜索<code data-page-node-id="4DRqFYxDg6KMCEC4FmDc9L">[关键词]</code></td></tr>
+              <tr data-page-node-id="8JpRXGF8nYTMxdDGxmYW13"><td data-page-node-id="k7h1UufPPxGp84lxS4iy4Y">缓存处理</td><td data-page-node-id="W7IhcUfRS1KYpYRZTzjkWC">处理缓存的<code data-page-node-id="lW0kY11Co50k6lzCd2bTsP">[数据/消息]</code></td></tr>
+              <tr data-page-node-id="olHXdEoncc2klf3EAkj6nj"><td data-page-node-id="8EGud9774z7r9lDUMuxJn8">同步准备</td><td data-page-node-id="wtoZcTXr8suIngWAgXncmn">准备需要同步的<code data-page-node-id="BvU6HhI6gcGZ2l2On1Fu5P">[内容/文件]</code></td></tr>
+            </tbody></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 十一、使用技巧 ========== -->
+      <div class="collapsible" data-page-node-id="bPPcEQVIEvMOC0ZA0ZpXfg">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)" data-page-node-id="M5VNt2JIbpnwZO5HeCP9Jd">
+          <span data-page-node-id="5GxP1iGnj5GwIYFq0wIjtw">💎 提示词优化原则 & 常见错误避免</span>
+          <span class="chevron" data-page-node-id="lw5ZvBKGH1nKq0P6ZEa6dH">▶</span>
+        </div>
+        <div class="collapsible-body" data-page-node-id="WMZ6cON6I9pLdNs2tSL31C">
+          <div class="collapsible-content" data-page-node-id="HnhYiN4fm4lOhSzEmfvgWL">
+            <div class="comparison" style="margin-top:0" data-page-node-id="ZCOj2OHvtP4AiYgswDKDJe">
+              <div class="comparison-col" data-page-node-id="Sp6NQVN6zUAkLa8SQHneEw">
+                <h4 data-page-node-id="W22MnkFYGanC70bqpAuyxC">❌ 常见错误</h4>
+                <ul data-page-node-id="OpJVANwYrhBMaFlVCNCzlh">
+                  <li data-page-node-id="22BD17ZRFzGB6jK7wQE0ov">信息不足导致理解偏差</li>
+                  <li data-page-node-id="zYqk1dMmLHyX4J2Ydc08xg">信息过多影响处理效率</li>
+                  <li data-page-node-id="wQOiEFCTP3YULqx4m035OF">非标准格式难以解析</li>
+                  <li data-page-node-id="IFgQlbbEK6JLOxLYsFKfmT">不清楚想要什么结果</li>
+                </ul>
+              </div>
+              <div class="comparison-col" data-page-node-id="E0KDX3x7lzFDVV3XrnxhUy">
+                <h4 data-page-node-id="tuSugNg2oXGC5mwvafQdo2">✓ 优化原则</h4>
+                <ul data-page-node-id="wiTZ0o42Vfe45XlOkAEM9o">
+                  <li data-page-node-id="oiize7kMtrhgqsZ0ie45rd">避免模糊，提供具体信息</li>
+                  <li data-page-node-id="pHtaZg37eIq5LePxAyY4wV">使用标准格式，便于解析</li>
+                  <li data-page-node-id="2uEAzzCfkCZOnVMFDJS0nv">明确想要达到的效果</li>
+                  <li data-page-node-id="oJsYrtwJ3b0MQmdGqeLscv">提供足够但不冗余的信息</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-footer" data-page-node-id="P5DxYBiycX1hFdI1exQpnm">
+        <p data-page-node-id="rzmFEzWayWJs0EzQo30ZJh">华生 📝 · 2026-06-09 · 基于 WorkBuddy 官方文档整理</p>
+      </div>
+    </section>
+
+  </div><!-- end content-area -->
+</div><!-- end main-content -->
+
+<!-- Back to Top -->
+<button class="back-to-top" id="backToTop" aria-label="回到顶部" data-page-node-id="eKz0xG7SnLV7Lm7dGPSwbm">↑</button>
+
+<script>
+// ========== Sidebar (Mobile) ==========
+const sidebar = document.getElementById('sidebar');
+const menuToggle = document.getElementById('menuToggle');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+menuToggle.addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+  sidebarOverlay.classList.toggle('visible');
+});
+
+sidebarOverlay.addEventListener('click', () => {
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('visible');
+});
+
+// Close sidebar on nav click (mobile)
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    if (window.innerWidth <= 768) {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('visible');
+    }
+  });
+});
+
+// ========== Active Nav Tracking ==========
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('.doc-section[id]');
+
+function updateActiveNav() {
+  let currentId = '';
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 120) {
+      currentId = section.id;
+    }
+  });
+  navItems.forEach(item => {
+    item.classList.toggle('active', item.getAttribute('href') === '#' + currentId);
+  });
+}
+
+window.addEventListener('scroll', updateActiveNav, { passive: true });
+updateActiveNav();
+
+// ========== Back to Top ==========
+const backToTop = document.getElementById('backToTop');
+
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ========== Collapsible ==========
+function toggleCollapsible(header) {
+  const parent = header.parentElement;
+  parent.classList.toggle('open');
+}
+
+// ========== Scroll Reveal ==========
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.doc-section.reveal').forEach(section => {
+  revealObserver.observe(section);
+});
+</script>
+
+<script>
+/* Anthea Nav: auto-highlight current page */
+(function(){var n=document.getElementById('anthea-nav');if(!n)return;var p=location.pathname.split('/').pop()||'index.html';n.querySelectorAll('a').forEach(function(a){var h=a.getAttribute('href');if(h&&h===p)a.classList.add('active')})})();
+</script>
+<script>
+/* ANT_NAV_DROPDOWN_JS */
+(function(){
+  var groups = document.querySelectorAll('.nav-group');
+  function closeAll(){ groups.forEach(function(g){ g.classList.remove('open'); }); }
+  document.querySelectorAll('.nav-toggle').forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var g = t.parentElement, was = g.classList.contains('open');
+      closeAll();
+      if (!was) g.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest || !e.target.closest('.nav-group')) closeAll();
+  });
+})();
+</script>
+
+</body>
+</html>
